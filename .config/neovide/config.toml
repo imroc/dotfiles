@@ -1,0 +1,5 @@
+maximized = true
+
+[font]
+normal = ["JetBrainsMono Nerd Font", "MesloLGS Nerd Font"]
+size = 13.0
