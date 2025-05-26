@@ -1,0 +1,23 @@
+plugins:
+  watch-events:
+    shortCut: Shift-E
+    confirm: false
+    description: "Get Events"
+    scopes:
+    - all
+    command: bash
+    background: false
+    args:
+    - -c
+    - |
+      export KUBECONFIG=$KUBECONFIG
+      resource="$RESOURCE_NAME.$RESOURCE_GROUP/$NAME"
+      cmd="kubecolor get events --context $CONTEXT --sort-by=.lastTimestamp --watch"
+      if [ "$NAMESPACE" = "-" ] || [ "$NAMESPACE" = "" ]; then
+        uid=$(kubectl get $resource -o jsonpath='{.metadata.uid}')
+        cmd="$cmd -A --field-selector=involvedObject.uid=$uid"
+      else
+        uid=$(kubectl get $resource --namespace=$NAMESPACE -o jsonpath='{.metadata.uid}')
+        cmd="$cmd --namespace=$NAMESPACE --field-selector=involvedObject.uid=$uid"
+      fi
+      exec $cmd 2>/dev/null

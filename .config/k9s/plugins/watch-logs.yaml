@@ -1,0 +1,25 @@
+plugins:
+  watch-pod-logs:
+    shortCut: Shift-L
+    confirm: false
+    description: "Watch Pod Logs in Zellij"
+    scopes:
+    - pods
+    command: bash
+    background: false
+    args:
+    - -c
+    - |
+      zellij run -f -- kubecolor logs --kubeconfig=$KUBECONFIG -f --all-containers --context $CONTEXT --tail 10000 --namespace=$NAMESPACE $NAME
+  watch-container-logs:
+    shortCut: Shift-L
+    confirm: false
+    description: "Watch Container Logs in Zellij"
+    scopes:
+    - container
+    command: bash
+    background: false
+    args:
+    - -c
+    - |
+      zellij run -f -- kubecolor logs --kubeconfig=$KUBECONFIG -f --context $CONTEXT --tail 10000 --namespace=$NAMESPACE $POD -c $NAME

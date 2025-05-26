@@ -1,0 +1,15 @@
+# View user-supplied values when the helm chart was created
+
+plugins:
+  helm-values:
+    shortCut: Ctrl-V
+    confirm: false
+    description: Show Values in Neovim
+    scopes:
+    - helm
+    command: sh
+    background: false
+    args:
+    - -c
+    - |
+      helm get values $COL-NAME -n $NAMESPACE --kube-context $CONTEXT | nvim -c 'set filetype=yaml' -

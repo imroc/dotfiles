@@ -1,0 +1,66 @@
+plugins:
+  argocd:
+    shortCut: "s"
+    description: Sync ArgoCD Application
+    scopes:
+    - applications.argoproj.io
+    command: argocd
+    args:
+    - app
+    - sync
+    - $NAME
+    - --app-namespace
+    - $NAMESPACE
+    background: true
+    confirm: true
+
+  refresh-apps:
+    shortCut: Shift-R
+    confirm: false
+    scopes:
+    - applications.argoproj.io
+    description: Refresh a argocd app hard
+    command: kubectl
+    background: false
+    args:
+    - annotate
+    - applications.argoproj.io
+    - -n
+    - $NAMESPACE
+    - $NAME
+    - argocd.argoproj.io/refresh=hard
+
+  disable-auto-sync:
+    shortCut: Shift-B
+    confirm: false
+    scopes:
+    - applications.argoproj.io
+    description: Disable argocd sync
+    command: kubectl
+    background: false
+    args:
+    - patch
+    - applications.argoproj.io
+    - -n
+    - $NAMESPACE
+    - $NAME
+    - "--type=json"
+    - '-p=[{"op":"replace", "path": "/spec/syncPolicy", "value": {}}]'
+
+  enable-auto-sync:
+    shortCut: b
+    confirm: false
+    scopes:
+    - applications.argoproj.io
+    description: Enable argocd sync
+    command: kubectl
+    background: false
+    args:
+    - patch
+    - applications.argoproj.io
+    - -n
+    - $NAMESPACE
+    - $NAME
+    - --type=merge
+    - '-p={"spec":{"syncPolicy":{"automated":{"prune":true,"selfHeal":true},"syncOptions":["ApplyOutOfSyncOnly=true","CreateNamespace=true","PruneLast=true","PrunePropagationPolicy=foreground"]}}}'
+

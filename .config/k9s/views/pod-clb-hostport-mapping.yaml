@@ -1,0 +1,11 @@
+views:
+  v1/pods:
+    sortColumn: AGE:asc
+    columns:
+    - NAME
+    - READY
+    - STATUS
+    - IP
+    - NODE
+    - AGE
+    - CLB-MAPPING-STATUS:.metadata.annotations.networking\.cloud\.tencent\.com/clb-hostport-mapping-status
