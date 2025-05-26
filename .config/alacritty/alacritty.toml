@@ -1,0 +1,15 @@
+[font]
+size = 14
+
+[font.normal]
+family = "JetBrainsMono Nerd Font"
+# family = "MesloLGS Nerd Font"
+
+[window]
+option_as_alt = "Both"
+startup_mode = "Maximized"
+decorations = "Buttonless"
+
+[general]
+# https://alacritty.org/config-alacritty.html
+import = ["themes/tokyo-night.toml"]
