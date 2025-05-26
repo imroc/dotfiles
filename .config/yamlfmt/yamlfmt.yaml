@@ -1,0 +1,4 @@
+# schema ref: https://github.com/google/yamlfmt/blob/main/docs/config-file.md
+formatter:
+  indentless_arrays: true
+  retain_line_breaks: true
