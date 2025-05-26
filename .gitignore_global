@@ -1,0 +1,11 @@
+.vscode/
+tmp/
+debug-roc/
+*.DS_Store
+*.pkl
+_output
+*.iml
+.gradle/
+gradle/
+gradlew
+gradlew.bat
