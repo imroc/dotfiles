@@ -1,0 +1,162 @@
+return {}
+
+-- if not LazyVim then
+--   return {}
+-- end
+
+-- local actions = require("telescope.actions")
+-- local action_state = require("telescope.actions.state")
+-- local telescope = require("util.telescope")
+--
+-- return {
+--   {
+--     "nvim-telescope/telescope.nvim",
+--     keys = {
+--       {
+--         "<leader>sP",
+--         function()
+--           telescope.find_files({ cwd = vim.fs.joinpath(vim.fn.stdpath("data"), "lazy") })
+--         end,
+--         desc = "[P]Plugin Files",
+--       },
+--       {
+--         "<leader>ff",
+--         function()
+--           telescope.find_files({ cwd = LazyVim.root() })
+--         end,
+--         desc = "[P]Find Files (root dir)",
+--       },
+--       {
+--         "<leader>fF",
+--         function()
+--           telescope.find_files({ cwd = vim.uv.cwd() })
+--         end,
+--         desc = "[P]Find Files (cwd)",
+--       },
+--       {
+--         "<leader>gb",
+--         LazyVim.pick("git_branches"),
+--         desc = "[P]Git Branches",
+--       },
+--       {
+--         "<leader>gC",
+--         LazyVim.pick("git_bcommits"),
+--         desc = "[P]Git commits for current buffer",
+--       },
+--     },
+--     opts = function(_, opts)
+--       local open_with_trouble = function(...)
+--         return require("trouble.sources.telescope").open(...)
+--       end
+--       opts.defaults = vim.tbl_deep_extend("force", opts.defaults or {}, {
+--         mappings = {
+--           i = {
+--             ["<C-j>"] = open_with_trouble,
+--           },
+--           n = {
+--             ["<C-j>"] = open_with_trouble,
+--           },
+--         },
+--       })
+--       opts.pickers = vim.tbl_deep_extend("force", opts.pickers or {}, {
+--         git_commits = {
+--           mappings = {
+--             i = {
+--               ["<C-d>"] = function() -- show diffview for the selected commit
+--                 -- Open in diffview
+--                 local entry = action_state.get_selected_entry()
+--                 -- close Telescope window properly prior to switching windows
+--                 actions.close(vim.api.nvim_get_current_buf())
+--                 vim.cmd(("DiffviewOpen %s^!"):format(entry.value))
+--               end,
+--             },
+--           },
+--         },
+--         git_bcommits = {
+--           mappings = {
+--             i = {
+--               ["<C-d>"] = function() -- show diffview for the selected commit of current buffer
+--                 -- Open in diffview
+--                 local entry = action_state.get_selected_entry()
+--                 -- close Telescope window properly prior to switching windows
+--                 actions.close(vim.api.nvim_get_current_buf())
+--                 vim.cmd(("DiffviewOpen %s^!"):format(entry.value))
+--               end,
+--             },
+--           },
+--         },
+--         git_branches = {
+--           mappings = {
+--             i = {
+--               ["<C-d>"] = function() -- show diffview comparing the selected branch with the current branch
+--                 -- Open in diffview
+--                 local entry = action_state.get_selected_entry()
+--                 -- close Telescope window properly prior to switching windows
+--                 actions.close(vim.api.nvim_get_current_buf())
+--                 vim.cmd(("DiffviewOpen %s.."):format(entry.value))
+--               end,
+--             },
+--           },
+--         },
+--       })
+--     end,
+--     dependencies = {
+--       {
+--         "LukasPietzschmann/telescope-tabs",
+--         config = function()
+--           require("telescope-tabs").setup({})
+--         end,
+--         keys = {
+--           {
+--             "<leader><Tab>o",
+--             function()
+--               require("telescope-tabs").list_tabs()
+--             end,
+--             desc = "[P]Open Tabs",
+--           },
+--         },
+--       },
+--       {
+--         "jemag/telescope-diff.nvim",
+--         keys = {
+--           {
+--             "<leader>D",
+--             function()
+--               require("telescope").extensions.diff.diff_current({ hidden = true })
+--             end,
+--             desc = "[P]Diff with ohter file",
+--           },
+--         },
+--       },
+--       {
+--         "nvim-telescope/telescope-file-browser.nvim",
+--         dependencies = {
+--           "nvim-lua/plenary.nvim",
+--         },
+--         config = function()
+--           require("telescope").load_extension("file_browser")
+--         end,
+--         keys = {
+--           {
+--             "<leader>fB",
+--             "<cmd>Telescope file_browser path=%:p:h select_buffer=true<CR>",
+--             desc = "[P]File browser",
+--           },
+--         },
+--       },
+--       {
+--         "nvim-telescope/telescope-live-grep-args.nvim",
+--         config = function()
+--           require("telescope").load_extension("live_grep_args")
+--         end,
+--       },
+--       {
+--         "nvim-telescope/telescope-fzf-native.nvim",
+--         build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build",
+--         config = function()
+--           require("telescope").load_extension("fzf")
+--         end,
+--       },
+--     },
+--   },
+-- }

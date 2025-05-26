@@ -1,0 +1,158 @@
+{
+  "toolbox": {
+    "prefix": [
+      "toolbox"
+    ],
+    "description": "toolbox deployment template",
+    "body": [
+      "apiVersion: apps/v1",
+      "kind: Deployment",
+      "metadata:",
+      "  name: toolbox",
+      "spec:",
+      "  replicas: 1",
+      "  selector:",
+      "    matchLabels:",
+      "      app: toolbox",
+      "  template:",
+      "    metadata:",
+      "      labels:",
+      "        app: toolbox",
+      "    spec:",
+      "      containers:",
+      "        - name: toolbox",
+      "          image: imroc/toolbox:latest",
+      "          securityContext:",
+      "            privileged: true",
+      "            runAsUser: 0",
+      "---",
+      "$0"
+    ]
+  },
+  "deployment template": {
+    "prefix": [
+      "dp"
+    ],
+    "description": "deployment template",
+    "body": [
+      "apiVersion: apps/v1",
+      "kind: Deployment",
+      "metadata:",
+      "  name: nginx",
+      "spec:",
+      "  replicas: 1",
+      "  selector:",
+      "    matchLabels:",
+      "      app: nginx",
+      "  template:",
+      "    metadata:",
+      "      labels:",
+      "        app: nginx",
+      "    spec:",
+      "      containers:",
+      "        - name: nginx",
+      "          image: nginx:latest",
+      "$0"
+    ]
+  },
+  "daemonset template": {
+    "prefix": [
+      "ds"
+    ],
+    "description": "daemonset template",
+    "body": [
+      "apiVersion: apps/v1",
+      "kind: DaemonSet",
+      "metadata:",
+      "  name: nginx",
+      "spec:",
+      "  selector:",
+      "    matchLabels:",
+      "      app: nginx",
+      "  template:",
+      "    metadata:",
+      "      labels:",
+      "        app: nginx",
+      "    spec:",
+      "      containers:",
+      "        - name: nginx",
+      "          image: nginx:latest",
+      "$0"
+    ]
+  },
+  "statefulset template": {
+    "prefix": [
+      "sts"
+    ],
+    "description": "statefulset template",
+    "body": [
+      "apiVersion: apps/v1",
+      "kind: StatefulSet",
+      "metadata:",
+      "  name: nginx",
+      "spec:",
+      "  replicas: 1",
+      "  serviceName: nginx",
+      "  selector:",
+      "    matchLabels:",
+      "      app: nginx",
+      "  template:",
+      "    metadata:",
+      "      labels:",
+      "        app: nginx",
+      "    spec:",
+      "      containers:",
+      "        - name: nginx",
+      "          image: nginx:latest",
+      "          volumeMounts:",
+      "          - name: www",
+      "            mountPath: /usr/share/nginx/html",
+      "    volumeClaimTemplates:",
+      "    - metadata:",
+      "        name: www",
+      "      spec:",
+      "        accessModes: [ \"ReadWriteOnce\" ]",
+      "        storageClassName: \"cbs\"",
+      "        resources:",
+      "          requests:",
+      "            storage: 10Gi",
+      "$0"
+    ]
+  },
+  "ambient namespace label": {
+    "prefix": [
+      "ambientns"
+    ],
+    "description": "ambient namespace label",
+    "body": [
+      "istio.io/dataplane-mode: ambient"
+    ]
+  },
+  "sidecar inject namespace label": {
+    "prefix": [
+      "injectsidecar"
+    ],
+    "description": "inject sidecar namespace label",
+    "body": [
+      "istio-injection: enabled"
+    ]
+  },
+  "eks label selector": {
+    "prefix": [
+      "eksnode"
+    ],
+    "description": "eks label selector",
+    "body": [
+      "node.kubernetes.io/instance-type: eklet"
+    ]
+  },
+  "eks gpu-type annotation": {
+    "prefix": [
+      "gputype"
+    ],
+    "description": "eks gpu-type annotation",
+    "body": [
+      "eks.tke.cloud.tencent.com/gpu-type: \"T4,V100,A10*PNV4,A10*GNV4,A10*GNV4v\""
+    ]
+  }
+}

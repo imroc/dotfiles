@@ -1,0 +1,22 @@
+{
+  "ie": {
+    "prefix": "ie",
+    "body": "if err != nil {\n\treturn ${1:err}\n}",
+    "description": "Snippet for if err != nil"
+  },
+  "iee": {
+    "prefix": "iee",
+    "body": "if err != nil {\n\treturn ${1:nil}, ${2:err}\n}",
+    "description": "Snippet for if err != nil"
+  },
+  "ine": {
+    "prefix": "ine",
+    "body": "if err := $0; err != nil {\n\treturn err\n}",
+    "description": "Snippet for if err := x; err != nil"
+  },
+  "inee": {
+    "prefix": "inee",
+    "body": "if err := $0; err != nil {\n\treturn nil, err\n}",
+    "description": "Snippet for if err := x; err != nil"
+  }
+}

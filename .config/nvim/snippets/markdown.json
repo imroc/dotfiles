@@ -1,0 +1,115 @@
+{
+  "cb": {
+    "prefix": "cb",
+    "body": [
+      "```${1:bash}",
+      "$0",
+      "```"
+    ],
+    "description": "插入代码块"
+  },
+  "bs": {
+    "prefix": "bs",
+    "body": [
+      "```bash",
+      "$0",
+      "```"
+    ],
+    "description": "插入 bash 代码块"
+  },
+  "ym": {
+    "prefix": "ym",
+    "body": [
+      "```yaml",
+      "$0",
+      "```"
+    ],
+    "description": "插入 yaml 代码块"
+  },
+  "gl": {
+    "prefix": "gl",
+    "body": [
+      "```go",
+      "$0",
+      "```"
+    ],
+    "description": "插入 go 代码块"
+  },
+  "bz": {
+    "prefix": "bz",
+    "body": [
+      ":::tip[备注]",
+      "",
+      "$0",
+      "",
+      ":::"
+    ],
+    "description": "高亮备注"
+  },
+  "sm": {
+    "prefix": "sm",
+    "body": [
+      ":::tip[说明]",
+      "",
+      "$0",
+      "",
+      ":::"
+    ],
+    "description": "高亮说明"
+  },
+  "zy": {
+    "prefix": "zy",
+    "body": [
+      ":::info[注意]",
+      "",
+      "$0",
+      "",
+      ":::"
+    ],
+    "description": "高亮注意"
+  },
+  "jg": {
+    "prefix": "jg",
+    "body": [
+      ":::warning[警告]",
+      "",
+      "$0",
+      "",
+      ":::"
+    ],
+    "description": "高亮警告"
+  },
+  "tb": {
+    "prefix": "tb",
+    "body": [
+      "<Tabs>",
+      "  <TabItem value=\"1\" label=\"$1\">",
+      "  </TabItem>",
+      "  <TabItem value=\"2\" label=\"$2\">",
+      "  </TabItem>",
+      "</Tabs>"
+    ],
+    "description": "docusaurus 的 tab"
+  },
+  "ct": {
+    "prefix": "ct",
+    "body": [
+      "<Tabs>",
+      "  <TabItem value=\"1\" label=\"$1\">",
+      "    <FileBlock file=\"$2\" showLineNumbers />",
+      "  </TabItem>",
+      "  <TabItem value=\"2\" label=\"$3\">",
+      "    <FileBlock file=\"$4\" showLineNumbers />",
+      "  </TabItem>",
+      "</Tabs>"
+    ],
+    "description": "docusaurus 的代码块 tab"
+  },
+  "fb": {
+    "prefix": "fb",
+    "body": [
+      "<FileBlock file=\"$0\" showLineNumbers />"
+    ],
+    "description": "docusaurus 的 FileBlock 标签"
+  }
+}

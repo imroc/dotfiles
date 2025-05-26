@@ -1,0 +1,11 @@
+vim.keymap.set("n", "<localleader>f", function()
+  local term = require("util.term")
+  local buffer = require("util.buffer")
+  term.run_script("fx " .. buffer.absolute_path(), { close_on_exit = true })
+end, { buffer = 0, desc = "[P]View Json With Fx (Terminal)" })
+
+vim.keymap.set("n", "<localleader>F", function()
+  local zellij = require("util.zellij")
+  local buffer = require("util.buffer")
+  zellij.run({ "fx", buffer.absolute_path() }, { name = buffer.file_name(), close_on_exit = true })
+end, { buffer = 0, desc = "[P]View Json With Fx (Zellij)" })
