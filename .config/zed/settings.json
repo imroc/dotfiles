@@ -1,0 +1,11 @@
+{
+  "theme": "Tokyo Night",
+  "ui_font_size": 14,
+  "buffer_font_size": 14,
+  "relative_line_numbers": true,
+  "ui_font_family": "JetBrainsMono Nerd Font",
+  "vim_mode": true,
+  "terminal": {
+    "font_family": "JetBrainsMono Nerd Font"
+  }
+}
