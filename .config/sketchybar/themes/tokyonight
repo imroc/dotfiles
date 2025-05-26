@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+
+# Tokyonight Night Palette
+black="0xff24283b"
+blue="0xff7aa2f7"
+blue1="0xff1a1b26"
+cyan="0xff7dcfff"
+green="0xff9ece6a"
+magenta="0xffbb9af7"
+orange="0xffff9e64"
+purple="0xff9d7cd8"
+red="0xfff7768e"
+transparent="0x00000000"
+white="0xffa9b1d6"
+yellow="0xffe0af68"
+
+# Bar
+## Colors
+BAR_COLOR="$blue1"
+BAR_BLUR_RADIUS=30
+
+## Geometry
+BAR_POSITION="top"
+BAR_HEIGHT=30
+BAR_PADDING=10
+BAR_Y_OFFSET=-3
+BAR_CORNER_RADIUS=0
+BAR_MARGIN=0
+
+# Item Defaults
+## Colors
+BACKGROUND_COLOR="$blue1"
+BACKGROUND_BORDER_COLOR="$blue"
+BACKGROUND_BORDER_WIDTH=0
+LABEL_ALIGN="center"
+LABEL_COLOR="$blue"
+LABEL_HIGHLIGHT_COLOR="$red"
+
+## Fonts
+ICON_BASE_FONT="JetBrainsMono Nerd Font"
+ICON_FONT="$ICON_BASE_FONT:Bold:13.0"
+LABEL_BASE_FONT="JetBrainsMono Nerd Font"
+LABEL_FONT="$LABEL_BASE_FONT:Regular:13.0"
+LABEL_HIGHLIGHT_FONT="$LABEL_BASE_FONT:ExtraBold:13.0"
+
+## Geometry
+BACKGROUND_CORNER_RADIUS=0
+BACKGROUND_HEIGHT=28
+LABEL_Y_OFFSET=0
+LABEL_PADDING=4
+BRACKET_BACKGROUND_BORDER_WIDTH=0
+BRACKET_BACKGROUND_CORNER_RADIUS=5
+Y_OFFSET=0
+LABEL_FONT_SIZE=13
