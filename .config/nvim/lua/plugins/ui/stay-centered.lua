@@ -7,17 +7,18 @@ return {
     {
       "<leader>ts",
       function()
+        local result = ""
         if not loaded then
           loaded = true
-          return
-        end
-        local sc = require("stay-centered")
-        sc.toggle()
-        local result = ""
-        if sc.cfg.enabled then
           result = "Enabled"
         else
-          result = "Disabled"
+          local sc = require("stay-centered")
+          sc.toggle()
+          if sc.cfg.enabled then
+            result = "Enabled"
+          else
+            result = "Disabled"
+          end
         end
         vim.notify("Stay Center " .. result, vim.log.levels.INFO)
       end,
