@@ -1,11 +1,16 @@
 -- https://github.com/arnamak/stay-centered.nvim
+local loaded = false
 return {
   "arnamak/stay-centered.nvim",
-  lazy = false,
+  lazy = true,
   keys = {
     {
       "<leader>ts",
       function()
+        if not loaded then
+          loaded = true
+          return
+        end
         local sc = require("stay-centered")
         sc.toggle()
         local result = ""
