@@ -305,8 +305,12 @@ run = ['move-node-to-workspace 5']
 
 # 非高频聊天工具
 [[on-window-detected]]
-if.app-id = 'com.tencent.qq'       # QQ
+if.app-id = 'com.tencent.qq'           # QQ 主界面
+if.window-title-regex-substring = 'QQ'
 run = ['move-node-to-workspace 6']
+[[on-window-detected]]
+if.app-id = 'com.tencent.qq' # QQ 其它界面默认 float
+run = ['layout floating']
 [[on-window-detected]]
 if.app-id = 'com.electron.lark'    # 飞书
 run = ['move-node-to-workspace 6']
@@ -325,7 +329,8 @@ run = ['move-node-to-workspace 6']
 if.app-id = 'com.lemon.lvpro'      # 剪映
 run = ['move-node-to-workspace 7']
 [[on-window-detected]]
-if.app-id = 'com.timpler.screenstudio' # ScreenStudio
+if.app-id = 'com.timpler.screenstudio'      # ScreenStudio
+if.window-title-regex-substring = 'Project' # 只将项目编辑界面放到 7 工作区
 run = ['move-node-to-workspace 7']
 [[on-window-detected]]
 if.app-id = 'net.telestream.screenflow10' # ScreenFlow
