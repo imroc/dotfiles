@@ -1,6 +1,3 @@
-abbr --add python python3
-abbr --add pip pip3
-abbr --add c "code -r"
 abbr --add chrome "/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome"
 abbr --add m make
 abbr --add duh 'du -sch * .*'
@@ -14,14 +11,12 @@ abbr --add cosroc "coscli -c ~/.cos.image.yaml"
 abbr --add lt "eza --icons --tree"
 abbr --add l "eza --group --header --group-directories-first --long --binary --icons --all"
 
-# 下载 go 依赖包
-abbr --add gomd "go mod download -x"
-# 下载 rust 依赖包
-abbr --add cf "cargo fetch -vv"
-
 # 覆盖 lazygit 在 MacOS 下的默认配置路径（~/Library/Application\ Support/jesseduffield/lazygit/config.yml）
 set -gx XDG_CONFIG_HOME "$HOME/.config"
 
 # 设置 locale 为中文，linux 与 macOS 通用
 set -gx LANG "zh_CN.UTF-8"
 set -gx LC_ALL "zh_CN.UTF-8"
+
+# 默认编辑器设为 neovim（许多 cli 工具会读这个 env，如 git、zellij、k9s 等）
+set -gx EDITOR nvim
