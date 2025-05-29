@@ -3,12 +3,12 @@ return {
   event = "VeryLazy",
   lazy = false,
   version = false, -- Set this to "*" to always pull the latest release version, or set it to false to update to the latest code changes.
+  keys = {
+    { "<leader>ia", "<cmd>AvanteAsk<CR>", desc = "[P]avante: ask" },
+    { "<leader>ie", "<cmd>AvanteEdit<CR>", desc = "[P]avante: edit" },
+    { "<leader>ir", "<cmd>AvanteRefresh<CR>", desc = "[P]avante: refresh" },
+  },
   opts = {
-    mappings = {
-      ask = "<leader>ia", -- ask
-      edit = "<leader>ie", -- edit
-      refresh = "<leader>ir", -- refresh
-    },
     behaviour = {
       auto_set_keymaps = false,
     },
