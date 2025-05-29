@@ -74,7 +74,7 @@ outer.right = 2
 outer.bottom = 2
 outer.top = [
   # 内建显示器是刘海屏，本身占用的高度足以容纳 SketchyBar，所以不需要 gaps
-  { monitor.'built-in retina display' = 6 },
+  { monitor.'built-in retina display' = 0 },
   26,
 ]
 
