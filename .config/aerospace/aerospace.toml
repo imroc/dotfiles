@@ -67,16 +67,16 @@ preset = 'qwerty'
 #                 See:
 #                 https://nikitabobko.github.io/AeroSpace/guide#assign-workspaces-to-monitors
 [gaps]
-inner.horizontal = 15
-inner.vertical = 15
-outer.left = 0
-outer.bottom = 0
+inner.horizontal = 5
+inner.vertical = 5
+outer.left = 2
+outer.right = 2
+outer.bottom = 2
 outer.top = [
   # 内建显示器是刘海屏，本身占用的高度足以容纳 SketchyBar，所以不需要 gaps
   { monitor.'built-in retina display' = 6 },
   26,
 ]
-outer.right = 0
 
 # 'main' binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
