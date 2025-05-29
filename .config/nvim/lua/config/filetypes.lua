@@ -10,7 +10,6 @@ local filetypes = {
     ["settings.json"] = "jsonc",
     ["keybindings.json"] = "jsonc",
     ["keymap.json"] = "jsonc",
-    -- [".gitalias"] = "gitconfig",
   },
   pattern = {
     [".*Dockerfile.*"] = "dockerfile",
