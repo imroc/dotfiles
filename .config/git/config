@@ -4,13 +4,11 @@
 [credential]
 	helper = store
 [core]
-	excludesfile = ~/.gitignore_global
 	ignorecase = true
 	quotepath = false
 	pager = delta
-	hooksPath = /Users/roc/.git-hooks
 [include]
-	path = ~/.gitalias
+	path = alias
 [color]
 	ui = auto
 [init]
