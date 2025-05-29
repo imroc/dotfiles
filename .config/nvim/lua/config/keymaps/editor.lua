@@ -31,7 +31,7 @@ vim.keymap.set({ "n", "v", "i" }, "<C-q>", "<cmd>wq<cr>", { desc = "[P]Save and 
 
 vim.keymap.set("i", "kj", "<Esc>")
 vim.keymap.set("n", "<C-c>", "ggVGy", { desc = "[P]Copy All" })
-vim.keymap.set("n", "<leader>A", "ggVG", { desc = "[P]Select All" })
+vim.keymap.set("n", "<M-C-a>", "ggVG", { desc = "[P]Select All" })
 
 vim.keymap.set("v", "<C-c>", "y", { desc = "[P]Copy" })
 
