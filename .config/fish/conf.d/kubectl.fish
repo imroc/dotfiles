@@ -4,6 +4,7 @@ abbr --add sd1 'kubectl get deployments.v1.apps | grep -v NAME | awk \'{print $1
 
 abbr --add kvc kubectl-view-cert
 abbr --add kc kubectl-kc
+abbr --add kck kubectl-klock
 abbr --add krew kubectl-krew
 abbr --add kf kubectl-fuzzy
 abbr --add kfd 'kubectl-fuzzy describe'
