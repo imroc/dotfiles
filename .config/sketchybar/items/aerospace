@@ -49,7 +49,7 @@ create_workspace_bracket_for_monitor() {
 
     sketchybar --add item workspaces_spacer_right left \
       --set workspaces_spacer_right \
-      width=10 \
+      width=2 \
       background.drawing=off \
       label.drawing=off
   fi
