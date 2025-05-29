@@ -11,7 +11,7 @@ return {
         { "<leader>k", group = "kube" },
         { "<leader>ka", group = "kubectl apply" },
         { "<leader>kd", group = "kubectl delete" },
-        { "<leader>a", group = "avante" },
+        { "<leader>i", group = "ai" },
         { "<leader>gH", group = "github" },
         { "<leader>gO", group = "open in browser" },
         { "<leader>gy", group = "copy url" },
