@@ -9,6 +9,9 @@ return {
       edit = "<leader>ie", -- edit
       refresh = "<leader>ir", -- refresh
     },
+    behaviour = {
+      auto_set_keymaps = false,
+    },
     provider = "deepseek",
     vendors = {
       deepseek = {
