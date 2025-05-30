@@ -1,6 +1,6 @@
 set -l private_path ~/.config/private
 
-if not test -d $private_path
+if not test -d $private_path; and not test -L $private_path
     return
 end
 
