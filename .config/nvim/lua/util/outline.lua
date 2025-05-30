@@ -7,10 +7,8 @@ function M.goto_location()
   if sidebar then --  有 sidebar，直接跳转
     if sidebar.view:is_open() then
       sidebar:__goto_location(true)
-      vim.notify("goto with exists sidebar")
     else
       sidebar:open({ focus_outline = false })
-      vim.notify("goto with exists sidebar and open it")
       vim.defer_fn(function()
         sidebar:__goto_location(true)
       end, 10)
@@ -19,13 +17,11 @@ function M.goto_location()
     Outline.open_outline({ focus_outline = false })
     sidebar = Outline._get_sidebar()
     if sidebar then
-      sidebar:__goto_location(true)
-      vim.notify("goto with new sidebar")
-      -- vim.defer_fn(function()
-      --   sidebar:__goto_location(true)
-      -- end, 10)
+      vim.defer_fn(function()
+        sidebar:__goto_location(true)
+      end, 10)
     else
-      vim.notify("failed to create outline sidebar")
+      vim.notify("failed to create outline sidebar", vim.log.levels.WARN)
     end
   end
 end
