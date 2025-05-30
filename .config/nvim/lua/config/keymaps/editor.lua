@@ -56,4 +56,4 @@ vim.keymap.set("n", "<C-u>", function()
 end, { noremap = true, silent = true })
 
 local outline = require("util.outline")
-vim.keymap.set("n", "gn", outline.goto_localtion, { desc = "[P]goto method name" })
+vim.keymap.set("n", "gn", outline.goto_location, { desc = "[P]goto method name" })
