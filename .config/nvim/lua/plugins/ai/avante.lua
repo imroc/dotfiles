@@ -18,7 +18,7 @@ return {
         __inherited_from = "openai",
         api_key_name = "DEEPSEEK_API_KEY",
         endpoint = "https://api.lkeap.cloud.tencent.com/v1",
-        model = "deepseek-r1",
+        model = "deepseek-r1-0528",
       },
     },
   },
