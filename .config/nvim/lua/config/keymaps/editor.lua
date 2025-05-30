@@ -54,3 +54,25 @@ vim.keymap.set("n", "<C-u>", function()
   local lines = math.floor(vim.api.nvim_win_get_height(0) * scroll_percentage)
   vim.cmd("normal! " .. lines .. "kzz")
 end, { noremap = true, silent = true })
+
+local Outline = require("outline")
+vim.keymap.set("n", "gn", function()
+  -- 确保 sidebar 打开
+  local sidebar = Outline._get_sidebar()
+  if not sidebar then
+    Outline.open_outline({ focus_outline = false })
+    sidebar = Outline._get_sidebar()
+  end
+  if not sidebar then
+    vim.notify("failed to open outline", vim.log.levels.WARN)
+    return
+  end
+  if not sidebar.view:is_open() then
+    sidebar:open({ focus_outline = false })
+    vim.defer_fn(function()
+      sidebar:__goto_location(true)
+    end, 100)
+  else
+    sidebar:__goto_location(true)
+  end
+end, { desc = "[P]goto method name" })
