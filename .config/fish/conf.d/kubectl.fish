@@ -28,15 +28,8 @@ abbr --add kglbrs 'kubectl get LoadBalancerResource -ojsonpath='\''{range .items
 # 获取 ingress 的 conditon
 abbr --add kgingc 'kubectl get ingress -o jsonpath='\''{.metadata.annotations.ingress\.cloud\.tencent\.com\/status\.conditions}'\'''
 
-# 个人网站的构建日志（用于检查是否有报错）
-abbr --add siteci "kubectl -n website logs deploy/website --tail 500 -f --timestamps=true"
-
-# 个人网站静态文件的拉取日志（用于检查是否拉取成功）
-abbr --add sitecd "kubectl -n website logs -l app=website-sync --tail 100 -f --timestamps=true"
-
 abbr --add kx "kubie ctx"
 abbr --add ks "kubie ns"
-abbr --add kt "set -gx KUBECONFIG ~/.kube/cls.yaml"
 abbr --add kns kubectl ns
 abbr --add kgc "kubectl get pods -o jsonpath='{.spec.containers[*].name}'"
 abbr --add kno "kubectl node-shell"
