@@ -1,4 +1,4 @@
-set -l private_path ~/.config/private
+set -l private_path ~/.config/fish/private
 
 if not test -d $private_path; and not test -L $private_path
     return
