@@ -24,7 +24,7 @@ vim.keymap.set(
 )
 
 -- quit
-vim.keymap.set({ "n", "v" }, "<leader>.", "<cmd>qa<cr>", { desc = "[P]Quit all" })
+vim.keymap.set({ "n", "v" }, "<leader>z", "<cmd>qa<cr>", { desc = "[P]Quit all" })
 vim.keymap.set({ "n", "v" }, "<leader>X", "<cmd>qa!<cr>", { desc = "[P]Quit all without save" })
 vim.keymap.set({ "n", "v" }, "go", "<cmd>qa!<cr>", { desc = "[P]Quit all without save" })
 vim.keymap.set({ "n", "v", "i" }, "<C-q>", "<cmd>wq<cr>", { desc = "[P]Save and quit current window" })

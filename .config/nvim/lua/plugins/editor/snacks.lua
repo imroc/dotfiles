@@ -16,8 +16,8 @@ return {
   "folke/snacks.nvim",
   keys = {
     -- 禁用一些快捷键，避免与自定义快捷键冲突
-    { "<leader>.", false },
-    { "<leader>S", false },
+    -- { "<leader>.", false },
+    -- { "<leader>S", false },
     -- { "<leader>gS", false },
     { "<leader>gd", false },
     { "<leader>gc", false },
