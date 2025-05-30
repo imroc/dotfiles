@@ -42,4 +42,3 @@ abbr --add kgc "kubectl get pods -o jsonpath='{.spec.containers[*].name}'"
 abbr --add kno "kubectl node-shell"
 abbr --add ke "kubectl edit"
 abbr --add kl "kubectl logs --tail 2000"
-abbr --add ki kubectl-ianvs
