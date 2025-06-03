@@ -51,7 +51,6 @@ local keys = {
 	-- tab: hide tab-bar
 	{ key = "T", mods = "LEADER", action = act.EmitEvent("tabs.toggle-tab-bar") },
 	-- tab: new tab-bar
-	{ key = "t", mods = "LEADER", action = act.SpawnTab("CurrentPaneDomain") },
 	{ key = "n", mods = "LEADER", action = act.SpawnTab("CurrentPaneDomain") },
 	-- tab: close tab-bar
 	{ key = "x", mods = "LEADER", action = act.CloseCurrentTab({ confirm = false }) },
@@ -118,6 +117,16 @@ local keys = {
 			timemout_miliseconds = 1000,
 		}),
 	},
+	-- tab mode
+	{
+		key = "t",
+		mods = "LEADER",
+		action = act.ActivateKeyTable({
+			name = "tab",
+			one_shot = false,
+			timemout_miliseconds = 1000,
+		}),
+	},
 }
 
 -- stylua: ignore
@@ -134,6 +143,14 @@ local key_tables = {
       { key = 'j',      action = act.AdjustPaneSize({ 'Down', 1 }) },
       { key = 'h',      action = act.AdjustPaneSize({ 'Left', 1 }) },
       { key = 'l',      action = act.AdjustPaneSize({ 'Right', 1 }) },
+      { key = 'Escape', action = 'PopKeyTable' },
+      { key = 'q',      action = 'PopKeyTable' },
+   },
+   tab = {
+      { key = "h",      action = act.ActivateTabRelative(-1) },
+      { key = "l",      action = act.ActivateTabRelative(1) },
+      { key = 'H',      action = act.MoveTabRelative(-1) },
+      { key = 'L',      action = act.MoveTabRelative(1) },
       { key = 'Escape', action = 'PopKeyTable' },
       { key = 'q',      action = 'PopKeyTable' },
    },
