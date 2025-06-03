@@ -18,7 +18,11 @@ vim.keymap.set("n", "<leader>gA", git.git_commit_amend, { desc = "[P]Git Amend" 
 
 -- lazygit
 if vim.fn.executable("lazygit") == 1 then
+  local buffer = require("util.buffer")
   vim.keymap.set({ "n", "i", "t", "v" }, "<C-g>", function()
     Snacks.lazygit({ cwd = LazyVim.root.git() })
   end, { desc = "Lazygit (Root Dir)" })
+  vim.keymap.set({ "n", "t", "v" }, "<leader>gG", function()
+    Snacks.lazygit({ cwd = buffer.current_dir() })
+  end, { desc = "Lazygit (Current Dir)" })
 end
