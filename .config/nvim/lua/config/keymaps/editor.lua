@@ -8,14 +8,60 @@ vim.keymap.set("n", "<leader>'", "<cmd>tabclose<cr>", { desc = "[P]Close Tab" })
 vim.keymap.set("n", "<C-S-n>", "<cmd>tabnew<cr>", { desc = "[P]New Tab" })
 
 -- window
-vim.keymap.set({ "n", "t" }, "<M-k>", "<cmd>resize +5<cr>", { desc = "[P]Increase window height" })
-vim.keymap.set({ "n", "t" }, "<M-j>", "<cmd>resize -5<cr>", { desc = "[P]Decrease window height" })
-vim.keymap.set({ "n", "t" }, "<M-l>", "<cmd>vertical resize +5<cr>", { desc = "[P]Increase window width" })
-vim.keymap.set({ "n", "t" }, "<M-h>", "<cmd>vertical resize -5<cr>", { desc = "[P]Decrease window width" })
+local function is_window_on_right()
+  local win = vim.api.nvim_get_current_win()
+  local col = vim.fn.win_screenpos(win)[2]
+  local width = vim.api.nvim_win_get_width(win)
+  local screen_width = vim.o.columns
+  local right_pos = screen_width - col - width
+  return right_pos <= 1
+end
+local function is_window_on_top()
+  local win = vim.api.nvim_get_current_win()
+  local row = vim.fn.win_screenpos(win)[1]
+  return row <= 2
+end
+vim.keymap.set({ "n", "t" }, "<M-h>", function()
+  -- 只有最右边的 window 才变宽，其它都变窄
+  if is_window_on_right() then
+    vim.cmd("vertical resize +5")
+  else
+    vim.cmd("vertical resize -5")
+  end
+end, { desc = "[P]Increase or Decrease window width" })
+vim.keymap.set({ "n", "t" }, "<M-l>", function()
+  -- 只有最右边的 window 才变窄，其它都变宽
+  if is_window_on_right() then
+    vim.cmd("vertical resize -5")
+  else
+    vim.cmd("vertical resize +5")
+  end
+end, { desc = "[P]Increase or Decrease window width" })
+vim.keymap.set({ "n", "t" }, "<M-j>", function()
+  -- 只有最上边的 window 才变高，其它都变矮
+  if is_window_on_top() then
+    vim.cmd("resize +5")
+  else
+    vim.cmd("resize -5")
+  end
+end, { desc = "[P]Increase or Decrease window height" })
+vim.keymap.set({ "n", "t" }, "<M-k>", function()
+  -- 只有最上边的 window 才变矮，其它都变高
+  if is_window_on_top() then
+    vim.cmd("resize -5")
+  else
+    vim.cmd("resize +5")
+  end
+end, { desc = "[P]Increase or Decrease window height" })
 vim.keymap.set({ "n", "t" }, "<C-'>", "<cmd>close<cr>", { desc = "[P]Close Window" })
 vim.keymap.set({ "n", "t" }, "<C-x>", "<cmd>close<cr>", { desc = "[P]Close Window" })
 vim.keymap.set({ "n" }, "<C-_>", "<C-W>s", { desc = "[P]Split Window Below", remap = true })
 vim.keymap.set({ "n" }, "<C-\\>", "<C-W>v", { desc = "[P]Split Window Right", remap = true })
+vim.keymap.set({ "n", "t" }, "<leader>tw", function()
+  local win = vim.api.nvim_get_current_win()
+  local row = vim.fn.win_screenpos(win)[1]
+  vim.notify("row:" .. row)
+end, { desc = "[P]test window" })
 
 -- format and save
 vim.keymap.set(
