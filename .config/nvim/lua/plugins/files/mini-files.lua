@@ -8,5 +8,8 @@ return {
     windows = {
       preview = false,
     },
+    mappings = {
+      go_in_plus = "<CR>",
+    },
   },
 }
