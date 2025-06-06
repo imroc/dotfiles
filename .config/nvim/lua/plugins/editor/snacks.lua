@@ -100,14 +100,14 @@ return {
       desc = "[P]Find Dotfiles",
     },
     {
-      "<leader>ff",
+      "<leader><space>",
       function()
         picker.files({ cwd = LazyVim.root() })
       end,
       desc = "[P]Find Files (Root Dir)",
     },
     {
-      "<leader>fF",
+      "<leader>ff",
       function()
         picker.files({ cwd = require("util.buffer").current_dir() })
       end,
@@ -139,7 +139,7 @@ return {
       desc = "[P]Grep (Plain Text)",
     },
     {
-      "<leader>sG",
+      "<leader>/",
       function()
         picker.grep({ cwd = LazyVim.root() })
       end,
