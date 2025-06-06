@@ -32,6 +32,8 @@ local keys = {
 	-- tab
 	-- new tab
 	{ key = "n", mods = "SHIFT|SUPER", action = act.SpawnTab("CurrentPaneDomain") },
+	-- close tab
+	{ key = "w", mods = "SHIFT|SUPER", action = act.CloseCurrentTab({ confirm = false }) },
 	-- tab: navigation
 	{ key = "[", mods = "SHIFT|SUPER", action = act.ActivateTabRelative(-1) },
 	{ key = "]", mods = "SHIFT|SUPER", action = act.ActivateTabRelative(1) },
@@ -53,7 +55,7 @@ local keys = {
 	-- pane: zoom
 	{ key = "Enter", mods = "SHIFT|SUPER", action = act.TogglePaneZoomState },
 	-- pane: close
-	{ key = "w", mods = "CTRL|SUPER", action = act.CloseCurrentPane({ confirm = false }) },
+	{ key = "x", mods = "SHIFT|SUPER", action = act.CloseCurrentPane({ confirm = false }) },
 	-- pane: navigation
 	{ key = "h", mods = "SHIFT|SUPER", action = act.ActivatePaneDirection("Left") },
 	{ key = "l", mods = "SHIFT|SUPER", action = act.ActivatePaneDirection("Right") },
@@ -151,11 +153,11 @@ local key_tables = {
 		-- reset tab title
 		{ key = "R", action = act.Multiple({ "PopKeyTable", act.EmitEvent("tabs.reset-tab-title") }) },
 		-- toggle tab-bar
-		{ key = "t", action = act.EmitEvent("tabs.toggle-tab-bar") },
+		{ key = "t", action = act.Multiple({ "PopKeyTable", act.EmitEvent("tabs.toggle-tab-bar") }) },
 		-- new tab-bar
-		{ key = "n", action = act.SpawnTab("CurrentPaneDomain") },
-		-- close tab-bar
-		{ key = "x", action = act.CloseCurrentTab({ confirm = false }) },
+		{ key = "n", action = act.Multiple({ "PopKeyTable", act.SpawnTab("CurrentPaneDomain") }) },
+		-- close tab
+		{ key = "x", action = act.Multiple({ "PopKeyTable", act.CloseCurrentTab({ confirm = false }) }) },
 		-- quit tab mode
 		{ key = "Escape", action = "PopKeyTable" },
 		{ key = "q", action = "PopKeyTable" },

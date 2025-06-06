@@ -5,8 +5,7 @@ keybinds clear-defaults=true {
         // bind "Super c" { Copy; }
     }
     locked {
-        // Ctrl g --> Super x 避免与 neovim “显示当前文件路径” 快捷键冲突
-        bind "Super x" { SwitchToMode "Normal"; }
+        bind "Super g" { SwitchToMode "Normal"; }
     }
     resize {
         bind "Super r" { SwitchToMode "Normal"; }
@@ -151,11 +150,12 @@ keybinds clear-defaults=true {
         bind "q" { Quit; }
     }
     shared_except "locked" {
-        bind "Super x" { SwitchToMode "Locked"; }
+        bind "Super g" { SwitchToMode "Locked"; }
         // 注释掉 Ctrl q，避免与 Neovim 退出并保存的快捷键冲突
         // bind "Ctrl q" { Quit; }
         bind "Super /" { ToggleFloatingPanes; }
-        bind "Super w" { CloseFocus; }
+        bind "Super x" { CloseFocus; }
+        bind "Super w" { CloseTab; }
         bind "Super n" { NewPane; }
         bind "Super -" { NewPane "Down"; }
         bind "Super \\" { NewPane "Right"; }
