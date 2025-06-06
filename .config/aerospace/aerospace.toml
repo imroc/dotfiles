@@ -110,8 +110,8 @@ outer.top = [
 # See: https://nikitabobko.github.io/AeroSpace/commands#layout
 alt-ctrl-slash = 'layout tiles horizontal vertical'
 alt-ctrl-comma = 'layout accordion horizontal vertical'
-alt-ctrl-f = 'fullscreen'
-alt-shift-f = 'layout floating tiling'
+alt-ctrl-enter = 'fullscreen'
+alt-ctrl-f = 'layout floating tiling'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#focus
 alt-ctrl-h = 'focus left'
