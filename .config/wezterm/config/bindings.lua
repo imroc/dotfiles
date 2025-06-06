@@ -91,22 +91,12 @@ local keys = {
 	{ key = "PageDown", mods = "NONE", action = act.ScrollByPage(0.75) },
 
 	-- key-tables --
-	-- enter resize font mode
+	-- enter resize mode
 	{
-		key = "f",
-		mods = "LEADER",
+		key = "r",
+		mods = "SHIFT|SUPER",
 		action = act.ActivateKeyTable({
-			name = "resize_font",
-			one_shot = false,
-			timemout_miliseconds = 1000,
-		}),
-	},
-	-- enter resize pane mode
-	{
-		key = "p",
-		mods = "LEADER",
-		action = act.ActivateKeyTable({
-			name = "resize_pane",
+			name = "resize",
 			one_shot = false,
 			timemout_miliseconds = 1000,
 		}),
@@ -124,19 +114,17 @@ local keys = {
 }
 
 local key_tables = {
-	resize_font = {
-		{ key = "k", action = act.IncreaseFontSize },
-		{ key = "j", action = act.DecreaseFontSize },
+	resize = {
+		-- resize font size
+		{ key = "=", action = act.IncreaseFontSize },
+		{ key = "-", action = act.DecreaseFontSize },
 		{ key = "r", action = act.ResetFontSize },
-		{ key = "Escape", action = "PopKeyTable" },
-		{ key = "q", action = "PopKeyTable" },
-		{ key = "Enter", action = "PopKeyTable" },
-	},
-	resize_pane = {
+		-- resize pane size
 		{ key = "k", action = act.AdjustPaneSize({ "Up", 1 }) },
 		{ key = "j", action = act.AdjustPaneSize({ "Down", 1 }) },
 		{ key = "h", action = act.AdjustPaneSize({ "Left", 1 }) },
 		{ key = "l", action = act.AdjustPaneSize({ "Right", 1 }) },
+		-- quit resize mode
 		{ key = "Escape", action = "PopKeyTable" },
 		{ key = "q", action = "PopKeyTable" },
 		{ key = "Enter", action = "PopKeyTable" },

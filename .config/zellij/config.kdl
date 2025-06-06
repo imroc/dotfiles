@@ -165,6 +165,7 @@ keybinds clear-defaults=true {
         bind "Super k" "Super Up" { MoveFocus "Up"; }
         bind "Super [" { GoToPreviousTab; }
         bind "Super ]" { GoToNextTab; }
+        bind "Alt Super n" { NewTab; }
         bind "Alt Super p" { ToggleTab; }
         bind "Alt Super =" { Resize "Increase"; }
         bind "Alt Super -" { Resize "Decrease"; }
