@@ -12,8 +12,10 @@ vim.keymap.set({ "n", "t" }, "<M-k>", "<cmd>resize +5<cr>", { desc = "[P]Increas
 vim.keymap.set({ "n", "t" }, "<M-j>", "<cmd>resize -5<cr>", { desc = "[P]Decrease window height" })
 vim.keymap.set({ "n", "t" }, "<M-l>", "<cmd>vertical resize +5<cr>", { desc = "[P]Increase window width" })
 vim.keymap.set({ "n", "t" }, "<M-h>", "<cmd>vertical resize -5<cr>", { desc = "[P]Decrease window width" })
-vim.keymap.set("n", "<leader>0", "<cmd>close<cr>", { desc = "[P]Close Window", remap = true })
-vim.keymap.set({ "n", "i" }, "<C-'>", "<cmd>close<cr>", { desc = "[P]Close Window", remap = true })
+vim.keymap.set({ "n", "t" }, "<C-'>", "<cmd>close<cr>", { desc = "[P]Close Window" })
+vim.keymap.set({ "n", "t" }, "<C-x>", "<cmd>close<cr>", { desc = "[P]Close Window" })
+vim.keymap.set({ "n" }, "<C-_>", "<C-W>s", { desc = "[P]Split Window Below", remap = true })
+vim.keymap.set({ "n" }, "<C-\\>", "<C-W>v", { desc = "[P]Split Window Right", remap = true })
 
 -- format and save
 vim.keymap.set(
