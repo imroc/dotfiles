@@ -121,44 +121,46 @@ local keys = {
 	},
 }
 
--- stylua: ignore
 local key_tables = {
-   resize_font = {
-      { key = 'k',      action = act.IncreaseFontSize },
-      { key = 'j',      action = act.DecreaseFontSize },
-      { key = 'r',      action = act.ResetFontSize },
-      { key = 'Escape', action = 'PopKeyTable' },
-      { key = 'q',      action = 'PopKeyTable' },
-   },
-   resize_pane = {
-      { key = 'k',      action = act.AdjustPaneSize({ 'Up', 1 }) },
-      { key = 'j',      action = act.AdjustPaneSize({ 'Down', 1 }) },
-      { key = 'h',      action = act.AdjustPaneSize({ 'Left', 1 }) },
-      { key = 'l',      action = act.AdjustPaneSize({ 'Right', 1 }) },
-      { key = 'Escape', action = 'PopKeyTable' },
-      { key = 'q',      action = 'PopKeyTable' },
-   },
-   tab = {
-     -- goto left/right tab
-      { key = "h",      action = act.ActivateTabRelative(-1) },
-      { key = "l",      action = act.ActivateTabRelative(1) },
-      -- move tab to left/right
-      { key = 'H',      action = act.MoveTabRelative(-1) },
-      { key = 'L',      action = act.MoveTabRelative(1) },
-      -- rename tab title
-      { key = "r", action = act.Multiple { 'PopKeyTable', act.EmitEvent("tabs.manual-update-tab-title") } },
-      -- reset tab title
-      { key = "R", action = act.Multiple { 'PopKeyTable', act.EmitEvent("tabs.reset-tab-title") } },
-      -- toggle tab-bar
-      { key = "t", action = act.EmitEvent("tabs.toggle-tab-bar") },
-      -- new tab-bar
-      { key = "n", action = act.SpawnTab("CurrentPaneDomain") },
-      -- close tab-bar
-      { key = "x", action = act.CloseCurrentTab({ confirm = false }) },
-      -- quit tab mode
-      { key = 'Escape', action = 'PopKeyTable' },
-      { key = 'q',      action = 'PopKeyTable' },
-   },
+	resize_font = {
+		{ key = "k", action = act.IncreaseFontSize },
+		{ key = "j", action = act.DecreaseFontSize },
+		{ key = "r", action = act.ResetFontSize },
+		{ key = "Escape", action = "PopKeyTable" },
+		{ key = "q", action = "PopKeyTable" },
+		{ key = "Enter", action = "PopKeyTable" },
+	},
+	resize_pane = {
+		{ key = "k", action = act.AdjustPaneSize({ "Up", 1 }) },
+		{ key = "j", action = act.AdjustPaneSize({ "Down", 1 }) },
+		{ key = "h", action = act.AdjustPaneSize({ "Left", 1 }) },
+		{ key = "l", action = act.AdjustPaneSize({ "Right", 1 }) },
+		{ key = "Escape", action = "PopKeyTable" },
+		{ key = "q", action = "PopKeyTable" },
+		{ key = "Enter", action = "PopKeyTable" },
+	},
+	tab = {
+		-- goto left/right tab
+		{ key = "h", action = act.ActivateTabRelative(-1) },
+		{ key = "l", action = act.ActivateTabRelative(1) },
+		-- move tab to left/right
+		{ key = "H", action = act.MoveTabRelative(-1) },
+		{ key = "L", action = act.MoveTabRelative(1) },
+		-- rename tab title
+		{ key = "r", action = act.Multiple({ "PopKeyTable", act.EmitEvent("tabs.manual-update-tab-title") }) },
+		-- reset tab title
+		{ key = "R", action = act.Multiple({ "PopKeyTable", act.EmitEvent("tabs.reset-tab-title") }) },
+		-- toggle tab-bar
+		{ key = "t", action = act.EmitEvent("tabs.toggle-tab-bar") },
+		-- new tab-bar
+		{ key = "n", action = act.SpawnTab("CurrentPaneDomain") },
+		-- close tab-bar
+		{ key = "x", action = act.CloseCurrentTab({ confirm = false }) },
+		-- quit tab mode
+		{ key = "Escape", action = "PopKeyTable" },
+		{ key = "q", action = "PopKeyTable" },
+		{ key = "Enter", action = "PopKeyTable" },
+	},
 }
 
 local mouse_bindings = {
