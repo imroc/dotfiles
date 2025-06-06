@@ -41,7 +41,7 @@ vim.keymap.set("n", "<leader>cT", "<cmd>%s/  /\t/g<cr>", { desc = "[P]Convert 2 
 local window = require("util.window")
 vim.keymap.set("n", "<leader>j", window.clear, { desc = "[P]Clear all other windows" })
 
-vim.keymap.set("n", "<C-t>", "<cmd>e ~/dev/note/todo.md<cr>")
+vim.keymap.set("n", "<leader>td", "<cmd>e ~/dev/note/todo.md<cr>", { desc = "[P]Open Todo" })
 
 -- Scroll by 35% of the window height and keep the cursor centered
 local scroll_percentage = 0.35

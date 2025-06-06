@@ -30,30 +30,20 @@ local keys = {
 	},
 
 	-- tab
-	--
+	-- new tab
+	{ key = "n", mods = "SHIFT|SUPER", action = act.SpawnTab("CurrentPaneDomain") },
 	-- tab: navigation
-	{ key = "[", mods = "LEADER", action = act.MoveTabRelative(-1) },
-	{ key = "]", mods = "LEADER", action = act.MoveTabRelative(1) },
 	{ key = "[", mods = "SHIFT|SUPER", action = act.ActivateTabRelative(-1) },
 	{ key = "]", mods = "SHIFT|SUPER", action = act.ActivateTabRelative(1) },
-	{ key = "1", mods = "SUPER", action = act.ActivateTab(0) },
-	{ key = "2", mods = "SUPER", action = act.ActivateTab(1) },
-	{ key = "3", mods = "SUPER", action = act.ActivateTab(2) },
-	{ key = "4", mods = "SUPER", action = act.ActivateTab(3) },
-	{ key = "5", mods = "SUPER", action = act.ActivateTab(4) },
-	{ key = "6", mods = "SUPER", action = act.ActivateTab(5) },
-	{ key = "7", mods = "SUPER", action = act.ActivateTab(6) },
-	{ key = "8", mods = "SUPER", action = act.ActivateTab(7) },
-	{ key = "9", mods = "SUPER", action = act.ActivateTab(-1) },
-	-- tab: title
-	{ key = "r", mods = "LEADER", action = act.EmitEvent("tabs.manual-update-tab-title") },
-	{ key = "R", mods = "LEADER", action = act.EmitEvent("tabs.reset-tab-title") },
-	-- tab: hide tab-bar
-	{ key = "T", mods = "LEADER", action = act.EmitEvent("tabs.toggle-tab-bar") },
-	-- tab: new tab-bar
-	{ key = "n", mods = "LEADER", action = act.SpawnTab("CurrentPaneDomain") },
-	-- tab: close tab-bar
-	{ key = "x", mods = "LEADER", action = act.CloseCurrentTab({ confirm = false }) },
+	{ key = "1", mods = "CTRL|SUPER", action = act.ActivateTab(0) },
+	{ key = "2", mods = "CTRL|SUPER", action = act.ActivateTab(1) },
+	{ key = "3", mods = "CTRL|SUPER", action = act.ActivateTab(2) },
+	{ key = "4", mods = "CTRL|SUPER", action = act.ActivateTab(3) },
+	{ key = "5", mods = "CTRL|SUPER", action = act.ActivateTab(4) },
+	{ key = "6", mods = "CTRL|SUPER", action = act.ActivateTab(5) },
+	{ key = "7", mods = "CTRL|SUPER", action = act.ActivateTab(6) },
+	{ key = "8", mods = "CTRL|SUPER", action = act.ActivateTab(7) },
+	{ key = "9", mods = "CTRL|SUPER", action = act.ActivateTab(-1) },
 
 	-- pane
 	--
@@ -62,6 +52,8 @@ local keys = {
 	{ key = "\\", mods = "SHIFT|SUPER", action = act.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
 	-- pane: zoom
 	{ key = "Enter", mods = "SHIFT|SUPER", action = act.TogglePaneZoomState },
+	-- pane: close
+	{ key = "w", mods = "CTRL|SUPER", action = act.CloseCurrentPane({ confirm = false }) },
 	-- pane: navigation
 	{ key = "h", mods = "SHIFT|SUPER", action = act.ActivatePaneDirection("Left") },
 	{ key = "l", mods = "SHIFT|SUPER", action = act.ActivatePaneDirection("Right") },
@@ -120,7 +112,7 @@ local keys = {
 	-- tab mode
 	{
 		key = "t",
-		mods = "LEADER",
+		mods = "SHIFT|SUPER",
 		action = act.ActivateKeyTable({
 			name = "tab",
 			one_shot = false,
@@ -147,10 +139,23 @@ local key_tables = {
       { key = 'q',      action = 'PopKeyTable' },
    },
    tab = {
+     -- goto left/right tab
       { key = "h",      action = act.ActivateTabRelative(-1) },
       { key = "l",      action = act.ActivateTabRelative(1) },
+      -- move tab to left/right
       { key = 'H',      action = act.MoveTabRelative(-1) },
       { key = 'L',      action = act.MoveTabRelative(1) },
+      -- rename tab title
+      { key = "r", action = act.Multiple { 'PopKeyTable', act.EmitEvent("tabs.manual-update-tab-title") } },
+      -- reset tab title
+      { key = "R", action = act.Multiple { 'PopKeyTable', act.EmitEvent("tabs.reset-tab-title") } },
+      -- toggle tab-bar
+      { key = "t", action = act.EmitEvent("tabs.toggle-tab-bar") },
+      -- new tab-bar
+      { key = "n", action = act.SpawnTab("CurrentPaneDomain") },
+      -- close tab-bar
+      { key = "x", action = act.CloseCurrentTab({ confirm = false }) },
+      -- quit tab mode
       { key = 'Escape', action = 'PopKeyTable' },
       { key = 'q',      action = 'PopKeyTable' },
    },
