@@ -89,7 +89,7 @@ local keys = {
 	{ key = "PageDown", mods = "NONE", action = act.ScrollByPage(0.75) },
 
 	-- key-tables --
-	-- resizes fonts
+	-- enter resize font mode
 	{
 		key = "f",
 		mods = "LEADER",
@@ -99,7 +99,7 @@ local keys = {
 			timemout_miliseconds = 1000,
 		}),
 	},
-	-- resize panes
+	-- enter resize pane mode
 	{
 		key = "p",
 		mods = "LEADER",
@@ -109,10 +109,10 @@ local keys = {
 			timemout_miliseconds = 1000,
 		}),
 	},
-	-- tab mode
+	-- enter tab mode
 	{
 		key = "t",
-		mods = "SHIFT|SUPER",
+		mods = "SUPER",
 		action = act.ActivateKeyTable({
 			name = "tab",
 			one_shot = false,
