@@ -55,7 +55,7 @@ local function detect_project_git_root(buf)
   return detect_git_root_dir(buf_dir)
 end
 
-vim.g.root_spec = { detect_project_git_root, { ".git" }, "lsp", "cwd" }
+vim.g.root_spec = { detect_project_git_root, { ".git" }, "cwd" }
 -- vim.g.root_spec = { "cwd" }
 
 vim.g.maplocalleader = ","
