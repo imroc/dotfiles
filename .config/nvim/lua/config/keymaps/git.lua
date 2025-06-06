@@ -7,10 +7,8 @@ local git = require("util.git")
 vim.keymap.set("n", "<leader>gT", git.open_tig_root_dir, { desc = "Tig (root dir)" })
 
 -- next/pre change
-vim.keymap.set("n", "<C-M-n>", "]c", { desc = "[P]Next Change" })
-vim.keymap.set("n", "<C-M-p>", "[c", { desc = "[P]Previous Change" })
-vim.keymap.set("n", "<C-M-j>", "]c", { desc = "[P]Next Change" })
-vim.keymap.set("n", "<C-M-k>", "[c", { desc = "[P]Previous Change" })
+vim.keymap.set("n", "<M-C-n>", "]c", { desc = "[P]Next Change" })
+vim.keymap.set("n", "<M-C-p>", "[c", { desc = "[P]Previous Change" })
 
 -- git push
 vim.keymap.set("n", "<leader>gp", git.git_push, { desc = "[P]Git Push" })
