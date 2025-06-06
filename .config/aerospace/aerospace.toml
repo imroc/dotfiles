@@ -102,10 +102,10 @@ outer.top = [
 # All possible commands: https://nikitabobko.github.io/AeroSpace/commands
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#exec-and-forget
-cmd-ctrl-4 = 'exec-and-forget open -a "WeChat.app"'
-cmd-ctrl-3 = 'exec-and-forget open -a "企业微信.app"'
-cmd-ctrl-2 = 'exec-and-forget open -a "WezTerm.app"'
-cmd-ctrl-1 = 'exec-and-forget open /Users/roc/Downloads'
+# cmd-ctrl-4 = 'exec-and-forget open -a "WeChat.app"'
+# cmd-ctrl-3 = 'exec-and-forget open -a "企业微信.app"'
+# cmd-ctrl-2 = 'exec-and-forget open -a "WezTerm.app"'
+# cmd-ctrl-1 = 'exec-and-forget open /Users/roc/Downloads'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#layout
 alt-ctrl-slash = 'layout tiles horizontal vertical'
