@@ -3,7 +3,8 @@ return {
   opts = {
     keymap = {
       ["<M-space>"] = { "show", "show_documentation", "hide_documentation" },
-      ["<C-y>"] = nil,
+      ["<C-k>"] = { "select_prev" },
+      ["<C-j>"] = { "select_next" },
     },
   },
 }
