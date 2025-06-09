@@ -22,7 +22,7 @@ local keys = {
 	-- open url
 	{
 		key = "u",
-		mods = mod.SUPER_REV,
+		mods = "LEADER",
 		action = wezterm.action.QuickSelectArgs({
 			label = "open url",
 			patterns = {
@@ -91,8 +91,6 @@ local keys = {
 	{ key = "b", mods = "LEADER", action = act.EmitEvent("toggle-opacity") },
 
 	-- panes: scroll pane
-	{ key = "u", mods = "LEADER", action = act.ScrollByLine(-5) },
-	{ key = "d", mods = "LEADER", action = act.ScrollByLine(5) },
 	{ key = "PageUp", mods = "NONE", action = act.ScrollByPage(-0.75) },
 	{ key = "PageDown", mods = "NONE", action = act.ScrollByPage(0.75) },
 
@@ -113,6 +111,16 @@ local keys = {
 		mods = mod.SUPER_REV,
 		action = act.ActivateKeyTable({
 			name = "tab_mode",
+			one_shot = false,
+			timemout_miliseconds = 1000,
+		}),
+	},
+	-- enter scroll mode
+	{
+		key = "s",
+		mods = mod.SUPER_REV,
+		action = act.ActivateKeyTable({
+			name = "scroll_mode",
 			one_shot = false,
 			timemout_miliseconds = 1000,
 		}),
@@ -153,6 +161,15 @@ local key_tables = {
 		-- close tab
 		{ key = "x", action = act.Multiple({ "PopKeyTable", act.CloseCurrentTab({ confirm = false }) }) },
 		-- quit tab mode
+		{ key = "Escape", action = "PopKeyTable" },
+		{ key = "q", action = "PopKeyTable" },
+		{ key = "Enter", action = "PopKeyTable" },
+	},
+	scroll_mode = {
+		{ key = "u", action = act.ScrollByLine(-5) },
+		{ key = "d", action = act.ScrollByLine(5) },
+		{ key = "b", action = act.ScrollByPage(-0.75) },
+		{ key = "f", action = act.ScrollByPage(0.75) },
 		{ key = "Escape", action = "PopKeyTable" },
 		{ key = "q", action = "PopKeyTable" },
 		{ key = "Enter", action = "PopKeyTable" },
