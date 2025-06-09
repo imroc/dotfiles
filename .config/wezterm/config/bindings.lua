@@ -87,7 +87,7 @@ local keys = {
 
 	-- window --
 	-- window: spawn windows
-	{ key = "N", mods = "LEADER", action = act.SpawnWindow },
+	{ key = "n", mods = "LEADER", action = act.SpawnWindow },
 	{ key = "b", mods = "LEADER", action = act.EmitEvent("toggle-opacity") },
 
 	-- panes: scroll pane
