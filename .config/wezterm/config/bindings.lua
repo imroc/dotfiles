@@ -2,6 +2,17 @@
 
 local wezterm = require("wezterm")
 local act = wezterm.action
+local platform = require("utils.platform")
+
+local mod = {}
+
+if platform.is_mac then
+	mod.SUPER = "SUPER"
+	mod.SUPER_REV = "SUPER|CTRL"
+elseif platform.is_win or platform.is_linux then
+	mod.SUPER = "ALT" -- to not conflict with Windows key shortcuts
+	mod.SUPER_REV = "ALT|CTRL"
+end
 
 local keys = {
 	-- misc/useful --
@@ -11,7 +22,7 @@ local keys = {
 	-- open url
 	{
 		key = "u",
-		mods = "LEADER",
+		mods = mod.SUPER_REV,
 		action = wezterm.action.QuickSelectArgs({
 			label = "open url",
 			patterns = {
@@ -31,49 +42,44 @@ local keys = {
 
 	-- tab
 	-- new tab
-	{ key = "n", mods = "SHIFT|SUPER", action = act.SpawnTab("CurrentPaneDomain") },
+	{ key = "n", mods = mod.SUPER_REV, action = act.SpawnTab("CurrentPaneDomain") },
 	-- close tab
-	{ key = "w", mods = "SHIFT|SUPER", action = act.CloseCurrentTab({ confirm = false }) },
+	{ key = "w", mods = mod.SUPER_REV, action = act.CloseCurrentTab({ confirm = false }) },
 	-- tab: navigation
-	{ key = "[", mods = "SHIFT|SUPER", action = act.ActivateTabRelative(-1) },
-	{ key = "]", mods = "SHIFT|SUPER", action = act.ActivateTabRelative(1) },
-	{ key = "1", mods = "CTRL|SUPER", action = act.ActivateTab(0) },
-	{ key = "2", mods = "CTRL|SUPER", action = act.ActivateTab(1) },
-	{ key = "3", mods = "CTRL|SUPER", action = act.ActivateTab(2) },
-	{ key = "4", mods = "CTRL|SUPER", action = act.ActivateTab(3) },
-	{ key = "5", mods = "CTRL|SUPER", action = act.ActivateTab(4) },
-	{ key = "6", mods = "CTRL|SUPER", action = act.ActivateTab(5) },
-	{ key = "7", mods = "CTRL|SUPER", action = act.ActivateTab(6) },
-	{ key = "8", mods = "CTRL|SUPER", action = act.ActivateTab(7) },
-	{ key = "9", mods = "CTRL|SUPER", action = act.ActivateTab(-1) },
+	{ key = "[", mods = mod.SUPER_REV, action = act.ActivateTabRelative(-1) },
+	{ key = "]", mods = mod.SUPER_REV, action = act.ActivateTabRelative(1) },
+	{ key = "1", mods = mod.SUPER_REV, action = act.ActivateTab(0) },
+	{ key = "2", mods = mod.SUPER_REV, action = act.ActivateTab(1) },
+	{ key = "3", mods = mod.SUPER_REV, action = act.ActivateTab(2) },
+	{ key = "4", mods = mod.SUPER_REV, action = act.ActivateTab(3) },
+	{ key = "5", mods = mod.SUPER_REV, action = act.ActivateTab(4) },
+	{ key = "6", mods = mod.SUPER_REV, action = act.ActivateTab(5) },
+	{ key = "7", mods = mod.SUPER_REV, action = act.ActivateTab(6) },
+	{ key = "8", mods = mod.SUPER_REV, action = act.ActivateTab(7) },
+	{ key = "9", mods = mod.SUPER_REV, action = act.ActivateTab(-1) },
 
 	-- pane
 	--
 	-- pane: split
-	{ key = "-", mods = "SHIFT|SUPER", action = act.SplitVertical({ domain = "CurrentPaneDomain" }) },
-	{ key = "\\", mods = "SHIFT|SUPER", action = act.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
+	{ key = "-", mods = mod.SUPER_REV, action = act.SplitVertical({ domain = "CurrentPaneDomain" }) },
+	{ key = "\\", mods = mod.SUPER_REV, action = act.SplitHorizontal({ domain = "CurrentPaneDomain" }) },
 	-- pane: zoom
-	{ key = "Enter", mods = "SHIFT|SUPER", action = act.TogglePaneZoomState },
+	{ key = "Enter", mods = mod.SUPER_REV, action = act.TogglePaneZoomState },
 	-- pane: close
-	{ key = "x", mods = "SHIFT|SUPER", action = act.CloseCurrentPane({ confirm = false }) },
+	{ key = "x", mods = mod.SUPER_REV, action = act.CloseCurrentPane({ confirm = false }) },
 	-- pane: navigation
-	{ key = "h", mods = "SHIFT|SUPER", action = act.ActivatePaneDirection("Left") },
-	{ key = "l", mods = "SHIFT|SUPER", action = act.ActivatePaneDirection("Right") },
-	{ key = "k", mods = "SHIFT|SUPER", action = act.ActivatePaneDirection("Up") },
-	{ key = "j", mods = "SHIFT|SUPER", action = act.ActivatePaneDirection("Down") },
+	{ key = "h", mods = mod.SUPER_REV, action = act.ActivatePaneDirection("Left") },
+	{ key = "l", mods = mod.SUPER_REV, action = act.ActivatePaneDirection("Right") },
+	{ key = "k", mods = mod.SUPER_REV, action = act.ActivatePaneDirection("Up") },
+	{ key = "j", mods = mod.SUPER_REV, action = act.ActivatePaneDirection("Down") },
 	{
-		key = "P",
-		mods = "LEADER",
+		key = "p",
+		mods = mod.SUPER_REV,
 		action = act.PaneSelect({ alphabet = "1234567890", mode = "SwapWithActiveKeepFocus" }),
 	},
 
-	-- cursor movement --
-	{ key = "LeftArrow", mods = "SUPER", action = act.SendString("\u{1b}OH") },
-	{ key = "RightArrow", mods = "SUPER", action = act.SendString("\u{1b}OF") },
-	{ key = "Backspace", mods = "SUPER", action = act.SendString("\u{15}") },
-
 	-- copy mode
-	{ key = "c", mods = "SHIFT|SUPER", action = act.ActivateCopyMode },
+	{ key = "c", mods = mod.SUPER_REV, action = act.ActivateCopyMode },
 
 	-- copy/paste --
 	{ key = "c", mods = "SUPER", action = act.CopyTo("Clipboard") },
@@ -94,9 +100,9 @@ local keys = {
 	-- enter resize mode
 	{
 		key = "r",
-		mods = "SHIFT|SUPER",
+		mods = mod.SUPER_REV,
 		action = act.ActivateKeyTable({
-			name = "resize",
+			name = "resize_mode",
 			one_shot = false,
 			timemout_miliseconds = 1000,
 		}),
@@ -104,9 +110,9 @@ local keys = {
 	-- enter tab mode
 	{
 		key = "t",
-		mods = "SUPER",
+		mods = mod.SUPER_REV,
 		action = act.ActivateKeyTable({
-			name = "tab",
+			name = "tab_mode",
 			one_shot = false,
 			timemout_miliseconds = 1000,
 		}),
@@ -114,7 +120,7 @@ local keys = {
 }
 
 local key_tables = {
-	resize = {
+	resize_mode = {
 		-- resize font size
 		{ key = "=", action = act.IncreaseFontSize },
 		{ key = "-", action = act.DecreaseFontSize },
@@ -129,7 +135,7 @@ local key_tables = {
 		{ key = "q", action = "PopKeyTable" },
 		{ key = "Enter", action = "PopKeyTable" },
 	},
-	tab = {
+	tab_mode = {
 		-- goto left/right tab
 		{ key = "h", action = act.ActivateTabRelative(-1) },
 		{ key = "l", action = act.ActivateTabRelative(1) },
