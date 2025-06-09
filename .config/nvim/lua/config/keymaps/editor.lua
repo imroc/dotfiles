@@ -19,11 +19,6 @@ vim.keymap.set({ "n", "t" }, "<C-'>", "<cmd>close<cr>", { desc = "[P]Close Windo
 vim.keymap.set({ "n", "t" }, "<C-x>", "<cmd>close<cr>", { desc = "[P]Close Window" })
 vim.keymap.set({ "n" }, "<C-_>", "<C-W>s", { desc = "[P]Split Window Below", remap = true })
 vim.keymap.set({ "n" }, "<C-\\>", "<C-W>v", { desc = "[P]Split Window Right", remap = true })
-vim.keymap.set({ "n", "t" }, "<leader>tw", function()
-  local win = vim.api.nvim_get_current_win()
-  local row = vim.fn.win_screenpos(win)[1]
-  vim.notify("row:" .. row)
-end, { desc = "[P]test window" })
 
 -- format and save
 vim.keymap.set(
