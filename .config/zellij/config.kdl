@@ -114,7 +114,6 @@ keybinds clear-defaults=true {
         bind "Esc" { UndoRenamePane; SwitchToMode "Pane"; }
     }
     session {
-        // Ctrl o --> Ctrl Super o  避免与 neovim 后退冲突
         bind "Ctrl Super o" { SwitchToMode "Normal"; }
         bind "Super s" { SwitchToMode "Scroll"; }
         bind "d" { Detach; }
@@ -151,6 +150,7 @@ keybinds clear-defaults=true {
     }
     shared_except "locked" {
         bind "Super g" { SwitchToMode "Locked"; }
+        bind "Super f" { SwitchToMode "EnterSearch"; SearchInput 0; }
         // 注释掉 Ctrl q，避免与 Neovim 退出并保存的快捷键冲突
         // bind "Ctrl q" { Quit; }
         bind "Super /" { ToggleFloatingPanes; }
@@ -188,7 +188,7 @@ keybinds clear-defaults=true {
         bind "Super u" { EditScrollback; SwitchToMode "Normal"; }
         bind "Super e" { EditScrollback; SwitchToMode "Normal"; }
         // 搜索 session 和 pane 的快捷键
-        bind "Ctrl Super f" {
+        bind "Super o" {
             LaunchOrFocusPlugin "session-manager" {
                 floating true
                 move_to_focused_tab true
@@ -217,7 +217,6 @@ keybinds clear-defaults=true {
     shared_except "scroll" "locked" {
         bind "Super s" { SwitchToMode "Scroll"; }
     }
-    // Ctrl o --> Ctrl Super o  避免与 neovim 后退冲突
     shared_except "session" "locked" {
         bind "Ctrl Super o" { SwitchToMode "Session"; }
     }

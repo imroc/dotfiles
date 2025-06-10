@@ -18,7 +18,7 @@ local keys = {
 	-- misc/useful --
 	--
 	-- search string
-	{ key = "f", mods = "SUPER", action = act.Search({ CaseInSensitiveString = "" }) },
+	{ key = "f", mods = mod.SUPER_REV, action = act.Search({ CaseInSensitiveString = "" }) },
 	-- open url
 	{
 		key = "u",
