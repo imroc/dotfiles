@@ -4,7 +4,7 @@ local git = require("util.git")
 -- vim.keymap.set("n", "<leader>gD", git.toggle_git_diff, { desc = "[P]Toggle Git Signs Diff" })
 
 -- tig
-vim.keymap.set("n", "<leader>gT", git.open_tig_root_dir, { desc = "Tig (root dir)" })
+vim.keymap.set("n", "<leader>gT", git.open_tig, { desc = "Tig (root dir)" })
 
 -- next/pre change
 vim.keymap.set("n", "<M-C-n>", "]c", { desc = "[P]Next Change" })

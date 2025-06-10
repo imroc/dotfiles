@@ -3,6 +3,7 @@
 local M = {}
 
 local job = require("util.job")
+local buffer = require("util.buffer")
 
 local refresh_git_status = function()
   local events = package.loaded["neo-tree.events"]
@@ -32,9 +33,17 @@ local push_script = [[
 	git push
 ]]
 
+local git_dir = function()
+  local dir = buffer.current_dir()
+  if not dir then
+    dir = LazyVim.root.git()
+  end
+  return dir
+end
+
 -- git commit and push
 function M.git_commit_and_push()
-  local cwd = LazyVim.root.git()
+  local cwd = git_dir()
   vim.notify("git commit and push at " .. cwd)
   job.run_script(commit_script, {
     cwd = cwd,
@@ -51,16 +60,16 @@ function M.git_push()
   set -e
 	git push
 ]]
-  local cwd = LazyVim.root.git()
+  local cwd = git_dir()
   vim.notify("git push at " .. cwd)
   job.run_script(script, {
-    cwd = LazyVim.root.git(),
+    cwd = cwd,
   })
 end
 
 function M.git_add_all()
-  local cwd = LazyVim.root.git()
-  job.run_script("git add .", {
+  local cwd = git_dir()
+  job.run_script("git add -A", {
     cwd = cwd,
     on_exit = function()
       refresh_git_status()
@@ -69,8 +78,8 @@ function M.git_add_all()
 end
 
 function M.git_commit_amend()
-  local cwd = LazyVim.root.git()
-  job.run_script("git add . && git commit --amend --no-edit", {
+  local cwd = git_dir()
+  job.run_script("git add -A && git commit --amend --no-edit", {
     cwd = cwd,
     on_exit = function()
       refresh_git_status()
@@ -79,11 +88,9 @@ function M.git_commit_amend()
 end
 
 -- tig
-function M.open_tig_root_dir()
-  LazyVim.terminal.open({ "tig" }, { cwd = LazyVim.root.git(), esc_esc = false, ctrl_hjkl = false })
-end
 function M.open_tig()
-  LazyVim.terminal.open({ "tig" }, { esc_esc = false, ctrl_hjkl = false })
+  local cwd = git_dir()
+  LazyVim.terminal.open({ "tig" }, { cwd = cwd, esc_esc = false, ctrl_hjkl = false })
 end
 
 return M
