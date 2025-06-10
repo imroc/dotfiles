@@ -14,10 +14,10 @@ return {
       "<leader>E",
       function()
         if not MiniFiles.close() then
-          MiniFiles.open(vim.uv.cwd(), true)
+          MiniFiles.open(LazyVim.root(), true)
         end
       end,
-      desc = "Files (cwd)",
+      desc = "Files (Root Directory)",
     },
   },
   init = function()
