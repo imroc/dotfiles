@@ -1,3 +1,6 @@
+---@diagnostic disable: undefined-field
+---@diagnostic disable: undefined-global
+
 local M = {}
 
 function M.setup(keymaps)

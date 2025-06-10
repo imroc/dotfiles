@@ -1,14 +1,16 @@
+---@diagnostic disable: undefined-global
+
 local M = {}
 
 M.toggle = function(cwd)
   if not cwd then
-    if last_term == nil or not last_term:buf_valid() then
-      last_term = Snacks.terminal(nil)
+    if LastTerm == nil or not LastTerm:buf_valid() then
+      LastTerm = Snacks.terminal(nil)
     else
-      last_term:toggle()
+      LastTerm:toggle()
     end
   else
-    last_term = Snacks.terminal(nil, { cwd = cwd })
+    LastTerm = Snacks.terminal(nil, { cwd = cwd })
   end
 end
 

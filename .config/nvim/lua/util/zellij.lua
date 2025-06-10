@@ -1,3 +1,5 @@
+---@diagnostic disable: undefined-global
+
 local M = {}
 
 local get_project_name = function()
@@ -32,6 +34,7 @@ local buffer = require("util.buffer")
 --- @param cmd (string[]|string) Command to execute
 --- @param opts? table
 M.run = function(cmd, opts)
+  opts = opts or {}
   local cmd_concat = { "zellij", "run", "-f" }
   local cwd = ""
   if opts.cwd then

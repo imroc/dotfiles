@@ -3,13 +3,13 @@ local M = {}
 local buffer = require("util.buffer")
 
 ---@param command string Command to run
----@param job Job
-M.run = function(command, job)
-  if not job.cwd then
-    job.cwd = buffer.current_dir()
+---@param opts Job
+M.run = function(command, opts)
+  if not opts.cwd then
+    opts.cwd = buffer.current_dir()
   end
-  on_exit = job.on_exit
-  job = vim.tbl_deep_extend("force", job, {
+  local on_exit = opts.on_exit
+  opts = vim.tbl_deep_extend("force", opts, {
     command = command,
     on_exit = function(job, code, signal)
       if on_exit then
@@ -33,11 +33,11 @@ M.run = function(command, job)
     end,
   })
   local Job = require("plenary.job")
-  Job:new(job):start()
+  Job:new(opts):start()
 end
 
 ---@param script string Bash script to run
----@param job Job
+---@param job? Job
 M.run_script = function(script, job)
   job = job or {}
   job = vim.tbl_deep_extend("force", job, {
