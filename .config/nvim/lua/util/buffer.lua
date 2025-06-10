@@ -3,28 +3,31 @@
 local M = {}
 
 ---@return string
-M.current_dir = function()
-  local absolute_path = vim.fn.expand("%:p")
-  return string.match(absolute_path, "(.+)/[^/]+$")
+function M.current_dir()
+  if vim.bo.buftype == "" then
+    local absolute_path = vim.fn.expand("%:p")
+    return string.match(absolute_path, "(.+)/[^/]+$")
+  end
+  return ""
 end
 
 ---@return string
-M.absolute_path = function()
+function M.absolute_path()
   return vim.fn.expand("%:p")
 end
 
 ---@return string
-M.file_name = function()
+function M.file_name()
   return vim.fn.expand("%:t")
 end
 
 ---@return string
-M.relative_path = function()
+function M.relative_path()
   return vim.fn.fnamemodify(vim.fn.expand("%:p"), ":.")
 end
 
 ---@return string
-M.root_dir = function()
+function M.root_dir()
   if LazyVim then
     return LazyVim.root()
   end
