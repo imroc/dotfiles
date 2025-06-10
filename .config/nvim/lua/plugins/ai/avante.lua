@@ -3,15 +3,15 @@ return {
   event = "VeryLazy",
   lazy = false,
   version = false, -- Set this to "*" to always pull the latest release version, or set it to false to update to the latest code changes.
-  keys = {
-    { "<leader>ia", "<cmd>AvanteAsk<CR>", mode = { "n", "v" }, desc = "[P]avante: ask" },
-    { "<leader>ie", "<cmd>AvanteEdit<CR>", mode = { "n", "v" }, desc = "[P]avante: edit" },
-    { "<leader>ir", "<cmd>AvanteRefresh<CR>", mode = { "n", "v" }, desc = "[P]avante: refresh" },
-  },
+  -- keys = {
+  --   { "<leader>ia", "<cmd>AvanteAsk<CR>", mode = { "n", "v" }, desc = "[P]avante: ask" },
+  --   { "<leader>ie", "<cmd>AvanteEdit<CR>", mode = { "n", "v" }, desc = "[P]avante: edit" },
+  --   { "<leader>ir", "<cmd>AvanteRefresh<CR>", mode = { "n", "v" }, desc = "[P]avante: refresh" },
+  -- },
   opts = {
-    behaviour = {
-      auto_set_keymaps = false,
-    },
+    -- behaviour = {
+    --   auto_set_keymaps = false,
+    -- },
     provider = "deepseek",
     providers = {
       deepseek = {

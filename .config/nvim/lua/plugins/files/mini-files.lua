@@ -1,18 +1,37 @@
 return {
   "echasnovski/mini.files",
   keys = {
-    { "<leader>a", "<leader>fm", desc = "[P]Open mini.files (Directory of Current File)", remap = true },
-    { "<leader>A", "<leader>fM", desc = "[P]Open mini.files (cwd)", remap = true },
+    {
+      "<leader>e",
+      function()
+        if not MiniFiles.close() then
+          MiniFiles.open(vim.api.nvim_buf_get_name(0), false)
+        end
+      end,
+      desc = "Files (Current Directory)",
+    },
+    {
+      "<leader>E",
+      function()
+        if not MiniFiles.close() then
+          MiniFiles.open(vim.uv.cwd(), true)
+        end
+      end,
+      desc = "Files (cwd)",
+    },
   },
   init = function()
     local miniKeymaps = require("util.mini-files-keymaps")
     miniKeymaps.setup({
       open_zellij = "<localleader>z",
       open_terminal = "<localleader>t",
-      toggle_explorer = "<leader>a",
       search_text = "<localleader>s",
       find_files = "<localleader>f",
       replace = "<localleader>r",
+      copy_to_clipboard = "<localleader>y",
+      paste_from_clipboard = "<localleader>p",
+      copy_path = "<localleader>c",
+      preview_image = "<localleader>i",
     })
     local miniGit = require("util.mini-files-git")
     miniGit.setup()

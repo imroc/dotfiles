@@ -16,11 +16,8 @@ return {
   "nvim-neo-tree/neo-tree.nvim",
   lazy = true,
   keys = {
-    {
-      "<leader>E",
-      "<cmd>Neotree focus<cr>",
-      desc = "[P]Explorer NeoTree (Focus)",
-    },
+    { "<leader>E", false },
+    { "<leader>e", false },
   },
   opts = {
     source_selector = {
