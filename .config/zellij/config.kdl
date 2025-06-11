@@ -82,7 +82,9 @@ keybinds clear-defaults=true {
         bind "Ctrl f" "PageDown" "Right" "l" { PageScrollDown; }
         bind "Ctrl b" "PageUp" "Left" "h" { PageScrollUp; }
         bind "d" { HalfPageScrollDown; }
+        bind "Super d" { HalfPageScrollDown; }
         bind "u" { HalfPageScrollUp; }
+        bind "Super u" { HalfPageScrollUp; }
         // uncomment this and adjust key if using copy_on_select=false
         // bind "Super c" { Copy; }
     }
@@ -185,7 +187,6 @@ keybinds clear-defaults=true {
         // 全屏快捷键
         bind "Super Enter" { ToggleFocusFullscreen; }
         // 导入终端显示内容到 neovim 的快捷键
-        // bind "Super u" { EditScrollback; SwitchToMode "Normal"; }
         bind "Super e" { EditScrollback; SwitchToMode "Normal"; }
         // 搜索 session 和 pane 的快捷键
         bind "Super o" {
@@ -217,6 +218,7 @@ keybinds clear-defaults=true {
     shared_except "scroll" "locked" {
         bind "Super s" { SwitchToMode "Scroll"; }
         bind "Super u" { SwitchToMode "Scroll"; HalfPageScrollUp; }
+        bind "Super d" { SwitchToMode "Scroll"; HalfPageScrollDown; }
     }
     shared_except "session" "locked" {
         bind "Ctrl Super o" { SwitchToMode "Session"; }
