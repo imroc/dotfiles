@@ -14,11 +14,18 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
     set subcommand "$argv[1]"
     switch $subcommand
         case color
-            if test -q DISABLE_KUBECTL_COLOR
+            if not command -sq kubecolor
+                echo "kubecolor not installed"
+                return
+            end
+            if set -q DISABLE_KUBECTL_COLOR
                 set -e DISABLE_KUBECTL_COLOR
+                echo "kubecolor enabled"
             else
                 set -g DISABLE_KUBECTL_COLOR 1
+                echo "kubecolor disabled"
             end
+            return
         case node-shell login # kubectl login / kubectl node-shell 登录节点，支持 fzf 补全节点
             set node $argv[2]
             if test -z "$node" # 子命令后没有参数，列出所有节点并用 fzf 选择（不包含无法登录的虚拟节点）
@@ -128,8 +135,7 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
 end
 
 function __kubecolor
-    if not test "$DISABLE_KUBECTL_COLOR" = 1
-        command -sq kubecolor
+    if not test "$DISABLE_KUBECTL_COLOR" = 1; and command -sq kubecolor
         command kubecolor $argv
     else
         command kubectl $argv
