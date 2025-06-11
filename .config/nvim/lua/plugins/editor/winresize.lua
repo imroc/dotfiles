@@ -1,5 +1,5 @@
-local resize_width = 5
-local resize_height = 5
+local resize_width = 8
+local resize_height = 8
 
 return {
   "pogyomo/winresize.nvim",
