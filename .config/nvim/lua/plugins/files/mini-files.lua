@@ -44,6 +44,7 @@ return {
       go_in_plus = "<CR>",
       go_in_horizontal_plus = "-",
       go_in_vertical_plus = "\\",
+      synchronize = "<C-CR>",
     },
   },
 }
