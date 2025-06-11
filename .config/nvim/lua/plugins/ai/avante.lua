@@ -12,6 +12,7 @@ return {
     -- behaviour = {
     --   auto_set_keymaps = false,
     -- },
+    hints = { enabled = false }, -- 禁用 hint，避免 visual mode 选中文本时提示快捷键，影响录屏演示效果
     provider = "deepseek",
     providers = {
       deepseek = {
