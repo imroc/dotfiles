@@ -1,8 +1,4 @@
 local window = require("util.window")
-vim.keymap.set({ "n", "t" }, "<M-h>", window.resize_width_left, { desc = "[P]Increase or Decrease window width" })
-vim.keymap.set({ "n", "t" }, "<M-l>", window.resize_width_right, { desc = "[P]Increase or Decrease window width" })
-vim.keymap.set({ "n", "t" }, "<M-j>", window.resize_height_down, { desc = "[P]Increase or Decrease window height" })
-vim.keymap.set({ "n", "t" }, "<M-k>", window.resize_height_up, { desc = "[P]Increase or Decrease window height" })
 
 vim.keymap.set({ "n", "t" }, "<C-'>", "<cmd>close<cr>", { desc = "[P]Close Window" })
 vim.keymap.set({ "n", "t" }, "<C-x>", "<cmd>close<cr>", { desc = "[P]Close Window" })
