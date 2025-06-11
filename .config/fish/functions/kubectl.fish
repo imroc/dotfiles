@@ -122,7 +122,8 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
 end
 
 function __kubecolor
-    if command -sq kubecolor
+    if not test "$NO_COLOR" = 1
+        command -sq kubecolor
         command kubecolor $argv
     else
         command kubectl $argv
