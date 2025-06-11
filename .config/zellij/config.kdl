@@ -153,8 +153,7 @@ keybinds clear-defaults=true {
     shared_except "locked" {
         bind "Super g" { SwitchToMode "Locked"; }
         bind "Super f" { SwitchToMode "EnterSearch"; SearchInput 0; }
-        // 注释掉 Ctrl q，避免与 Neovim 退出并保存的快捷键冲突
-        // bind "Ctrl q" { Quit; }
+        bind "Super i" { TogglePanePinned; SwitchToMode "Normal"; ToggleFloatingPanes; }
         bind "Super /" { ToggleFloatingPanes; }
         bind "Super x" { CloseFocus; }
         bind "Super w" { CloseTab; }
