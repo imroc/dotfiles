@@ -33,7 +33,7 @@ local push_script = [[
 	git push
 ]]
 
-local git_dir = function()
+local current_git_dir = function()
   local dir = buffer.current_dir()
   if not dir then
     dir = LazyVim.root.git()
@@ -43,7 +43,7 @@ end
 
 -- git commit and push
 function M.git_commit_and_push()
-  local cwd = git_dir()
+  local cwd = current_git_dir()
   vim.notify("git commit and push at " .. cwd)
   job.run_script(commit_script, {
     cwd = cwd,
@@ -60,7 +60,7 @@ function M.git_push()
   set -e
 	git push
 ]]
-  local cwd = git_dir()
+  local cwd = LazyVim.root.git()
   vim.notify("git push at " .. cwd)
   job.run_script(script, {
     cwd = cwd,
@@ -68,7 +68,7 @@ function M.git_push()
 end
 
 function M.git_add_all()
-  local cwd = git_dir()
+  local cwd = LazyVim.root.git()
   job.run_script("git add -A", {
     cwd = cwd,
     on_exit = function()
@@ -78,7 +78,7 @@ function M.git_add_all()
 end
 
 function M.git_commit_amend()
-  local cwd = git_dir()
+  local cwd = LazyVim.root.git()
   job.run_script("git add -A && git commit --amend --no-edit", {
     cwd = cwd,
     on_exit = function()
@@ -89,7 +89,7 @@ end
 
 -- tig
 function M.open_tig()
-  local cwd = git_dir()
+  local cwd = current_git_dir()
   LazyVim.terminal.open({ "tig" }, { cwd = cwd, esc_esc = false, ctrl_hjkl = false })
 end
 
