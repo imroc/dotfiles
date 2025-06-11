@@ -2,7 +2,7 @@
 -- https://wezfurlong.org/wezterm/config/lua/config/index.html
 
 local Config = require("config")
-require("events.left-status").setup()
+require("events.right-status").setup()
 require("events.tab-title").setup()
 require("events.new-tab-button").setup()
 require("events.toggle-opacity").setup()
