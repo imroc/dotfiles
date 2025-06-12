@@ -217,7 +217,7 @@ return {
               ["<Esc>"] = { "close", mode = { "n", "i" } },
               ["<C-h>"] = { "preview_scroll_left", mode = { "i", "n" } },
               ["<C-l>"] = { "preview_scroll_right", mode = { "i", "n" } },
-              ["<C-m>"] = {
+              ["<C-t>"] = {
                 "trouble_open",
                 mode = { "i" },
               },
