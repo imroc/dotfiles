@@ -6,7 +6,7 @@ return {
   },
   config = function()
     vim.g.gitblame_set_extmark_options = {
-      priority = 0, -- 最低显示优先级，避免遮住诊断信息
+      priority = 0, -- lowest priority, avoid obscuring diagnostic information.
     }
     require("gitblame").setup({
       date_format = "%x %X",
