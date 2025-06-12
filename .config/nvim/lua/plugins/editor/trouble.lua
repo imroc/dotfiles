@@ -2,6 +2,13 @@ return {
   "folke/trouble.nvim",
   keys = {
     {
+      "<C-t>",
+      function()
+        require("trouble").toggle("snacks")
+      end,
+      desc = "[P]Toggle Trouble (Snacks)",
+    },
+    {
       "<leader>tt",
       function()
         require("trouble").toggle("snacks")
