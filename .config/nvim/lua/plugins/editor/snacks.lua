@@ -101,7 +101,7 @@ return {
       "<leader>fd",
       function()
         picker.files({
-          cwd = vim.fn.expand("$HOME/dotfiles"),
+          cwd = vim.fn.expand("$HOME/.config"),
         })
       end,
       desc = "[P]Find Dotfiles",
