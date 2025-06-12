@@ -82,7 +82,6 @@ keybinds clear-defaults=true {
         bind "Ctrl f" "PageDown" "Right" "l" { PageScrollDown; }
         bind "Ctrl b" "PageUp" "Left" "h" { PageScrollUp; }
         bind "d" { HalfPageScrollDown; }
-        bind "Super d" { HalfPageScrollDown; }
         bind "u" { HalfPageScrollUp; }
         bind "Super u" { HalfPageScrollUp; }
         // uncomment this and adjust key if using copy_on_select=false
@@ -160,6 +159,7 @@ keybinds clear-defaults=true {
         bind "Super n" { NewPane; }
         bind "Super -" { NewPane "Down"; }
         bind "Super \\" { NewPane "Right"; }
+        bind "Super d" { NewPane "Right"; }
         bind "Super h" "Super Left" { MoveFocus "Left"; }
         bind "Super l" "Super Right" { MoveFocus "Right"; }
         bind "Super j" "Super Down" { MoveFocus "Down"; }
@@ -217,7 +217,6 @@ keybinds clear-defaults=true {
     shared_except "scroll" "locked" {
         bind "Super s" { SwitchToMode "Scroll"; }
         bind "Super u" { SwitchToMode "Scroll"; HalfPageScrollUp; }
-        bind "Super d" { SwitchToMode "Scroll"; HalfPageScrollDown; }
     }
     shared_except "session" "locked" {
         bind "Ctrl Super o" { SwitchToMode "Session"; }
