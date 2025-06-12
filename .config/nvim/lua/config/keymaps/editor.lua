@@ -1,3 +1,5 @@
+---@diagnostic disable: undefined-global
+
 -- quit
 vim.keymap.set({ "n", "v" }, "<leader>.", "<cmd>qa<cr>", { desc = "[P]Quit all" })
 vim.keymap.set({ "n", "v" }, "<leader>X", "<cmd>qa!<cr>", { desc = "[P]Quit all without save" })
@@ -18,6 +20,9 @@ vim.keymap.set("n", "<leader>cT", "<cmd>%s/  /\t/g<cr>", { desc = "[P]Convert 2 
 
 -- todo
 vim.keymap.set("n", "<leader>td", "<cmd>e ~/dev/note/todo.md<cr>", { desc = "[P]Open Todo" })
+
+-- toggle cursor column
+Snacks.toggle.option("cursorcolumn", { name = "Cursor Column" }):map("<leader>ux")
 
 -- scroll
 local scroll_percentage = 0.35 -- Scroll by 35% of the window height and keep the cursor centered

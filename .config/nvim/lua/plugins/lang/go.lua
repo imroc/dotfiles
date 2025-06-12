@@ -8,6 +8,7 @@ return {
       "nvim-treesitter/nvim-treesitter",
     },
     opts = {
+      diagnostic = false,
       lsp_cfg = false,
       -- camelcase/snakecase
       tag_transform = "camelcase",
