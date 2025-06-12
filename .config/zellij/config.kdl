@@ -49,7 +49,7 @@ keybinds clear-defaults=true {
         bind "l" "Right" { MovePane "Right"; }
     }
     tab {
-        bind "Ctrl t" { SwitchToMode "Normal"; }
+        bind "Super t" { SwitchToMode "Normal"; }
         bind "r" { SwitchToMode "RenameTab"; TabNameInput 0; }
         bind "h" "Left" "Up" "k" { GoToPreviousTab; }
         bind "l" "Right" "Down" "j" { GoToNextTab; }
@@ -223,7 +223,7 @@ keybinds clear-defaults=true {
         bind "Ctrl Super o" { SwitchToMode "Session"; }
     }
     shared_except "tab" "locked" {
-        bind "Ctrl t" { SwitchToMode "Tab"; }
+        bind "Super t" { SwitchToMode "Tab"; }
     }
     shared_except "move" "locked" {
         // Ctrl h --> Super m 避免与 neovim 向左 window 聚焦冲突
