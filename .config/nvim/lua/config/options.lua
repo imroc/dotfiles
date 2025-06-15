@@ -14,7 +14,7 @@ opt.list = false -- 禁用显示不可见字符（比如 tab 展示成 >，比�
 -- disable auto format by default
 vim.g.autoformat = false
 -- diable diagnostic by default
--- vim.diagnostic.enable(false)
+vim.diagnostic.enable(false)
 
 local function detect_git_root_dir(dir)
   if not dir then
