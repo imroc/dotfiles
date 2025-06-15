@@ -338,6 +338,10 @@ run = ['move-node-to-workspace 7']
 [[on-window-detected]]
 if.app-id = 'com.apple.QuickTimePlayerX' # QuickTime Player
 run = ['move-node-to-workspace 7']
+[[on-window-detected]]
+if.app-id = 'com.tencent.tenvideo' # 腾讯视频
+run = ['move-node-to-workspace 7']
+
 
 # 会议相关
 [[on-window-detected]]
