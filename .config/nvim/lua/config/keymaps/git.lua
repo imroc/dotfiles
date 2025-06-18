@@ -7,7 +7,7 @@ local git = require("util.git")
 
 -- tig
 vim.keymap.set("n", "<leader>gT", git.open_tig, { desc = "Tig (Current Dir)" })
-vim.keymap.set("n", "<leader>gm", git.open_yadm, { desc = "Open Dotfiles with Lazygit" })
+vim.keymap.set("n", "<leader>tc", git.open_yadm, { desc = "Open Dotfiles with Lazygit" })
 
 -- next/pre change
 vim.keymap.set("n", "<M-C-n>", "]c", { desc = "[P]Next Change" })
