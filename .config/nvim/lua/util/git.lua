@@ -95,10 +95,10 @@ end
 
 -- use lazygit to open dotfiles which managed by yadm
 function M.open_yadm()
-  local lazygit_dir = vim.fn.expand("$HOME/.local/share/yadm/lazygit")
+  local lazygit_config_file = vim.fn.expand("$HOME/.config/yaml/lazygit.yml")
   local home_dir = vim.fn.expand("$HOME")
   local git_dir = vim.fn.expand("$HOME/.local/share/yadm/repo.git")
-  Snacks.terminal({ "lazygit", "-ucd", lazygit_dir, "-w", home_dir, "-g", git_dir }, {
+  Snacks.terminal({ "lazygit", "--use-config-file", lazygit_dir, "--work-tree", home_dir, "--git-dir", git_dir }, {
     win = { width = 0, height = 0 },
   })
 end
