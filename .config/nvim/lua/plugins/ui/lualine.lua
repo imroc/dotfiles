@@ -8,7 +8,7 @@ return {
   {
     "nvim-lualine/lualine.nvim",
     opts = function(_, opts)
-      vim.list_extend(opts.sections.lualine_c, {
+      opts.sections.lualine_c = {
         LazyVim.lualine.root_dir(),
         {
           "diagnostics",
@@ -21,7 +21,7 @@ return {
         },
         -- { "filetype", icon_only = true, separator = "", padding = { left = 1, right = 0 } }, -- lualine_y 已展示文件类型，这里就不要了
         { LazyVim.lualine.pretty_path({ length = 8 }) }, -- LazyVim 默认展示 3 级路径，这里改为 8 级
-      })
+      }
       vim.list_extend(
         opts.sections.lualine_y,
         { "filetype", icon_only = false, separator = "", padding = { left = 1, right = 0 } }
