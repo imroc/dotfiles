@@ -1,3 +1,5 @@
+# aerospace for macbook M1, make sure set the local class: yadm config local.class M1
+
 # Place a copy of this config to ~/.aerospace.toml
 # After that, you can edit ~/.aerospace.toml to your liking
 
