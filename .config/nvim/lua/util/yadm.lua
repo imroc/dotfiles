@@ -11,11 +11,9 @@ function M.open_lazygit()
   )
 end
 
-function M.open_diffview()
-  local work_tree = vim.fn.expand("$HOME")
-  local git_dir = vim.fn.expand("$HOME/.local/share/yadm/repo.git")
-  local cmd = "DiffviewOpen --git-dir=" .. git_dir .. " --work-tree=" .. work_tree
-  vim.cmd(cmd)
+function M.set_git_env()
+  vim.env.GIT_WORK_TREE = vim.fn.expand("$HOME")
+  vim.env.GIT_DIR = vim.fn.expand("$HOME/.local/share/yadm/repo.git")
 end
 
 return M
