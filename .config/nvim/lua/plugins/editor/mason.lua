@@ -11,15 +11,16 @@ return {
         vim.cmd("MasonInstall helm-ls")
         vim.cmd("MasonInstall json-lsp")
         vim.cmd("MasonInstall lua-language-server")
-      --   local mason_lsp_config = require("mason-lspconfig.settings").current
-      --   local lspconfig_to_package = require("mason-lspconfig.mappings.server").lspconfig_to_package
-      --   for _, server in ipairs(mason_lsp_config.ensure_installed) do
-      --     local pkg = lspconfig_to_package[server]
-      --     if pkg then
-      --       vim.cmd("MasonInstall " .. pkg)
-      --     end
-      --   end
-      -- end, {})
+        --   local mason_lsp_config = require("mason-lspconfig.settings").current
+        --   local lspconfig_to_package = require("mason-lspconfig.mappings.server").lspconfig_to_package
+        --   for _, server in ipairs(mason_lsp_config.ensure_installed) do
+        --     local pkg = lspconfig_to_package[server]
+        --     if pkg then
+        --       vim.cmd("MasonInstall " .. pkg)
+        --     end
+        --   end
+        -- end, {})
+      end, {})
       return opts
     end,
   },
