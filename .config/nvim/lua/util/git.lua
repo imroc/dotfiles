@@ -93,4 +93,14 @@ function M.open_tig()
   LazyVim.terminal.open({ "tig" }, { cwd = cwd, esc_esc = false, ctrl_hjkl = false })
 end
 
+function M.open_yadm()
+  local lazygit_dir = vim.fn.expand("$HOME/.local/share/yadm/lazygit")
+  local home_dir = vim.fn.expand("$HOME")
+  local git_dir = vim.fn.expand("$HOME/.local/share/yadm/repo.git")
+  LazyVim.terminal.open(
+    { "lazygit", "-ucd", lazygit_dir, "-w", home_dir, "-g", git_dir },
+    { esc_esc = false, ctrl_hjkl = false }
+  )
+end
+
 return M
