@@ -74,9 +74,7 @@ inner.vertical = 5
 outer.left = 2
 outer.right = 2
 outer.bottom = 2
-outer.top = [
-  29,
-]
+outer.top = 29
 
 # 'main' binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
