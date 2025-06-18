@@ -1,5 +1,6 @@
-abbr --add yP "yadm commit -s && yadm push"
+abbr --add ypp "yadm commit -s && yadm push"
 abbr --add yp "yadm push"
+abbr --add yd "yadm diff"
 abbr --add yl "yadm pull"
+abbr --add yll "yadm reset --hard HEAD && yadm pull"
 abbr --add yss "yadm status"
-abbr --add yL "yadm reset --hard HEAD && yadm pull"
