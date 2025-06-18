@@ -14,7 +14,8 @@ end
 function M.open_diffview()
   local work_tree = vim.fn.expand("$HOME")
   local git_dir = vim.fn.expand("$HOME/.local/share/yadm/repo.git")
-  vim.cmd("DiffviewOpen --git-dir=~/.local/share/yadm/repo.git --work-tree=~")
+  local cmd = "DiffviewOpen --git-dir=" .. git_dir .. " --work-tree=" .. work_tree
+  vim.cmd(cmd)
 end
 
 return M
