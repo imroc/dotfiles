@@ -9,6 +9,11 @@ local opt = vim.opt
 -- opt.conceallevel = 0 -- no hidden character
 opt.clipboard = "unnamedplus"
 
+-- enable modeline even in root, but keep safe
+opt.modeline = true
+opt.modelines = 1
+opt.modelineexpr = false
+
 opt.list = false -- 禁用显示不可见字符（比如 tab 展示成 >，比较丑陋）
 
 -- disable auto format by default
