@@ -29,3 +29,11 @@ And you can force overwrite of local dotfiles:
 yadm reset --hard HEAD
 yadm pull
 ```
+
+## Screenshoots
+
+### Wezterm
+
+Tab mode(tab new/rename/move/hide/close):
+
+![Wezterm Tab Mode](https://github.com/user-attachments/assets/cae17a41-7222-4f19-a7c6-4f9441b1b5c9)
