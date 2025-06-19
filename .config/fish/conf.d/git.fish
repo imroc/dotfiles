@@ -8,3 +8,5 @@ abbr --add gsa 'git submodule add --depth=1'
 #abbr --add gsu 'git submodule update --init --depth=1'
 abbr --add gls "git pull --recurse-submodule=yes"
 abbr --add gc1 "git clone --depth=1"
+
+abbr --add lg lazygit
