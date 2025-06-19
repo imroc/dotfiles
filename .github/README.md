@@ -37,3 +37,15 @@ yadm pull
 Tab management (create, close, rename, move or toggle hide):
 
 ![Wezterm Tab Mode](https://github.com/user-attachments/assets/cae17a41-7222-4f19-a7c6-4f9441b1b5c9)
+
+TODO:
+- Pane management
+- Resize (font, pane)
+
+### Others TODO
+
+- neovim
+- zellij
+- aerospace
+- fish
+- kubernetes workflow
