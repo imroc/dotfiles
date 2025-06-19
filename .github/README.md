@@ -34,6 +34,6 @@ yadm pull
 
 ### Wezterm
 
-Tab mode(tab new/rename/move/hide/close):
+Tab management (create, close, rename, move or toggle hide):
 
 ![Wezterm Tab Mode](https://github.com/user-attachments/assets/cae17a41-7222-4f19-a7c6-4f9441b1b5c9)
