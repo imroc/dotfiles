@@ -1,4 +1,4 @@
-# aerospace config for macbook M1, make sure set the local class: yadm config local.class M1
+# vim: set ft=toml :
 
 # Place a copy of this config to ~/.aerospace.toml
 # After that, you can edit ~/.aerospace.toml to your liking
@@ -29,7 +29,7 @@ enable-normalization-opposite-orientation-for-nested-containers = true
 accordion-padding = 0
 
 # Possible values: tiles|accordion
-default-root-container-layout = 'tiles'
+default-root-container-layout = 'accordion'
 
 # Possible values: horizontal|vertical|auto
 # 'auto' means: wide monitor (anything wider than high) gets horizontal orientation,
@@ -340,7 +340,6 @@ run = ['move-node-to-workspace 7']
 if.app-id = 'com.tencent.tenvideo' # 腾讯视频
 run = ['move-node-to-workspace 7']
 
-
 # 会议相关
 [[on-window-detected]]
 if.app-id = 'com.tencent.meeting'  # 腾讯会议
@@ -348,7 +347,6 @@ run = ['move-node-to-workspace 8']
 [[on-window-detected]]
 if.app-id = 'com.tencent.wwmapp'   # 企微微信·会议
 run = ['move-node-to-workspace 8']
-
 
 # 其它
 [[on-window-detected]]
