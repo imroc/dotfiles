@@ -55,7 +55,7 @@ These tools are used in my daily work:
 
 ## Screenshoots
 
-Work efficiently with tab and pane for `Aerospace` (macOS tiling window manager), `Wezterm` (terminal emulator) and `Zellij` (terminal multiplexers):
+Work efficiently with tab and pane using `Aerospace` (macOS tiling window manager), `Wezterm` (terminal emulator) and `Zellij` (terminal multiplexers):
 
 https://github.com/user-attachments/assets/dc5237ac-339d-45d8-a3a0-b6da8696cf72
 
