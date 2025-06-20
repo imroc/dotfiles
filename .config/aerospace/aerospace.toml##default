@@ -181,9 +181,7 @@ esc = [
   'mode main',
   'exec-and-forget sketchybar --trigger aerospace_service_mode_enabled_changed AEROSPACE_SERVICE_MODE_ENABLED=false',
 ]
-# Reload config
-# See: https://nikitabobko.github.io/AeroSpace/commands#reload-config
-c = [
+enter = [
   'reload-config',
   'mode main',
   'exec-and-forget sketchybar --trigger aerospace_service_mode_enabled_changed AEROSPACE_SERVICE_MODE_ENABLED=false',
