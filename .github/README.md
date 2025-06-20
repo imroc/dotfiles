@@ -34,23 +34,7 @@ yadm pull
 
 ### Wezterm
 
-<details>
-<summary>Tab Management</summary>
-  
-Create, close, navigate, rename, move and toggle hide tabs:
-
-https://github.com/user-attachments/assets/0dc0fa56-60bb-4ce8-b0a3-f9b949ee459d
-
-</details>
-
-<details>
-<summary>Pane Management</summary>
-
-Split, navigate and resize panes:
-
-https://github.com/user-attachments/assets/f51889ce-59c3-41b6-b044-930f13a1f33b
-
-</details>
+https://github.com/user-attachments/assets/dc5237ac-339d-45d8-a3a0-b6da8696cf72
 
 ### Others TODO
 
