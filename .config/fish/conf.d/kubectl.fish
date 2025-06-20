@@ -4,13 +4,13 @@ abbr --add sd1 'kubectl get deployments.v1.apps | grep -v NAME | awk \'{print $1
 
 abbr --add kvc kubectl-view-cert
 abbr --add kc kubectl-kc
-abbr --add kw kubectl-klock
+abbr --add kk kubectl-klock
 abbr --add krew kubectl-krew
 abbr --add kf kubectl-fuzzy
 abbr --add kfd 'kubectl-fuzzy describe'
 abbr --add kxp kubectl-explore
 abbr --add kn kubectl-neat
-abbr --add kk kubectl-kustomize
+abbr --add kz kustomize
 abbr --add kb 'kustomize build --enable-helm --load-restrictor=LoadRestrictionsNone .'
 abbr --add kka 'kustomize build --enable-helm --load-restrictor=LoadRestrictionsNone . | kubectl apply --server-side=true -f -'
 abbr --add km 'kubectl -n monitoring'
@@ -18,7 +18,6 @@ abbr --add km 'kubectl -n monitoring'
 abbr --add kgpa 'kubectl get pod -o wide -A'
 abbr --add kgpw 'kubectl get pod -o wide'
 
-abbr --add knsi 'kubectl ns istio-system'
 abbr --add knss 'kubectl ns kube-system'
 
 # 获取 LBR 的概览信息
