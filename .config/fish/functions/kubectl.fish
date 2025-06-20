@@ -49,7 +49,7 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
             end
 
             # 解析增加的自定义参数 -e -E -j -p -P -c -C 来扩展 get 命令的功能
-            argparse --ignore-unknown e E j p P c C -- $original_args
+            argparse --ignore-unknown e E j p P c C W -- $original_args
             set args $argv
 
             if set -q _flag_c; or set -q _flag_C # 设置了 -c 参数，查看证书信息，支持 certificate 和 secret 资源类型
@@ -99,6 +99,9 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
                 return
             else if set -q _flag_j # 设置了 -j 参数，用 json 格式输出并用 fx 打开
                 command kubectl $args -o json | fx
+                return
+            else if set -q _flag_W # 设置了 -W 参数，watch 事件
+                __kubecolor events --for="$resource_type/$resource_name" -w
                 return
             else # 尝试指定输出格式用第三方工具打开（bat、nvim）
                 # 解析 "-o/--output" 指定的输出格式
