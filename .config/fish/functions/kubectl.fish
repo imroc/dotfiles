@@ -48,7 +48,7 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
                 return
             end
 
-            # 解析增加的自定义参数 -e -E -j -p -P -c -C 来扩展 get 命令的功能
+            # 解析增加的自定义参数 -e -E -j -p -P -c -C -W 来扩展 get 命令的功能
             argparse --ignore-unknown e E j p P c C W -- $original_args
             set args $argv
 
