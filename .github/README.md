@@ -34,13 +34,17 @@ yadm pull
 
 ### Wezterm
 
-Tab management (create, close, rename, move or toggle hide):
+<details>
+<summary>Tab Management</summary>
+create, close, navigation, rename, move or toggle hide tabs:
+![Wezterm Tab Management](https://github.com/user-attachments/assets/cae17a41-7222-4f19-a7c6-4f9441b1b5c9)
+</details>
 
-![Wezterm Tab Mode](https://github.com/user-attachments/assets/cae17a41-7222-4f19-a7c6-4f9441b1b5c9)
-
-TODO:
-- Pane management
-- Resize (font, pane)
+<details>
+<summary>Pane Management</summary>
+split, navigation, resize panes:
+https://github.com/user-attachments/assets/6ede2191-d883-468c-ab61-4477306fe876
+</details>
 
 ### Others TODO
 
