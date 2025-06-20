@@ -37,7 +37,7 @@ yadm pull
 <details>
 <summary>Tab Management</summary>
   
-create, close, navigation, rename, move or toggle hide tabs:
+Create, close, navigate, rename, move and toggle hide tabs:
 
 https://github.com/user-attachments/assets/0dc0fa56-60bb-4ce8-b0a3-f9b949ee459d
 
@@ -46,9 +46,10 @@ https://github.com/user-attachments/assets/0dc0fa56-60bb-4ce8-b0a3-f9b949ee459d
 <details>
 <summary>Pane Management</summary>
 
-split, navigation, resize panes:
+Split, navigate and resize panes:
 
-https://github.com/user-attachments/assets/6ede2191-d883-468c-ab61-4477306fe876
+https://github.com/user-attachments/assets/f51889ce-59c3-41b6-b044-930f13a1f33b
+
 </details>
 
 ### Others TODO
