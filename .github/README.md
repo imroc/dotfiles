@@ -38,7 +38,7 @@ https://github.com/user-attachments/assets/dc5237ac-339d-45d8-a3a0-b6da8696cf72
 
 ### Zellij
 
-https://github.com/user-attachments/assets/507d0b73-cbbd-4c52-bccc-2176f8300edb
+https://github.com/user-attachments/assets/b49c14dd-944a-45e4-9108-d0d1ba2e571f
 
 ### Others TODO
 
