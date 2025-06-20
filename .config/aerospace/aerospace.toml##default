@@ -226,6 +226,10 @@ run = ['layout floating']
 check-further-callbacks = true
 if.window-title-regex-substring = '预览'
 run = ['layout floating']
+[[on-window-detected]]
+check-further-callbacks = false
+if.window-title-regex-substring = '画中画'
+run = ['layout floating']
 
 # 一些开发者工具
 [[on-window-detected]]
