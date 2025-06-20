@@ -32,13 +32,13 @@ yadm pull
 
 ## Screenshoots
 
-### Wezterm
+Work efficiently with tab and pane for aerospace (tiling window manager for macOS), wezterm (terminal emulator) and zellij (terminal multiplexers):
 
 https://github.com/user-attachments/assets/dc5237ac-339d-45d8-a3a0-b6da8696cf72
 
-### Zellij
-
 https://github.com/user-attachments/assets/b49c14dd-944a-45e4-9108-d0d1ba2e571f
+
+https://github.com/user-attachments/assets/442e8751-ae56-44b2-b2a6-2877238289e0
 
 ### Others TODO
 
