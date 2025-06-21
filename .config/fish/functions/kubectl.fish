@@ -101,7 +101,16 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
                 command kubectl $args -o json | fx
                 return
             else if set -q _flag_W # 设置了 -W 参数，watch 事件
-                __kubecolor events --for="$resource_type/$resource_name" -w
+                command kubectl $args -o json 2>&1 | read -z output
+                if not test $status -eq 0
+                    echo "Error fetching resource: $output"
+                    return
+                end
+                if echo $output | jq -e '.metadata | has("namespace")' >/dev/null
+                    __kubecolor events --for="$resource_type/$resource_name" -w
+                    return
+                end
+                __kubecolor events --for="$resource_type/$resource_name" -w -A
                 return
             else # 尝试指定输出格式用第三方工具打开（bat、nvim）
                 # 解析 "-o/--output" 指定的输出格式
