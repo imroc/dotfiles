@@ -334,7 +334,6 @@ if.app-id = 'com.lemon.lvpro'      # 剪映
 run = ['move-node-to-workspace 7']
 [[on-window-detected]]
 if.app-id = 'com.timpler.screenstudio'      # ScreenStudio
-if.window-title-regex-substring = 'Project' # 只将项目编辑界面放到 7 工作区
 run = ['move-node-to-workspace 7']
 [[on-window-detected]]
 if.app-id = 'net.telestream.screenflow10' # ScreenFlow
