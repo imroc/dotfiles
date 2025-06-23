@@ -2,16 +2,8 @@
 ---@diagnostic disable: undefined-field
 ---@diagnostic disable: undefined-global
 
-local outline = require("util.outline")
 local conform = require("util.conform")
 local map = vim.keymap.set
-
--- jump methond
-map({ "n", "v" }, "gm", outline.goto_location, { desc = "[P]goto method name" })
-map({ "n", "v" }, "gM", function()
-  outline.goto_location()
-  Snacks.picker.lsp_references()
-end, { desc = "[P]method references" })
 
 -- format and save
 map({ "n", "v", "i" }, "<leader>;", conform.format_and_save_async, { desc = "[P]Format and Save file asynchronously" })
@@ -40,3 +32,11 @@ map("n", "]e", diagnostic_goto(true, "ERROR"), { desc = "Next Error" })
 map("n", "[e", diagnostic_goto(false, "ERROR"), { desc = "Prev Error" })
 map("n", "]w", diagnostic_goto(true, "WARN"), { desc = "Next Warning" })
 map("n", "[w", diagnostic_goto(false, "WARN"), { desc = "Prev Warning" })
+
+-- jump methond
+local lsp = require("util.lsp")
+map("n", "gm", lsp.jump_to_method_name, { noremap = true, silent = true, desc = "[P]Goto method name" })
+map({ "n", "v" }, "gM", function()
+  lsp.jump_to_method_name()
+  Snacks.picker.lsp_references()
+end, { desc = "[P]Goto method references" })
