@@ -33,9 +33,10 @@ abbr --add kgingc 'kubectl get ingress -o jsonpath='\''{.metadata.annotations.in
 # kubie 相关
 abbr --add kx "kubie ctx"
 abbr --add ks "kubie ns"
-abbr --add kss 'kubie ns kube-system'
+abbr --add kss "kubie ns kube-system"
 
-abbr --add kns kubectl ns
+abbr --add kns "kubectl ns"
+abbr --add knss "kubectl ns kube-system"
 abbr --add kgc "kubectl get pods -o jsonpath='{.spec.containers[*].name}'"
 abbr --add kno "kubectl node-shell"
 abbr --add ke "kubectl edit"
