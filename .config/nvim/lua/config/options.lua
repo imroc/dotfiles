@@ -21,46 +21,8 @@ vim.g.autoformat = false
 -- diable diagnostic by default
 vim.diagnostic.enable(false)
 
-local function detect_git_root_dir(dir)
-  if not dir then
-    return {}
-  end
-
-  local git_cmd = {
-    "git",
-    "-C",
-    dir,
-    "rev-parse",
-    "--show-toplevel",
-  }
-
-  local output = vim.fn.system(git_cmd)
-  local dir, _ = output:gsub("^%s*(.-)%s*$", "%1")
-  if vim.v.shell_error == 0 and dir then
-    -- 检查目录名称是否为 debug-roc
-    local root_name = vim.fn.fnamemodify(dir, ":t")
-    if root_name == "debug-roc" then
-      -- 向上一级目录查找
-      local parent_dir = vim.fn.fnamemodify(dir, ":h")
-      return detect_git_root_dir(parent_dir)
-    else
-      return { dir }
-    end
-  else
-    return {}
-  end
-end
-
--- 检测 git 项目根目录，如果是调试git目录（debug-roc)，则向上一级目录查找真正的 git 项目根目录
-local function detect_project_git_root(buf)
-  -- 获取当前文件路径并提取所在目录
-  local buf_name = vim.api.nvim_buf_get_name(buf)
-  local buf_dir = buf_name ~= "" and vim.fn.fnamemodify(buf_name, ":p:h") or vim.fn.getcwd()
-  return detect_git_root_dir(buf_dir)
-end
-
-vim.g.root_spec = { detect_project_git_root, { ".git" }, "cwd" }
--- vim.g.root_spec = { "cwd" }
+local root = require("util.root")
+vim.g.root_spec = { root.detect_project_root, { ".git" }, "cwd" }
 
 vim.g.maplocalleader = ","
 
