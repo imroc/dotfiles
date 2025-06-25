@@ -114,6 +114,7 @@ alt-ctrl-slash = 'layout tiles horizontal vertical'
 alt-ctrl-comma = 'layout accordion horizontal vertical'
 alt-ctrl-enter = 'fullscreen'
 alt-ctrl-f = 'layout floating tiling'
+alt-ctrl-x = 'close'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#focus
 alt-ctrl-h = 'focus left'
@@ -337,7 +338,7 @@ run = ['move-node-to-workspace 6']
 if.app-id = 'com.lemon.lvpro'      # 剪映
 run = ['move-node-to-workspace 7']
 [[on-window-detected]]
-if.app-id = 'com.timpler.screenstudio'      # ScreenStudio
+if.app-id = 'com.timpler.screenstudio' # ScreenStudio
 run = ['move-node-to-workspace 7']
 [[on-window-detected]]
 if.app-id = 'net.telestream.screenflow10' # ScreenFlow
