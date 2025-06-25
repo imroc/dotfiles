@@ -40,3 +40,7 @@ map({ "n", "v" }, "gM", function()
   lsp.jump_to_method_name()
   Snacks.picker.lsp_references()
 end, { desc = "[P]Goto method references" })
+
+-- outline
+map("n", "<M-o>", "<cmd>Outline<cr>", { desc = "[P]Toggle Outline" })
+map("n", "<leader>to", "<cmd>Outline<cr>", { desc = "[P]Toggle Outline" })

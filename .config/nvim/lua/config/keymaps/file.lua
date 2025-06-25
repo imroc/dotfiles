@@ -10,6 +10,21 @@ vim.keymap.set("n", "<leader>yd", clipboard.copy_current_directory, { desc = "[P
 -- file permission
 vim.keymap.set("n", "<leader>fx", "<cmd>!chmod +x %<cr>", { desc = "[P]Add executable permission" })
 
+-- yazi
 vim.keymap.set("n", "<leader>yZ", function()
   require("util.zellij").run({ "yazi", require("util.buffer").current_dir() }, { name = "yazi" })
-end, { desc = "[P]Open Yazi (zellij)" })
+end, { desc = "[P]Open Yazi (Zellij)" })
+
+local job = require("util.job")
+
+vim.keymap.set("n", "<leader>oc", function()
+  job.run("code", { args = { "-r", LazyVim.root() } })
+end, { desc = "[P]Open VSCode (Root Dir)" })
+
+vim.keymap.set("n", "<leader>oz", function()
+  job.run("zed", { args = { LazyVim.root() } })
+end, { desc = "[P]Open Zed (Root Dir)" })
+
+vim.keymap.set("n", "<leader>on", function()
+  job.run("neovide", { args = { LazyVim.root() } })
+end, { desc = "[P]Open Neovide (Root Dir)" })

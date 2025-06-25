@@ -8,6 +8,7 @@ return {
         { "<leader>t", group = "toggle/todo" },
         { "<leader>y", group = "yazi/yadm/yank" },
         { "<leader>k", group = "kube" },
+        { "<leader>o", group = "open" },
         { "<leader>ka", group = "kubectl apply" },
         { "<leader>kd", group = "kubectl delete" },
         { "<leader>gH", group = "github" },
