@@ -13,7 +13,7 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
     # 包装、增强指定的子命令
     set subcommand "$argv[1]"
     switch $subcommand
-        case noconfig
+        case cc # clear config
             set -e KUBECONFIG
         case color
             if not command -sq kubecolor
