@@ -42,7 +42,7 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
                 end
                 return
             end
-        case get # 增强 kubectl get，支持用 bat 美化输出、用 neovim 以 yaml 格式打开、用 fx 以 json 格式打开、获取 configmap/secret 中的文件内容等
+        case get # 增强 kubectl get，支持用 bat 美化输出、用 neovim 以 yaml 格式打开、用 fx 以 json 格式打开、获取 configmap/secret 中的文件内容、查看证书信息、watch 资源相关事件等
             set -l resource_type $argv[2]
             set -l resource_name $argv[3]
             # 如果没有指定资源类型和资源名，不再执行后面的解析
