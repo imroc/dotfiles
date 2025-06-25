@@ -13,8 +13,10 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
     # 包装、增强指定的子命令
     set subcommand "$argv[1]"
     switch $subcommand
-        case cc # clear config
+        case cc # clean config
             set -e KUBECONFIG
+            echo "KUBECONFIG has been unset"
+            return
         case color
             if not command -sq kubecolor
                 echo "kubecolor not installed"
@@ -22,10 +24,10 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
             end
             if set -q DISABLE_KUBECTL_COLOR
                 set -e DISABLE_KUBECTL_COLOR
-                echo "kubecolor enabled"
+                echo "color enabled"
             else
                 set -g DISABLE_KUBECTL_COLOR 1
-                echo "kubecolor disabled"
+                echo "color disabled"
             end
             return
         case node-shell login # kubectl login / kubectl node-shell 登录节点，支持 fzf 补全节点
