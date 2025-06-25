@@ -142,6 +142,7 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
                 end
             end
     end
+    # 没有命中任何自定义逻辑，透传给 kubecolor 处理
     __kubecolor $original_args
 end
 
