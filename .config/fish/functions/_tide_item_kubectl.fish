@@ -8,8 +8,12 @@ function _tide_item_kubectl
     set parts (string split "/" $context)
     set current_context "$parts[1]"
     set current_namespace "$parts[2]"
-    if test -n "$current_context"; and test -n "$current_namespace"; and test "$current_namespace" != default
-        set prompt "$current_context/$current_namespace"
+    if test -n "$current_context"
+        if test -n "$current_namespace"; and test "$current_namespace" != default
+            set prompt "$current_context/$current_namespace"
+        else
+            set prompt "$current_context"
+        end
         _tide_print_item kubectl $tide_kubectl_icon' ' "$prompt"
     end
 end
