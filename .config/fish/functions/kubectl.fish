@@ -3,7 +3,7 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
     set original_args $argv
     # 解析全局参数并从 argv 中移除，以便后续判断子命令与子命令参数
     argparse --ignore-unknown \
-        "n/namespace=" \
+        "n/namespace=" "o/output=" \
         "context=" "v/v=" "kubeconfig=" \
         "s/server=" "cluster=" "user=" "username=" "token=" "password=" \
         "client-certificate=" "client-key=" "tls-server-name=" "certificate-authority=" insecure-skip-tls-verify \
@@ -13,6 +13,8 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
     # 包装、增强指定的子命令
     set subcommand "$argv[1]"
     switch $subcommand
+        case noconfig
+            set -e KUBECONFIG
         case color
             if not command -sq kubecolor
                 echo "kubecolor not installed"
@@ -41,86 +43,76 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
         case get # 增强 kubectl get，支持用 bat 美化输出、用 neovim 以 yaml 格式打开、用 fx 以 json 格式打开、获取 configmap/secret 中的文件内容等
             set resource_type $argv[2]
             set resource_name $argv[3]
-
             # 如果没有指定资源类型和资源名，不再执行后面的解析
-            if test -z "$resource_type" -o -z "$resource_name"
-                __kubecolor $original_args
-                return
-            end
+            if test -n "$resource_type" -a -n "$resource_name"
+                # 解析增加的自定义参数 -e -E -j -p -P -c -C -W 来扩展 get 命令的功能
+                argparse --ignore-unknown e E j p P c C W -- $original_args
+                set args $argv
 
-            # 解析增加的自定义参数 -e -E -j -p -P -c -C -W 来扩展 get 命令的功能
-            argparse --ignore-unknown e E j p P c C W -- $original_args
-            set args $argv
-
-            if set -q _flag_c; or set -q _flag_C # 设置了 -c 参数，查看证书信息，支持 certificate 和 secret 资源类型
-                if string match -rq '^cert' -- "$resource_type" # 证书类型资源
-                    set cmd cmctl status certificate $resource_name
-                else if string match -rq '^secrets?$' -- "$resource_type" # secret 类型资源
-                    set cmd cmctl inspect secret $resource_name
-                end
-                if set -q cmd
-                    if test -n "$_flag_n" # 追加 namespace
-                        set -a cmd -n $_flag_n
+                if set -q _flag_c; or set -q _flag_C # 设置了 -c/-C 参数，查看证书信息，支持 certificate 和 secret 资源类型
+                    if string match -rq '^cert' -- "$resource_type" # 证书类型资源
+                        set cmd cmctl status certificate $resource_name
+                    else if string match -rq '^secrets?$' -- "$resource_type" # secret 类型资源
+                        set cmd cmctl inspect secret $resource_name
                     end
-                    if set -q _flag_context # 追加 context
-                        set -a cmd --context $_flag_context
-                    end
-                    if set -q _flag_C
-                        command $cmd | nvim
+                    if set -q cmd
+                        if test -n "$_flag_n" # 追加 namespace
+                            set -a cmd -n $_flag_n
+                        end
+                        if set -q _flag_context # 追加 context
+                            set -a cmd --context $_flag_context
+                        end
+                        if set -q _flag_C
+                            command $cmd | nvim
+                        else
+                            command $cmd | less
+                        end
                     else
-                        command $cmd | less
+                        echo "'-c' 和 '-C' 参数仅支持 certificate 和 secret 资源类型"
                     end
-                else
-                    echo "'-c' 和 '-C' 参数仅支持 certificate 和 secret 资源类型"
-                end
-                return
-            else if set -q _flag_p; or set -q _flag_P # 设置了 -p 或 -P 参数，选择 configmap/secret 中的文件名打开。-p 直接将文件内容打印到终端；-P 使用 neovim 打开文件内容。
-                set filename (command kubectl $args -o json | jq -r '.data | keys | .[]' | fzf -1 -0)
-                if test -z "$filename" # 空 configmap/secret，直接返回
-                    echo "empty configmap or secret"
                     return
-                end
-                set escaped_filename (string replace -a '.' '\\.' $filename)
-                set -a args -o jsonpath="{.data.$escaped_filename}"
-                set filename /tmp/$filename
-                if string match -rq '^secrets?$' -- "$resource_type" # secret 类型需 base64 解码
-                    if set -q _flag_P
-                        command kubectl $args | base64 -d >$filename && nvim $filename && rm $filename
+                else if set -q _flag_p; or set -q _flag_P # 设置了 -p/-P 参数，选择 configmap/secret 中的文件名打开。-p 直接将文件内容打印到终端；-P 使用 neovim 打开文件内容。
+                    set filename (command kubectl $args -o json | jq -r '.data | keys | .[]' | fzf -1 -0)
+                    if test -z "$filename" # 空 configmap/secret，直接返回
+                        echo "empty configmap or secret"
+                        return
+                    end
+                    set escaped_filename (string replace -a '.' '\\.' $filename)
+                    set -a args -o jsonpath="{.data.$escaped_filename}"
+                    set filename /tmp/$filename
+                    if string match -rq '^secrets?$' -- "$resource_type" # secret 类型需 base64 解码
+                        if set -q _flag_P
+                            command kubectl $args | base64 -d >$filename && nvim $filename && rm $filename
+                        else
+                            command kubectl $args | base64 -d
+                        end
                     else
-                        command kubectl $args | base64 -d
+                        if set -q _flag_P
+                            command kubectl $args >$filename && nvim $filename && rm $filename
+                        else
+                            command kubectl $args
+                        end
                     end
-                else
-                    if set -q _flag_P
-                        command kubectl $args >$filename && nvim $filename && rm $filename
+                    return
+                else if set -q _flag_j # 设置了 -j 参数，用 json 格式输出并用 fx 打开
+                    command kubectl $args -o json | fx
+                    return
+                else if set -q _flag_W # 设置了 -W 参数，watch 事件
+                    command kubectl $args -o json 2>&1 | read -z output
+                    if not test $status -eq 0
+                        echo "Error fetching resource: $output"
+                        return
+                    end
+                    # watch 该资源的相关事件（根据资源是否是集群范围的来决定是否需要加 -A 参数）
+                    if echo $output | jq -e '.metadata | has("namespace")' >/dev/null
+                        __kubecolor events --for="$resource_type/$resource_name" -w
+                        return
                     else
-                        command kubectl $args
+                        __kubecolor events --for="$resource_type/$resource_name" -w -A
+                        return
                     end
-                end
-                return
-            else if set -q _flag_j # 设置了 -j 参数，用 json 格式输出并用 fx 打开
-                command kubectl $args -o json | fx
-                return
-            else if set -q _flag_W # 设置了 -W 参数，watch 事件
-                command kubectl $args -o json 2>&1 | read -z output
-                if not test $status -eq 0
-                    echo "Error fetching resource: $output"
-                    return
-                end
-                if echo $output | jq -e '.metadata | has("namespace")' >/dev/null
-                    __kubecolor events --for="$resource_type/$resource_name" -w
-                    return
-                end
-                __kubecolor events --for="$resource_type/$resource_name" -w -A
-                return
-            else # 尝试指定输出格式用第三方工具打开（bat、nvim）
-                # 解析 "-o/--output" 指定的输出格式
-                argparse --ignore-unknown "o=" "output=" -- $args
-                set output_format "$_flag_o"
-                if test -z "$output_format"
-                    set output_format "$_flag_output"
-                end
-
-                if set -q _flag_e # 设置了 -e 参数，将内容存到文件并用 nvim 打开（会启动 LSP，提供提示和补全的能力）
+                else if set -q _flag_e # 设置了 -e 参数，将内容存到文件并用 nvim 打开（会启动 LSP，提供提示和补全的能力）
+                    set -l output_format $_flag_o
                     if test -z "$output_format"
                         set -a args -o yaml
                         set output_format yaml
@@ -129,6 +121,7 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
                     command kubectl $args >$filename && nvim $filename && rm $filename
                     return
                 else if set -q _flag_E # 设置了 -E 参数，将内容通过 kubectl neat 精简后存到文件并用 nvim 打开（会启动 LSP，提供提示和补全的能力）
+                    set -l output_format $_flag_o
                     if test -z "$output_format"
                         set -a args -o yaml
                         set output_format yaml
@@ -136,12 +129,16 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
                     set filename /tmp/$resource_type-$resource_name.$output_format
                     command kubectl $args | kubectl neat >$filename && nvim $filename && rm $filename
                     return
-                else if test -n "$output_format"; and test "$output_format" = json -o "$output_format" = yaml # 设置了 "-o/--output"，且值为 json 或 yaml，用 bat 渲染对应格式
-                    command kubectl $args | bat --style=plain --theme tokyonight_night --language "$output_format"
-                    return
+                end
+                # 没有为 kubectl get 设置任何自定义参数，尝试根据 "-o/--output" 参数指定的格式用 bat 渲染内容
+                if not test "$DISABLE_KUBECTL_COLOR" = 1; and test -n "$_flag_o"
+                    switch $_flag_o
+                        case yaml json
+                            command kubectl $args | bat --language "$_flag_o"
+                            return
+                    end
                 end
             end
-            # 没有设置自定义参数，或者无需包装的场景（比如 -o wide)，直接交给 kubecolor 来代理 kubectl
     end
     __kubecolor $original_args
 end
