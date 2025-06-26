@@ -22,11 +22,11 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
                 echo "kubecolor not installed"
                 return
             end
-            if set -q DISABLE_KUBECTL_COLOR
-                set -e DISABLE_KUBECTL_COLOR
+            if set -q __kubectl_disable_color
+                set -e __kubectl_disable_color
                 echo "color enabled"
             else
-                set -g DISABLE_KUBECTL_COLOR 1
+                set -g __kubectl_disable_color 1
                 echo "color disabled"
             end
             return
@@ -160,7 +160,7 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
                     return
                 end
                 # 没有为 kubectl get 设置任何自定义参数，尝试根据 "-o/--output" 参数指定的格式用 bat 渲染内容
-                if not test "$DISABLE_KUBECTL_COLOR" = 1; and test -n "$_flag_o"
+                if not test "$__kubectl_disable_color" = 1; and test -n "$_flag_o"
                     switch $_flag_o
                         case yaml json
                             command kubectl $args | bat --language "$_flag_o"
@@ -173,7 +173,7 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
     __kubecolor $original_args
 end
 function __kubecolor
-    if not test "$DISABLE_KUBECTL_COLOR" = 1; and command -sq kubecolor
+    if not test "$__kubectl_disable_color" = 1; and command -sq kubecolor
         command kubecolor $argv
     else
         command kubectl $argv
