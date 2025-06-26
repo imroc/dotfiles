@@ -30,7 +30,7 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
                 echo "color disabled"
             end
             return
-        case node-shell login # kubectl login / kubectl node-shell 登录节点，支持 fzf 补全节点
+        case node-shell # kubectl node-shell 登录节点，支持 fzf 补全节点
             set -l node $argv[2]
             if test -z "$node" # 子命令后没有参数，列出所有节点并用 fzf 选择（不包含无法登录的虚拟节点）
                 # 利用 node-shell 登录节点
@@ -42,6 +42,33 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
                 end
                 return
             end
+        case pod-shell # kubectl pod-shell 登录 pod，支持 fzf 补全 pod
+            set -l pod_list (command kubectl get pod -o json)
+            set -l pod $argv[2]
+            if test -z "$pod"
+                # 利用 node-shell 登录节点
+                set pod (printf "%s" "$pod_list" | jq -r '.items[].metadata.name' | fzf --prompt "select pod: " -0)
+                if test -z "$pod"
+                    echo "no pod selected"
+                    return
+                end
+            end
+            set -l container (printf "%s" "$pod_list" | jq -r ".items[] | select(.metadata.name == \"$pod\") | .status.containerStatuses[]?.name" | fzf --prompt "select container: " -0 -1)
+            if test -z "$container"
+                echo "no container selected"
+                return
+            end
+            set -l shell (printf "/bin/bash\n/bin/sh\nfish\nzsh" | fzf --prompt "select shell: ")
+            if test -z "$shell"
+                read --prompt-str "input shell manually: " shell
+                if test -z "$shell"
+                    echo "no shell specified"
+                    return
+                end
+            end
+            echo "login container $container in pod $pod with shell $shell"
+            command kubectl exec -it $pod -c $container -- $shell
+            return
         case get # 增强 kubectl get，支持用 bat 美化输出、用 neovim 以 yaml 格式打开、用 fx 以 json 格式打开、获取 configmap/secret 中的文件内容、查看证书信息、watch 资源相关事件等
             set -l resource_type $argv[2]
             set -l resource_name $argv[3]
@@ -145,7 +172,6 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
     # 没有命中任何自定义逻辑，透传给 kubecolor 处理
     __kubecolor $original_args
 end
-
 function __kubecolor
     if not test "$DISABLE_KUBECTL_COLOR" = 1; and command -sq kubecolor
         command kubecolor $argv
