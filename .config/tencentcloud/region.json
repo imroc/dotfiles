@@ -1,0 +1,170 @@
+[
+  {
+    "Region": "ap-guangzhou-open",
+    "RegionName": "华南地区(广州OPEN)"
+  },
+  {
+    "Region": "ap-shenzhen",
+    "RegionName": "华南地区(深圳)"
+  },
+  {
+    "Region": "ap-qingyuan",
+    "RegionName": "华南地区(清远)"
+  },
+  {
+    "Region": "ap-guangzhou-wxzf",
+    "RegionName": "华南地区(广州微信支付)"
+  },
+  {
+    "Region": "ap-shanghai",
+    "RegionName": "华东地区(上海)"
+  },
+  {
+    "Region": "ap-shanghai-fsi",
+    "RegionName": "华东地区(上海金融)"
+  },
+  {
+    "Region": "ap-jinan-ec",
+    "RegionName": "华东地区(济南)"
+  },
+  {
+    "Region": "ap-hangzhou-ec",
+    "RegionName": "华东地区(杭州)"
+  },
+  {
+    "Region": "ap-nanjing",
+    "RegionName": "华东地区(南京)"
+  },
+  {
+    "Region": "ap-fuzhou-ec",
+    "RegionName": "华东地区(福州)"
+  },
+  {
+    "Region": "ap-guangzhou",
+    "RegionName": "华南地区(广州)"
+  },
+  {
+    "Region": "ap-hefei-ec",
+    "RegionName": "华东地区(合肥)"
+  },
+  {
+    "Region": "ap-shanghai-adc",
+    "RegionName": "华东地区(上海自动驾驶云)"
+  },
+  {
+    "Region": "ap-shenzhen-fsi",
+    "RegionName": "华南地区(深圳金融)"
+  },
+  {
+    "Region": "ap-shanghai-wxzf",
+    "RegionName": "华东地区(上海微信支付)"
+  },
+  {
+    "Region": "ap-nanjing-xf-cft",
+    "RegionName": "华东地区(南京学府财付通)"
+  },
+  {
+    "Region": "ap-shanghai-hq-cft",
+    "RegionName": "华东地区(上海花桥财付通)"
+  },
+  {
+    "Region": "ap-shanghai-hq-uat-cft",
+    "RegionName": "华东地区(上海花桥财付通仿真环境)"
+  },
+  {
+    "Region": "ap-shanghai-wxp-ops",
+    "RegionName": "华东地区(上海微信支付精品云支撑Region)"
+  },
+  {
+    "Region": "ap-beijing",
+    "RegionName": "华北地区(北京)"
+  },
+  {
+    "Region": "ap-tianjin",
+    "RegionName": "华北地区(天津)"
+  },
+  {
+    "Region": "ap-beijing-fsi",
+    "RegionName": "华北地区(北京金融)"
+  },
+  {
+    "Region": "ap-shijiazhuang-ec",
+    "RegionName": "华北地区(石家庄)"
+  },
+  {
+    "Region": "ap-wuhan-ec",
+    "RegionName": "华中地区(武汉)"
+  },
+  {
+    "Region": "ap-changsha-ec",
+    "RegionName": "华中地区(长沙)"
+  },
+  {
+    "Region": "ap-zhengzhou-ec",
+    "RegionName": "华中地区(郑州)"
+  },
+  {
+    "Region": "ap-chengdu",
+    "RegionName": "西南地区(成都)"
+  },
+  {
+    "Region": "ap-chongqing",
+    "RegionName": "西南地区(重庆)"
+  },
+  {
+    "Region": "ap-xian-ec",
+    "RegionName": "西北地区(西安)"
+  },
+  {
+    "Region": "ap-xibei-ec",
+    "RegionName": "西北地区(西北)"
+  },
+  {
+    "Region": "ap-shenyang-ec",
+    "RegionName": "东北地区(沈阳)"
+  },
+  {
+    "Region": "ap-hongkong",
+    "RegionName": "港澳台地区(中国香港)"
+  },
+  {
+    "Region": "ap-taipei",
+    "RegionName": "港澳台地区(中国台北)"
+  },
+  {
+    "Region": "ap-seoul",
+    "RegionName": "亚太东北(首尔)"
+  },
+  {
+    "Region": "ap-tokyo",
+    "RegionName": "亚太东北(东京)"
+  },
+  {
+    "Region": "ap-singapore",
+    "RegionName": "亚太东南(新加坡)"
+  },
+  {
+    "Region": "ap-bangkok",
+    "RegionName": "亚太东南(曼谷)"
+  },
+  {
+    "Region": "ap-jakarta",
+    "RegionName": "亚太东南(雅加达)"
+  },
+  {
+    "Region": "na-siliconvalley",
+    "RegionName": "美国西部(硅谷)"
+  },
+  {
+    "Region": "eu-frankfurt",
+    "RegionName": "欧洲地区(法兰克福)"
+  },
+  {
+    "Region": "na-ashburn",
+    "RegionName": "美国东部(弗吉尼亚)"
+  },
+  {
+    "Region": "sa-saopaulo",
+    "RegionName": "南美地区(圣保罗)"
+  }
+]
