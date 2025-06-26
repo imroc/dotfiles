@@ -33,7 +33,7 @@ return {
   {
     "iamcco/markdown-preview.nvim",
     keys = {
-      { "<localleader>p", "<cmd>MarkdownPreviewToggle<cr>", ft = "markdown", desc = "[P]Toggle Preview" },
+      { "<localleader>P", "<cmd>MarkdownPreviewToggle<cr>", ft = "markdown", desc = "[P]Toggle Preview" },
     },
   },
   {
@@ -111,6 +111,16 @@ return {
         image_name = false,
       })
     end,
+  },
+  {
+    "HakonHarnes/img-clip.nvim",
+    event = "VeryLazy",
+    ft = "markdown",
+    opts = {},
+    keys = {
+      -- suggested keymap
+      { "<localleader>p", "<cmd>PasteImage<cr>", desc = "Paste image from system clipboard" },
+    },
   },
   {
     "MeanderingProgrammer/render-markdown.nvim",
