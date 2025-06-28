@@ -108,20 +108,28 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
                     end
                     set -l escaped_filename (string replace -a '.' '\\.' $filename)
                     set -a args -o jsonpath="{.data.$escaped_filename}"
-                    set filename /tmp/$filename
-                    if string match -rq '^secrets?$' -- "$resource_type" # secret 类型需 base64 解码
-                        if set -q _flag_P
-                            command kubectl $args | base64 -d >$filename && nvim $filename && rm $filename
-                        else
-                            command kubectl $args | base64 -d
-                        end
-                    else
-                        if set -q _flag_P
-                            command kubectl $args >$filename && nvim $filename && rm $filename
-                        else
-                            command kubectl $args
+                    set -l result (kubectl $args | string collect)
+                    if not test $status -eq 0
+                        return
+                    end
+                    if string match -rq '^secrets?$' -- "$resource_type" # secret 资源需 base64 解码
+                        set result (printf "%s" "$result" | base64 -d | string collect)
+                        if not test $status -eq 0
+                            return
                         end
                     end
+                    if set -q _flag_P # 指定了 -P，用 nvim 打开
+                        set filename /tmp/$filename
+                        printf "%s" "$result" >$filename && nvim $filename && rm $filename
+                        return
+                    end
+                    # 如果没禁用 color，用 bat 打印
+                    if not test "$__kubectl_disable_color" = 1
+                        printf "%s" "$result" | bat --file-name "$filename"
+                        return
+                    end
+                    # 禁用了 color， 直接打印
+                    printf "%s" "$result"
                     return
                 else if set -q _flag_j # 设置了 -j 参数，用 json 格式输出并用 fx 打开
                     command kubectl $args -o json | fx
