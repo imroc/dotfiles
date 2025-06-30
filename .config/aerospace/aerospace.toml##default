@@ -235,6 +235,10 @@ run = ['layout floating']
 check-further-callbacks = false
 if.window-title-regex-substring = '导出'
 run = ['layout floating']
+[[on-window-detected]]
+check-further-callbacks = false
+if.window-title-regex-substring = 'Screen Studio Display Window Picker Highlighter'
+run = ['layout floating']
 
 # 一些开发者工具
 [[on-window-detected]]
