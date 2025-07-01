@@ -287,11 +287,8 @@ if.window-title-regex-substring = '窗口'
 run = ['layout floating']
 [[on-window-detected]]
 if.app-id = 'com.tencent.xinWeChat'    # 微信主界面
-if.window-title-regex-substring = '微信'
 run = ['move-node-to-workspace 3']
 [[on-window-detected]]
-if.app-id = 'com.tencent.xinWeChat' # 微信其它界面默认 float
-run = ['layout floating']
 
 # 浏览器
 [[on-window-detected]]
