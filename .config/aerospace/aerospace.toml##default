@@ -292,7 +292,6 @@ run = ['layout floating']
 [[on-window-detected]]
 if.app-id = 'com.tencent.xinWeChat'    # 微信主界面
 run = ['move-node-to-workspace 3']
-[[on-window-detected]]
 
 # 浏览器
 [[on-window-detected]]
