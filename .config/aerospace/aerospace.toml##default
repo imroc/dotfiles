@@ -115,6 +115,7 @@ alt-ctrl-comma = 'layout accordion horizontal vertical'
 alt-ctrl-enter = 'fullscreen'
 alt-ctrl-f = 'layout floating tiling'
 alt-ctrl-x = 'close'
+alt-ctrl-o = 'close-all-windows-but-current'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#focus
 alt-ctrl-h = 'focus left'
@@ -286,6 +287,7 @@ run = ['move-node-to-workspace 3']
 if.app-id = 'com.tencent.WeWorkMac' # 企业微信其它界面默认 float
 run = ['layout floating']
 [[on-window-detected]]
+check-further-callbacks = true
 if.app-id = 'com.tencent.xinWeChat'    # 微信视频号、搜一搜、小程序的 title 为：微信（窗口），带“微信”但并非主界面，默认 float
 if.window-title-regex-substring = '窗口'
 run = ['layout floating']
