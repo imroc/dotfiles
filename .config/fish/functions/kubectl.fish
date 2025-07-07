@@ -15,6 +15,16 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
     switch $subcommand
         case cc # clean config
             set -e KUBECONFIG
+            set -e KUBIE_ACTIVE
+            set -e KUBIE_FISH_USE_RPROMPT
+            set -e KUBIE_SHELL
+            set -e KUBIE_STATE
+            set -e KUBIE_ZSH_USE_RPS1
+            set -e KUBIE_KUBECONFIG
+            set -e KUBIE_PROMPT_DISABLE
+            set -e KUBIE_DEPTH
+            set -e KUBIE_XONSH_USE_RIGHT_PROMPT
+            set -e KUBIE_SESSION
             echo "KUBECONFIG has been unset"
             return
         case color
