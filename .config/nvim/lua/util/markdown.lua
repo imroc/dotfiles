@@ -89,10 +89,13 @@ end
 -- Changed all the markdown folding and unfolding keymaps from <leader>mfj to
 -- zj, zk, zl, z; and zu respectively lamw25wmal
 function M.unfold_level_2()
+  -- "Update" saves only if the buffer has been modified since the last save
+  vim.cmd("silent update")
   -- vim.keymap.set("n", "<leader>mfu", function()
   -- Reloads the file to reflect the changes
   vim.cmd("edit!")
   vim.cmd("normal! zR") -- Unfold all headings
+  vim.cmd("normal! zz") -- center the cursor line on screen
 end
 
 -- gk jummps to the markdown heading above and then folds it
@@ -103,35 +106,43 @@ function M.fold_current()
   vim.cmd("normal! za")
 end
 
--- fold markdown headings of level 1 or above
-function M.fold_level_1()
-  -- vim.keymap.set("n", "<leader>mfj", function()
-  -- Reloads the file to refresh folds, otherwise you have to re-open neovim
+function fold_level(min_level)
+  -- 保存更改并重新加载缓冲区
+  vim.cmd("silent update")
+  -- 重新加载文件以刷新折叠
   vim.cmd("edit!")
-  -- Unfold everything first or I had issues
+  -- 展开所有折叠，避免出现问题
   vim.cmd("normal! zR")
-  fold_markdown_headings({ 6, 5, 4, 3, 2, 1 })
+
+  local levels = {}
+  for lv = 6, min_level, -1 do
+    table.insert(levels, lv)
+  end
+
+  -- 调用折叠函数
+  fold_markdown_headings(levels)
+  -- 光标行居中
+  vim.cmd("normal! zz")
 end
 
--- fold markdown headings of level 2 or above
--- I know, it reads like "madafaka" but "k" for me means "2"
-function M.fold_level_2()
-  -- vim.keymap.set("n", "<leader>mfk", function()
-  -- Reloads the file to refresh folds, otherwise you have to re-open neovim
-  vim.cmd("edit!")
-  -- Unfold everything first or I had issues
-  vim.cmd("normal! zR")
-  fold_markdown_headings({ 6, 5, 4, 3, 2 })
+-- fold markdown headings of level 4 or above
+function M.fold_level_4()
+  fold_level(4)
 end
 
 -- fold markdown headings of level 3 or above
 function M.fold_level_3()
-  -- vim.keymap.set("n", "<leader>mfl", function()
-  -- Reloads the file to refresh folds, otherwise you have to re-open neovim
-  vim.cmd("edit!")
-  -- Unfold everything first or I had issues
-  vim.cmd("normal! zR")
-  fold_markdown_headings({ 6, 5, 4, 3 })
+  fold_level(3)
+end
+
+-- fold markdown headings of level 3 or above
+function M.fold_level_2()
+  fold_level(2)
+end
+
+-- fold markdown headings of level 3 or above
+function M.fold_level_1()
+  fold_level(1)
 end
 
 return M
