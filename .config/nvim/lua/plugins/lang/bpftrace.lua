@@ -1,0 +1,3 @@
+return {
+  "mmarchini/bpftrace.vim",
+}
