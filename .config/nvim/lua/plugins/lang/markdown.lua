@@ -50,6 +50,7 @@ return {
       },
       {
         "<localleader>l",
+        mode = { "n", "v" },
         "<cmd>MkdnCreateLinkFromClipboard<cr>",
         ft = "markdown",
         desc = "[P]Create Link From Clipboard",
