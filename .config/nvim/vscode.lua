@@ -25,3 +25,28 @@ require("lazy").setup({
     -- version = "*", -- try installing the latest stable version for plugins that support semver
   },
 })
+
+-- 定义全局变量保存输入法状态
+vim.g.last_im_select = ""
+
+-- 退出插入模式时：保存当前输入法 + 切换英文输入法
+vim.api.nvim_create_autocmd("InsertLeave", {
+  pattern = "*",
+  callback = function()
+    -- 保存当前输入法状态 (需替换为你的英文输入法 ID)
+    vim.g.last_im_select = vim.fn.system("im-select"):gsub("%s+", "")
+    -- 强制切换到英文输入法 (需替换为你的英文输入法 ID)
+    vim.fn.system("im-select com.apple.keylayout.ABC")
+  end,
+})
+
+-- 进入插入模式时：恢复上次输入法
+vim.api.nvim_create_autocmd("InsertEnter", {
+  pattern = "*",
+  callback = function()
+    if vim.g.last_im_select ~= "" then
+      vim.fn.system("im-select " .. vim.g.last_im_select)
+    end
+  end,
+})
+

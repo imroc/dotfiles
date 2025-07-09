@@ -7,7 +7,6 @@ return {
   -- https://github.com/keaising/im-select.nvim
   "keaising/im-select.nvim",
   lazy = false,
-  vscode = true,
   opts = {
     default_im_select = "com.apple.keylayout.ABC",
     default_command = "macism",
