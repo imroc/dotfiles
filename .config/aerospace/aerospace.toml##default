@@ -245,6 +245,9 @@ run = ['layout floating']
 [[on-window-detected]]
 if.app-id = 'net.shinystone.OKJSON'
 run = ['move-node-to-workspace 1']
+[[on-window-detected]]
+if.app-id = 'is.follow'
+run = ['move-node-to-workspace 1']
 
 # 日常开发: terminal / editor / IDE
 [[on-window-detected]]
