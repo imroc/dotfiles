@@ -1,3 +1,24 @@
+local on_new_config = function(new_config)
+  new_config.settings.yaml.schemas = require("schemastore").yaml.schemas({
+    -- Optional ignore schemas from SchemaStore, each item is a schema name in SchemaStore's catalog.json
+    ignore = {
+      -- Rancher Fleet's fileMatch is 'fleet.yaml', which may conflict with the kubernetes yaml file of the same name.
+      -- e.g. https://github.com/googleforgames/agones/blob/main/examples/fleet.yaml
+      "Rancher Fleet",
+    },
+    extra = {
+      {
+        description = "CNB",
+        fileMatch = ".cnb.yml",
+        name = "CNB",
+        url = "https://docs.cnb.woa.com/conf-schema.json",
+      },
+    },
+  })
+end
+local on_attach = function(client, bufnr)
+  require("kubeschema").on_attach(client, bufnr)
+end
 return {
   {
     "neovim/nvim-lspconfig",
@@ -14,9 +35,13 @@ return {
       },
       "b0o/SchemaStore.nvim",
     },
-    opts = function(_, opts)
-      opts.servers = vim.tbl_deep_extend("force", opts.servers or {}, {
+    opts = {
+      servers = {
         yamlls = {
+          on_new_config = on_new_config,
+          -- IMPORTANT!!! Set kubeschema's on_attch to yamlls so that kubeschema can dynamically and accurately match the
+          -- corresponding schema file based on the yaml file content (APIVersion and Kind).
+          on_attach = on_attach,
           capabilities = {
             workspace = {
               didChangeConfiguration = {
@@ -27,43 +52,19 @@ return {
               },
             },
           },
-          -- IMPORTANT!!! Set kubeschema's on_attch to yamlls so that kubeschema can dynamically and accurately match the
-          -- corresponding schema file based on the yaml file content (APIVersion and Kind).
-          on_attach = require("kubeschema").on_attach,
-          on_new_config = function(new_config)
-            new_config.settings.yaml = vim.tbl_deep_extend("force", new_config.settings.yaml or {}, {
+          settings = {
+            yaml = {
               editor = {
                 formatOnType = false,
               },
               format = {
                 enable = false,
               },
-              schemaStore = {
-                enable = false,
-              },
-              -- Use other schemas from SchemaStore
-              -- https://raw.githubusercontent.com/SchemaStore/schemastore/master/src/api/json/catalog.json
-              schemas = require("schemastore").yaml.schemas({
-                -- Optional ignore schemas from SchemaStore, each item is a schema name in SchemaStore's catalog.json
-                ignore = {
-                  -- Rancher Fleet's fileMatch is 'fleet.yaml', which may conflict with the kubernetes yaml file of the same name.
-                  -- e.g. https://github.com/googleforgames/agones/blob/main/examples/fleet.yaml
-                  "Rancher Fleet",
-                },
-                extra = {
-                  {
-                    description = "CNB",
-                    fileMatch = ".cnb.yml",
-                    name = "CNB",
-                    url = "https://docs.cnb.woa.com/conf-schema.json",
-                  },
-                },
-              }),
-            })
-          end,
+            },
+          },
         },
-      })
-    end,
+      },
+    },
   },
   {
     "cuducos/yaml.nvim",
