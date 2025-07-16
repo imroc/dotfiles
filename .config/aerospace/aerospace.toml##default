@@ -226,15 +226,7 @@ check-further-callbacks = true
 run = ['layout floating']
 [[on-window-detected]]
 check-further-callbacks = true
-if.window-title-regex-substring = '预览'
-run = ['layout floating']
-[[on-window-detected]]
-check-further-callbacks = false
-if.window-title-regex-substring = '画中画'
-run = ['layout floating']
-[[on-window-detected]]
-check-further-callbacks = false
-if.window-title-regex-substring = '导出'
+if.window-title-regex-substring = '预览|图片和视频|画中画|导出'
 run = ['layout floating']
 [[on-window-detected]]
 check-further-callbacks = false
