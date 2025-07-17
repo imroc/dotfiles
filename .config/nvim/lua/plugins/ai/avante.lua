@@ -1,7 +1,7 @@
 return {
   "yetone/avante.nvim",
   event = "VeryLazy",
-  lazy = false,
+  lazy = true,
   version = false, -- Set this to "*" to always pull the latest release version, or set it to false to update to the latest code changes.
   -- keys = {
   --   { "<leader>ia", "<cmd>AvanteAsk<CR>", mode = { "n", "v" }, desc = "[P]avante: ask" },
@@ -12,6 +12,30 @@ return {
     -- behaviour = {
     --   auto_set_keymaps = false,
     -- },
+    -- system_prompt as function ensures LLM always has latest MCP server state
+    -- This is evaluated for every message, even in existing chats
+    system_prompt = function()
+      local hub = require("mcphub").get_hub_instance()
+      return hub and hub:get_active_servers_prompt() or ""
+    end,
+    -- Using function prevents requiring mcphub before it's loaded
+    custom_tools = function()
+      return {
+        require("mcphub.extensions.avante").mcp_tool(),
+      }
+    end,
+    disabled_tools = {
+      "list_files", -- Built-in file operations
+      "search_files",
+      "read_file",
+      "create_file",
+      "rename_file",
+      "delete_file",
+      "create_dir",
+      "rename_dir",
+      "delete_dir",
+      "bash", -- Built-in terminal access
+    },
     hints = { enabled = false }, -- 禁用 hint，避免 visual mode 选中文本时提示快捷键，影响录屏演示效果
     provider = "deepseek",
     providers = {
@@ -27,6 +51,7 @@ return {
   build = "make",
   -- build = "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false" -- for windows
   dependencies = {
+    "ravitemer/mcphub.nvim",
     "nvim-treesitter/nvim-treesitter",
     "stevearc/dressing.nvim",
     "nvim-lua/plenary.nvim",
@@ -70,8 +95,9 @@ return {
       dependencies = {
         "Kaiser-Yang/blink-cmp-avante",
       },
-      opts = function(_, opts)
-        opts.sources = vim.tbl_deep_extend("force", opts.sources or {}, {
+      opts = {
+        sources = {
+          default = { "avante" },
           providers = {
             avante = {
               module = "blink-cmp-avante",
@@ -79,9 +105,8 @@ return {
               opts = {},
             },
           },
-        })
-        vim.list_extend(opts.sources.default, { "avante" })
-      end,
+        },
+      },
     },
   },
 }
