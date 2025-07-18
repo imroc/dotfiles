@@ -27,7 +27,7 @@ local run_target = function(run)
   if not result then
     return
   end
-  vim.ui.select(result, { prompt = "Run Target" }, function(target)
+  Snacks.picker.select(result, { prompt = "Run Target" }, function(target)
     if target then
       run(target)
     end

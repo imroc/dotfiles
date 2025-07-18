@@ -6,7 +6,7 @@ return {
         "<leader>sf",
         function()
           local parsers = require("nvim-treesitter.parsers").available_parsers()
-          vim.ui.select(parsers, { prompt = "Select Filetype" }, function(ft)
+          Snacks.picker.select(parsers, { prompt = "Select Filetype" }, function(ft)
             if ft then
               vim.cmd("set filetype=" .. ft)
             end
