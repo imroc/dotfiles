@@ -53,8 +53,9 @@ return {
   dependencies = {
     "ravitemer/mcphub.nvim",
     "nvim-treesitter/nvim-treesitter",
-    "stevearc/dressing.nvim",
     "nvim-lua/plenary.nvim",
+    "olke/snacks.nvim", -- for input provider
+    "nvim-tree/nvim-web-devicons",
     "MunifTanjim/nui.nvim",
     -- {
     --   -- support for image pasting
