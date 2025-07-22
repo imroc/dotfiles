@@ -17,7 +17,7 @@ end, { desc = "[P]Open Yazi (Zellij)" })
 
 local job = require("util.job")
 
-vim.keymap.set("n", "<leader>oc", function()
+vim.keymap.set("n", "<leader>ov", function()
   job.run("code", { args = { "-r", LazyVim.root() } })
 end, { desc = "[P]Open VSCode (Root Dir)" })
 

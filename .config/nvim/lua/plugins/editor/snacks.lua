@@ -52,14 +52,14 @@ return {
       desc = "[P]Copy Permalink URL",
     },
     {
-      "<leader>gOr",
+      "<leader>ogr",
       function()
         Snacks.gitbrowse({ what = "repo" })
       end,
       desc = "[P]Open Repo In Browser",
     },
     {
-      "<leader>gOf",
+      "<leader>ogf",
       function()
         Snacks.gitbrowse({ what = "file" })
       end,
@@ -67,7 +67,7 @@ return {
       desc = "[P]Open File In Browser",
     },
     {
-      "<leader>gOp",
+      "<leader>ogp",
       function()
         Snacks.gitbrowse({ what = "permalink" })
       end,
@@ -75,7 +75,7 @@ return {
       desc = "[P]Open Permalink In Browser",
     },
     {
-      "<leader>gOb",
+      "<leader>ogb",
       function()
         Snacks.gitbrowse({ what = "branch" })
       end,
