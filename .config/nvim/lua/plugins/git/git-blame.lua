@@ -2,7 +2,7 @@ return {
   "f-person/git-blame.nvim",
   event = "VeryLazy",
   keys = {
-    { "<leader>gOc", "<cmd>GitBlameOpenCommitURL<CR>", desc = "[P]Open Commit URL" },
+    { "<leader>ogc", "<cmd>GitBlameOpenCommitURL<CR>", desc = "[P]Open Commit URL" },
   },
   config = function()
     vim.g.gitblame_set_extmark_options = {
