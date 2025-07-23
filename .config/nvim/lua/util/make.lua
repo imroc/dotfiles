@@ -19,7 +19,7 @@ local run_target = function(run)
       },
       cwd = buffer.current_dir(),
     })
-    :sync()
+    :sync(10000)
 
   if code ~= 0 then
     return
