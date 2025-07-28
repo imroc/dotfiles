@@ -13,7 +13,7 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
     # 包装、增强指定的子命令
     set subcommand "$argv[1]"
     switch $subcommand
-        case cc # clean config
+        case clear # clear kubeconfig
             set -e KUBECONFIG
             set -e KUBIE_ACTIVE
             set -e KUBIE_FISH_USE_RPROMPT
