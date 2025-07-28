@@ -18,8 +18,9 @@ vim.keymap.set("v", "<C-c>", "y", { desc = "[P]Copy" })
 vim.keymap.set("n", "<leader>ct", "<cmd>%s/\t/  /g<cr>", { desc = "[P]Convert tab to 2 spaces" })
 vim.keymap.set("n", "<leader>cT", "<cmd>%s/  /\t/g<cr>", { desc = "[P]Convert 2 spaces to a tab" })
 
--- todo
-vim.keymap.set("n", "<leader>td", "<cmd>e ~/dev/note/todo.md<cr>", { desc = "[P]Open Todo" })
+-- open quick note
+vim.keymap.set("n", "<leader>td", "<cmd>e ~/dev/note/todo.md<cr>", { desc = "[P]Open todo.md" })
+vim.keymap.set("n", "<leader>tb", "<cmd>e ~/dev/note/zb.md<cr>", { desc = "[P]Open zb.md" })
 
 -- toggle cursor column
 Snacks.toggle.option("cursorcolumn", { name = "Cursor Column" }):map("<leader>ux")
