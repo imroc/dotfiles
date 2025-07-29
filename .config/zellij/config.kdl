@@ -115,7 +115,7 @@ keybinds clear-defaults=true {
         bind "Esc" { UndoRenamePane; SwitchToMode "Pane"; }
     }
     session {
-        bind "Ctrl Super o" { SwitchToMode "Normal"; }
+        bind "Alt Super o" { SwitchToMode "Normal"; }
         bind "Super s" { SwitchToMode "Scroll"; }
         bind "d" { Detach; }
         bind "w" {
@@ -219,7 +219,7 @@ keybinds clear-defaults=true {
         bind "Super u" { SwitchToMode "Scroll"; HalfPageScrollUp; }
     }
     shared_except "session" "locked" {
-        bind "Ctrl Super o" { SwitchToMode "Session"; }
+        bind "Alt Super o" { SwitchToMode "Session"; }
     }
     shared_except "tab" "locked" {
         bind "Super t" { SwitchToMode "Tab"; }
