@@ -22,8 +22,8 @@ vim.keymap.set("n", "<leader>cT", "<cmd>%s/  /\t/g<cr>", { desc = "[P]Convert 2 
 vim.keymap.set("n", "<leader>td", "<cmd>e ~/dev/note/todo.md<cr>", { desc = "[P]Open todo.md" })
 vim.keymap.set("n", "<leader>tb", "<cmd>e ~/dev/note/zb.md<cr>", { desc = "[P]Open zb.md" })
 
-vim.keymap.set("n", "<M-n>", "]c", { desc = "[P]Next change" })
-vim.keymap.set("n", "<M-p>", "[c", { desc = "[P]Previous change" })
+vim.keymap.set("n", "<M-n>", "]c", { desc = "[P]Next change", noremap = true, silent = true })
+vim.keymap.set("n", "<M-p>", "[c", { desc = "[P]Previous change", noremap = true, silent = true })
 
 -- toggle cursor column
 Snacks.toggle.option("cursorcolumn", { name = "Cursor Column" }):map("<leader>ux")
