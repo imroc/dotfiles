@@ -278,6 +278,9 @@ return {
       },
       image = {
         enabled = true,
+        convert = {
+          notify = false, -- disable notification on error
+        },
         doc = {
           -- Personally I set this to false, I don't want to render all the
           -- images in the file, only when I hover over them
