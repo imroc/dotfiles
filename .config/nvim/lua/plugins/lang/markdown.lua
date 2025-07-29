@@ -117,7 +117,13 @@ return {
     "HakonHarnes/img-clip.nvim",
     event = "VeryLazy",
     ft = "markdown",
-    opts = {},
+    opts = {
+      default = {
+        drag_and_drop = {
+          enabled = false,
+        },
+      },
+    },
     keys = {
       -- suggested keymap
       { "<localleader>p", "<cmd>PasteImage<cr>", desc = "Paste image from system clipboard" },
