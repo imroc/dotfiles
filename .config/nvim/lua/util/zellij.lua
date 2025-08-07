@@ -24,7 +24,7 @@ M.open_float = function(dir)
     dir = dir() or ""
   end
   if dir then
-    vim.list_extend(cmd, { "-c", "cd " .. dir .. " && exec fish -i" })
+    vim.list_extend(cmd, { "-c", 'cd "' .. dir .. '" && exec fish -i' })
   end
   vim.system(cmd)
 end
