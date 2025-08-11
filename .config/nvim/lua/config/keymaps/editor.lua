@@ -19,8 +19,10 @@ vim.keymap.set("n", "<leader>ct", "<cmd>%s/\t/  /g<cr>", { desc = "[P]Convert ta
 vim.keymap.set("n", "<leader>cT", "<cmd>%s/  /\t/g<cr>", { desc = "[P]Convert 2 spaces to a tab" })
 
 -- open quick note
-vim.keymap.set("n", "<leader>od", "<cmd>e ~/dev/note/todo.md<cr>", { desc = "[P]Open todo.md" })
-vim.keymap.set("n", "<leader>ob", "<cmd>e ~/dev/note/zb.md<cr>", { desc = "[P]Open zb.md" })
+local picker = require("util.picker")
+vim.keymap.set("n", "<leader>oo", function()
+  picker.files({ cwd = vim.fn.expand("$HOME/dev/note") })
+end, { desc = "[P]Open Note" })
 
 vim.keymap.set("n", "<M-n>", "]c", { desc = "[P]Next change", noremap = true, silent = true })
 vim.keymap.set("n", "<M-p>", "[c", { desc = "[P]Previous change", noremap = true, silent = true })

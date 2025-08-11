@@ -1,4 +1,5 @@
 local clipboard = require("util.clipboard")
+local job = require("util.job")
 
 -- copy file path
 vim.keymap.set("n", "<leader>yf", clipboard.copy_absolute_path, { desc = "[P]Copy Absolute Path" })
@@ -14,8 +15,6 @@ vim.keymap.set("n", "<leader>fx", "<cmd>!chmod +x %<cr>", { desc = "[P]Add execu
 vim.keymap.set("n", "<leader>yZ", function()
   require("util.zellij").run({ "yazi", require("util.buffer").current_dir() }, { name = "yazi" })
 end, { desc = "[P]Open Yazi (Zellij)" })
-
-local job = require("util.job")
 
 vim.keymap.set("n", "<leader>ov", function()
   job.run("code", { args = { "-r", LazyVim.root() } })
