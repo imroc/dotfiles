@@ -177,8 +177,8 @@ keybinds clear-defaults=true {
         bind "Alt Super p" { ToggleTab; }
         bind "Alt Super =" { Resize "Increase"; }
         bind "Alt Super -" { Resize "Decrease"; }
-        bind "Alt p" { TogglePaneInGroup; }
-        bind "Alt Shift p" { ToggleGroupMarking; }
+        bind "Super y" { TogglePaneInGroup; }
+        bind "Alt Super y" { ToggleGroupMarking; }
 
         bind "Super 1" { GoToTab 1; }
         bind "Super 2" { GoToTab 2; }
