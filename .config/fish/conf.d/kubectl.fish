@@ -51,3 +51,5 @@ abbr --add kgcidr "kubectl get node -o=custom-columns=NAME:.metadata.name,INTERN
 abbr --add kgnodeip "kubectl get no -o=custom-columns=NAME:.metadata.name,INTERNAL-IP:.status.addresses[0].address,EXTERNAL-IP:.status.addresses[1].address,CIDR:.spec.podCIDR"
 # 获取 node 可用区
 abbr --add kgzone 'kubectl get node -o custom-columns=NAME:.metadata.name,ZONE:".metadata.labels.topology\.kubernetes\.io/zone"'
+# 获取命名空间内pod的镜像列表
+abbr --add kgimages 'kubectl get pod -ojsonpath=\'{range .items[*]}{range .spec.containers[*]}{"\n"}{.image}{end}{end}\' | sort | uniq'
