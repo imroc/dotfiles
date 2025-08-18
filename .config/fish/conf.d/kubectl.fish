@@ -45,3 +45,9 @@ abbr --add kl "kubectl logs --tail 2000"
 
 # 获取 node 的 uuid
 abbr --add kguuid "kubectl get node -o=custom-columns=NAME:.metadata.name,UUID:.status.nodeInfo.systemUUID"
+# 获取 podCIDR
+abbr --add kgcidr "kubectl get node -o=custom-columns=NAME:.metadata.name,INTERNAL-IP:.status.addresses[0].address,CIDR:.spec.podCIDR"
+# 获取 node IP (公网+内网+podCIDR)
+abbr --add kgnodeip "kubectl get no -o=custom-columns=NAME:.metadata.name,INTERNAL-IP:.status.addresses[0].address,EXTERNAL-IP:.status.addresses[1].address,CIDR:.spec.podCIDR"
+# 获取 node 可用区
+abbr --add kgzone 'kubectl get node -o custom-columns=NAME:.metadata.name,ZONE:".metadata.labels.topology\.kubernetes\.io/zone"'
