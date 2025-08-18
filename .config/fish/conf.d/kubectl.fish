@@ -42,3 +42,6 @@ abbr --add kno "kubectl node-shell"
 abbr --add kpo "kubectl pod-shell"
 abbr --add ke "kubectl edit"
 abbr --add kl "kubectl logs --tail 2000"
+
+# 获取 node 的 uuid
+abbr --add kguuid "kubectl get node -o=custom-columns=NAME:.metadata.name,UUID:.status.nodeInfo.systemUUID"
