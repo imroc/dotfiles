@@ -236,6 +236,9 @@ run = ['layout floating']
 check-further-callbacks = false
 if.window-title-regex-substring = 'Screen Studio Display Window Picker Highlighter'
 run = ['layout floating']
+[[on-window-detected]]
+if.app-id = 'com.apple.Preview'
+run = ['layout floating']
 
 # 一些开发者工具
 [[on-window-detected]]
