@@ -1,4 +1,4 @@
 function groc --description "Set git user roc"
-    git config --global user.name roc
-    git config --global user.email "roc@imroc.cc"
+    git config user.name roc
+    git config user.email "roc@imroc.cc"
 end

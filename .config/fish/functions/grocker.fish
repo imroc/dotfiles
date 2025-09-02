@@ -1,4 +1,4 @@
 function grocker --description "Set git user rockerchen"
-    git config --global user.name rockerchen
-    git config --global user.email "rockerchen@tencent.com"
+    git config user.name rockerchen
+    git config user.email "rockerchen@tencent.com"
 end
