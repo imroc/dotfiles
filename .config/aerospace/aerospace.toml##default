@@ -247,6 +247,9 @@ run = ['move-node-to-workspace 1']
 [[on-window-detected]]
 if.app-id = 'is.follow'
 run = ['move-node-to-workspace 1']
+[[on-window-detected]]
+if.app-id = 'com.microsoft.VSCode'
+run = ['move-node-to-workspace 1']
 
 # 日常开发: terminal / editor / IDE
 [[on-window-detected]]
@@ -269,9 +272,6 @@ if.app-id = 'com.tencent.weterm'
 run = ['move-node-to-workspace 2']
 [[on-window-detected]]
 if.app-id = 'dev.zed.Zed'
-run = ['move-node-to-workspace 2']
-[[on-window-detected]]
-if.app-id = 'com.microsoft.VSCode'
 run = ['move-node-to-workspace 2']
 [[on-window-detected]]
 if.app-id = 'com.neovide.neovide'
