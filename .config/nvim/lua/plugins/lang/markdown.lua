@@ -56,6 +56,13 @@ return {
         desc = "[P]Create Link From Clipboard",
       },
       {
+        "<localleader>L",
+        mode = { "n", "v" },
+        "<cmd>MkdnDestroyLink<cr>",
+        ft = "markdown",
+        desc = "[P]Destroy Link",
+      },
+      {
         "<localleader>n",
         "<cmd>MkdnUpdateNumbering<cr>",
         ft = "markdown",
