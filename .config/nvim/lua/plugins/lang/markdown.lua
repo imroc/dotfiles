@@ -272,16 +272,6 @@ return {
         },
         hyperlink = " ",
       },
-      anti_conceal = {
-        disabled_modes = { "n" },
-        ignore = {
-          bullet = true, -- render bullet in insert mode
-          head_border = true,
-          head_background = true,
-        },
-      },
-      -- https://github.com/MeanderingProgrammer/render-markdown.nvim/issues/509
-      win_options = { concealcursor = { rendered = "nvc" } },
       completions = {
         blink = { enabled = true },
         lsp = { enabled = true },
