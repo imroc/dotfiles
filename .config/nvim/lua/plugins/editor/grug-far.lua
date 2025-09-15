@@ -57,7 +57,7 @@ return {
       function()
         require("grug-far").open({
           prefills = {
-            paths = vim.fn.expand("%"),
+            paths = vim.fn.fnameescape(vim.fn.expand("%")),
           },
         })
       end,
@@ -69,7 +69,7 @@ return {
       function()
         require("grug-far").open({
           prefills = {
-            paths = require("util.buffer").current_dir(),
+            paths = vim.fn.fnameescape(require("util.buffer").current_dir()),
           },
         })
       end,
@@ -81,7 +81,7 @@ return {
       function()
         require("grug-far").open({
           prefills = {
-            paths = LazyVim.root(),
+            paths = vim.fn.fnameescape(LazyVim.root()),
           },
         })
       end,
