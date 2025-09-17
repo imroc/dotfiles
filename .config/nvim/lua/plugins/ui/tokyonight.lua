@@ -15,6 +15,8 @@ return {
         highlights.DiagnosticUnnecessary = {
           fg = colors.comment,
         }
+        -- 禁用条件编译的代码用注释方式渲染（比如 c/c++ 的 #ifdef 内的代码内容太暗，影响阅读）
+        highlights["@lsp.type.comment"] = {}
       end,
     },
     priority = 9999999,
