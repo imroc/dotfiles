@@ -139,6 +139,9 @@ return {
   {
     "MeanderingProgrammer/render-markdown.nvim",
     opts = {
+      -- anti_conceal = {
+      -- ignore = {},
+      -- },
       callout = {
         abstract = {
           raw = "[!ABSTRACT]",
@@ -192,19 +195,9 @@ return {
         wip = { raw = "[!WIP]", rendered = "󰦖 WIP", highlight = "RenderMarkdownHint", category = "obsidian" },
         done = { raw = "[!DONE]", rendered = " Done", highlight = "RenderMarkdownSuccess", category = "obsidian" },
       },
-      sign = { enabled = false },
+      -- sign = { enabled = false },
       code = {
-        -- general
-        width = "block",
-        min_width = 80,
-        -- borders
-        border = "thin",
-        left_pad = 1,
-        right_pad = 1,
-        -- language info
-        position = "right",
-        language_icon = true,
-        language_name = true,
+        disable_background = true,
         -- avoid making headings ugly
         highlight_inline = "RenderMarkdownCodeInfo",
       },
