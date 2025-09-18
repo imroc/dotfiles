@@ -4,7 +4,20 @@ return {
     "ray-x/go.nvim",
     dependencies = { -- optional packages
       "ray-x/guihua.lua",
-      "neovim/nvim-lspconfig",
+      {
+        "neovim/nvim-lspconfig",
+        opts = {
+          servers = {
+            gopls = {
+              settings = {
+                gopls = {
+                  buildFlags = { "-tags=linux" }, -- 强制包含 linux tag
+                },
+              },
+            },
+          },
+        },
+      },
       "nvim-treesitter/nvim-treesitter",
     },
     opts = {
