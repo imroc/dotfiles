@@ -1,7 +1,7 @@
 local miniFiles = require("util.mini-files")
 
 return {
-  "echasnovski/mini.files",
+  "nvim-mini/mini.pairs",
   version = false,
   opts = {
     custom_keymaps = {
