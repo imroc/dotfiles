@@ -1,4 +1,6 @@
 _tide_find_and_remove context tide_right_prompt_items
+_tide_find_and_remove gcloud tide_right_prompt_items
+_tide_find_and_remove aws tide_right_prompt_items
 
 if set -q tide_character_icon
     return
