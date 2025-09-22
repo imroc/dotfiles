@@ -4,6 +4,7 @@ local filetypes = {
     service = "systemd",
     ets = "typescript",
     tmTheme = "xml",
+    conflist = "json",
   },
   filename = {
     ["PROJECT"] = "yaml",
