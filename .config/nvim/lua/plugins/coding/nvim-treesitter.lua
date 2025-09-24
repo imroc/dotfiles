@@ -5,8 +5,10 @@ return {
       {
         "<leader>sf",
         function()
-          local parsers = require("nvim-treesitter.parsers").available_parsers()
-          Snacks.picker.select(parsers, { prompt = "Select Filetype" }, function(ft)
+          local parsers = require("nvim-treesitter.parsers")
+          local languages = vim.tbl_keys(parsers)
+          table.sort(languages)
+          Snacks.picker.select(languages, { prompt = "Select Filetype" }, function(ft)
             if ft then
               vim.cmd("set filetype=" .. ft)
             end
@@ -19,10 +21,4 @@ return {
       indent = { enable = false },
     },
   },
-  -- {
-  --   "nvim-treesitter/nvim-treesitter-context",
-  --   opts = {
-  --     mode = "topline",
-  --   },
-  -- },
 }
