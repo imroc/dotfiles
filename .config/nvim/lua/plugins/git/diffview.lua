@@ -18,10 +18,8 @@ return {
           diff_buf_win_enter = function()
             -- 每次 diff 都要展开所有折叠(包含重新打开相同 diff）
             vim.opt_local.foldenable = false
-          end,
-          diff_buf_read = function()
             -- 某个 diff 第一次打开时光标定位到第一个 change 的位置
-            vim.api.nvim_input("gg]czz")
+            -- vim.api.nvim_input("gg]czz")
           end,
         },
         keymaps = {
