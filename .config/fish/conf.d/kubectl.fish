@@ -55,3 +55,7 @@ abbr --add kgnodeip "kubectl get no -o=custom-columns=NAME:.metadata.name,INTERN
 abbr --add kgzone 'kubectl get node -o custom-columns=NAME:.metadata.name,ZONE:".metadata.labels.topology\.kubernetes\.io/zone"'
 # 获取命名空间内pod的镜像列表
 abbr --add kgimages 'kubectl get pod -ojsonpath=\'{range .items[*]}{range .spec.containers[*]}{"\n"}{.image}{end}{end}\' | sort | uniq'
+
+# watch
+abbr --add kwp 'kubectl-klock pod -o wide'
+abbr --add kwn 'kubectl-klock node -o wide'
