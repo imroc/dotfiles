@@ -1,6 +1,6 @@
-_tide_find_and_remove context tide_right_prompt_items
-_tide_find_and_remove gcloud tide_right_prompt_items
-_tide_find_and_remove aws tide_right_prompt_items
+# _tide_find_and_remove context tide_right_prompt_items
+# _tide_find_and_remove gcloud tide_right_prompt_items
+# _tide_find_and_remove aws tide_right_prompt_items
 
 if set -q tide_character_icon
     return
@@ -117,7 +117,7 @@ set -U tide_python_bg_color 444444
 set -U tide_python_color 00AFAF
 set -U tide_python_icon \U000f0320
 set -U tide_right_prompt_frame_enabled true
-set -U tide_right_prompt_items status\x1ecmd_duration\x1ejobs\x1edirenv\x1enode\x1epython\x1erustc\x1ejava\x1ephp\x1epulumi\x1eruby\x1ego\x1egcloud\x1ekubectl\x1edistrobox\x1etoolbox\x1eterraform\x1eaws\x1enix_shell\x1ecrystal\x1eelixir\x1ezig\x1etime
+set -U tide_right_prompt_items status\x1ecmd_duration\x1ejobs\x1edirenv\x1enode\x1epython\x1erustc\x1ejava\x1ephp\x1epulumi\x1eruby\x1ego\x1ekubectl\x1edistrobox\x1etoolbox\x1eterraform\x1enix_shell\x1ecrystal\x1eelixir\x1ezig\x1etime
 set -U tide_right_prompt_prefix \ue0b2
 set -U tide_right_prompt_separator_diff_color \ue0b2
 set -U tide_right_prompt_separator_same_color \ue0b3
