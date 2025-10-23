@@ -86,6 +86,29 @@
       "  apiGroup: rbac.authorization.k8s.io"
     ]
   },
+  "service template": {
+    "prefix": [
+      "svc"
+    ],
+    "description": "service template",
+    "body": [
+      "apiVersion: v1",
+      "kind: Service",
+      "metadata:",
+      "  name: ${1:nginx}",
+      "spec:",
+      "  selector:",
+      "    app: ${1:nginx}",
+      "  type: ClusterIP",
+      "  ports:",
+      "  - protocol: TCP",
+      "    port: 80",
+      "    targetPort: 80",
+      "",
+      "---",
+      "$0"
+    ]
+  },
   "deployment template": {
     "prefix": [
       "dp"
