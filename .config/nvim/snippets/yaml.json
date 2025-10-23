@@ -20,11 +20,11 @@
       "        app: netdebug",
       "    spec:",
       "      containers:",
-      "        - name: netdebug",
-      "          image: imroc/net-debug:latest",
-      "          securityContext:",
-      "            privileged: true",
-      "            runAsUser: 0"
+      "      - name: netdebug",
+      "        image: imroc/net-tools:latest",
+      "        securityContext:",
+      "          privileged: true",
+      "          runAsUser: 0"
     ]
   },
   "docker-kubectl": {
