@@ -18,3 +18,6 @@ set -gx LC_ALL "zh_CN.UTF-8"
 
 # 默认编辑器设为 neovim（许多 cli 工具会读这个 env，如 git、zellij、k9s 等）
 set -gx EDITOR nvim
+
+# man 默认使用 neovim 打开
+set -gx MANPAGER 'nvim +Man!'
