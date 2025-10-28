@@ -5,6 +5,7 @@ abbr --add duh 'du -sch * .*'
 abbr --add typora "open -a typora"
 
 abbr --add tf terraform
+abbr --add ta "terraform apply -auto-approve"
 
 abbr --add bigfile "sudo find / -type f -size +100M -exec ls -lh {} \;"
 abbr --add cosroc "coscli -c ~/.cos.image.yaml"
