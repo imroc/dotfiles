@@ -19,6 +19,7 @@ return {
     -- { "<leader>S", false },
     -- { "<leader>gS", false },
     { "<leader>gd", false },
+    { "<leader>gD", false },
     { "<leader>gc", false },
     { "<leader>.", false },
     {
