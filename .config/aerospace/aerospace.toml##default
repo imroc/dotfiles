@@ -293,6 +293,11 @@ if.window-title-regex-substring = '企业微信'
 run = ['move-node-to-workspace 3']
 [[on-window-detected]]
 check-further-callbacks = true
+if.app-id = 'com.tencent.xinWeChat'    # 微信图片和视频预览，默认 float
+if.window-title-regex-substring = '图片和视频'
+run = ['layout floating']
+[[on-window-detected]]
+check-further-callbacks = true
 if.app-id = 'com.tencent.xinWeChat'    # 微信视频号、搜一搜、小程序的 title 为：微信（窗口），带“微信”但并非主界面，默认 float
 if.window-title-regex-substring = '窗口'
 run = ['layout floating']
