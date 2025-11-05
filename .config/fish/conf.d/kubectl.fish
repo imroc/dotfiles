@@ -20,6 +20,7 @@ abbr --add kb 'kustomize build --enable-helm --load-restrictor=LoadRestrictionsN
 abbr --add kka 'kustomize build --enable-helm --load-restrictor=LoadRestrictionsNone . | kubectl apply --server-side=true -f -'
 
 abbr --add km 'kubectl -n monitoring'
+abbr --add kr 'kubectl api-resources'
 abbr --add kgpa 'kubectl get pod -o wide -A'
 abbr --add kgpw 'kubectl get pod -o wide'
 abbr --add kgvh 'kubectl get validatingwebhookconfigurations'
