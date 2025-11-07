@@ -1,4 +1,13 @@
 return {
   "neovim/nvim-lspconfig",
-  opts = {},
+  opts = {
+    servers = {
+      ["*"] = {
+        keys = {
+          { "<a-n>", false },
+          { "<a-p>", false },
+        },
+      },
+    },
+  },
 }

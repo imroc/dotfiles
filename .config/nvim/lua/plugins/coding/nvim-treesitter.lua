@@ -21,4 +21,8 @@ return {
       indent = { enable = false },
     },
   },
+  -- {
+  --   "nvim-treesitter/nvim-treesitter-textobjects",
+  --   config = function() end,
+  -- },
 }
