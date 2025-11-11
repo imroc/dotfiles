@@ -18,10 +18,18 @@ return {
     -- 禁用一些快捷键，避免与自定义快捷键冲突
     -- { "<leader>S", false },
     -- { "<leader>gS", false },
+    { "<leader>gi", false },
+    { "<leader>gI", false },
+    { "<leader>gp", false },
+    { "<leader>gP", false },
     { "<leader>gd", false },
     { "<leader>gD", false },
     { "<leader>gc", false },
     { "<leader>.", false },
+    { "<leader>gHi", function() Snacks.picker.gh_issue() end, desc = "GitHub Issues (open)" },
+    { "<leader>gHI", function() Snacks.picker.gh_issue({ state = "all" }) end, desc = "GitHub Issues (all)" },
+    { "<leader>gHp", function() Snacks.picker.gh_pr() end, desc = "GitHub Pull Requests (open)" },
+    { "<leader>gHP", function() Snacks.picker.gh_pr({ state = "all" }) end, desc = "GitHub Pull Requests (all)" },
     {
       "g.",
       function()

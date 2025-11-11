@@ -1,5 +1,6 @@
 return {
   "pwntester/octo.nvim",
+  enabled = false,
   keys = {
     { "<leader>gHa", "<Cmd>Octo actions<CR>", desc = "[P]Actions" },
     { "<leader>gHi", "<cmd>Octo issue list<CR>", desc = "[P]List Issues (Octo)" },
