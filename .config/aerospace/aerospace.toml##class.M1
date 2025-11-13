@@ -288,6 +288,9 @@ if.app-id = 'com.tencent.WeWorkMac'      # 企业微信主界面
 if.window-title-regex-substring = '企业微信'
 run = ['move-node-to-workspace 3']
 [[on-window-detected]]
+if.app-id = 'com.tencent.WeWorkMac'      # 企业微信其它界面
+run = ['layout floating']
+[[on-window-detected]]
 check-further-callbacks = true
 if.app-id = 'com.tencent.xinWeChat'    # 微信图片和视频预览，默认 float
 if.window-title-regex-substring = '图片和视频'
