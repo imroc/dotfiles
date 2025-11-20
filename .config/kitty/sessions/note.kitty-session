@@ -1,0 +1,5 @@
+layout tall
+
+cd ~/dev/note
+
+launch --title "note"

@@ -6,6 +6,7 @@ end
 return {
   "gongfeng-copilot",
   url = "git@git.woa.com:rockerchen/gongfeng-copilot.git",
+  enabled = vim.g.simpler_scrollback ~= "deeznuts",
   lazy = true,
   event = "InsertEnter",
   cond = function()

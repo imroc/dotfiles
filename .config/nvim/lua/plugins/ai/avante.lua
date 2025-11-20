@@ -1,6 +1,7 @@
 return {
   "yetone/avante.nvim",
   event = "VeryLazy",
+  enabled = vim.g.simpler_scrollback ~= "deeznuts",
   lazy = true,
   version = false, -- Set this to "*" to always pull the latest release version, or set it to false to update to the latest code changes.
   -- keys = {

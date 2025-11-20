@@ -1,5 +1,6 @@
 return {
   "ravitemer/mcphub.nvim",
+  enabled = vim.g.simpler_scrollback ~= "deeznuts",
   dependencies = {
     "nvim-lua/plenary.nvim",
   },
