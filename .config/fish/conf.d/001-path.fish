@@ -5,6 +5,7 @@ fish_add_path -m \
     $HOME/go/bin \
     $HOME/.krew/bin \
     $HOME/.fzf/bin \
+    $HOME/.codebuddy/bin \
     /usr/local/go/bin \
     /opt/go/bin \
     /opt/homebrew/bin \
