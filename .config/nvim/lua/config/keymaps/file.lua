@@ -27,3 +27,7 @@ end, { desc = "[P]Open Zed (Root Dir)" })
 vim.keymap.set("n", "<leader>on", function()
   job.run("neovide", { args = { LazyVim.root() } })
 end, { desc = "[P]Open Neovide (Root Dir)" })
+
+vim.keymap.set("n", "<leader>ob", function()
+  job.run("buddycn", { args = { "-r", LazyVim.root() } })
+end, { desc = "[P]Open CodeBuddy (Root Dir)" })
