@@ -1,5 +1,6 @@
 return {
   "f-person/git-blame.nvim",
+  enabled = vim.g.simpler_scrollback ~= "deeznuts",
   event = "VeryLazy",
   keys = {
     { "<leader>ogc", "<cmd>GitBlameOpenCommitURL<CR>", desc = "[P]Open Commit URL" },

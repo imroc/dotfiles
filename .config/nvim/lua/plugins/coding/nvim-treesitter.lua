@@ -1,6 +1,7 @@
 return {
   {
     "nvim-treesitter/nvim-treesitter",
+    enabled = vim.g.simpler_scrollback ~= "deeznuts",
     keys = {
       {
         "<leader>sf",

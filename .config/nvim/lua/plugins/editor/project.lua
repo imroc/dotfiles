@@ -1,6 +1,7 @@
 return {
   {
     "ahmedkhalf/project.nvim",
+    enabled = vim.g.simpler_scrollback ~= "deeznuts",
     opts = {
       manual_mode = true,
       detection_methods = { "pattern", "lsp" },

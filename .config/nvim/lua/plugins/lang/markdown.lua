@@ -122,6 +122,8 @@ return {
   },
   {
     "HakonHarnes/img-clip.nvim",
+    -- enabled = vim.g.simpler_scrollback ~= "deeznuts",
+    lazy = true,
     event = "VeryLazy",
     ft = "markdown",
     opts = {
