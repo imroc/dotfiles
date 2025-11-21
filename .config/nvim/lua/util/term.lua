@@ -14,31 +14,10 @@ M.toggle = function(cwd)
   end
 end
 
-local wrap_script = function(script)
-  return script
-    .. [=[
-
-while true; do
-  echo "Press 'q' or 'ESC' to exit, any other key to continue:"
-  read -rsn1 input
-  if [[ $input == "q" ]] || [[ $input == $'\e' ]]; then
-  	exit 0
-  else
-  	exec fish -i
-  fi
-done
-  ]=]
-end
-
 ---@param script string
 ---@param opts? table
 M.run_script = function(script, opts)
-  opts = opts or {}
-  local close_on_exit = false
-  if not opts.close_on_exit then
-    script = wrap_script(script)
-  end
-  Snacks.terminal({ "bash", "-c", script }, opts)
+  require("floaterm.api").send_cmd({ cmd = script, close_on_exit = opts.close_on_exit })
 end
 
 return M
