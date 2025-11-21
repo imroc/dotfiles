@@ -26,10 +26,34 @@ return {
     { "<leader>gD", false },
     { "<leader>gc", false },
     { "<leader>.", false },
-    { "<leader>gHi", function() Snacks.picker.gh_issue() end, desc = "GitHub Issues (open)" },
-    { "<leader>gHI", function() Snacks.picker.gh_issue({ state = "all" }) end, desc = "GitHub Issues (all)" },
-    { "<leader>gHp", function() Snacks.picker.gh_pr() end, desc = "GitHub Pull Requests (open)" },
-    { "<leader>gHP", function() Snacks.picker.gh_pr({ state = "all" }) end, desc = "GitHub Pull Requests (all)" },
+    {
+      "<leader>gHi",
+      function()
+        Snacks.picker.gh_issue()
+      end,
+      desc = "GitHub Issues (open)",
+    },
+    {
+      "<leader>gHI",
+      function()
+        Snacks.picker.gh_issue({ state = "all" })
+      end,
+      desc = "GitHub Issues (all)",
+    },
+    {
+      "<leader>gHp",
+      function()
+        Snacks.picker.gh_pr()
+      end,
+      desc = "GitHub Pull Requests (open)",
+    },
+    {
+      "<leader>gHP",
+      function()
+        Snacks.picker.gh_pr({ state = "all" })
+      end,
+      desc = "GitHub Pull Requests (all)",
+    },
     {
       "g.",
       function()
@@ -166,6 +190,7 @@ return {
     return vim.tbl_deep_extend("force", opts or {}, {
       scroll = { enabled = false },
       dashboard = {
+        enabled = vim.g.simpler_scrollback ~= "deeznuts",
         preset = {
           -- keys = {
           --   { icon = " ", key = "s", desc = "Restore Session", section = "session" },

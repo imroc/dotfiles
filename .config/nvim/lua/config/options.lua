@@ -2,6 +2,21 @@ if vim.g.vscode then
   return
 end
 
+if not vim.g.simpler_scrollback then
+  vim.g.simpler_scrollback = vim.env.SIMPLER_SCROLLBACK or "default"
+end
+
+if vim.g.simpler_scrollback == "deeznuts" then
+  -- disable winbar entirely
+  vim.opt.winbar = ""
+  -- Disable the gutter
+  vim.opt.signcolumn = "no"
+  -- Disables the statusbar at the bottom
+  vim.opt.laststatus = 0
+  -- No colorcolumn in skitty
+  vim.opt.colorcolumn = ""
+end
+
 -- Options are automatically loaded before lazy.nvim startup
 -- Default options that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/options.lua
 -- Add any additional options here

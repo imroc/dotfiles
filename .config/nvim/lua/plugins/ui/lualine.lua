@@ -7,6 +7,7 @@ local Job = require("plenary.job")
 return {
   {
     "nvim-lualine/lualine.nvim",
+    enabled = vim.g.simpler_scrollback ~= "deeznuts",
     opts = function(_, opts)
       opts.sections.lualine_c = {
         LazyVim.lualine.root_dir(),

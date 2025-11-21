@@ -3,6 +3,7 @@ local loaded = false
 return {
   "arnamak/stay-centered.nvim",
   lazy = true,
+  enabled = vim.g.simpler_scrollback ~= "deeznuts",
   keys = {
     {
       "<leader>ts",
