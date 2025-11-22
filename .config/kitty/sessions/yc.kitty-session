@@ -1,8 +1,0 @@
-layout tall
-
-cd ~/dev/tke/cofix
-launch --title "cofix"
-
-new_tab
-cd ~/dev/tke/kateway-server
-launch --title "kateway-server"
