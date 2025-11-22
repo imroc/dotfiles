@@ -240,7 +240,7 @@ run = ['layout floating']
 if.app-id = 'com.apple.Preview'
 run = ['layout floating']
 
-# 一些开发者工具
+# 非高频开发工具
 [[on-window-detected]]
 if.app-id = 'net.shinystone.OKJSON'
 run = ['move-node-to-workspace 1']
@@ -253,37 +253,37 @@ run = ['move-node-to-workspace 1']
 [[on-window-detected]]
 if.app-id = 'com.tencent.codebuddycn'
 run = ['move-node-to-workspace 1']
-
-# 日常开发: terminal
 [[on-window-detected]]
 if.app-id = 'com.github.wez.wezterm'
-run = ['move-node-to-workspace 2']
-[[on-window-detected]]
-if.app-id = 'net.kovidgoyal.kitty'
-run = ['move-node-to-workspace 2']
+run = ['move-node-to-workspace 1']
 [[on-window-detected]]
 if.app-id = 'com.googlecode.iterm2'
-run = ['move-node-to-workspace 2']
+run = ['move-node-to-workspace 1']
 [[on-window-detected]]
 if.app-id = 'com.mitchellh.ghostty'
-run = ['move-node-to-workspace 2']
+run = ['move-node-to-workspace 1']
 [[on-window-detected]]
 if.app-id = 'org.alacritty'
-run = ['move-node-to-workspace 2']
+run = ['move-node-to-workspace 1']
 [[on-window-detected]]
 if.app-id = 'com.tencent.weterm'
-run = ['move-node-to-workspace 2']
+run = ['move-node-to-workspace 1']
 [[on-window-detected]]
 if.app-id = 'dev.zed.Zed'
-run = ['move-node-to-workspace 2']
+run = ['move-node-to-workspace 1']
 [[on-window-detected]]
 if.app-id = 'com.neovide.neovide'
-run = ['move-node-to-workspace 2']
+run = ['move-node-to-workspace 1']
 [[on-window-detected]]
 if.app-id = 'com.apple.Terminal'
-run = ['move-node-to-workspace 2']
+run = ['move-node-to-workspace 1']
 [[on-window-detected]]
 if.app-id = 'dev.zed.Zed'
+run = ['move-node-to-workspace 1']
+
+# 高频开发工具
+[[on-window-detected]]
+if.app-id = 'net.kovidgoyal.kitty'
 run = ['move-node-to-workspace 2']
 
 # 高频聊天工具
