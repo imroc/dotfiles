@@ -1,6 +1,6 @@
 return {
   "sphamba/smear-cursor.nvim",
-  cond = vim.g.neovide == nil,
+  enabled = vim.env.KITTY_PID == nil and vim.g.neovide == nil,
   event = "VeryLazy",
   cmd = {
     "SmearCursorToggle",
