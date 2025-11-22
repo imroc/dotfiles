@@ -54,7 +54,7 @@ end
 function M.run_in_terminal(close_on_exit)
   run_target(function(target)
     term.run_script(
-      "make -f " .. buffer.file_name() .. " " .. target,
+      "cd " .. buffer.current_dir() .. " && make -f " .. buffer.file_name() .. " " .. target,
       { cwd = buffer.current_dir(), close_on_exit = close_on_exit }
     )
   end)
