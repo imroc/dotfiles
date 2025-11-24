@@ -1,0 +1,9 @@
+layout tall
+
+cd ~/dotfiles
+launch --title "private"
+
+new_tab
+layout tall
+cd ~/.config
+launch --title "public"
