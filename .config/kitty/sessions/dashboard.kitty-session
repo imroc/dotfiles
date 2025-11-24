@@ -1,0 +1,4 @@
+layout tall
+
+cd ~/dev/tke/dashboard/master
+launch --title "dashboard"

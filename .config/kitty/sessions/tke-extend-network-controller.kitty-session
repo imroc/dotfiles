@@ -1,0 +1,4 @@
+layout tall
+
+cd ~/dev/tke/tke-extend-network-controller
+launch
