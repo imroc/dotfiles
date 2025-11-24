@@ -1,9 +1,10 @@
+enabled_layouts tall,stack
 layout tall
-
 cd ~/dotfiles
 launch --title "private"
 
 new_tab
+enabled_layouts tall,stack
 layout tall
 cd ~/.config
 launch --title "public"

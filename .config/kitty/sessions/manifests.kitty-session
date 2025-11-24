@@ -1,9 +1,10 @@
+enabled_layouts tall,stack
 layout tall
-
 cd ~/dev/kubernetes-manifests
 launch --title "kubernetes-manifests"
 
 new_tab
+enabled_layouts tall,stack
 layout tall
 cd ~/dev/terraform-manifests
 launch --title "terraform-manifests"

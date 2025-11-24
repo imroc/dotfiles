@@ -1,3 +1,4 @@
+enabled_layouts tall,stack
 layout tall
 
 cd ~/dev
