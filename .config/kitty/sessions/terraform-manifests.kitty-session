@@ -4,7 +4,7 @@ cd ~/dev/terraform-manifests
 launch --title "terraform-manifests"
 
 new_tab
-enabled_layouts grid,stack
-layout grid
+enabled_layouts tall,grid,stack
+layout tall
 cd ~/dev/terraform-manifests
-launch --title "kubectl"
+launch --title "cmdline"
