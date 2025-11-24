@@ -4,7 +4,7 @@ cd ~/dev/kubernetes-manifests
 launch --title "kubernetes-manifests"
 
 new_tab
-enabled_layouts tall,stack
-layout tall
-cd ~/dev/terraform-manifests
-launch --title "terraform-manifests"
+enabled_layouts grid,stack
+layout grid
+cd ~/dev/kubernetes-manifests
+launch --title "kubectl"
