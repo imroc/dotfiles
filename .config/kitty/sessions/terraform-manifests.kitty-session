@@ -2,9 +2,10 @@ enabled_layouts tall,stack
 layout tall
 cd ~/dev/terraform-manifests
 launch --title "manifests"
+launch --title "cmdline"
 
 new_tab
 enabled_layouts tall,grid,stack
 layout tall
-cd ~/dev/terraform-manifests
-launch --title "cmdline"
+cd ~
+launch --title "kubectl"

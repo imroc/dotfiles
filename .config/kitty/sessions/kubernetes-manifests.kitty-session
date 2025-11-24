@@ -6,5 +6,5 @@ launch --title "manifests"
 new_tab
 enabled_layouts tall,grid,stack
 layout tall
-cd ~/dev/kubernetes-manifests
-launch --title "cmdline"
+cd ~
+launch --title "kubectl"
