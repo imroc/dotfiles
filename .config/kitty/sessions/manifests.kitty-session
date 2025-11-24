@@ -4,5 +4,6 @@ cd ~/dev/kubernetes-manifests
 launch --title "kubernetes-manifests"
 
 new_tab
+layout tall
 cd ~/dev/terraform-manifests
 launch --title "terraform-manifests"
