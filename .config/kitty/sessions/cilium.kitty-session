@@ -1,0 +1,13 @@
+layout tall
+cd ~/dev/tke/cilium/main
+launch --title "main"
+
+new_tab
+layout tall
+cd ~/dev/tke/cilium/v1.10.19-tke
+launch --title "CiliumOverlay"
+
+new_tab
+layout tall
+cd ~/dev/tke/cilium/v1.13.11_tke
+launch --title "DataPlaneV2"
