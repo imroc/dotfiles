@@ -1,0 +1,10 @@
+enabled_layouts tall,stack
+layout tall
+cd ~/dev/kubernetes/master
+launch --title "master"
+
+new_tab
+enabled_layouts tall,stack
+layout tall
+cd ~/dev/kubernetes/tke
+launch --title "tke"
