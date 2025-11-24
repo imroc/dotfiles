@@ -17,3 +17,21 @@ vim.api.nvim_create_autocmd("BufEnter", {
     vim.cmd("tcd " .. root)
   end,
 })
+
+-- setup yadm keymap for files under ~/.config
+vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
+  group = vim.api.nvim_create_augroup("yadm_config_files", { clear = true }),
+  callback = function(ev)
+    local yadm = require("util.yadm")
+    local config_dir = vim.fn.expand("$HOME/.config")
+    local absolute_path = require("util.buffer").absolute_path()
+    if vim.startswith(absolute_path, config_dir) then
+      vim.keymap.set("n", "<leader>ga", function()
+        require("util.yadm").git_add(absolute_path)
+      end, {
+        buffer = ev.buf,
+        desc = "Yadm add current file",
+      })
+    end
+  end,
+})

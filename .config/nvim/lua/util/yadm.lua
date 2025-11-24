@@ -16,4 +16,14 @@ function M.set_git_env()
   vim.env.GIT_DIR = vim.fn.expand("$HOME/.local/share/yadm/repo.git")
 end
 
+-- add file to yadm
+function M.git_add(filepath)
+  vim.fn.system({ "yadm", "add", filepath })
+  if vim.v.shell_error == 0 then
+    vim.notify(string.format("Added to yadm: %s", filepath), vim.log.levels.INFO)
+  else
+    vim.notify(string.format("Failed to add to yadm: %s", filepath), vim.log.levels.ERROR)
+  end
+end
+
 return M
