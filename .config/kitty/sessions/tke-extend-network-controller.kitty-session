@@ -1,4 +1,4 @@
 enabled_layouts tall,stack
 layout tall
 cd ~/dev/tke/tke-extend-network-controller
-launch
+launch --title="tke-extend-network-controller"

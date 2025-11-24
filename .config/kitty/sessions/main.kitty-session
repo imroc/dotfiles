@@ -1,0 +1,5 @@
+enabled_layouts tall,grid,stack
+layout tall
+
+cd ~
+launch --title="main"

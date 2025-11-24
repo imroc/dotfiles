@@ -14,3 +14,9 @@ enabled_layouts tall,stack
 layout tall
 cd ~/dev/tke/cilium/v1.13.11_tke
 launch --title "DataPlaneV2"
+
+new_tab
+enabled_layouts tall,stack
+layout tall
+cd ~/dev/tke/cofix
+launch --title "cofix"
