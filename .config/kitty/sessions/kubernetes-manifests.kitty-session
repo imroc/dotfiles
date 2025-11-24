@@ -1,10 +1,10 @@
 enabled_layouts tall,stack
 layout tall
 cd ~/dev/kubernetes-manifests
-launch --title "kubernetes-manifests"
+launch --title "manifests"
 
 new_tab
-enabled_layouts grid,stack
-layout grid
+enabled_layouts tall,grid,stack
+layout tall
 cd ~/dev/kubernetes-manifests
-launch --title "kubectl"
+launch --title "cmdline"

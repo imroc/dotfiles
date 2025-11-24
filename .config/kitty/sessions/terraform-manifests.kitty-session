@@ -1,7 +1,7 @@
 enabled_layouts tall,stack
 layout tall
 cd ~/dev/terraform-manifests
-launch --title "terraform-manifests"
+launch --title "manifests"
 
 new_tab
 enabled_layouts tall,grid,stack
