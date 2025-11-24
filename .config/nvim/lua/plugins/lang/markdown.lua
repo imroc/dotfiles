@@ -258,7 +258,8 @@ return {
       },
       link = {
         wiki = { icon = " ", highlight = "RenderMarkdownWikiLink", scope_highlight = "RenderMarkdownWikiLink" },
-        image = " ",
+        image = vim.g.neovim_mode == "skitty" and "" or "󰥶 ",
+        -- image = " ",
         custom = {
           github = { pattern = "github", icon = " " },
           gitlab = { pattern = "gitlab", icon = "󰮠 " },

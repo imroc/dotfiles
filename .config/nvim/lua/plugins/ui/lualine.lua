@@ -9,6 +9,31 @@ return {
     "nvim-lualine/lualine.nvim",
     enabled = vim.g.simpler_scrollback ~= "deeznuts",
     opts = function(_, opts)
+      if vim.g.neovim_mode == "skitty" then
+        -- For skitty mode, only keep section_x and disable all others
+        opts.sections = {
+          lualine_a = {
+            function()
+              return "skitty-notes"
+            end, -- Ensures it's displayed properly
+          },
+          lualine_b = {},
+          lualine_c = {},
+          lualine_x = {
+            {
+              "diff",
+              symbols = {
+                added = icons.git.added,
+                modified = icons.git.modified,
+                removed = icons.git.removed,
+              },
+            },
+          },
+          lualine_y = {},
+          lualine_z = {},
+        }
+        return
+      end
       opts.sections.lualine_c = {
         LazyVim.lualine.root_dir(),
         {

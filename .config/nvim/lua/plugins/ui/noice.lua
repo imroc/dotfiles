@@ -43,7 +43,7 @@ return {
       },
       mini = {
         -- timeout = 5000, -- timeout in milliseconds
-        timeout = 5000,
+        timeout = vim.g.neovim_mode == "skitty" and 2000 or 5000,
         align = "center",
         position = {
           -- Centers messages top to bottom

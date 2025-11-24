@@ -6,7 +6,54 @@ if not vim.g.simpler_scrollback then
   vim.g.simpler_scrollback = vim.env.SIMPLER_SCROLLBACK or "default"
 end
 
-if vim.g.simpler_scrollback == "deeznuts" then
+if not vim.g.neovim_mode then
+  vim.g.neovim_mode = vim.env.NEOVIM_MODE or "default"
+end
+
+-- Conditional settings based on mode
+if vim.g.neovim_mode == "skitty" then
+  vim.opt.laststatus = 2
+  vim.opt.statusline = "%m"
+
+  -- Line numbers
+  vim.opt.number = true
+  vim.opt.relativenumber = true
+
+  -- Disable the gutter
+  vim.opt.signcolumn = "no"
+
+  -- Text width and wrapping
+  -- vim.opt.textwidth = 25
+  vim.opt.textwidth = 80
+
+  -- -- I tried these 2 with prettier prosewrap in "preserve" mode, and I'm not sure
+  -- -- what they do, I think lines are wrapped, but existing ones are not, so if I
+  -- -- have files with really long lines, they will remain the same, also LF
+  -- -- characters were introduced at the end of each line, not sure, didn't test
+  -- -- enough
+  -- --
+  -- -- Wrap lines at convenient points, this comes enabled by default in lazyvim
+  vim.opt.linebreak = false
+
+  -- Set to false by default in lazyvim
+  -- If this is "false", when I'm typing around the 28/33 character, I see the screen
+  -- scrolling to the right, and I don't want that, setting it to true seems to
+  -- fix that
+  -- Problem if set to true is that markdown links don't wrap, so they span
+  -- across multiple lines
+  vim.opt.wrap = false
+
+  -- No colorcolumn in skitty
+  vim.opt.colorcolumn = ""
+
+  local colors = require("config.colors")
+  -- -- Set the winbar to display "skitty-notes" with the specified color
+  -- vim.opt.winbar = "%#WinBar1#   skitty-notes%*"
+  -- -- Set the winbar to display the current file name on the left and "imroc.cc" aligned to the right
+  -- vim.opt.winbar = "%#WinBar1# %t%*%=%#WinBar1# linkarzu.com %*"
+  -- Set the winbar to display the current file name on the left (without the extension) and "imroc.cc" aligned to the right
+  vim.opt.winbar = '%#WinBar1# %{luaeval(\'vim.fn.fnamemodify(vim.fn.expand("%:t"), ":r")\')}%*%=%#WinBar1# imroc.cc %*'
+elseif vim.g.simpler_scrollback == "deeznuts" then
   -- disable winbar entirely
   vim.opt.winbar = ""
   -- Disable the gutter
