@@ -5,6 +5,7 @@ local filetypes = {
     ets = "typescript",
     tmTheme = "xml",
     conflist = "json",
+    ["kitty-session"] = "kitty",
   },
   filename = {
     ["PROJECT"] = "yaml",
