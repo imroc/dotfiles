@@ -1,0 +1,13 @@
+layout tall
+cd ~/dev/website/tke-guide
+launch --title "tke-guide"
+
+new_tab
+layout tall
+cd ~/dev/website/kubernetes-guide
+launch --title "kubernetes-guide"
+
+new_tab
+layout tall
+cd ~/dev/website/tech-guide
+launch --title "tech-note"
