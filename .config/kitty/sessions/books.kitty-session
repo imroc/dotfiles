@@ -14,3 +14,6 @@ enabled_layouts tall,stack
 layout tall
 cd ~/dev/website/tech-guide
 launch --title "tech-note"
+
+focus
+focus_os_window

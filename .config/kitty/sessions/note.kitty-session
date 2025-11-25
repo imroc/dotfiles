@@ -2,3 +2,6 @@ enabled_layouts tall,stack
 layout tall
 cd ~/dev/note
 launch --title "note"
+
+focus
+focus_os_window

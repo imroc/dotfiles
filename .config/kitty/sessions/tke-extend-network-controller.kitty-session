@@ -2,3 +2,6 @@ enabled_layouts tall,stack
 layout tall
 cd ~/dev/tke/tke-extend-network-controller
 launch --title="tke-extend-network-controller"
+
+focus
+focus_os_window

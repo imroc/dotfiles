@@ -3,3 +3,6 @@ layout tall
 
 cd ~
 launch --title="main"
+
+focus
+focus_os_window

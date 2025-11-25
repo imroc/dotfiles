@@ -8,3 +8,6 @@ enabled_layouts tall,stack
 layout tall
 cd ~/.config
 launch --title "public"
+
+focus
+focus_os_window

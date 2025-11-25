@@ -8,3 +8,6 @@ enabled_layouts tall,stack
 layout tall
 cd ~/dev/kubernetes/tke
 launch --title "tke"
+
+focus
+focus_os_window
