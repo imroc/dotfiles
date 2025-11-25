@@ -1,0 +1,14 @@
+new_tab terraform
+enabled_layouts tall,stack
+layout tall
+cd ~/dev/terraform-manifests
+launch
+
+new_tab cmdline
+enabled_layouts tall,grid,stack
+layout tall
+cd ~
+launch
+
+focus
+focus_os_window

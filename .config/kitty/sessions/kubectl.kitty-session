@@ -1,0 +1,8 @@
+new_tab kubectl
+enabled_layouts tall,grid,stack
+layout grid
+cd ~
+launch
+
+focus
+focus_os_window
