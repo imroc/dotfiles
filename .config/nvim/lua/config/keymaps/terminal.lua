@@ -13,3 +13,7 @@ end, { desc = "[P]Open Zellij Floating Terminal (currrent dir)" })
 vim.keymap.set("n", "gZ", function()
   require("util.zellij").open_float(require("util.buffer").root_dir)
 end, { desc = "[P]Open Zellij Floating Terminal (root dir)" })
+
+-- page up/down in terminal
+vim.keymap.set("t", "<C-u>", "<C-\\><C-n><C-u>", { noremap = true })
+vim.keymap.set("t", "<C-d>", "<C-\\><C-n><C-d>", { noremap = true })
