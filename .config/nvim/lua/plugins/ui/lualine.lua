@@ -14,7 +14,7 @@ return {
         opts.sections = {
           lualine_a = {
             function()
-              return "skitty-notes"
+              return "quick-notes"
             end, -- Ensures it's displayed properly
           },
           lualine_b = {},
