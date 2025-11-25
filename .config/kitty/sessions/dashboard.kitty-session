@@ -1,7 +1,8 @@
+new_tab dashboard
 enabled_layouts tall,stack
 layout tall
 cd ~/dev/tke/dashboard/master
-launch --title "dashboard"
+launch
 
 focus
 focus_os_window

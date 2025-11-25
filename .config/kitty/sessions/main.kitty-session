@@ -1,8 +1,8 @@
+new_tab main
 enabled_layouts tall,grid,stack
 layout tall
-
 cd ~
-launch --title="main"
+launch
 
 focus
 focus_os_window

@@ -1,13 +1,14 @@
+new_tab private
 enabled_layouts tall,stack
 layout tall
 cd ~/dotfiles
-launch --title "private"
+launch
 
-new_tab
+new_tab public
 enabled_layouts tall,stack
 layout tall
 cd ~/.config
-launch --title "public"
+launch
 
 focus
 focus_os_window

@@ -1,3 +1,4 @@
+new_tab req
 enabled_layouts tall,stack
 layout tall
 cd ~/dev/req/master

@@ -1,13 +1,14 @@
+new_tab master
 enabled_layouts tall,stack
 layout tall
 cd ~/dev/kubernetes/master
-launch --title "master"
+launch
 
-new_tab
+new_tab tke
 enabled_layouts tall,stack
 layout tall
 cd ~/dev/kubernetes/tke
-launch --title "tke"
+launch
 
 focus
 focus_os_window

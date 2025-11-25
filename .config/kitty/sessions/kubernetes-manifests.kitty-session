@@ -1,13 +1,14 @@
+new_tab manifests
 enabled_layouts tall,stack
 layout tall
 cd ~/dev/kubernetes-manifests
-launch --title "manifests"
+launch
 
-new_tab
+new_tab kubectl
 enabled_layouts tall,grid,stack
 layout tall
 cd ~
-launch --title "kubectl"
+launch
 
 focus
 focus_os_window

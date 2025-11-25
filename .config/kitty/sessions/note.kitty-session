@@ -1,7 +1,8 @@
+new_tab note
 enabled_layouts tall,stack
 layout tall
 cd ~/dev/note
-launch --title "note"
+launch
 
 focus
 focus_os_window

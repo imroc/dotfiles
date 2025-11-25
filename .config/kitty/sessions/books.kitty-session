@@ -1,19 +1,20 @@
+new_tab tke-guide
 enabled_layouts tall,stack
 layout tall
 cd ~/dev/website/tke-guide
-launch --title "tke-guide"
+launch
 
-new_tab
+new_tab kubernetes-guide
 enabled_layouts tall,stack
 layout tall
 cd ~/dev/website/kubernetes-guide
-launch --title "kubernetes-guide"
+launch
 
-new_tab
+new_tab tech-note
 enabled_layouts tall,stack
 layout tall
 cd ~/dev/website/tech-guide
-launch --title "tech-note"
+launch
 
 focus
 focus_os_window

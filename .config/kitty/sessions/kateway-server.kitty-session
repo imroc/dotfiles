@@ -1,7 +1,8 @@
+new_tab kateway-server
 enabled_layouts tall,stack
 layout tall
 cd ~/dev/tke/kateway-server
-launch --title "kateway-server"
+launch
 
 focus
 focus_os_window
