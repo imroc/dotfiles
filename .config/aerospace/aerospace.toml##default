@@ -108,7 +108,7 @@ outer.top = [
 # cmd-ctrl-3 = 'exec-and-forget open -a "企业微信.app"'
 # cmd-ctrl-2 = 'exec-and-forget open -a "WezTerm.app"'
 # cmd-ctrl-1 = 'exec-and-forget open /Users/roc/Downloads'
-cmd-shift-a = 'exec-and-forget kitten quick-access-terminal --config ~/.config/kitty/quick-access-terminal-daily.conf --instance-group skitty-notes nvim --cmd "let g:neovim_mode = \"skitty\"" ~/dev/note/todo.md'
+cmd-shift-t = 'exec-and-forget kitten quick-access-terminal --config ~/.config/kitty/quick-access-terminal-daily.conf --instance-group skitty-notes nvim --cmd "let g:neovim_mode = \"skitty\"" ~/dev/note/todo.md'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#layout
 alt-ctrl-slash = 'layout tiles horizontal vertical'
