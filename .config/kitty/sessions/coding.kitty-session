@@ -1,0 +1,8 @@
+new_tab coding
+enabled_layouts tall,stack
+layout tall
+cd ~
+launch
+
+focus
+focus_os_window
