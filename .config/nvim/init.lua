@@ -1,6 +1,7 @@
 -- bootstrap lazy.nvim, LazyVim and your plugins
 require("config.lazy")
 require("config.filetypes")
+-- require("config.imswitch").setup()
 
 -- Delay for `skitty` configuration
 -- If I don't add this delay, I get the message
