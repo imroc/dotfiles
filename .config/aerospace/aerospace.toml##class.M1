@@ -364,6 +364,9 @@ run = ['move-node-to-workspace 8']
 [[on-window-detected]]
 if.app-id = 'com.tencent.wwmapp'   # 企微微信·会议
 run = ['move-node-to-workspace 8']
+[[on-window-detected]]
+if.app-id = 'com.electron.lark.iron'   # 飞书会议
+run = ['move-node-to-workspace 8']
 
 # 其它
 [[on-window-detected]]
