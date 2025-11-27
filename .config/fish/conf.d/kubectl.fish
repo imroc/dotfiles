@@ -27,10 +27,6 @@ abbr --add kgpw 'kubectl get pod -o wide'
 abbr --add kgvh 'kubectl get validatingwebhookconfigurations'
 abbr --add kgmh 'kubectl get mutatingwebhookconfigurations'
 
-# 获取 LBR 的概览信息
-abbr --add kglbr 'kubectl get LoadBalancerResource -ojsonpath='\''{.metadata.name}{range .spec.listeners[*]}{"\n"}{"\t"}{.port} {.protocol}{range .references[*]}{"\n"}{"\t\t"}{.kind}{"\t"}{.namespace}/{.name}{end}{end}{"\n"}'\'''
-abbr --add kglbrs 'kubectl get LoadBalancerResource -ojsonpath='\''{range .items[*]}{.metadata.name}{range .spec.listeners[*]}{"\n"}{"\t"}{.port} {.protocol}{range .references[*]}{"\n"}{"\t\t"}{.kind}{"\t"}{.namespace}/{.name}{end}{end}{"\n"}{end}'\'''
-
 # 获取 ingress 的 conditon
 abbr --add kgingc 'kubectl get ingress -o jsonpath='\''{.metadata.annotations.ingress\.cloud\.tencent\.com\/status\.conditions}'\'''
 
