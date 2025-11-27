@@ -58,5 +58,5 @@ abbr --add kgzone 'kubectl get node -o custom-columns=NAME:.metadata.name,ZONE:"
 abbr --add kgimages 'kubectl get pod -ojsonpath=\'{range .items[*]}{range .spec.containers[*]}{"\n"}{.image}{end}{end}\' | sort | uniq'
 
 # watch
-abbr --add kkp 'kubectl-klock pod -o wide'
-abbr --add kkn 'kubectl-klock node -o wide'
+abbr --add kw 'kubectl-klock pod -o wide'
+abbr --add kwn 'kubectl-klock node -o wide'
