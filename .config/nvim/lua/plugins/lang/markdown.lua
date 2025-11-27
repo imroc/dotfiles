@@ -141,6 +141,10 @@ return {
   {
     "MeanderingProgrammer/render-markdown.nvim",
     opts = {
+      bullet = {
+        -- Turn on / off list bullet rendering
+        enabled = true,
+      },
       -- anti_conceal = {
       -- ignore = {},
       -- },
@@ -209,6 +213,8 @@ return {
         render_modes = true, -- keep rendering while inserting
       },
       checkbox = {
+        -- Turn on / off checkbox state rendering
+        enabled = true,
         unchecked = {
           icon = "󰄱",
           highlight = "RenderMarkdownCodeFallback",
