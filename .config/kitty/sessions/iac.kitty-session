@@ -1,6 +1,6 @@
-new_tab terraform
+new_tab terraform-manifests
 enabled_layouts tall,stack
-layout tall
+layout stack
 cd ~/dev/terraform-manifests
 launch
 

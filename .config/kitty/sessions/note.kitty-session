@@ -1,6 +1,6 @@
 new_tab note
 enabled_layouts tall,stack
-layout tall
+layout stack
 cd ~/dev/note
 launch
 

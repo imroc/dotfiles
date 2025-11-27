@@ -1,13 +1,7 @@
-new_tab manifests
+new_tab kubernetes-manifests
 enabled_layouts tall,stack
-layout tall
+layout stack
 cd ~/dev/kubernetes-manifests
-launch
-
-new_tab kubectl
-enabled_layouts tall,grid,stack
-layout tall
-cd ~
 launch
 
 focus
