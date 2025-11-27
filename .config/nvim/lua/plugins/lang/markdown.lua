@@ -69,7 +69,7 @@ return {
         desc = "[P]Update Numbering For List Item",
       },
       {
-        "<localleader>d",
+        "<localleader>x",
         mode = { "n", "v" },
         "<cmd>MkdnToggleToDo<cr>",
         ft = "markdown",
