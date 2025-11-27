@@ -18,6 +18,7 @@ abbr --add kn kubectl-neat
 abbr --add kz kustomize
 abbr --add kb 'kustomize build --enable-helm --load-restrictor=LoadRestrictionsNone .'
 abbr --add kka 'kustomize build --enable-helm --load-restrictor=LoadRestrictionsNone . | kubectl apply --server-side=true -f -'
+abbr --add kkd 'kustomize build --enable-helm --load-restrictor=LoadRestrictionsNone . | kubectl delete --server-side=true -f -'
 
 abbr --add km 'kubectl -n monitoring'
 abbr --add kr 'kubectl api-resources'
