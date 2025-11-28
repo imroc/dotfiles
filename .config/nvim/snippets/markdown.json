@@ -8,6 +8,15 @@
     ],
     "description": "插入代码块"
   },
+  "tx": {
+    "prefix": "tx",
+    "body": [
+      "```txt",
+      "$0",
+      "```"
+    ],
+    "description": "插入 txt 代码块"
+  },
   "bs": {
     "prefix": "bs",
     "body": [
