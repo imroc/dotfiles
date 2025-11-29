@@ -2,13 +2,13 @@
 keybinds clear-defaults=true {
     normal {
         // uncomment this and adjust key if using copy_on_select=false
-        // bind "Super c" { Copy; }
+        // bind "Super Ctrl c" { Copy; }
     }
     locked {
-        bind "Super g" { SwitchToMode "Normal"; }
+        bind "Super Ctrl g" { SwitchToMode "Normal"; }
     }
     resize {
-        bind "Super r" { SwitchToMode "Normal"; }
+        bind "Super Ctrl r" { SwitchToMode "Normal"; }
         bind "h" "Left" { Resize "Increase Left"; }
         bind "j" "Down" { Resize "Increase Down"; }
         bind "k" "Up" { Resize "Increase Up"; }
@@ -21,7 +21,7 @@ keybinds clear-defaults=true {
         bind "-" { Resize "Decrease"; }
     }
     pane {
-        bind "Super p" { SwitchToMode "Normal"; }
+        bind "Super Ctrl p" { SwitchToMode "Normal"; }
         bind "h" "Left" { MoveFocus "Left"; }
         bind "l" "Right" { MoveFocus "Right"; }
         bind "j" "Down" { MoveFocus "Down"; }
@@ -41,7 +41,7 @@ keybinds clear-defaults=true {
     }
     move {
         // Ctrl h --> Super m 避免与 neovim 向左 window 聚焦冲突
-        bind "Super m" { SwitchToMode "Normal"; }
+        bind "Super Ctrl m" { SwitchToMode "Normal"; }
         bind "n" "Tab" { MovePane; }
         bind "p" { MovePaneBackwards; }
         bind "h" "Left" { MovePane "Left"; }
@@ -50,7 +50,7 @@ keybinds clear-defaults=true {
         bind "l" "Right" { MovePane "Right"; }
     }
     tab {
-        bind "Super t" { SwitchToMode "Normal"; }
+        bind "Super Ctrl t" { SwitchToMode "Normal"; }
         bind "r" { SwitchToMode "RenameTab"; TabNameInput 0; }
         bind "h" "Left" "Up" "k" { GoToPreviousTab; }
         bind "l" "Right" "Down" "j" { GoToNextTab; }
@@ -74,7 +74,7 @@ keybinds clear-defaults=true {
         bind "Tab" { ToggleTab; }
     }
     scroll {
-        bind "Super s" { SwitchToMode "Normal"; }
+        bind "Super Ctrl s" { SwitchToMode "Normal"; }
         bind "e" { EditScrollback; SwitchToMode "Normal"; }
         bind "s" { SwitchToMode "EnterSearch"; SearchInput 0; }
         bind "Ctrl c" { ScrollToBottom; SwitchToMode "Normal"; }
@@ -84,12 +84,12 @@ keybinds clear-defaults=true {
         bind "Ctrl b" "PageUp" "Left" "h" { PageScrollUp; }
         bind "d" { HalfPageScrollDown; }
         bind "u" { HalfPageScrollUp; }
-        bind "Super u" { HalfPageScrollUp; }
+        bind "Super Ctrl u" { HalfPageScrollUp; }
         // uncomment this and adjust key if using copy_on_select=false
-        // bind "Super c" { Copy; }
+        // bind "Super Ctrl c" { Copy; }
     }
     search {
-        bind "Super s" { SwitchToMode "Normal"; }
+        bind "Super Ctrl s" { SwitchToMode "Normal"; }
         bind "Ctrl c" { ScrollToBottom; SwitchToMode "Normal"; }
         bind "j" "Down" { ScrollDown; }
         bind "k" "Up" { ScrollUp; }
@@ -117,7 +117,7 @@ keybinds clear-defaults=true {
     }
     session {
         bind "Alt Super o" { SwitchToMode "Normal"; }
-        bind "Super s" { SwitchToMode "Scroll"; }
+        bind "Super Ctrl s" { SwitchToMode "Scroll"; }
         bind "d" { Detach; }
         bind "w" {
             LaunchOrFocusPlugin "session-manager" {
@@ -158,46 +158,43 @@ keybinds clear-defaults=true {
         bind "q" { Quit; }
     }
     shared_except "locked" {
-        bind "Super g" { SwitchToMode "Locked"; }
-        bind "Super f" { SwitchToMode "EnterSearch"; SearchInput 0; }
-        bind "Super i" { TogglePanePinned; SwitchToMode "Normal"; ToggleFloatingPanes; }
-        bind "Super /" { ToggleFloatingPanes; }
-        bind "Super w" { CloseFocus; }
-        bind "Super n" { NewPane; }
-        bind "Super -" { NewPane "Down"; }
-        bind "Super \\" { NewPane "Right"; }
-        bind "Super d" { NewPane "Right"; }
-        bind "Super h" "Super Left" { MoveFocus "Left"; }
-        bind "Super l" "Super Right" { MoveFocus "Right"; }
-        bind "Super j" "Super Down" { MoveFocus "Down"; }
-        bind "Super k" "Super Up" { MoveFocus "Up"; }
-        bind "Super [" { GoToPreviousTab; }
-        bind "Super ]" { GoToNextTab; }
-        bind "Alt Super n" { NewTab; }
-        bind "Alt Super p" { ToggleTab; }
-        bind "Alt Super =" { Resize "Increase"; }
-        bind "Alt Super -" { Resize "Decrease"; }
-        bind "Super y" { TogglePaneInGroup; }
+        bind "Super Ctrl g" { SwitchToMode "Locked"; }
+        bind "Super Ctrl f" { SwitchToMode "EnterSearch"; SearchInput 0; }
+        bind "Super Ctrl i" { TogglePanePinned; SwitchToMode "Normal"; ToggleFloatingPanes; }
+        bind "Super Ctrl /" { ToggleFloatingPanes; }
+        bind "Super Ctrl w" { CloseFocus; }
+        bind "Super Ctrl n" { NewPane; }
+        bind "Super Ctrl -" { NewPane "Down"; }
+        bind "Super Ctrl \\" { NewPane "Right"; }
+        bind "Super Ctrl d" { NewPane "Right"; }
+        bind "Super Ctrl h" "Super Ctrl Left" { MoveFocus "Left"; }
+        bind "Super Ctrl l" "Super Ctrl Right" { MoveFocus "Right"; }
+        bind "Super Ctrl j" "Super Ctrl Down" { MoveFocus "Down"; }
+        bind "Super Ctrl k" "Super Ctrl Up" { MoveFocus "Up"; }
+        bind "Super Ctrl [" { GoToPreviousTab; }
+        bind "Super Ctrl ]" { GoToNextTab; }
+        // bind "Super Ctrl p" { ToggleTab; }
+        bind "Super Ctrl y" { TogglePaneInGroup; }
         bind "Alt Super y" { ToggleGroupMarking; }
 
-        bind "Super 1" { GoToTab 1; }
-        bind "Super 2" { GoToTab 2; }
-        bind "Super 3" { GoToTab 3; }
-        bind "Super 4" { GoToTab 4; }
-        bind "Super 5" { GoToTab 5; }
-        bind "Super 6" { GoToTab 6; }
-        bind "Super 7" { GoToTab 7; }
-        bind "Super 8" { GoToTab 8; }
-        bind "Super 9" { GoToTab 9; }
+        bind "Super Ctrl 1" { GoToTab 1; }
+        bind "Super Ctrl 2" { GoToTab 2; }
+        bind "Super Ctrl 3" { GoToTab 3; }
+        bind "Super Ctrl 4" { GoToTab 4; }
+        bind "Super Ctrl 5" { GoToTab 5; }
+        bind "Super Ctrl 6" { GoToTab 6; }
+        bind "Super Ctrl 7" { GoToTab 7; }
+        bind "Super Ctrl 8" { GoToTab 8; }
+        bind "Super Ctrl 9" { GoToTab 9; }
 
         // 切换布局
-        bind "Super ," { NextSwapLayout; }
+        bind "Super Ctrl ," { NextSwapLayout; }
         // 全屏快捷键
-        bind "Super Enter" { ToggleFocusFullscreen; }
+        bind "Super Ctrl Enter" { ToggleFocusFullscreen; }
         // 导入终端显示内容到 neovim 的快捷键
-        bind "Super e" { EditScrollback; SwitchToMode "Normal"; }
+        bind "Super Ctrl e" { EditScrollback; SwitchToMode "Normal"; }
         // 搜索 session 和 pane 的快捷键
-        bind "Super o" {
+        bind "Super Ctrl o" {
             LaunchOrFocusPlugin "session-manager" {
                 floating true
                 move_to_focused_tab true
@@ -218,24 +215,24 @@ keybinds clear-defaults=true {
     }
     shared_except "pane" "locked" {
         // Ctrl p --> Super p 避免与 neovim 和 shell 中 “上翻” 的快捷键冲突，另外还有 neovim normal 模式下打开 project manager 的快捷键冲突。
-        bind "Super p" { SwitchToMode "Pane"; }
+        bind "Super Ctrl p" { SwitchToMode "Pane"; }
     }
     shared_except "resize" "locked" {
-        bind "Super r" { SwitchToMode "Resize"; }
+        bind "Super Ctrl r" { SwitchToMode "Resize"; }
     }
     shared_except "scroll" "locked" {
-        bind "Super s" { SwitchToMode "Scroll"; }
-        bind "Super u" { SwitchToMode "Scroll"; HalfPageScrollUp; }
+        bind "Super Ctrl s" { SwitchToMode "Scroll"; }
+        bind "Super Ctrl u" { SwitchToMode "Scroll"; HalfPageScrollUp; }
     }
     shared_except "session" "locked" {
         bind "Alt Super o" { SwitchToMode "Session"; }
     }
     shared_except "tab" "locked" {
-        bind "Super t" { SwitchToMode "Tab"; }
+        bind "Super Ctrl t" { SwitchToMode "Tab"; }
     }
     shared_except "move" "locked" {
         // Ctrl h --> Super m 避免与 neovim 向左 window 聚焦冲突
-        bind "Super m" { SwitchToMode "Move"; }
+        bind "Super Ctrl m" { SwitchToMode "Move"; }
     }
     // 禁用 tmux
     // shared_except "tmux" "locked" {

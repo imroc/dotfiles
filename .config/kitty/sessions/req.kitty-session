@@ -3,6 +3,3 @@ enabled_layouts tall,stack
 layout tall
 cd ~/dev/req/master
 launch
-
-focus
-focus_os_window

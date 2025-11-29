@@ -21,6 +21,3 @@ enabled_layouts tall,stack
 layout tall
 cd ~/dev/tke/cofix
 launch
-
-focus
-focus_os_window

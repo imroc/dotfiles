@@ -15,6 +15,3 @@ enabled_layouts tall,stack
 layout tall
 cd ~/dev/website/tech-guide
 launch
-
-focus
-focus_os_window

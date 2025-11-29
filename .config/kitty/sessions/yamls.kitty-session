@@ -3,6 +3,3 @@ enabled_layouts tall,stack
 layout stack
 cd ~/dev/kubernetes-manifests
 launch
-
-focus
-focus_os_window
