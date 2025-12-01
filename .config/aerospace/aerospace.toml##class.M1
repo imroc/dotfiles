@@ -267,6 +267,7 @@ if.app-id = 'org.alacritty'
 run = ['move-node-to-workspace 1']
 [[on-window-detected]]
 if.app-id = 'com.tencent.weterm'
+if.window-title-regex-substring = '^WeTERM$'
 run = ['move-node-to-workspace 1']
 [[on-window-detected]]
 if.app-id = 'dev.zed.Zed'
