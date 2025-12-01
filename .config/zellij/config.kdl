@@ -74,7 +74,6 @@ keybinds clear-defaults=true {
         bind "Tab" { ToggleTab; }
     }
     scroll {
-        bind "Super Ctrl s" { SwitchToMode "Normal"; }
         bind "e" { EditScrollback; SwitchToMode "Normal"; }
         bind "s" { SwitchToMode "EnterSearch"; SearchInput 0; }
         bind "Ctrl c" { ScrollToBottom; SwitchToMode "Normal"; }
@@ -89,7 +88,6 @@ keybinds clear-defaults=true {
         // bind "Super Ctrl c" { Copy; }
     }
     search {
-        bind "Super Ctrl s" { SwitchToMode "Normal"; }
         bind "Ctrl c" { ScrollToBottom; SwitchToMode "Normal"; }
         bind "j" "Down" { ScrollDown; }
         bind "k" "Up" { ScrollUp; }
@@ -116,8 +114,7 @@ keybinds clear-defaults=true {
         bind "Esc" { UndoRenamePane; SwitchToMode "Pane"; }
     }
     session {
-        bind "Alt Super o" { SwitchToMode "Normal"; }
-        bind "Super Ctrl s" { SwitchToMode "Scroll"; }
+        bind "Super Ctrl s" { SwitchToMode "Normal"; }
         bind "d" { Detach; }
         bind "w" {
             LaunchOrFocusPlugin "session-manager" {
@@ -194,7 +191,7 @@ keybinds clear-defaults=true {
         // 导入终端显示内容到 neovim 的快捷键
         bind "Super Ctrl e" { EditScrollback; SwitchToMode "Normal"; }
         // 搜索 session 和 pane 的快捷键
-        bind "Super Ctrl o" {
+        bind "Super Ctrl s" {
             LaunchOrFocusPlugin "session-manager" {
                 floating true
                 move_to_focused_tab true
@@ -202,7 +199,7 @@ keybinds clear-defaults=true {
             SwitchToMode "Normal"
         }
         // 搜索文件
-        bind "Alt Super f" {
+        bind "Super Ctrl o" {
             LaunchOrFocusPlugin "filepicker" {
                 floating true
                 close_on_selection true
@@ -221,11 +218,10 @@ keybinds clear-defaults=true {
         bind "Super Ctrl r" { SwitchToMode "Resize"; }
     }
     shared_except "scroll" "locked" {
-        bind "Super Ctrl s" { SwitchToMode "Scroll"; }
         bind "Super Ctrl u" { SwitchToMode "Scroll"; HalfPageScrollUp; }
     }
     shared_except "session" "locked" {
-        bind "Alt Super o" { SwitchToMode "Session"; }
+        bind "Super Ctrl s" { SwitchToMode "Session"; }
     }
     shared_except "tab" "locked" {
         bind "Super Ctrl t" { SwitchToMode "Tab"; }
