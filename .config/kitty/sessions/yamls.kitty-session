@@ -1,5 +1,3 @@
 new_tab kubernetes-manifests
-enabled_layouts tall,stack
-layout stack
 cd ~/dev/kubernetes-manifests
 launch

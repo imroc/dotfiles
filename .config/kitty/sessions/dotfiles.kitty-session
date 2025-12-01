@@ -1,11 +1,26 @@
 new_tab private
-enabled_layouts tall,stack
-layout tall
 cd ~/dotfiles
 launch
 
-new_tab public
-enabled_layouts tall,stack
-layout tall
-cd ~/.config
+new_tab nvim
+cd ~/.config/nvim
 launch
+
+new_tab fish
+cd ~/.config/fish
+launch
+
+new_tab kitty
+cd ~/.config/kitty
+launch
+
+new_tab aerospace
+cd ~/.config/aerospace
+launch
+
+new_tab zellij
+cd ~/.config/zellij
+launch
+
+
+

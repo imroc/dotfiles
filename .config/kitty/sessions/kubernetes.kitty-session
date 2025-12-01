@@ -1,11 +1,7 @@
 new_tab master
-enabled_layouts tall,stack
-layout tall
 cd ~/dev/kubernetes/master
 launch
 
 new_tab tke
-enabled_layouts tall,stack
-layout tall
 cd ~/dev/kubernetes/tke
 launch

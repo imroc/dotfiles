@@ -1,5 +1,3 @@
 new_tab kubectl
-enabled_layouts tall,grid,stack
-layout grid
 cd ~
 launch

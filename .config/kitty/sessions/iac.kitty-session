@@ -1,11 +1,7 @@
 new_tab terraform-manifests
-enabled_layouts tall,stack
-layout stack
 cd ~/dev/terraform-manifests
 launch
 
 new_tab cmdline
-enabled_layouts tall,grid,stack
-layout tall
 cd ~
 launch

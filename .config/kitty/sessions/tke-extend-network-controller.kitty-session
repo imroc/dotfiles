@@ -1,5 +1,3 @@
 new_tab tke-extend-network-controller
-enabled_layouts tall,stack
-layout tall
 cd ~/dev/tke/tke-extend-network-controller
 launch

@@ -1,23 +1,15 @@
 new_tab main
-enabled_layouts tall,stack
-layout tall
 cd ~/dev/tke/cilium/main
 launch
 
 new_tab CiliumOverlay
-enabled_layouts tall,stack
-layout tall
 cd ~/dev/tke/cilium/v1.10.19-tke
 launch
 
 new_tab DataPlaneV2
-enabled_layouts tall,stack
-layout tall
 cd ~/dev/tke/cilium/v1.13.11_tke
 launch
 
 new_tab cofix
-enabled_layouts tall,stack
-layout tall
 cd ~/dev/tke/cofix
 launch
