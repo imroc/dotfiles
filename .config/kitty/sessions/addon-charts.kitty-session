@@ -1,0 +1,3 @@
+new_tab addon-charts
+cd ~/dev/tke/addon-charts/master
+launch
