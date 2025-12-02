@@ -102,13 +102,19 @@ return {
         in_progress = ">",
         complete = "x",
       },
+      mappings = {
+        MkdnTableNewRowBelow = { "n", "<localleader>ir" },
+        MkdnTableNewRowAbove = { "n", "<localleader>iR" },
+        MkdnTableNewColAfter = { "n", "<localleader>ic" },
+        MkdnTableNewColBefore = { "n", "<localleader>iC" },
+      },
     },
   },
   {
     "askfiy/nvim-picgo",
     keys = {
       {
-        "<localleader>i",
+        "<localleader>ip",
         function()
           require("nvim-picgo").upload_clipboard()
         end,

@@ -43,4 +43,5 @@ end, { desc = "[P]Goto method references" })
 
 -- outline
 map({ "n", "v", "i" }, "<M-o>", "<cmd>Outline<cr>", { desc = "[P]Toggle Outline" })
+map({ "n" }, "<leader>i", "<cmd>Outline<cr>", { desc = "[P]Toggle Outline" })
 map("n", "<leader>to", "<cmd>Outline<cr>", { desc = "[P]Toggle Outline" })
