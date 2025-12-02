@@ -7,5 +7,5 @@ cd ~/dev/website/kubernetes-guide
 launch
 
 new_tab tech-note
-cd ~/dev/website/tech-guide
+cd ~/dev/website/tech-note
 launch
