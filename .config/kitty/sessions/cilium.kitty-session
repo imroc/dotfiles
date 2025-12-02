@@ -10,6 +10,6 @@ new_tab DataPlaneV2
 cd ~/dev/tke/cilium/v1.13.11_tke
 launch
 
-new_tab cofix
-cd ~/dev/tke/cofix
+new_tab DirectENI
+cd ~/dev/tke/cilium/1.9.5-tke
 launch
