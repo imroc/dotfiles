@@ -175,56 +175,56 @@ alt-ctrl-space = [
 ]
 cmd-semicolon = [
   'mode app',
-  'exec-and-forget sketchybar --trigger aerospace_service_mode_enabled_changed AEROSPACE_SERVICE_MODE_ENABLED=true',
+  'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=true',
 ]
 
 [mode.app.binding]
 esc = [
   'mode main',
-  'exec-and-forget sketchybar --trigger aerospace_service_mode_enabled_changed AEROSPACE_SERVICE_MODE_ENABLED=false',
+  'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
 ]
 enter = [
   'mode main',
-  'exec-and-forget sketchybar --trigger aerospace_service_mode_enabled_changed AEROSPACE_SERVICE_MODE_ENABLED=false',
+  'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
 ]
 w = [
   'mode main',
-  'exec-and-forget sketchybar --trigger aerospace_service_mode_enabled_changed AEROSPACE_SERVICE_MODE_ENABLED=false',
+  'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
   'exec-and-forget open -a "WeChat.app"'
 ]
 q = [
   'mode main',
-  'exec-and-forget sketchybar --trigger aerospace_service_mode_enabled_changed AEROSPACE_SERVICE_MODE_ENABLED=false',
+  'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
   'exec-and-forget open -a "企业微信.app"'
 ]
 t = [
   'mode main',
-  'exec-and-forget sketchybar --trigger aerospace_service_mode_enabled_changed AEROSPACE_SERVICE_MODE_ENABLED=false',
+  'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
   'exec-and-forget open -a "WeTERM.app"'
 ]
 b = [
   'mode main',
-  'exec-and-forget sketchybar --trigger aerospace_service_mode_enabled_changed AEROSPACE_SERVICE_MODE_ENABLED=false',
+  'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
   'exec-and-forget open -a "Google Chrome.app"'
 ]
 c = [
   'mode main',
-  'exec-and-forget sketchybar --trigger aerospace_service_mode_enabled_changed AEROSPACE_SERVICE_MODE_ENABLED=false',
+  'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
   'exec-and-forget open -a "CodeBuddy CN.app"'
 ]
 v = [
   'mode main',
-  'exec-and-forget sketchybar --trigger aerospace_service_mode_enabled_changed AEROSPACE_SERVICE_MODE_ENABLED=false',
+  'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
   'exec-and-forget open -a "Visual Studio Code.app"'
 ]
 j = [
   'mode main',
-  'exec-and-forget sketchybar --trigger aerospace_service_mode_enabled_changed AEROSPACE_SERVICE_MODE_ENABLED=false',
+  'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
   'exec-and-forget open -a "OK JSON.app"'
 ]
 z = [
   'mode main',
-  'exec-and-forget sketchybar --trigger aerospace_service_mode_enabled_changed AEROSPACE_SERVICE_MODE_ENABLED=false',
+  'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
   'exec-and-forget open -a "WezTerm.app"'
 ]
 
