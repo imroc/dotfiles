@@ -114,6 +114,12 @@ return {
     "askfiy/nvim-picgo",
     keys = {
       {
+        "<localleader>i",
+        "",
+        ft = "markdown",
+        desc = "[P]Insert",
+      },
+      {
         "<localleader>ip",
         function()
           require("nvim-picgo").upload_clipboard()

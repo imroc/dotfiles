@@ -111,6 +111,7 @@ outer.top = [
 # All possible commands: https://nikitabobko.github.io/AeroSpace/commands
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#exec-and-forget
+alt-semicolon = 'exec-and-forget open -a "kitty.app"'
 cmd-ctrl-shift-m = 'exec-and-forget open -a "WeTERM.app"'
 cmd-ctrl-shift-k = 'exec-and-forget open -a "kitty.app"'
 cmd-ctrl-shift-z = 'exec-and-forget open -a "WezTerm.app"'

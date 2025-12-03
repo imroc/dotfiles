@@ -14,7 +14,6 @@ return {
         { "<leader>kd", group = "kubectl delete" },
         { "<leader>gH", group = "github" },
         { "<leader>gy", group = "copy url" },
-        { "<localleader>i", group = "insert", ft = "markdown" },
       },
     },
   },
