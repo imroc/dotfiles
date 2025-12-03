@@ -271,7 +271,11 @@ automatically-unhide-macos-hidden-apps = true
     up = 'volume up'
     shift-down = ['volume set 0', 'mode main']
 
-# floating
+# ----------------------
+# 应用窗口自动放置规则
+# ----------------------
+
+# 默认 float 的窗口
 [[on-window-detected]]
     if.app-id = 'com.apple.iCal'
     check-further-callbacks = true
@@ -296,7 +300,7 @@ automatically-unhide-macos-hidden-apps = true
     if.app-id = 'com.apple.Preview'
     run = ['layout floating']
 
-# 非高频开发工具
+# 1: 非高频开发工具
 [[on-window-detected]]
     if.app-id = 'net.shinystone.OKJSON'
     run = ['move-node-to-workspace 1']
@@ -338,12 +342,12 @@ automatically-unhide-macos-hidden-apps = true
     if.app-id = 'dev.zed.Zed'
     run = ['move-node-to-workspace 1']
 
-# 高频开发工具
+# 2: 高频开发工具
 [[on-window-detected]]
     if.app-id = 'net.kovidgoyal.kitty'
     run = ['move-node-to-workspace 2']
 
-# 高频聊天工具
+# 3: 聊天工具
 [[on-window-detected]]
     if.app-id = 'com.tencent.WeWorkMac'      # 企业微信主界面
     if.window-title-regex-substring = '^企业微信$'
@@ -358,8 +362,27 @@ automatically-unhide-macos-hidden-apps = true
 [[on-window-detected]]
     if.app-id = 'com.tencent.xinWeChat'    # 微信其它主界面
     run = ['layout floating']
+[[on-window-detected]]
+    if.app-id = 'com.tencent.qq'           # QQ 主界面
+    if.window-title-regex-substring = 'QQ'
+    run = ['move-node-to-workspace 3']
+[[on-window-detected]]
+    if.app-id = 'com.tencent.qq' # QQ 其它界面默认 float
+    run = ['layout floating']
+[[on-window-detected]]
+    if.app-id = 'com.electron.lark'    # 飞书
+    run = ['move-node-to-workspace 3']
+[[on-window-detected]]
+    if.app-id = 'com.alibaba.DingTalkMac' # 钉钉
+    run = ['move-node-to-workspace 3']
+[[on-window-detected]]
+    if.app-id = 'com.tdesktop.Telegram' # Telegram
+    run = ['move-node-to-workspace 3']
+[[on-window-detected]]
+    if.app-id = 'com.tinyspeck.slackmacgap' # Slack
+    run = ['move-node-to-workspace 3']
 
-# 浏览器
+# 4: 浏览器
 [[on-window-detected]]
     if.app-id = 'com.google.Chrome'
     run = ['move-node-to-workspace 4']
@@ -373,33 +396,17 @@ automatically-unhide-macos-hidden-apps = true
     if.app-id = 'com.microsoft.edgemac'
     run = ['move-node-to-workspace 4']
 
-# AI 工具
+# 5: AI 工具
 [[on-window-detected]]
     if.app-id = 'com.tencent.yuanbao'
     run = ['move-node-to-workspace 5']
 
-# 非高频聊天工具
+# 6: 其它（不常用）
 [[on-window-detected]]
-    if.app-id = 'com.tencent.qq'           # QQ 主界面
-    if.window-title-regex-substring = 'QQ'
-    run = ['move-node-to-workspace 6']
-[[on-window-detected]]
-    if.app-id = 'com.tencent.qq' # QQ 其它界面默认 float
-    run = ['layout floating']
-[[on-window-detected]]
-    if.app-id = 'com.electron.lark'    # 飞书
-    run = ['move-node-to-workspace 6']
-[[on-window-detected]]
-    if.app-id = 'com.alibaba.DingTalkMac' # 钉钉
-    run = ['move-node-to-workspace 6']
-[[on-window-detected]]
-    if.app-id = 'com.tdesktop.Telegram' # Telegram
-    run = ['move-node-to-workspace 6']
-[[on-window-detected]]
-    if.app-id = 'com.tinyspeck.slackmacgap' # Slack
-    run = ['move-node-to-workspace 6']
+    if.app-id = 'com.omnigroup.OmniGraffle7'
+    run = ['move-node-to-workspace 5']
 
-# 视频相关: 剪映、ScreenStudio、ScreenFlow
+# 7: 媒体
 [[on-window-detected]]
     if.app-id = 'com.lemon.lvpro'      # 剪映
     run = ['move-node-to-workspace 7']
@@ -416,7 +423,7 @@ automatically-unhide-macos-hidden-apps = true
     if.app-id = 'com.tencent.tenvideo' # 腾讯视频
     run = ['move-node-to-workspace 7']
 
-# 会议相关
+# 8: 会议
 [[on-window-detected]]
     if.app-id = 'com.tencent.meeting'  # 腾讯会议
     if.window-title-regex-substring = '腾讯会议'
@@ -428,7 +435,4 @@ automatically-unhide-macos-hidden-apps = true
     if.app-id = 'com.electron.lark.iron'   # 飞书会议
     run = ['move-node-to-workspace 8']
 
-# 其它
-[[on-window-detected]]
-    if.app-id = 'com.omnigroup.OmniGraffle7'
-    run = ['move-node-to-workspace 9']
+# 9: 临时
