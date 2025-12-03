@@ -122,6 +122,7 @@ cmd-ctrl-shift-w = 'exec-and-forget open -a "WeChat.app"'
 cmd-ctrl-shift-j = 'exec-and-forget open -a "OK JSON.app"'
 cmd-ctrl-shift-s = 'exec-and-forget open -a "Visual Studio Code.app"'
 cmd-ctrl-shift-n = 'exec-and-forget kitten quick-access-terminal --config ~/.config/kitty/quick-access-terminal-quick-notes.conf --instance-group todo daily-note.sh'
+cmd-ctrl-semicolo = 'exec-and-forget kitten quick-access-terminal --config ~/.config/kitty/quick-access-terminal-quick-notes.conf --instance-group todo daily-note.sh'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#layout
 alt-ctrl-slash = 'layout tiles horizontal vertical'
