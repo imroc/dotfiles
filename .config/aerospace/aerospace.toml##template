@@ -112,16 +112,6 @@ outer.top = [
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#exec-and-forget
 cmd-ctrl-semicolon = 'exec-and-forget open -a "kitty.app"'
-cmd-ctrl-shift-m = 'exec-and-forget open -a "WeTERM.app"'
-cmd-ctrl-shift-k = 'exec-and-forget open -a "kitty.app"'
-cmd-ctrl-shift-z = 'exec-and-forget open -a "WezTerm.app"'
-cmd-ctrl-shift-b = 'exec-and-forget open -a "Google Chrome.app"'
-cmd-ctrl-shift-i = 'exec-and-forget open -a "CodeBuddy CN.app"'
-cmd-ctrl-shift-q = 'exec-and-forget open -a "企业微信.app"'
-cmd-ctrl-shift-w = 'exec-and-forget open -a "WeChat.app"'
-cmd-ctrl-shift-j = 'exec-and-forget open -a "OK JSON.app"'
-cmd-ctrl-shift-s = 'exec-and-forget open -a "Visual Studio Code.app"'
-cmd-ctrl-shift-n = 'exec-and-forget kitten quick-access-terminal --config ~/.config/kitty/quick-access-terminal-quick-notes.conf --instance-group todo daily-note.sh'
 cmd-shift-semicolon = 'exec-and-forget kitten quick-access-terminal --config ~/.config/kitty/quick-access-terminal-quick-notes.conf --instance-group todo daily-note.sh'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#layout
@@ -207,10 +197,35 @@ q = [
   'exec-and-forget sketchybar --trigger aerospace_service_mode_enabled_changed AEROSPACE_SERVICE_MODE_ENABLED=false',
   'exec-and-forget open -a "企业微信.app"'
 ]
-n = [
+t = [
   'mode main',
   'exec-and-forget sketchybar --trigger aerospace_service_mode_enabled_changed AEROSPACE_SERVICE_MODE_ENABLED=false',
-  'exec-and-forget kitten quick-access-terminal --config ~/.config/kitty/quick-access-terminal-quick-notes.conf --instance-group todo daily-note.sh'
+  'exec-and-forget open -a "WeTERM.app"'
+]
+b = [
+  'mode main',
+  'exec-and-forget sketchybar --trigger aerospace_service_mode_enabled_changed AEROSPACE_SERVICE_MODE_ENABLED=false',
+  'exec-and-forget open -a "Google Chrome.app"'
+]
+c = [
+  'mode main',
+  'exec-and-forget sketchybar --trigger aerospace_service_mode_enabled_changed AEROSPACE_SERVICE_MODE_ENABLED=false',
+  'exec-and-forget open -a "CodeBuddy CN.app"'
+]
+v = [
+  'mode main',
+  'exec-and-forget sketchybar --trigger aerospace_service_mode_enabled_changed AEROSPACE_SERVICE_MODE_ENABLED=false',
+  'exec-and-forget open -a "Visual Studio Code.app"'
+]
+j = [
+  'mode main',
+  'exec-and-forget sketchybar --trigger aerospace_service_mode_enabled_changed AEROSPACE_SERVICE_MODE_ENABLED=false',
+  'exec-and-forget open -a "OK JSON.app"'
+]
+z = [
+  'mode main',
+  'exec-and-forget sketchybar --trigger aerospace_service_mode_enabled_changed AEROSPACE_SERVICE_MODE_ENABLED=false',
+  'exec-and-forget open -a "WezTerm.app"'
 ]
 
 # 'service' binding mode declaration.
