@@ -130,7 +130,14 @@ return {
       {
         "<M-i>",
         function()
-          require("nvim-picgo").upload_clipboard()
+          local buffer = require("util.buffer")
+          local iwiki_json = buffer.current_dir() .. "/iwiki.json"
+          local stat = vim.loop.fs_stat(iwiki_path)
+          if stat ~= nil and stat.type == "file" then
+            require("util.iwiki").insert_image()
+          else
+            require("nvim-picgo").upload_clipboard()
+          end
         end,
         mode = { "n", "v", "i" },
         ft = "markdown",
