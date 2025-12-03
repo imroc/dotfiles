@@ -14,7 +14,7 @@ function _tide_item_kubectl
         if command -sq yq
             set cluster_alias (command yq ".$KUBECTL_TKE_CLUSTER_ID" <$HOME/.kube/tke-cluster-alias.yaml)
             if test $status -eq 0; and test "$cluster_alias" != null
-                set current_context "$cluster_alias($KUBECTL_TKE_CLUSTER_ID)"
+                set current_context "$KUBECTL_TKE_CLUSTER_ID($cluster_alias)"
             end
         end
     end
