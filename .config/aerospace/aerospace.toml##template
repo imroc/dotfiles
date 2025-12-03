@@ -10,14 +10,6 @@ config-version = 2
 [exec.env-vars]
     PATH = '${HOME}/.local/bin:${PATH}'
 
-# You can use it to add commands that run after AeroSpace startup.
-# 'after-startup-command' is run after 'after-login-command'
-# Available commands : https://nikitabobko.github.io/AeroSpace/commands
-after-startup-command = [
-  'exec-and-forget sketchybar',
-  'exec-and-forget borders',
-]
-
 # Start AeroSpace at login
 start-at-login = true
 
