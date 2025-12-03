@@ -5,7 +5,7 @@ return {
   cmd = "FloatermToggle",
   keys = {
     {
-      "<M-/>",
+      "<C-;>",
       "<cmd>FloatermToggle<cr>",
       mode = { "n", "v", "i", "t" },
       desc = "[P] Toggle Floaterm",
