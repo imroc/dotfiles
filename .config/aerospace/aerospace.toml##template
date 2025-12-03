@@ -204,12 +204,12 @@ persistent-workspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9" ]
       'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
       'exec-and-forget open -a "WeTERM.app"'
     ]
-    b = [
+    g = [
       'mode main',
       'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
       'exec-and-forget open -a "Google Chrome.app"'
     ]
-    c = [
+    b = [
       'mode main',
       'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
       'exec-and-forget open -a "CodeBuddy CN.app"'
@@ -233,6 +233,41 @@ persistent-workspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9" ]
       'mode main',
       'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
       'exec-and-forget goto-kitty-session.sh note'
+    ]
+    d = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
+      'exec-and-forget goto-kitty-session.sh dotfiles'
+    ]
+    c = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
+      'exec-and-forget goto-kitty-session.sh coding'
+    ]
+    h = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
+      'exec-and-forget goto-kitty-session.sh home'
+    ]
+    k = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
+      'exec-and-forget goto-kitty-session.sh kubectl'
+    ]
+    e = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
+      'exec-and-forget goto-kitty-session.sh ebook'
+    ]
+    i = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
+      'exec-and-forget goto-kitty-session.sh iac'
+    ]
+    y = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
+      'exec-and-forget goto-kitty-session.sh yamls'
     ]
 
 # 'service' binding mode declaration.
