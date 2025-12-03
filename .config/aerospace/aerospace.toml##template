@@ -161,6 +161,8 @@ automatically-unhide-macos-hidden-apps = true
     alt-ctrl-7 = 'move-node-to-workspace 7 --focus-follows-window'
     alt-ctrl-8 = 'move-node-to-workspace 8 --focus-follows-window'
     alt-ctrl-9 = 'move-node-to-workspace 9 --focus-follows-window'
+    alt-ctrl-leftSquareBracket = 'exec-and-forget aerospace workspace "$(aerospace list-workspaces --monitor mouse --visible)" && aerospace workspace prev'
+    alt-ctrl-rightSquareBracket = 'exec-and-forget aerospace workspace "$(aerospace list-workspaces --monitor mouse --visible)" && aerospace workspace next'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
     alt-ctrl-tab = 'workspace-back-and-forth'
