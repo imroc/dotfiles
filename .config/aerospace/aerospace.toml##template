@@ -228,6 +228,11 @@ automatically-unhide-macos-hidden-apps = true
       'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
       'exec-and-forget open -a "WezTerm.app"'
     ]
+    n = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
+      'exec-and-forget goto-kitty-session.sh note'
+    ]
 
 # 'service' binding mode declaration.
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
