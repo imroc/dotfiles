@@ -7,9 +7,6 @@
 # Fallback value (if you omit the key): config-version = 1
 config-version = 2
 
-[exec.env-vars]
-    PATH = '${HOME}/.local/bin:${PATH}'
-
 # Start AeroSpace at login
 start-at-login = true
 
@@ -86,6 +83,9 @@ persistent-workspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9" ]
       29,
     ]
     {% endif %}
+
+[exec.env-vars]
+    PATH = '${HOME}/.local/bin:${PATH}'
 
 # 'main' binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
