@@ -19,9 +19,7 @@ elif [ "$SENDER" = "aerospace_app_mode_enabled_changed" ]; then
     sketchybar --set workspaces_app_mode \
       label.drawing=off
   fi
-fi
-
-if [ "$SENDER" = "aerospace_workspace_change" ]; then
+elif [ "$SENDER" = "aerospace_workspace_change" ]; then
   if [ "$1" = "$FOCUSED_WORKSPACE" ]; then
     sketchybar --set $NAME \
       label.highlight=on \
