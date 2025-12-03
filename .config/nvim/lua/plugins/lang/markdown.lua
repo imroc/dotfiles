@@ -37,13 +37,103 @@ return {
     },
   },
   {
+    "Kicamon/markdown-table-mode.nvim",
+    opts = {},
+    keys = {
+      { "<localleader>tm", "<cmd>Mtm<cr>", ft = "markdown", desc = "[P]Toggle Table Mode" },
+    },
+  },
+  {
+    "bngarren/checkmate.nvim",
+    ft = "markdown", -- Lazy loads for Markdown files matching patterns in 'files'
+    opts = {
+      files = {
+        "*.md", -- Any markdown file (basename matching)
+      },
+      archive = {
+        heading = {
+          title = "已完成",
+          level = 2, -- e.g. ##
+        },
+      },
+      keys = {
+        ["<localleader>t"] = {
+          rhs = "",
+          desc = "[P]todo",
+          modes = { "n", "v" },
+        },
+        ["<localleader>tt"] = {
+          rhs = "<cmd>Checkmate toggle<CR>",
+          desc = "Toggle todo item",
+          modes = { "n", "v" },
+        },
+        ["<localleader>tc"] = {
+          rhs = "<cmd>Checkmate check<CR>",
+          desc = "Set todo item as checked (done)",
+          modes = { "n", "v" },
+        },
+        ["<localleader>tu"] = {
+          rhs = "<cmd>Checkmate uncheck<CR>",
+          desc = "Set todo item as unchecked (not done)",
+          modes = { "n", "v" },
+        },
+        ["<localleader>t="] = {
+          rhs = "<cmd>Checkmate cycle_next<CR>",
+          desc = "Cycle todo item(s) to the next state",
+          modes = { "n", "v" },
+        },
+        ["<localleader>t-"] = {
+          rhs = "<cmd>Checkmate cycle_previous<CR>",
+          desc = "Cycle todo item(s) to the previous state",
+          modes = { "n", "v" },
+        },
+        ["<localleader>tn"] = {
+          rhs = "<cmd>Checkmate create<CR>",
+          desc = "Create todo item",
+          modes = { "n", "v" },
+        },
+        ["<localleader>tr"] = {
+          rhs = "<cmd>Checkmate remove_all_metadata<CR>",
+          desc = "Remove all metadata from a todo item",
+          modes = { "n", "v" },
+        },
+        ["<localleader>ta"] = {
+          rhs = "<cmd>Checkmate archive<CR>",
+          desc = "Archive checked/completed todo items (move to bottom section)",
+          modes = { "n" },
+        },
+        ["<localleader>tf"] = {
+          rhs = "<cmd>Checkmate select_todo<CR>",
+          desc = "Open a picker to select a todo from the current buffer",
+          modes = { "n" },
+        },
+        ["<localleader>tv"] = {
+          rhs = "<cmd>Checkmate metadata select_value<CR>",
+          desc = "Update the value of a metadata tag under the cursor",
+          modes = { "n" },
+        },
+        ["<localleader>t]"] = {
+          rhs = "<cmd>Checkmate metadata jump_next<CR>",
+          desc = "Move cursor to next metadata tag",
+          modes = { "n" },
+        },
+        ["<localleader>t["] = {
+          rhs = "<cmd>Checkmate metadata jump_previous<CR>",
+          desc = "Move cursor to previous metadata tag",
+          modes = { "n" },
+        },
+      },
+    },
+  },
+  {
     -- https://github.com/jakewvincent/mkdnflow.nvim
     "jakewvincent/mkdnflow.nvim",
     lazy = true,
+    enabled = false,
     ft = { "markdown" },
     keys = {
       {
-        "<localleader>f",
+        "<localleader>Tf",
         "<cmd>MkdnTableFormat<cr>",
         ft = "markdown",
         desc = "[P]Format Table Under The Cursor",
@@ -76,7 +166,12 @@ return {
         desc = "[P]Toggle ToDo",
       },
       {
-        "<localleader>t",
+        "<localleader>T",
+        ft = "markdown",
+        desc = "[P]Table",
+      },
+      {
+        "<localleader>Tc",
         function()
           vim.ui.input({ prompt = "Create Table: nrow ncol" }, function(msg)
             if not msg then
@@ -117,7 +212,7 @@ return {
         "<localleader>i",
         "",
         ft = "markdown",
-        desc = "[P]Insert",
+        desc = "[P]insert",
       },
       {
         "<localleader>ip",

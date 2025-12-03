@@ -10,9 +10,27 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
         "as=" "as-group=" "as-uid=" \
         -- $original_args 2>/dev/null # 忽略解析错误，因为 argparse
 
+    set common_args ()
+    # 显式指定 KUBECTL_SERVER 环境变量，自动追加 --server 参数
+    if test -n "$KUBECTL_SERVER"
+        set -a common_args --server=$KUBECTL_SERVER
+    end
+    # 若没有显式指定命名空间且设置了 KUBECTL_NAMESPACE 环境变量，则以该环境变量为准
+    if test -z "$_flag_n"; and test -n "$KUBECTL_NAMESPACE"
+        set -a common_args --namespace=$KUBECTL_NAMESPACE
+    end
+
     # 包装、增强指定的子命令
     set subcommand "$argv[1]"
     switch $subcommand
+        case ns
+            set -l ns "$argv[2]"
+            if test -n "$ns"
+                set -gx KUBECTL_NAMESPACE "$ns"
+            else
+                command kubectl ns
+            end
+            return
         case clear # clear kubeconfig
             set -e KUBECONFIG
             set -e KUBIE_ACTIVE
@@ -44,7 +62,7 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
             set -l node $argv[2]
             if test -z "$node" # 子命令后没有参数，列出所有节点并用 fzf 选择（不包含无法登录的虚拟节点）
                 # 利用 node-shell 登录节点
-                set node (command kubectl get node -o json | jq -r '.items[].metadata.name' | grep -v eklet- | fzf -0)
+                set node (command kubectl get node $common_args -o json | jq -r '.items[].metadata.name' | grep -v eklet- | fzf -0)
                 if test -n "$node"
                     command kubectl node-shell $node
                 else
@@ -53,7 +71,7 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
                 return
             end
         case pod-shell # kubectl pod-shell 登录 pod，支持 fzf 补全 pod
-            set -l pod_list (command kubectl get pod -o json)
+            set -l pod_list (command kubectl get pod $common_args -o json)
             set -l pod $argv[2]
             if test -z "$pod"
                 # 利用 node-shell 登录节点
@@ -77,7 +95,7 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
                 end
             end
             echo "login container $container in pod $pod with shell $shell"
-            command kubectl exec -it $pod -c $container -- $shell
+            command kubectl exec $common_args -it $pod -c $container -- $shell
             return
         case get # 增强 kubectl get，支持用 bat 美化输出、用 neovim 以 yaml 格式打开、用 fx 以 json 格式打开、获取 configmap/secret 中的文件内容、查看证书信息、watch 资源相关事件等
             set -l resource_type $argv[2]
@@ -87,6 +105,7 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
                 # 解析增加的自定义参数 -e -E -j -p -P -c -C -W 来扩展 get 命令的功能
                 argparse --ignore-unknown e E j p P c C W -- $original_args
                 set -l args $argv
+                set -a args $common_args
 
                 if set -q _flag_c; or set -q _flag_C # 设置了 -c/-C 参数，查看证书信息，支持 certificate 和 secret 资源类型
                     if string match -rq '^cert' -- "$resource_type" # 证书类型资源
@@ -97,6 +116,8 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
                     if set -q cmd
                         if test -n "$_flag_n" # 追加 namespace
                             set -a cmd -n $_flag_n
+                        else if test -n "$KUBECTL_NAMESPACE"
+                            set -a cmd -n $KUBECTL_NAMESPACE
                         end
                         if set -q _flag_context # 追加 context
                             set -a cmd --context $_flag_context
@@ -188,7 +209,7 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
             end
     end
     # 没有命中任何自定义逻辑，透传给 kubecolor 处理
-    __kubecolor $original_args
+    __kubecolor $common_args $original_args
 end
 function __kubecolor
     if not test "$__kubectl_disable_color" = 1; and command -sq kubecolor
