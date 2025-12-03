@@ -21,6 +21,15 @@ local filetypes = {
     [".*ghostty/config"] = "toml",
     [".*aws/config"] = "toml",
     [".*aws/credentials"] = "toml",
+    [".*#.*"] = {
+      function(path, bufnr)
+        local basename = vim.fn.fnamemodify(path, ":t")
+        local actual_name = basename:match("^(.-)#")
+        if actual_name then
+          return vim.filetype.match({ filename = actual_name, buf = bufnr })
+        end
+      end,
+    },
   },
 }
 
