@@ -342,6 +342,9 @@ persistent-workspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9" ]
 [[on-window-detected]]
     if.app-id = 'com.apple.Preview'
     run = ['layout floating']
+[[on-window-detected]]
+    if.app-id = 'com.apple.ActivityMonitor'
+    run = ['layout floating']
 
 # 1: 非高频开发工具
 [[on-window-detected]]
