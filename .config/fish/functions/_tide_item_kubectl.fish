@@ -4,21 +4,18 @@ function _tide_item_kubectl
     end
 
     set kubectl (command -s kubectl) # 避免调用到 kubectl 函数
-    set context ($kubectl config view --minify --output 'jsonpath={.current-context}|{..namespace}' 2>/dev/null)
-    set parts (string split "|" $context)
-    set current_context "$parts[1]"
-    set current_namespace "$parts[2]"
 
-    if test -n "$KUBECTL_TKE_CLUSTER_ID"
-        if command -sq yq
-            set cluster_alias (command yq ".$KUBECTL_TKE_CLUSTER_ID" <$HOME/.kube/tke-cluster-alias.yaml)
-            if test $status -eq 0; and test "$cluster_alias" != null
-                set current_context "$KUBECTL_TKE_CLUSTER_ID($cluster_alias)"
-            end
+    set current_context "$KUBECTL_CONTEXT_NAME"
+    set current_namespace "$KUBECTL_NAMESPACE"
+    if test -z "$current_context"; or test -z "$current_namespace"
+        set context ($kubectl config view --minify --output 'jsonpath={.current-context}|{..namespace}' 2>/dev/null)
+        set parts (string split "|" $context)
+        if test -z "$current_context"
+            set current_context "$parts[1]"
         end
-    end
-    if test -n "$KUBECTL_NAMESPACE"
-        set current_namespace "$KUBECTL_NAMESPACE"
+        if test -z "$current_namespace"
+            set current_namespace "$parts[2]"
+        end
     end
 
     if test -n "$current_context"
