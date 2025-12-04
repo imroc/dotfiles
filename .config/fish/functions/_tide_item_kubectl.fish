@@ -5,20 +5,13 @@ function _tide_item_kubectl
 
     set kubectl (command -s kubectl) # 避免调用到 kubectl 函数
 
-    set current_context "$KUBECTL_CONTEXT_NAME"
-    set current_namespace "$KUBECTL_NAMESPACE"
-    if test -z "$current_context"; or test -z "$current_namespace"
-        set context ($kubectl config view --minify --output 'jsonpath={.current-context}|{..namespace}' 2>/dev/null)
-        set parts (string split "|" $context)
-        if test -z "$current_context"
-            set current_context "$parts[1]"
-        end
-        if test -z "$current_namespace"
-            set current_namespace "$parts[2]"
-        end
+    set current_context "$KUBECTL_CONTEXT"
+    if test -z "$current_context"
+        set current_context ($kubectl config current-context)
     end
 
     if test -n "$current_context"
+        set current_namespace ($kubectl config view --output jsonpath="{.contexts[?(@.name==\"$current_context\")].context.namespace}" 2>/dev/null)
         if test -n "$current_namespace"; and test "$current_namespace" != default
             set prompt "$current_context|$current_namespace"
         else

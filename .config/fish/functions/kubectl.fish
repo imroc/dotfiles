@@ -12,12 +12,8 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
 
     set common_args ()
     # 显式指定 KUBECTL_SERVER 环境变量，自动追加 --server 参数
-    if test -n "$KUBECTL_SERVER"
-        set -a common_args --server=$KUBECTL_SERVER
-    end
-    # 若没有显式指定命名空间且设置了 KUBECTL_NAMESPACE 环境变量，则以该环境变量为准
-    if test -z "$_flag_n"; and test -n "$KUBECTL_NAMESPACE"
-        set -a common_args --namespace=$KUBECTL_NAMESPACE
+    if test -n "$KUBECTL_CONTEXT"
+        set -a common_args --context=$KUBECTL_CONTEXT
     end
 
     # 包装、增强指定的子命令
