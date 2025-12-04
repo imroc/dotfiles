@@ -8,7 +8,6 @@ function _tide_item_kubectl
     set parts (string split "|" $context)
     set current_context "$parts[1]"
     set current_namespace "$parts[2]"
-    set current_context "$KUBECTL_TKE_CLUSTER_ID"
 
     if test -n "$KUBECTL_TKE_CLUSTER_ID"
         if command -sq yq

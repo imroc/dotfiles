@@ -1,3 +1,7 @@
-new_tab kubectl
+new_tab ianvs
 cd ~
-launch
+launch --env KUBECONFIG=$HOME/.kube/cls.yaml
+
+new_tab tke
+cd ~
+launch fish -C "kubie ctx tke"
