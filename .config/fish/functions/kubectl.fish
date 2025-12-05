@@ -207,9 +207,11 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
                     end
                 end
             end
+        case klock view-cert view-allocations image explore get-all # 透传 --namespace 和 --kubeconfig 给 kubectl 插件
+            __kubecolor $subcommand $common_args $original_args[2..-1]
     end
     # 没有命中任何自定义逻辑，透传给 kubecolor 处理
-    __kubecolor $original_args[1] $common_args $original_args[2..-1]
+    __kubecolor $original_args
 end
 function __kubecolor
     if not test "$__kubectl_disable_color" = 1; and command -sq kubecolor
