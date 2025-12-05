@@ -11,9 +11,13 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
         -- $original_args 2>/dev/null # 忽略解析错误，因为 argparse
 
     set common_args ()
-    # 显式指定 KUBECTL_SERVER 环境变量，自动追加 --server 参数
+    # 显式指定 KUBECTL_CONTEXT 环境变量，自动追加 --context 参数
     if test -n "$KUBECTL_CONTEXT"
         set -a common_args --context=$KUBECTL_CONTEXT
+    end
+    # 若没有显式指定命名空间且设置了 KUBECTL_NAMESPACE 环境变量，则以该环境变量为准
+    if test -z "$_flag_n"; and test -n "$KUBECTL_NAMESPACE"
+        set -a common_args --namespace=$KUBECTL_NAMESPACE
     end
 
     # 包装、增强指定的子命令
@@ -205,7 +209,7 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
             end
     end
     # 没有命中任何自定义逻辑，透传给 kubecolor 处理
-    __kubecolor $common_args $original_args
+    __kubecolor $original_args[1] $common_args $original_args[2..-1]
 end
 function __kubecolor
     if not test "$__kubectl_disable_color" = 1; and command -sq kubecolor

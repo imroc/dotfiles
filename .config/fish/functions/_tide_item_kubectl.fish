@@ -7,11 +7,19 @@ function _tide_item_kubectl
 
     set current_context "$KUBECTL_CONTEXT"
     if test -z "$current_context"
-        set current_context ($kubectl config current-context)
+        set -l context ($kubectl config current-context 2>/dev/null)
+        if test $status -eq 0; and test -n "$context"
+            set current_context $context
+            return
+        end
     end
 
     if test -n "$current_context"
-        set current_namespace ($kubectl config view --output jsonpath="{.contexts[?(@.name==\"$current_context\")].context.namespace}" 2>/dev/null)
+        if test -n "$KUBECTL_NAMESPACE"
+            set current_namespace "$KUBECTL_NAMESPACE"
+        else
+            set current_namespace ($kubectl config view --output jsonpath="{.contexts[?(@.name==\"$current_context\")].context.namespace}" 2>/dev/null)
+        end
         if test -n "$current_namespace"; and test "$current_namespace" != default
             set prompt "$current_context|$current_namespace"
         else
