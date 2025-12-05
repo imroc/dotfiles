@@ -104,8 +104,7 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
             if test -n "$resource_type" -a -n "$resource_name"
                 # 解析增加的自定义参数 -e -E -j -p -P -c -C -W 来扩展 get 命令的功能
                 argparse --ignore-unknown e E j p P c C W -- $original_args
-                set -l args $argv
-                set -a args $common_args
+                set -l args $common_args $argv
 
                 if set -q _flag_c; or set -q _flag_C # 设置了 -c/-C 参数，查看证书信息，支持 certificate 和 secret 资源类型
                     if string match -rq '^cert' -- "$resource_type" # 证书类型资源
@@ -207,8 +206,11 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
                     end
                 end
             end
+            command kubectl $common_args $argv
+            return
         case klock view-cert view-allocations image explore get-all # 透传 --namespace 和 --kubeconfig 给 kubectl 插件
             __kubecolor $subcommand $common_args $original_args[2..-1]
+            return
     end
     # 没有命中任何自定义逻辑，透传给 kubecolor 处理
     __kubecolor $original_args
