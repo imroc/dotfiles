@@ -10,7 +10,6 @@ function _tide_item_kubectl
         set -l context ($kubectl config current-context 2>/dev/null)
         if test $status -eq 0; and test -n "$context"
             set current_context $context
-            return
         end
     end
 
