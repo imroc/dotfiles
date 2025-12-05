@@ -206,7 +206,7 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
                     end
                 end
             end
-            command kubectl $common_args $argv
+            __kubecolor $common_args $original_args
             return
         case klock view-cert view-allocations image explore get-all # 透传 --namespace 和 --kubeconfig 给 kubectl 插件
             __kubecolor $subcommand $common_args $original_args[2..-1]
