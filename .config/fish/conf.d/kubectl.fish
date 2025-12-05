@@ -5,14 +5,14 @@ abbr --add sd0 'kubectl get deployments.v1.apps | grep -v NAME | awk \'{print $1
 abbr --add sd1 'kubectl get deployments.v1.apps | grep -v NAME | awk \'{print $1}\' | xargs -I {} kubectl scale deployments.v1.apps --replicas=1 {}'
 
 # kubectl plugins
-abbr --add kvc kubectl-view-cert
-abbr --add kc kubectl-kc
-abbr --add kk kubectl-klock
-abbr --add krew kubectl-krew
-abbr --add kf kubectl-fuzzy
-abbr --add kfd 'kubectl-fuzzy describe'
-abbr --add kxp kubectl-explore
-abbr --add kn kubectl-neat
+abbr --add kvc kubectl view-cert
+abbr --add kc kubectl kc
+abbr --add kk kubectl klock
+abbr --add krew kubectl krew
+abbr --add kf kubectl fuzzy
+abbr --add kfd 'kubectl fuzzy describe'
+abbr --add kxp kubectl explore
+abbr --add kn kubectl neat
 
 # kustomize 相关
 abbr --add kz kustomize
@@ -55,5 +55,5 @@ abbr --add kgzone 'kubectl get node -o custom-columns=NAME:.metadata.name,ZONE:"
 abbr --add kgimages 'kubectl get pod -ojsonpath=\'{range .items[*]}{range .spec.containers[*]}{"\n"}{.image}{end}{end}\' | sort | uniq'
 
 # watch
-abbr --add kw 'kubectl-klock pod -o wide'
-abbr --add kwn 'kubectl-klock node -o wide'
+abbr --add kw 'kubectl klock pod -o wide'
+abbr --add kwn 'kubectl klock node -o wide'
