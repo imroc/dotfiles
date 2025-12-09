@@ -7,7 +7,7 @@ return {
   },
   keys = {
     {
-      "<leader>tS",
+      "<leader>uR",
       function()
         require("smear_cursor").toggle()
       end,

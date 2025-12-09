@@ -5,7 +5,6 @@ return {
       spec = {
         { "<localleader>", "<cmd>WhichKey <localleader><cr>" },
         { "<localleader>h", group = "git hunk" },
-        { "<leader>t", group = "toggle/todo" },
         { "<leader>y", group = "yazi/yadm/yank" },
         { "<leader>k", group = "kube" },
         { "<leader>o", group = "open" },

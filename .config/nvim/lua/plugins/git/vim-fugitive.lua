@@ -2,7 +2,7 @@ return {
   "tpope/vim-fugitive",
   lazy = true,
   keys = {
-    { "<leader>tb", "<cmd>G blame<CR>", desc = "[P]Toggle All Git Blame Line" },
+    { "<leader>uB", "<cmd>G blame<CR>", desc = "[P]Toggle All Git Blame Line" },
     {
       "<leader>gc",
       function()

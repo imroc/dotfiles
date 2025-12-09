@@ -6,7 +6,7 @@ return {
   enabled = vim.g.simpler_scrollback ~= "deeznuts",
   keys = {
     {
-      "<leader>ts",
+      "<leader>u-",
       function()
         local result = ""
         if not loaded then

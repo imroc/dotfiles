@@ -57,67 +57,67 @@ return {
         },
       },
       keys = {
-        ["<localleader>t"] = {
+        ["<leader>t"] = {
           rhs = "",
           desc = "[P]todo",
           modes = { "n", "v" },
         },
-        ["<localleader>tt"] = {
+        ["<leader>tt"] = {
           rhs = "<cmd>Checkmate toggle<CR>",
           desc = "Toggle todo item",
           modes = { "n", "v" },
         },
-        ["<localleader>tc"] = {
+        ["<leader>tc"] = {
           rhs = "<cmd>Checkmate check<CR>",
           desc = "Set todo item as checked (done)",
           modes = { "n", "v" },
         },
-        ["<localleader>tu"] = {
+        ["<leader>tu"] = {
           rhs = "<cmd>Checkmate uncheck<CR>",
           desc = "Set todo item as unchecked (not done)",
           modes = { "n", "v" },
         },
-        ["<localleader>t="] = {
+        ["<leader>t="] = {
           rhs = "<cmd>Checkmate cycle_next<CR>",
           desc = "Cycle todo item(s) to the next state",
           modes = { "n", "v" },
         },
-        ["<localleader>t-"] = {
+        ["<leader>t-"] = {
           rhs = "<cmd>Checkmate cycle_previous<CR>",
           desc = "Cycle todo item(s) to the previous state",
           modes = { "n", "v" },
         },
-        ["<localleader>tn"] = {
+        ["<leader>tn"] = {
           rhs = "<cmd>Checkmate create<CR>",
           desc = "Create todo item",
           modes = { "n", "v" },
         },
-        ["<localleader>tr"] = {
+        ["<leader>tr"] = {
           rhs = "<cmd>Checkmate remove_all_metadata<CR>",
           desc = "Remove all metadata from a todo item",
           modes = { "n", "v" },
         },
-        ["<localleader>ta"] = {
+        ["<leader>ta"] = {
           rhs = "<cmd>Checkmate archive<CR>",
           desc = "Archive checked/completed todo items (move to bottom section)",
           modes = { "n" },
         },
-        ["<localleader>tf"] = {
+        ["<leader>tf"] = {
           rhs = "<cmd>Checkmate select_todo<CR>",
           desc = "Open a picker to select a todo from the current buffer",
           modes = { "n" },
         },
-        ["<localleader>tv"] = {
+        ["<leader>tv"] = {
           rhs = "<cmd>Checkmate metadata select_value<CR>",
           desc = "Update the value of a metadata tag under the cursor",
           modes = { "n" },
         },
-        ["<localleader>t]"] = {
+        ["<leader>t]"] = {
           rhs = "<cmd>Checkmate metadata jump_next<CR>",
           desc = "Move cursor to next metadata tag",
           modes = { "n" },
         },
-        ["<localleader>t["] = {
+        ["<leader>t["] = {
           rhs = "<cmd>Checkmate metadata jump_previous<CR>",
           desc = "Move cursor to previous metadata tag",
           modes = { "n" },

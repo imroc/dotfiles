@@ -2,7 +2,7 @@ return {
   "folke/trouble.nvim",
   keys = {
     {
-      "<leader>tt",
+      "<leader>uj",
       function()
         require("trouble").toggle("snacks")
       end,
