@@ -4,19 +4,39 @@
     "body": "if err != nil {\n\treturn ${1:err}\n}",
     "description": "Snippet for if err != nil"
   },
+  "iew": {
+    "prefix": "iew",
+    "body": "if err != nil {\n\treturn errors.WithStack(err)\n}",
+    "description": "Snippet for if err != nil and errors.WithStack"
+  },
   "iee": {
     "prefix": "iee",
     "body": "if err != nil {\n\treturn ${1:nil}, ${2:err}\n}",
     "description": "Snippet for if err != nil"
+  },
+  "ieew": {
+    "prefix": "ieew",
+    "body": "if err != nil {\n\treturn ${1:nil}, errors.WithStack(err)\n}",
+    "description": "Snippet for if err != nil and errors.WithStack(err)"
   },
   "ine": {
     "prefix": "ine",
     "body": "if err := $0; err != nil {\n\treturn err\n}",
     "description": "Snippet for if err := x; err != nil"
   },
+  "inew": {
+    "prefix": "inew",
+    "body": "if err := $0; err != nil {\n\treturn errors.WithStack(err)\n}",
+    "description": "Snippet for if err := x; err != nil; errors.WithStack"
+  },
   "inee": {
     "prefix": "inee",
     "body": "if err := $0; err != nil {\n\treturn nil, err\n}",
     "description": "Snippet for if err := x; err != nil"
+  },
+  "ineew": {
+    "prefix": "ineew",
+    "body": "if err := $0; err != nil {\n\treturn nil, errors.WithStack(err)\n}",
+    "description": "Snippet for if err := x; err != nil; errors.WithStack(err)"
   }
 }
