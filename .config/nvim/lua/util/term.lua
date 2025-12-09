@@ -20,4 +20,9 @@ M.run_script = function(script, opts)
   require("floaterm.api").send_cmd({ cmd = script, close_on_exit = opts.close_on_exit })
 end
 
+M.goto = function(dir)
+  require("floaterm").open()
+  require("floaterm.api").send_cmd({ cmd = "cd " .. dir })
+end
+
 return M

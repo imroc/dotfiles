@@ -56,7 +56,7 @@ function M.setup(keymaps)
 
       if keymaps.open_terminal then
         map_dir_handler(keymaps.open_terminal, function(dir)
-          term.toggle(dir)
+          term.goto(dir)
         end, "[P]Open Terminal", true)
       end
 
