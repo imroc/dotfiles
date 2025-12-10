@@ -1,3 +1,7 @@
+new_tab test
+cd ~
+launch
+
 new_tab ianvs
 cd ~
 launch --env KUBECONFIG=$HOME/.kube/cls.yaml
@@ -5,3 +9,15 @@ launch --env KUBECONFIG=$HOME/.kube/cls.yaml
 new_tab tke
 cd ~
 launch fish -C "kubie ctx tke"
+
+new_tab home
+cd ~
+launch fish -C "kubie ctx home"
+
+new_tab us
+cd ~
+launch fish -C "kubie ctx us"
+
+new_tab dev
+cd ~
+launch fish -C "kubie ctx dev"
