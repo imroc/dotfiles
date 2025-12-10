@@ -4,7 +4,7 @@ launch
 
 new_tab ianvs
 cd ~
-launch --env KUBECONFIG=$HOME/.kube/cls.yaml
+launch --env KUBECONFIG=$HOME/.kube/ianvs.yaml
 
 new_tab tke
 cd ~
