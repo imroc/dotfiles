@@ -23,3 +23,7 @@ set -gx EDITOR nvim
 
 # man 默认使用 neovim 打开
 set -gx MANPAGER 'nvim +Man!'
+
+if test "$TERM" = xterm-kitty
+    alias ssh="kitty +kitten ssh"
+end
