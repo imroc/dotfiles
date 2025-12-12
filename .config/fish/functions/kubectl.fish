@@ -25,11 +25,7 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
     switch $subcommand
         case ns
             set -l ns "$argv[2]"
-            if test -n "$ns"
-                set -gx KUBECTL_NAMESPACE "$ns"
-            else
-                command kubectl ns
-            end
+            command kubectl ns $ns
             return
         case clear # clear kubeconfig
             set -e KUBECONFIG
