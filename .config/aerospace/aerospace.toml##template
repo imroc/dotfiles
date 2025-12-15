@@ -307,7 +307,7 @@ persistent-workspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9" ]
     ctrl-s = [
       'mode main',
       'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
-      'exec-and-forget goto-kitty-session.sh katewa-server'
+      'exec-and-forget goto-kitty-session.sh kateway-server'
     ]
     ctrl-c = [
       'mode main',
