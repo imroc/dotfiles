@@ -1,7 +1,3 @@
 new_tab master
-cd ~/dev/kubernetes/master
-launch
-
-new_tab tke
-cd ~/dev/kubernetes/tke
+cd ~/dev/kubernetes
 launch
