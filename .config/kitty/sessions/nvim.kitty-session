@@ -1,0 +1,3 @@
+new_tab nvim
+cd ~/.config/nvim
+launch nvim init.lua

@@ -1,0 +1,3 @@
+new_tab zellij
+cd ~/.config/zellij
+launch nvim config.kdl

@@ -1,0 +1,3 @@
+new_tab aerospace
+cd ~/.config/aerospace
+launch nvim aerospace.toml##template

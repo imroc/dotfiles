@@ -1,0 +1,3 @@
+new_tab kitty
+cd ~/.config/kitty
+launch nvim kitty.conf
