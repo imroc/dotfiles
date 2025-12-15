@@ -1,3 +1,3 @@
 new_tab kateway-server
 cd ~/dev/tke/kateway-server/master
-launch nvim README.md
+launch

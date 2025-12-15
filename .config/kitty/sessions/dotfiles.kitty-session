@@ -1,26 +1,3 @@
-new_tab private
+new_tab dotfiles
 cd ~/dotfiles
 launch
-
-new_tab nvim
-cd ~/.config/nvim
-launch
-
-new_tab fish
-cd ~/.config/fish
-launch
-
-new_tab kitty
-cd ~/.config/kitty
-launch
-
-new_tab aerospace
-cd ~/.config/aerospace
-launch
-
-new_tab zellij
-cd ~/.config/zellij
-launch
-
-
-
