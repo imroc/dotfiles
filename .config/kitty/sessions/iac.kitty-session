@@ -1,7 +1,3 @@
 new_tab terraform-manifests
 cd ~/dev/terraform-manifests
 launch
-
-new_tab cmdline
-cd ~
-launch

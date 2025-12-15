@@ -294,6 +294,36 @@ persistent-workspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9" ]
       'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
       'exec-and-forget goto-kitty-session.sh fish'
     ]
+    ctrl-a = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
+      'exec-and-forget goto-kitty-session.sh addon-charts'
+    ]
+    ctrl-d = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
+      'exec-and-forget goto-kitty-session.sh dashboard'
+    ]
+    ctrl-s = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
+      'exec-and-forget goto-kitty-session.sh katewa-server'
+    ]
+    ctrl-c = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
+      'exec-and-forget goto-kitty-session.sh cilium'
+    ]
+    ctrl-r = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
+      'exec-and-forget goto-kitty-session.sh req'
+    ]
+    ctrl-e = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
+      'exec-and-forget goto-kitty-session.sh tke-extend-network-controller'
+    ]
 
 # 'service' binding mode declaration.
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes

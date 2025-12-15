@@ -1,15 +1,3 @@
 new_tab main
 cd ~/dev/tke/cilium/main
 launch
-
-new_tab CiliumOverlay
-cd ~/dev/tke/cilium/v1.10.19-tke
-launch
-
-new_tab DataPlaneV2
-cd ~/dev/tke/cilium/v1.13.11_tke
-launch
-
-new_tab DirectENI
-cd ~/dev/tke/cilium/1.9.5-tke
-launch
