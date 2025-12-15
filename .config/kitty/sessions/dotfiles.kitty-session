@@ -1,3 +1,7 @@
 new_tab dotfiles
 cd ~/dotfiles
 launch
+
+new_tab dotfiles-public
+cd ~/dotfiles-public
+launch
