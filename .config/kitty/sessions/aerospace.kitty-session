@@ -1,3 +1,3 @@
 new_tab aerospace
 cd ~/.config/aerospace
-launch
+launch fish -C 'nvim aerospace.toml##template'
