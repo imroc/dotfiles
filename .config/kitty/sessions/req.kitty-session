@@ -1,2 +1,3 @@
 new_tab req
 cd ~/dev/req/master
+launch fish -C 'nvim go.mod'
