@@ -63,7 +63,7 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
                     echo "no node selected"
                 end
             end
-            command kubectl node-shell $node $common_args
+            command kubectl node-shell $node $common_args $argv[3..-1]
             return
         case pod-shell # kubectl pod-shell 登录 pod，支持 fzf 补全 pod
             set -l pod_list (command kubectl get pod $common_args -o json)
