@@ -103,19 +103,11 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
 
                 if set -q _flag_c; or set -q _flag_C # 设置了 -c/-C 参数，查看证书信息，支持 certificate 和 secret 资源类型
                     if string match -rq '^cert' -- "$resource_type" # 证书类型资源
-                        set cmd cmctl status certificate $resource_name
+                        set cmd cmctl status certificate $common_args $resource_name
                     else if string match -rq '^secrets?$' -- "$resource_type" # secret 类型资源
-                        set cmd cmctl inspect secret $resource_name
+                        set cmd cmctl inspect secret $common_args $resource_name
                     end
                     if set -q cmd
-                        if test -n "$_flag_n" # 追加 namespace
-                            set -a cmd -n $_flag_n
-                        else if test -n "$KUBECTL_NAMESPACE"
-                            set -a cmd -n $KUBECTL_NAMESPACE
-                        end
-                        if set -q _flag_context # 追加 context
-                            set -a cmd --context $_flag_context
-                        end
                         if set -q _flag_C
                             command $cmd | nvim
                         else
@@ -167,10 +159,10 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
                     end
                     # watch 该资源的相关事件（根据资源是否是集群范围的来决定是否需要加 -A 参数）
                     if echo $output | jq -e '.metadata | has("namespace")' >/dev/null
-                        __kubecolor events --for="$resource_type/$resource_name" -w
+                        __kubecolor events $common_args --for="$resource_type/$resource_name" -w
                         return
                     else
-                        __kubecolor events --for="$resource_type/$resource_name" -w -A
+                        __kubecolor events $common_args --for="$resource_type/$resource_name" -w -A
                         return
                     end
                 else if set -q _flag_e # 设置了 -e 参数，将内容存到文件并用 nvim 打开（会启动 LSP，提供提示和补全的能力）
