@@ -13,11 +13,11 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
     set common_args ()
     # 显式指定 KUBECTL_CONTEXT 环境变量，自动追加 --context 参数
     if test -n "$KUBECTL_CONTEXT"
-        set -a common_args --context=$KUBECTL_CONTEXT
+        set -a common_args --context "$KUBECTL_CONTEXT"
     end
     # 若没有显式指定命名空间且设置了 KUBECTL_NAMESPACE 环境变量，则以该环境变量为准
     if test -z "$_flag_n"; and test -n "$KUBECTL_NAMESPACE"
-        set -a common_args --namespace=$KUBECTL_NAMESPACE
+        set -a common_args --namespace "$KUBECTL_NAMESPACE"
     end
 
     # 包装、增强指定的子命令
@@ -59,13 +59,12 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
             if test -z "$node" # 子命令后没有参数，列出所有节点并用 fzf 选择（不包含无法登录的虚拟节点）
                 # 利用 node-shell 登录节点
                 set node (command kubectl get node $common_args -o json | jq -r '.items[].metadata.name' | grep -v eklet- | fzf -0)
-                if test -n "$node"
-                    command kubectl node-shell $node
-                else
+                if test -z "$node"
                     echo "no node selected"
                 end
-                return
             end
+            command kubectl node-shell $node $common_args
+            return
         case pod-shell # kubectl pod-shell 登录 pod，支持 fzf 补全 pod
             set -l pod_list (command kubectl get pod $common_args -o json)
             set -l pod $argv[2]
