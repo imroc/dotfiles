@@ -199,7 +199,7 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
             __kubecolor $original_args
             return $status
         case '*' # 默认透传全局参数给子命令（包括 kubectl 插件）
-            __kubecolor $original_args[1] $common_args $original_args[2..-1]
+            __kubecolor $original_args $common_args
             return $status
     end
 end
