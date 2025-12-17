@@ -1,4 +1,4 @@
-function helm --wraps=helm --description "wrap helm with extra advanced feature"
+function k9s --wraps=k9s --description "wrap k9s with extra advanced feature"
     set original_args $argv
     argparse --ignore-unknown \
         "n/namespace=" "context=" \
@@ -13,8 +13,8 @@ function helm --wraps=helm --description "wrap helm with extra advanced feature"
     end
 
     if test -z "$common_args"
-        command helm $original_args
+        command k9s $original_args
     else
-        command helm $common_args $argv
+        command k9s $common_args $argv
     end
 end
