@@ -86,6 +86,7 @@ create_workspace_bracket_for_monitor() {
 sketchybar --add event aerospace_workspace_change
 sketchybar --add event aerospace_service_mode_enabled_changed
 sketchybar --add event aerospace_app_mode_enabled_changed
+sketchybar --add event aerospace_kitty_mode_enabled_changed
 
 monitor_ids=($(aerospace list-monitors | awk '{print $1}'))
 
