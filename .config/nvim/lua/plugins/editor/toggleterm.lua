@@ -19,6 +19,12 @@ return {
   },
   keys = {
     {
+      "<C-t>",
+      mode = { "n", "t" },
+      "<cmd>ToggleTerm<cr>",
+      desc = "[P]Toggle Terminal",
+    },
+    {
       "<leader>oh",
       "<cmd>ToggleTerm direction=horizontal<cr>",
       desc = "[P]Open Horizontal Terminal",
