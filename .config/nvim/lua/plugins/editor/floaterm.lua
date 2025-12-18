@@ -7,7 +7,7 @@ return {
     {
       "<C-t>",
       "<cmd>FloatermToggle<cr>",
-      mode = { "n", "v", "t" },
+      mode = { "n", "v", "t", "o", "x", "s" },
       desc = "[P] Toggle Floaterm",
     },
   },
