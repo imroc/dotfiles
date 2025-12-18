@@ -1,3 +1,0 @@
-new_tab fish
-cd ~/.config/fish
-launch fish -C 'nvim conf.d/common.fish'

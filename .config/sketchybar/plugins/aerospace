@@ -19,6 +19,14 @@ elif [ "$SENDER" = "aerospace_app_mode_enabled_changed" ]; then
     sketchybar --set workspaces_app_mode \
       label.drawing=off
   fi
+elif [ "$SENDER" = "aerospace_kitty_mode_enabled_changed" ]; then
+  if [ "$AEROSPACE_KITTY_MODE_ENABLED" = true ]; then
+    sketchybar --set workspaces_kitty_mode \
+      label.drawing=on
+  else
+    sketchybar --set workspaces_kitty_mode \
+      label.drawing=off
+  fi
 elif [ "$SENDER" = "aerospace_workspace_change" ]; then
   if [ "$1" = "$FOCUSED_WORKSPACE" ]; then
     sketchybar --set $NAME \

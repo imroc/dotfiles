@@ -35,7 +35,7 @@ create_workspace_bracket_for_monitor() {
       label.font.size="$BACKGROUND_HEIGHT" \
       label.width="15" \
       label="|"
-  else # 最后一个显示器，不画分割线，加一个默认隐藏的 service/app mode 标识，激活 service/app mode 时才显示
+  else # 最后一个显示器，不画分割线，加一个默认隐藏的 service/app/kitty mode 标识，激活 service/app mode 时才显示
     sketchybar --add item workspaces_service_mode left \
       --subscribe workspaces_service_mode aerospace_service_mode_enabled_changed \
       --set workspaces_service_mode \
@@ -57,6 +57,17 @@ create_workspace_bracket_for_monitor() {
       label="[a]" \
       label.padding_right=8 \
       script="$PLUGIN_DIR/aerospace $AEROSPACE_APP_MODE_ENABLED"
+
+    sketchybar --add item workspaces_kitty_mode left \
+      --subscribe workspaces_kitty_mode aerospace_kitty_mode_enabled_changed \
+      --set workspaces_kitty_mode \
+      background.drawing=off \
+      label.drawing=off \
+      label.highlight=on \
+      label.font="$LABEL_HIGHLIGHT_FONT" \
+      label="[k]" \
+      label.padding_right=8 \
+      script="$PLUGIN_DIR/aerospace $AEROSPACE_KITTY_MODE_ENABLED"
 
     sketchybar --add item workspaces_spacer_right left \
       --set workspaces_spacer_right \

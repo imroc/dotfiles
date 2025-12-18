@@ -1,3 +1,0 @@
-new_tab zellij
-cd ~/.config/zellij
-launch fish -C 'nvim config.kdl'
