@@ -379,7 +379,7 @@ M.create_autocmd = function(opts)
         if curr_entry then
           local path = curr_entry.path
           local parent_dir = vim.fn.fnamemodify(path, ":h") -- Get the parent directory
-          require("util.term").toggle(parent_dir)
+          require("util.term").goto(parent_dir)
         end
       end, { buffer = buf_id, noremap = true, silent = true, desc = "[P]Open Terminal" })
 

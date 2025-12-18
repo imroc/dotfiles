@@ -15,14 +15,17 @@ M.toggle = function(cwd)
 end
 
 ---@param script string
----@param opts? table
-M.run_script = function(script, opts)
-  require("floaterm.api").send_cmd({ cmd = script, close_on_exit = opts.close_on_exit })
+M.run_script = function(script)
+  local last_focused = require("toggleterm.terminal").get_last_focused()
+  if last_focused then
+    vim.cmd(last_focused.id .. 'TermExec cmd="' .. script .. '"')
+  else
+    vim.cmd('TermExec cmd="' .. script .. '"')
+  end
 end
 
 M.goto = function(dir)
-  require("floaterm").open()
-  require("floaterm.api").send_cmd({ cmd = "cd " .. dir })
+  return M.run_script("cd " .. dir)
 end
 
 return M

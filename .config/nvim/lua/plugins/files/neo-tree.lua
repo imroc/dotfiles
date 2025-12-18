@@ -50,7 +50,7 @@ return {
           require("util.zellij").open_float(get_node_dir(state))
         end,
         go_terminal = function(state)
-          require("util.term").toggle(get_node_dir(state))
+          require("util.term").goto(get_node_dir(state))
         end,
       },
       window = {
@@ -90,7 +90,7 @@ return {
           },
           ["gt"] = {
             function(state)
-              require("util.term").toggle(get_node_dir(state))
+              require("util.term").goto(get_node_dir(state))
             end,
             desc = "Open Terminal",
           },
