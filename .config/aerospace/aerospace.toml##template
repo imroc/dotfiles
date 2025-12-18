@@ -181,7 +181,7 @@ persistent-workspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9" ]
     ]
     ctrl-semicolon = [
       'mode kitty',
-      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=true',
+      'exec-and-forget sketchybar --trigger aerospace_kitty_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=true',
     ]
 
 [mode.kitty.binding]
