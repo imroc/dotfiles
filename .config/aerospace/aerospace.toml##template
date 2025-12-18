@@ -187,85 +187,85 @@ persistent-workspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9" ]
 [mode.kitty.binding]
     esc = [
       'mode main',
-      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
+      'exec-and-forget sketchybar --trigger aerospace_kitty_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
     ]
     enter = [
       'mode main',
-      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
+      'exec-and-forget sketchybar --trigger aerospace_kitty_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
     ]
     n = [
       'mode main',
-      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
+      'exec-and-forget sketchybar --trigger aerospace_kitty_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
       'exec-and-forget goto-kitty-session.sh note'
     ]
     d = [
       'mode main',
-      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
+      'exec-and-forget sketchybar --trigger aerospace_kitty_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
       'exec-and-forget goto-kitty-session.sh dotfiles'
     ]
     c = [
       'mode main',
-      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
+      'exec-and-forget sketchybar --trigger aerospace_kitty_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
       'exec-and-forget goto-kitty-session.sh coding'
     ]
     h = [
       'mode main',
-      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
+      'exec-and-forget sketchybar --trigger aerospace_kitty_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
       'exec-and-forget goto-kitty-session.sh home'
     ]
     w = [
       'mode main',
-      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
+      'exec-and-forget sketchybar --trigger aerospace_kitty_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
       'exec-and-forget goto-kitty-session.sh website'
     ]
     i = [
       'mode main',
-      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
+      'exec-and-forget sketchybar --trigger aerospace_kitty_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
       'exec-and-forget goto-kitty-session.sh iac'
     ]
     t = [
       'mode main',
-      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
+      'exec-and-forget sketchybar --trigger aerospace_kitty_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
       'exec-and-forget goto-kitty-session.sh troubleshooting'
     ]
     y = [
       'mode main',
-      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
+      'exec-and-forget sketchybar --trigger aerospace_kitty_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
       'exec-and-forget goto-kitty-session.sh yamls'
     ]
     ctrl-a = [
       'mode main',
-      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
+      'exec-and-forget sketchybar --trigger aerospace_kitty_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
       'exec-and-forget goto-kitty-session.sh addon-charts'
     ]
     ctrl-d = [
       'mode main',
-      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
+      'exec-and-forget sketchybar --trigger aerospace_kitty_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
       'exec-and-forget goto-kitty-session.sh dashboard'
     ]
     ctrl-s = [
       'mode main',
-      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
+      'exec-and-forget sketchybar --trigger aerospace_kitty_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
       'exec-and-forget goto-kitty-session.sh kateway-server'
     ]
     ctrl-c = [
       'mode main',
-      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
+      'exec-and-forget sketchybar --trigger aerospace_kitty_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
       'exec-and-forget goto-kitty-session.sh cilium'
     ]
     ctrl-r = [
       'mode main',
-      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
+      'exec-and-forget sketchybar --trigger aerospace_kitty_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
       'exec-and-forget goto-kitty-session.sh req'
     ]
     ctrl-e = [
       'mode main',
-      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
+      'exec-and-forget sketchybar --trigger aerospace_kitty_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
       'exec-and-forget goto-kitty-session.sh tke-extend-network-controller'
     ]
     ctrl-k = [
       'mode main',
-      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
+      'exec-and-forget sketchybar --trigger aerospace_kitty_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
       'exec-and-forget goto-kitty-session.sh kubernetes'
     ]
 
