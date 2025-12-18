@@ -17,5 +17,22 @@ return {
     open_mapping = [[<c-t>]],
     direction = "float",
   },
+  keys = {
+    {
+      "<leader>oh",
+      "<cmd>ToggleTerm direction=horizontal<cr>",
+      desc = "[P]Open Horizontal Terminal",
+    },
+    {
+      "<leader>ov",
+      "<cmd>ToggleTerm direction=vertical<cr>",
+      desc = "[P]Open Vertical Terminal",
+    },
+    {
+      "<leader>of",
+      "<cmd>ToggleTerm direction=float<cr>",
+      desc = "[P]Open Float Terminal",
+    },
+  },
   config = true,
 }

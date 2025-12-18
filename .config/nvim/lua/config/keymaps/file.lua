@@ -16,7 +16,7 @@ vim.keymap.set("n", "<leader>yZ", function()
   require("util.zellij").run({ "yazi", require("util.buffer").current_dir() }, { name = "yazi" })
 end, { desc = "[P]Open Yazi (Zellij)" })
 
-vim.keymap.set("n", "<leader>ov", function()
+vim.keymap.set("n", "<leader>oc", function()
   job.run("code", { args = { "-r", LazyVim.root() } })
 end, { desc = "[P]Open VSCode (Root Dir)" })
 
