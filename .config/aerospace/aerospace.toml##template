@@ -493,9 +493,9 @@ persistent-workspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9" ]
     if.app-id = 'com.tinyspeck.slackmacgap' # Slack
     run = ['move-node-to-workspace 5']
 
-# 6: 其它（不常用）
+# 6: AI 聊天
 [[on-window-detected]]
-    if.app-id = 'com.omnigroup.OmniGraffle7'
+    if.app-id = 'com.tencent.yuanbao'
     run = ['move-node-to-workspace 6']
 
 # 7: 媒体
@@ -527,7 +527,7 @@ persistent-workspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9" ]
     if.app-id = 'com.electron.lark.iron'   # 飞书会议
     run = ['move-node-to-workspace 8']
 
-# 9: AI 聊天
+# 9: 其它（不常用）
 [[on-window-detected]]
-    if.app-id = 'com.tencent.yuanbao'
+    if.app-id = 'com.omnigroup.OmniGraffle7'
     run = ['move-node-to-workspace 9']
