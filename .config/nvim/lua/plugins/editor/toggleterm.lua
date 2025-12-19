@@ -1,10 +1,19 @@
 function _G.set_terminal_keymaps()
   local opts = { buffer = 0 }
-  vim.keymap.set("t", "<C-S-/>", [[<C-\><C-n>]], opts)
+  vim.keymap.set("t", "<M-/>", [[<C-\><C-n>]], opts)
 end
 
 -- if you only want these mappings for toggle term use term://*toggleterm#* instead
 vim.cmd("autocmd! TermOpen term://* lua set_terminal_keymaps()")
+
+local function rename_terminal()
+  local focused_id = require("toggleterm.terminal").get_focused_id()
+  if focused_id then
+    vim.cmd(focused_id .. "ToggleTermSetName")
+  else
+    vim.cmd("ToggleTermSetName")
+  end
+end
 
 return {
   "akinsho/toggleterm.nvim",
@@ -58,20 +67,20 @@ return {
       desc = "[P]New Terminal",
     },
     {
-      "<C-n>",
+      "<M-n>",
+      mode = "t",
       "<cmd>TermNew<cr>",
       desc = "[P]New Terminal",
     },
     {
       "<leader>tr",
-      function()
-        local focused_id = require("toggleterm.terminal").get_focused_id()
-        if focused_id then
-          vim.cmd(focused_id .. "ToggleTermSetName")
-        else
-          vim.cmd("ToggleTermSetName")
-        end
-      end,
+      rename_terminal,
+      desc = "[P]Rename Terminal",
+    },
+    {
+      "<M-r>",
+      mode = { "n", "t" },
+      rename_terminal,
       desc = "[P]Rename Terminal",
     },
   },
