@@ -48,12 +48,8 @@ return {
       desc = "[P]Open Float Terminal",
     },
     {
-      "<leader>ts",
-      "<cmd>TermSelect<cr>",
-      desc = "[P]Select Terminal",
-    },
-    {
       "<C-t>",
+      mode = { "n", "t" },
       "<cmd>TermSelect<cr>",
       desc = "[P]Select Terminal",
     },
@@ -63,8 +59,20 @@ return {
       desc = "[P]New Terminal",
     },
     {
+      "<C-n>",
+      "<cmd>TermNew<cr>",
+      desc = "[P]New Terminal",
+    },
+    {
       "<leader>tr",
-      "<cmd>ToggleTermSetName<cr>",
+      function()
+        local focused_id = require("toggleterm.terminal").get_focused_id()
+        if focused_id then
+          vim.cmd(focused_id .. "ToggleTermSetName")
+        else
+          vim.cmd("ToggleTermSetName")
+        end
+      end,
       desc = "[P]Rename Terminal",
     },
   },
