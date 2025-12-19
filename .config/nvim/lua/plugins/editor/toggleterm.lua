@@ -22,7 +22,7 @@ return {
   },
   keys = {
     {
-      "<C-t>",
+      "<C-/>",
       mode = { "n", "t" },
       "<cmd>ToggleTerm<cr>",
       desc = "[P]Toggle Terminal",
@@ -49,6 +49,11 @@ return {
     },
     {
       "<leader>ts",
+      "<cmd>TermSelect<cr>",
+      desc = "[P]Select Terminal",
+    },
+    {
+      "<C-t>",
       "<cmd>TermSelect<cr>",
       desc = "[P]Select Terminal",
     },
