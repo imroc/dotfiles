@@ -1,10 +1,7 @@
 function _G.set_terminal_keymaps()
   local opts = { buffer = 0 }
   vim.keymap.set("t", "<esc>", [[<C-\><C-n>]], opts)
-  vim.keymap.set("t", "<C-h>", [[<Cmd>wincmd h<CR>]], opts)
-  vim.keymap.set("t", "<C-j>", [[<Cmd>wincmd j<CR>]], opts)
-  vim.keymap.set("t", "<C-k>", [[<Cmd>wincmd k<CR>]], opts)
-  vim.keymap.set("t", "<C-l>", [[<Cmd>wincmd l<CR>]], opts)
+  vim.keymap.set("t", "<C-[>", [[<C-\><C-n>]], opts)
 end
 
 -- if you only want these mappings for toggle term use term://*toggleterm#* instead
@@ -12,7 +9,6 @@ vim.cmd("autocmd! TermOpen term://* lua set_terminal_keymaps()")
 
 return {
   "akinsho/toggleterm.nvim",
-  version = "*",
   opts = {
     open_mapping = [[<c-t>]],
     direction = "float",
@@ -32,19 +28,39 @@ return {
       desc = "[P]Toggle Terminal",
     },
     {
-      "<leader>oh",
+      "<leader>t",
+      "",
+      desc = "[P]Terminal",
+    },
+    {
+      "<leader>tj",
       "<cmd>ToggleTerm direction=horizontal<cr>",
       desc = "[P]Open Horizontal Terminal",
     },
     {
-      "<leader>ov",
+      "<leader>tl",
       "<cmd>ToggleTerm direction=vertical<cr>",
       desc = "[P]Open Vertical Terminal",
     },
     {
-      "<leader>of",
+      "<leader>tt",
       "<cmd>ToggleTerm direction=float<cr>",
       desc = "[P]Open Float Terminal",
+    },
+    {
+      "<leader>ts",
+      "<cmd>TermSelect<cr>",
+      desc = "[P]Select Terminal",
+    },
+    {
+      "<leader>tn",
+      "<cmd>TermNew<cr>",
+      desc = "[P]New Terminal",
+    },
+    {
+      "<leader>tr",
+      "<cmd>ToggleTermSetName<cr>",
+      desc = "[P]Rename Terminal",
     },
   },
   config = true,
