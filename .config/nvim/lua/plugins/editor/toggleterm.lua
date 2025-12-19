@@ -10,7 +10,7 @@ vim.cmd("autocmd! TermOpen term://* lua set_terminal_keymaps()")
 return {
   "akinsho/toggleterm.nvim",
   opts = {
-    open_mapping = [[<c-t>]],
+    open_mapping = [[<C-/>]],
     direction = "float",
     size = function(term)
       if term.direction == "horizontal" then
