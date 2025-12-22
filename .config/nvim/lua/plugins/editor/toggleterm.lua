@@ -1,6 +1,6 @@
 function _G.set_terminal_keymaps()
   local opts = { buffer = 0 }
-  vim.keymap.set("t", "<M-/>", [[<C-\><C-n>]], opts)
+  vim.keymap.set("t", "<M-.>", [[<C-\><C-n>]], opts)
 end
 
 -- if you only want these mappings for toggle term use term://*toggleterm#* instead
@@ -18,7 +18,7 @@ end
 return {
   "akinsho/toggleterm.nvim",
   opts = {
-    open_mapping = [[<C-/>]],
+    open_mapping = [[<C-t>]],
     direction = "float",
     auto_scroll = false,
     size = function(term)
@@ -31,7 +31,7 @@ return {
   },
   keys = {
     {
-      "<C-/>",
+      "<C-t>",
       mode = { "n", "t" },
       "<cmd>ToggleTerm<cr>",
       desc = "[P]Toggle Terminal",
@@ -52,13 +52,12 @@ return {
       desc = "[P]Open Vertical Terminal",
     },
     {
-      "<leader>tt",
+      "<leader>tf",
       "<cmd>ToggleTerm direction=float<cr>",
       desc = "[P]Open Float Terminal",
     },
     {
-      "<C-t>",
-      mode = { "n", "t" },
+      "<leader>tt",
       "<cmd>TermSelect<cr>",
       desc = "[P]Select Terminal",
     },
@@ -68,19 +67,7 @@ return {
       desc = "[P]New Terminal",
     },
     {
-      "<M-n>",
-      mode = "t",
-      "<cmd>TermNew<cr>",
-      desc = "[P]New Terminal",
-    },
-    {
       "<leader>tr",
-      rename_terminal,
-      desc = "[P]Rename Terminal",
-    },
-    {
-      "<M-r>",
-      mode = { "n", "t" },
       rename_terminal,
       desc = "[P]Rename Terminal",
     },
