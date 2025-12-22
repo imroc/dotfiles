@@ -1,6 +1,6 @@
 function _G.set_terminal_keymaps()
   local opts = { buffer = 0 }
-  vim.keymap.set("t", "<M-.>", [[<C-\><C-n>]], opts)
+  vim.keymap.set("t", "<C-[>", [[<C-\><C-n>]], opts)
 end
 
 -- if you only want these mappings for toggle term use term://*toggleterm#* instead
@@ -58,6 +58,12 @@ return {
     },
     {
       "<leader>tt",
+      "<cmd>TermSelect<cr>",
+      desc = "[P]Select Terminal",
+    },
+    {
+      "<C-/>",
+      mode = { "n", "t" },
       "<cmd>TermSelect<cr>",
       desc = "[P]Select Terminal",
     },
