@@ -1,10 +1,10 @@
 ---@diagnostic disable: undefined-global
 
-if vim.g.simpler_scrollback == "deeznuts" then
-  -- yank and quit when using my scrollback config
-  vim.keymap.set({ "n", "v" }, "y", [["+y<cmd>q!<cr>]], { desc = "[P]Yank to system clipboard + Quit" })
-  -- vim.keymap.set({ "n", "v" }, "q", "<cmd>q!<cr>", { desc = "[P]Quit" })
-end
+-- if vim.g.simpler_scrollback == "deeznuts" then
+--   -- yank and quit when using my scrollback config
+--   vim.keymap.set({ "n", "v" }, "y", [["+y<cmd>q!<cr>]], { desc = "[P]Yank to system clipboard + Quit" })
+--   -- vim.keymap.set({ "n", "v" }, "q", "<cmd>q!<cr>", { desc = "[P]Quit" })
+-- end
 
 -- quit
 vim.keymap.set({ "n", "v" }, "<leader>.", "<cmd>qa<cr>", { desc = "[P]Quit all" })
