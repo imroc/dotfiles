@@ -4,7 +4,7 @@ abbr --add duh 'du -sch * .*'
 
 abbr --add typora "open -a typora"
 
-abbr --add cb codebuddy-cli
+abbr --add gi gemini-internal
 abbr --add tf terraform
 abbr --add ta "terraform apply -auto-approve"
 abbr --add td "terraform apply -destroy -auto-approve"
