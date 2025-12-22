@@ -4,10 +4,13 @@ function cilium --wraps=cilium --description "wrap cilium with extra advanced fe
     set subcommand "$argv[1]"
     switch $subcommand
         case login
-            set -l node (kubectl get node -o json | jq -r '.items[].metadata.name' | grep -v eklet- | fzf -0)
+            set -l node "$argv[2]"
             if test -z "$node"
-                echo "no node selected"
-                return
+                set node (kubectl get node -o json | jq -r '.items[].metadata.name' | grep -v eklet- | fzf -0)
+                if test -z "$node"
+                    echo "no node selected"
+                    return
+                end
             end
             set -l pod $(kubectl --namespace=kube-system get pod --field-selector spec.nodeName=$node -l k8s-app=cilium -o json | jq -r '.items[0].metadata.name')
             kubectl --namespace=kube-system exec -it $pod -- bash

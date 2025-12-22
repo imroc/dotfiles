@@ -20,6 +20,7 @@ return {
   opts = {
     open_mapping = [[<C-/>]],
     direction = "float",
+    auto_scroll = false,
     size = function(term)
       if term.direction == "horizontal" then
         return vim.o.lines * 0.4
