@@ -77,6 +77,12 @@ return {
       rename_terminal,
       desc = "[P]Rename Terminal",
     },
+    {
+      "<C-,>",
+      mode = { "n", "t" },
+      rename_terminal,
+      desc = "[P]Rename Terminal",
+    },
   },
   config = true,
 }
