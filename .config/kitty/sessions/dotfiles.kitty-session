@@ -5,3 +5,5 @@ launch
 new_tab dotfiles-public
 cd ~/dotfiles-public
 launch
+cd ~/.config
+launch
