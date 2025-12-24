@@ -3,7 +3,6 @@ return {
   lazy = true,
   cmd = { "KittyScrollbackGenerateKittens", "KittyScrollbackCheckHealth", "KittyScrollbackGenerateCommandLineEditing" },
   event = { "User KittyScrollbackLaunch" },
-  config = function()
-    require("kitty-scrollback").setup()
-  end,
+  opts = {},
+  config = true,
 }
