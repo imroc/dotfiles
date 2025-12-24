@@ -13,6 +13,10 @@ function cilium --wraps=cilium --description "wrap cilium with extra advanced fe
                 end
             end
             set -l pod (kubectl --namespace=kube-system get pod --field-selector spec.nodeName=$node -l k8s-app=cilium -o json | jq -r '.items[0].metadata.name')
+            if test -z "$pod"
+                echo "cilium pod not found on node $node"
+                return 1
+            end
             kubectl --namespace=kube-system exec -it $pod -- bash
             return
     end
