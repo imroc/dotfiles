@@ -30,13 +30,12 @@ abbr --add kgmh 'kubectl get mutatingwebhookconfigurations'
 # 获取 ingress 的 conditon
 abbr --add kgingc 'kubectl get ingress -o jsonpath='\''{.metadata.annotations.ingress\.cloud\.tencent\.com\/status\.conditions}'\'''
 
-# kubie 相关
 abbr --add kx "kubie ctx"
-abbr --add ks "kubie ns"
-abbr --add kss "kubie ns kube-system"
+abbr --add ks "kubectl ns"
+abbr --add kss "kubectl ns kube-system"
+abbr --add ksd "kubectl ns default"
+abbr --add kst "kubectl ns test"
 
-abbr --add kns "kubectl ns"
-abbr --add knss "kubectl ns kube-system"
 abbr --add kgc "kubectl get pods -o jsonpath='{.spec.containers[*].name}'"
 abbr --add kno "kubectl node-shell"
 abbr --add kpo "kubectl pod-shell"
