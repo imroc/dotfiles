@@ -23,22 +23,22 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
     # 包装、增强指定的子命令
     set subcommand "$argv[1]"
     switch $subcommand
-        case switch-ns
+        case ns
             __switch_ns $argv[2..-1]
         case clear # clear kubeconfig
-            __clear_kubeconfig_env
+            __clear_kube_env
             return
         case color
             if not command -sq kubecolor
-                echo "kubecolor not installed"
+                echo "kubecolor 未安装"
                 return
             end
             if set -q __kubectl_disable_color
                 set -e __kubectl_disable_color
-                echo "color enabled"
+                echo 彩色已启用
             else
                 set -g __kubectl_disable_color 1
-                echo "color disabled"
+                echo 彩色已禁用
             end
             return
         case node-shell # kubectl node-shell 登录节点，支持 fzf 补全节点
@@ -59,13 +59,13 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
                 # 利用 node-shell 登录节点
                 set pod (printf "%s" "$pod_list" | jq -r '.items[].metadata.name' | fzf --prompt "select pod: " -0)
                 if test -z "$pod"
-                    echo "no pod selected"
+                    echo "没有选择 Pod"
                     return
                 end
             end
             set -l container (printf "%s" "$pod_list" | jq -r ".items[] | select(.metadata.name == \"$pod\") | .status.containerStatuses[]?.name" | fzf --prompt "select container: " -0 -1)
             if test -z "$container"
-                echo "no container selected"
+                echo 没有选择容器
                 return
             end
             set -l shell (printf "/bin/bash\n/bin/sh\nfish\nzsh" | fzf --prompt "select shell: ")
@@ -215,6 +215,10 @@ end
 
 function __switch_ns --description "switch namespace"
     set -l ns "$argv[1]"
+    if set -q KUBIE_ACTIVE
+        kubie ns $argv[2..-1]
+        return
+    end
     if test -z "$ns"
         set ns (kubectl get namespaces -o json | jq -r '.items[].metadata.name' | fzf --prompt="选择 Namespace: " --height=40% --reverse)
         if test -z "$ns"
@@ -234,11 +238,21 @@ function __switch_ns --description "switch namespace"
     echo "namespace 已切换到 $ns"
 end
 
-function __clear_kubeconfig_env --description "switch namespace"
+function __clear_kube_env --description "clear env"
     if set -q KUBIE_ACTIVE
         echo "在 kubie shell 中，无法清理 KUBECONFIG 环境变量 "
         return 1
     end
-    set -e KUBECONFIG
-    echo "KUBECONFIG has been unset"
+    if set -q KUBECONFIG
+        set -e KUBECONFIG
+        echo "KUBECONFIG has been unset"
+    end
+    if set -q KUBECTL_CONTEXT
+        set -e KUBECTL_CONTEXT
+        echo "KUBECTL_CONTEXT has been unset"
+    end
+    if set -q KUBECTL_NAMESPACE
+        set -e KUBECTL_NAMESPACE
+        echo "KUBECTL_NAMESPACE has been unset"
+    end
 end
