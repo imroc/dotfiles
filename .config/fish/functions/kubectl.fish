@@ -22,7 +22,7 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
             __login_pod $argv[2..-1]
             return
         case get # Enhanced kubectl get: supports bat for pretty output, neovim for yaml, fx for json, get configmap/secret file content, view certificate info, watch resource events, etc.
-            __kubectl_get $argv[2..-1]
+            __kubectl_get $argv
             return
         case ianvs ctx neat krew # kubectl plugins that don't need global arguments passed through (to avoid errors from unsupported flags)
             __kubecolor $argv
@@ -222,14 +222,14 @@ function __kubectl_get --description "Override kubectl get"
             end
             return
         else if set -q _flag_p; or set -q _flag_P # -p/-P flag set, select filename from configmap/secret to open. -p prints content to terminal; -P opens content in neovim.
-            set -l filename (command kubectl get $args -o json | jq -r '.data | keys | .[]' | fzf -1 -0)
+            set -l filename (command kubectl $args -o json | jq -r '.data | keys | .[]' | fzf -1 -0)
             if test -z "$filename" # Empty configmap/secret, return directly
                 echo "empty configmap or secret"
                 return
             end
             set -l escaped_filename (string replace -a -- '.' '\\.' $filename)
             set -a args -o jsonpath="{.data.$escaped_filename}"
-            set -l result (command kubectl get $args | string collect)
+            set -l result (command kubectl $args | string collect)
             if not test $status -eq 0
                 return
             end
@@ -253,10 +253,10 @@ function __kubectl_get --description "Override kubectl get"
             printf "%s" "$result"
             return
         else if set -q _flag_j # -j flag set, output in json format and open with fx
-            command kubectl get $args -o json | fx
+            command kubectl $args -o json | fx
             return
         else if set -q _flag_W # -W flag set, watch events
-            command kubectl get $args -o json 2>&1 | read -z output
+            command kubectl $args -o json 2>&1 | read -z output
             if not test $status -eq 0
                 echo "Error fetching resource: $output"
                 return
@@ -276,7 +276,7 @@ function __kubectl_get --description "Override kubectl get"
                 set output_format yaml
             end
             set -l filename /tmp/$resource_type-$resource_name.$output_format
-            command kubectl get $args >$filename && nvim $filename && rm $filename
+            command kubectl $args >$filename && nvim $filename && rm $filename
             return
         else if set -q _flag_E # -E flag set, clean content with kubectl neat, save to file and open with nvim (enables LSP for hints and completion)
             set -l output_format $_flag_o
@@ -285,19 +285,19 @@ function __kubectl_get --description "Override kubectl get"
                 set output_format yaml
             end
             set -l filename /tmp/$resource_type-$resource_name.$output_format
-            command kubectl get $args | command kubectl neat >$filename && nvim $filename && rm $filename
+            command kubectl $args | command kubectl neat >$filename && nvim $filename && rm $filename
             return
         end
         # No custom arguments set for kubectl get, try to render content with bat based on "-o/--output" format
         if not test "$__kubectl_disable_color" = 1; and test -n "$_flag_o"
             switch $_flag_o
                 case yaml json
-                    command kubectl get $args | bat --language "$_flag_o"
+                    command kubectl $args | bat --language "$_flag_o"
                     return
             end
         end
     end
-    __kubecolor $common_args get $original_args
+    __kubecolor $common_args $original_args
 end
 
 function __get_common_args

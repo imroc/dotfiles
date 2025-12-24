@@ -12,7 +12,7 @@ function cilium --wraps=cilium --description "wrap cilium with extra advanced fe
                     return
                 end
             end
-            set -l pod $(kubectl --namespace=kube-system get pod --field-selector spec.nodeName=$node -l k8s-app=cilium -o json | jq -r '.items[0].metadata.name')
+            set -l pod (kubectl --namespace=kube-system get pod --field-selector spec.nodeName=$node -l k8s-app=cilium -o json | jq -r '.items[0].metadata.name')
             kubectl --namespace=kube-system exec -it $pod -- bash
             return
     end
