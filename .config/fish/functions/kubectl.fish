@@ -29,55 +29,13 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
             __clear_kube_env
             return
         case color
-            if not command -sq kubecolor
-                echo "kubecolor is not installed"
-                return
-            end
-            if set -q __kubectl_disable_color
-                set -e __kubectl_disable_color
-                echo "Color output enabled"
-            else
-                set -g __kubectl_disable_color 1
-                echo "Color output disabled"
-            end
+            __toggle_color
             return
         case node-shell # kubectl node-shell to login to node, supports fzf completion for nodes
-            set -l node $argv[2]
-            if test -z "$node" # No argument after subcommand, list all nodes and select with fzf (excluding virtual nodes that cannot be logged into)
-                # Use node-shell to login to node
-                set node (command kubectl get node $common_args -o json | jq -r '.items[].metadata.name' | grep -v eklet- | fzf -0)
-                if test -z "$node"
-                    echo "No node selected"
-                end
-            end
-            command kubectl node-shell $node $common_args $argv[3..-1]
+            __login_node $argv[2..-1]
             return
         case pod-shell # kubectl pod-shell to login to pod, supports fzf completion for pods
-            set -l pod_list (command kubectl get pod $common_args -o json)
-            set -l pod $argv[2]
-            if test -z "$pod"
-                # Select pod with fzf
-                set pod (printf "%s" "$pod_list" | jq -r '.items[].metadata.name' | fzf --prompt "select pod: " -0)
-                if test -z "$pod"
-                    echo "No pod selected"
-                    return
-                end
-            end
-            set -l container (printf "%s" "$pod_list" | jq -r ".items[] | select(.metadata.name == \"$pod\") | .status.containerStatuses[]?.name" | fzf --prompt "select container: " -0 -1)
-            if test -z "$container"
-                echo "No container selected"
-                return
-            end
-            set -l shell (printf "/bin/bash\n/bin/sh\nfish\nzsh" | fzf --prompt "select shell: ")
-            if test -z "$shell"
-                read --prompt-str "input shell manually: " shell
-                if test -z "$shell"
-                    echo "No shell specified"
-                    return
-                end
-            end
-            echo "login container $container in pod $pod with shell $shell"
-            command kubectl exec $common_args -it $pod -c $container -- $shell
+            __login_pod $argv[2..-1]
             return
         case get # Enhanced kubectl get: supports bat for pretty output, neovim for yaml, fx for json, get configmap/secret file content, view certificate info, watch resource events, etc.
             set -l resource_type $argv[2]
@@ -197,6 +155,7 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
             return
     end
 end
+
 function __kubecolor
     if not test "$__kubectl_disable_color" = 1; and command -sq kubecolor
         command kubecolor $argv
@@ -255,4 +214,58 @@ function __clear_kube_env --description "Clear env"
         set -e KUBECTL_NAMESPACE
         echo "KUBECTL_NAMESPACE has been unset"
     end
+end
+
+function __toggle_color --description "Toggle color"
+    if not command -sq kubecolor
+        echo "kubecolor is not installed"
+        return
+    end
+    if set -q __kubectl_disable_color
+        set -e __kubectl_disable_color
+        echo "Color output enabled"
+    else
+        set -g __kubectl_disable_color 1
+        echo "Color output disabled"
+    end
+end
+
+function __login_node --description "Login to node"
+    set -l node $argv[1]
+    if test -z "$node" # No argument after subcommand, list all nodes and select with fzf (excluding virtual nodes that cannot be logged into)
+        # Use node-shell to login to node
+        set node (command kubectl get node $common_args -o json | jq -r '.items[].metadata.name' | grep -v eklet- | fzf -0)
+        if test -z "$node"
+            echo "No node selected"
+        end
+    end
+    command kubectl node-shell $node $common_args $argv[3..-1]
+end
+
+function __login_pod --description "Login to pod"
+    set -l pod_list (command kubectl get pod $common_args -o json)
+    set -l pod $argv[1]
+    if test -z "$pod"
+        # Select pod with fzf
+        set pod (printf "%s" "$pod_list" | jq -r '.items[].metadata.name' | fzf --prompt "select pod: " -0)
+        if test -z "$pod"
+            echo "No pod selected"
+            return
+        end
+    end
+    set -l container (printf "%s" "$pod_list" | jq -r ".items[] | select(.metadata.name == \"$pod\") | .status.containerStatuses[]?.name" | fzf --prompt "select container: " -0 -1)
+    if test -z "$container"
+        echo "No container selected"
+        return
+    end
+    set -l shell (printf "/bin/bash\n/bin/sh\nfish\nzsh" | fzf --prompt "select shell: ")
+    if test -z "$shell"
+        read --prompt-str "input shell manually: " shell
+        if test -z "$shell"
+            echo "No shell specified"
+            return
+        end
+    end
+    echo "login container $container in pod $pod with shell $shell"
+    kubectl exec $common_args -it $pod -c $container -- $shell
 end
