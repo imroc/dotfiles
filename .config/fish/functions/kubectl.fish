@@ -8,26 +8,32 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
     switch $subcommand
         case ns
             __switch_ns $argv[2..-1]
-            return
         case clear # Clear kubeconfig
             __clear_kube_env
-            return
         case color
             __toggle_color
-            return
         case node-shell # kubectl node-shell to login to node, supports fzf completion for nodes
             __login_node $argv[2..-1]
-            return
         case pod-shell # kubectl pod-shell to login to pod, supports fzf completion for pods
             __login_pod $argv[2..-1]
-            return
         case get # Enhanced kubectl get: supports bat for pretty output, neovim for yaml, fx for json, get configmap/secret file content, view certificate info, watch resource events, etc.
             __kubectl_get $argv
-            return
         case ianvs ctx neat krew # kubectl plugins that don't need global arguments passed through (to avoid errors from unsupported flags)
             __kubecolor $argv
-            return
+        case *
+            __kubectl_with_common_args $argv
     end
+end
+
+function __kubecolor
+    if not test "$__kubectl_disable_color" = 1; and command -sq kubecolor
+        command kubecolor $argv
+    else
+        command kubectl $argv
+    end
+end
+
+function __kubectl_with_common_args
     # pass common args to subcommands by default
     set -l common_args (__get_common_args $argv)
     # If first argument starts with - (is a flag, not subcommand), put common_args at the front.
@@ -37,14 +43,6 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
         __kubecolor $common_args $argv
     else
         __kubecolor $argv[1] $common_args $argv[2..-1]
-    end
-end
-
-function __kubecolor
-    if not test "$__kubectl_disable_color" = 1; and command -sq kubecolor
-        command kubecolor $argv
-    else
-        command kubectl $argv
     end
 end
 
