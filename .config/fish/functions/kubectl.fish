@@ -20,7 +20,7 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
             __kubectl_get $argv
         case ianvs ctx neat krew # kubectl plugins that don't need global arguments passed through (to avoid errors from unsupported flags)
             __kubecolor $argv
-        case *
+        case '*'
             __kubectl_with_common_args $argv
     end
 end
