@@ -175,11 +175,11 @@ persistent-workspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9" ]
       'mode service',
       'exec-and-forget sketchybar --trigger aerospace_service_mode_enabled_changed AEROSPACE_SERVICE_MODE_ENABLED=true',
     ]
-    cmd-semicolon = [
+    cmd-quote = [
       'mode app',
       'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=true',
     ]
-    ctrl-semicolon = [
+    cmd-semicolon = [
       'mode kitty',
       'exec-and-forget sketchybar --trigger aerospace_kitty_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=true',
     ]
