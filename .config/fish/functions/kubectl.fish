@@ -23,13 +23,14 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
             __kubecolor $original_args
             return
         case '*' # Default: pass global arguments to subcommand (including kubectl plugins)
+            set -l common_args (__get_common_args $argv)
             # If first argument starts with - (is a flag, not subcommand), put common_args at the front.
             # Otherwise, first argument is the subcommand, which might be a kubectl plugin.
             # common_args must come after the plugin name, otherwise it errors that flags cannot precede plugins.
-            if string match -q -- '-*' $original_args[1]
-                __kubecolor $common_args $original_args
+            if string match -q -- '-*' $argv[1]
+                __kubecolor $common_args $argv
             else
-                __kubecolor $original_args[1] $common_args $original_args[2..-1]
+                __kubecolor $argv[1] $common_args $argv[2..-1]
             end
             return
     end
@@ -262,7 +263,7 @@ function __kubectl_get --description "Override kubectl get"
             end
         end
     end
-    __kubecolor get $common_args $original_args
+    __kubecolor $common_args get $original_args
 end
 
 function __get_common_args
