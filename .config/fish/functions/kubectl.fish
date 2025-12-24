@@ -1,25 +1,4 @@
 function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced feature"
-    # Keep original arguments for later use
-    set original_args $argv
-    # Parse global arguments and remove them from argv to determine subcommand and its arguments
-    argparse --ignore-unknown \
-        "n/namespace=" "o/output=" \
-        "context=" "v/v=" "kubeconfig=" \
-        "s/server=" "cluster=" "user=" "username=" "token=" "password=" \
-        "client-certificate=" "client-key=" "tls-server-name=" "certificate-authority=" insecure-skip-tls-verify \
-        "as=" "as-group=" "as-uid=" \
-        -- $original_args 2>/dev/null # Ignore parsing errors from argparse
-
-    set common_args ()
-    # If KUBECTL_CONTEXT env var is set and --context is not explicitly specified, auto-append --context
-    if test -z "$_flag_context"; and test -n "$KUBECTL_CONTEXT"
-        set -a common_args --context "$KUBECTL_CONTEXT"
-    end
-    # If namespace is not explicitly specified and KUBECTL_NAMESPACE env var is set, use it
-    if test -z "$_flag_n"; and test -n "$KUBECTL_NAMESPACE"
-        set -a common_args --namespace "$KUBECTL_NAMESPACE"
-    end
-
     # Wrap and enhance specific subcommands
     set subcommand "$argv[1]"
     switch $subcommand
@@ -38,107 +17,7 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
             __login_pod $argv[2..-1]
             return
         case get # Enhanced kubectl get: supports bat for pretty output, neovim for yaml, fx for json, get configmap/secret file content, view certificate info, watch resource events, etc.
-            set -l resource_type $argv[2]
-            set -l resource_name $argv[3]
-            # If resource type and name are not specified, skip the following parsing
-            if test -n "$resource_type" -a -n "$resource_name"
-                # Parse custom arguments -e -E -j -p -P -c -C -W to extend get command functionality
-                argparse --ignore-unknown e E j p P c C W -- $original_args
-                set -l args $common_args $argv
-
-                if set -q _flag_c; or set -q _flag_C # -c/-C flag set, view certificate info, supports certificate and secret resource types
-                    if string match -rq '^cert' -- "$resource_type" # Certificate resource type
-                        set cmd cmctl status certificate $common_args $resource_name
-                    else if string match -rq '^secrets?$' -- "$resource_type" # Secret resource type
-                        set cmd cmctl inspect secret $common_args $resource_name
-                    end
-                    if set -q cmd
-                        if set -q _flag_C
-                            command $cmd | nvim
-                        else
-                            command $cmd | less
-                        end
-                    else
-                        echo "'-c' and '-C' flags only support certificate and secret resource types"
-                    end
-                    return
-                else if set -q _flag_p; or set -q _flag_P # -p/-P flag set, select filename from configmap/secret to open. -p prints content to terminal; -P opens content in neovim.
-                    set -l filename (command kubectl $args -o json | jq -r '.data | keys | .[]' | fzf -1 -0)
-                    if test -z "$filename" # Empty configmap/secret, return directly
-                        echo "empty configmap or secret"
-                        return
-                    end
-                    set -l escaped_filename (string replace -a '.' '\\.' $filename)
-                    set -a args -o jsonpath="{.data.$escaped_filename}"
-                    set -l result (kubectl $args | string collect)
-                    if not test $status -eq 0
-                        return
-                    end
-                    if string match -rq '^secrets?$' -- "$resource_type" # Secret resource needs base64 decoding
-                        set result (printf "%s" "$result" | base64 -d | string collect)
-                        if not test $status -eq 0
-                            return
-                        end
-                    end
-                    if set -q _flag_P # -P specified, open with nvim
-                        set filename /tmp/$filename
-                        printf "%s" "$result" >$filename && nvim $filename && rm $filename
-                        return
-                    end
-                    # If color is not disabled, print with bat
-                    if not test "$__kubectl_disable_color" = 1
-                        printf "%s" "$result" | bat --file-name "$filename"
-                        return
-                    end
-                    # Color disabled, print directly
-                    printf "%s" "$result"
-                    return
-                else if set -q _flag_j # -j flag set, output in json format and open with fx
-                    command kubectl $args -o json | fx
-                    return
-                else if set -q _flag_W # -W flag set, watch events
-                    command kubectl $args -o json 2>&1 | read -z output
-                    if not test $status -eq 0
-                        echo "Error fetching resource: $output"
-                        return
-                    end
-                    # Watch events for this resource (add -A flag based on whether the resource is cluster-scoped)
-                    if echo $output | jq -e '.metadata | has("namespace")' >/dev/null
-                        __kubecolor events $common_args --for="$resource_type/$resource_name" -w
-                        return
-                    else
-                        __kubecolor events $common_args --for="$resource_type/$resource_name" -w -A
-                        return
-                    end
-                else if set -q _flag_e # -e flag set, save content to file and open with nvim (enables LSP for hints and completion)
-                    set -l output_format $_flag_o
-                    if test -z "$output_format"
-                        set -a args -o yaml
-                        set output_format yaml
-                    end
-                    set -l filename /tmp/$resource_type-$resource_name.$output_format
-                    command kubectl $args >$filename && nvim $filename && rm $filename
-                    return
-                else if set -q _flag_E # -E flag set, clean content with kubectl neat, save to file and open with nvim (enables LSP for hints and completion)
-                    set -l output_format $_flag_o
-                    if test -z "$output_format"
-                        set -a args -o yaml
-                        set output_format yaml
-                    end
-                    set -l filename /tmp/$resource_type-$resource_name.$output_format
-                    command kubectl $args | kubectl neat >$filename && nvim $filename && rm $filename
-                    return
-                end
-                # No custom arguments set for kubectl get, try to render content with bat based on "-o/--output" format
-                if not test "$__kubectl_disable_color" = 1; and test -n "$_flag_o"
-                    switch $_flag_o
-                        case yaml json
-                            command kubectl $args | bat --language "$_flag_o"
-                            return
-                    end
-                end
-            end
-            __kubecolor $common_args $original_args
+            __kubectl_get $argv[2..-1]
             return
         case ianvs ctx neat krew # kubectl plugins that don't need global arguments passed through (to avoid errors from unsupported flags)
             __kubecolor $original_args
@@ -231,6 +110,7 @@ function __toggle_color --description "Toggle color"
 end
 
 function __login_node --description "Login to node"
+    set -l common_args (__get_common_args $argv)
     set -l node $argv[1]
     if test -z "$node" # No argument after subcommand, list all nodes and select with fzf (excluding virtual nodes that cannot be logged into)
         # Use node-shell to login to node
@@ -243,6 +123,7 @@ function __login_node --description "Login to node"
 end
 
 function __login_pod --description "Login to pod"
+    set -l common_args (__get_common_args $argv)
     set -l pod_list (command kubectl get pod $common_args -o json)
     set -l pod $argv[1]
     if test -z "$pod"
@@ -268,4 +149,147 @@ function __login_pod --description "Login to pod"
     end
     echo "login container $container in pod $pod with shell $shell"
     kubectl exec $common_args -it $pod -c $container -- $shell
+end
+
+function __kubectl_get --description "Override kubectl get"
+    set -l common_args (__get_common_args $argv)
+    set original_args $argv
+    # Parse global arguments and remove them from argv to determine subcommand and its arguments
+    argparse --ignore-unknown \
+        "o/output=" "v/v=" "kubeconfig=" \
+        "s/server=" "cluster=" "user=" "username=" "token=" "password=" \
+        "client-certificate=" "client-key=" "tls-server-name=" "certificate-authority=" insecure-skip-tls-verify \
+        "as=" "as-group=" "as-uid=" \
+        -- $original_args 2>/dev/null # Ignore parsing errors from argparse
+
+    set -l resource_type $argv[1]
+    set -l resource_name $argv[2]
+    # If resource type and name are not specified, skip the following parsing
+    if test -n "$resource_type" -a -n "$resource_name"
+        # Parse custom arguments -e -E -j -p -P -c -C -W to extend get command functionality
+        argparse --ignore-unknown e E j p P c C W -- $original_args
+        set -l args $common_args $argv # Remove custom flags, add common flags(-n/--context)
+
+        if set -q _flag_c; or set -q _flag_C # -c/-C flag set, view certificate info, supports certificate and secret resource types
+            if string match -rq '^cert' -- "$resource_type" # Certificate resource type
+                set cmd cmctl status certificate $common_args $resource_name
+            else if string match -rq '^secrets?$' -- "$resource_type" # Secret resource type
+                set cmd cmctl inspect secret $common_args $resource_name
+            end
+            if set -q cmd
+                if set -q _flag_C
+                    command $cmd | nvim
+                else
+                    command $cmd | less
+                end
+            else
+                echo "'-c' and '-C' flags only support certificate and secret resource types"
+            end
+            return
+        else if set -q _flag_p; or set -q _flag_P # -p/-P flag set, select filename from configmap/secret to open. -p prints content to terminal; -P opens content in neovim.
+            set -l filename (command kubectl $args -o json | jq -r '.data | keys | .[]' | fzf -1 -0)
+            if test -z "$filename" # Empty configmap/secret, return directly
+                echo "empty configmap or secret"
+                return
+            end
+            set -l escaped_filename (string replace -a '.' '\\.' $filename)
+            set -a args -o jsonpath="{.data.$escaped_filename}"
+            set -l result (kubectl $args | string collect)
+            if not test $status -eq 0
+                return
+            end
+            if string match -rq '^secrets?$' -- "$resource_type" # Secret resource needs base64 decoding
+                set result (printf "%s" "$result" | base64 -d | string collect)
+                if not test $status -eq 0
+                    return
+                end
+            end
+            if set -q _flag_P # -P specified, open with nvim
+                set filename /tmp/$filename
+                printf "%s" "$result" >$filename && nvim $filename && rm $filename
+                return
+            end
+            # If color is not disabled, print with bat
+            if not test "$__kubectl_disable_color" = 1
+                printf "%s" "$result" | bat --file-name "$filename"
+                return
+            end
+            # Color disabled, print directly
+            printf "%s" "$result"
+            return
+        else if set -q _flag_j # -j flag set, output in json format and open with fx
+            command kubectl $args -o json | fx
+            return
+        else if set -q _flag_W # -W flag set, watch events
+            command kubectl $args -o json 2>&1 | read -z output
+            if not test $status -eq 0
+                echo "Error fetching resource: $output"
+                return
+            end
+            # Watch events for this resource (add -A flag based on whether the resource is cluster-scoped)
+            if echo $output | jq -e '.metadata | has("namespace")' >/dev/null
+                __kubecolor events $common_args --for="$resource_type/$resource_name" -w
+                return
+            else
+                __kubecolor events $common_args --for="$resource_type/$resource_name" -w -A
+                return
+            end
+        else if set -q _flag_e # -e flag set, save content to file and open with nvim (enables LSP for hints and completion)
+            set -l output_format $_flag_o
+            if test -z "$output_format"
+                set -a args -o yaml
+                set output_format yaml
+            end
+            set -l filename /tmp/$resource_type-$resource_name.$output_format
+            command kubectl $args >$filename && nvim $filename && rm $filename
+            return
+        else if set -q _flag_E # -E flag set, clean content with kubectl neat, save to file and open with nvim (enables LSP for hints and completion)
+            set -l output_format $_flag_o
+            if test -z "$output_format"
+                set -a args -o yaml
+                set output_format yaml
+            end
+            set -l filename /tmp/$resource_type-$resource_name.$output_format
+            command kubectl $args | kubectl neat >$filename && nvim $filename && rm $filename
+            return
+        end
+        # No custom arguments set for kubectl get, try to render content with bat based on "-o/--output" format
+        if not test "$__kubectl_disable_color" = 1; and test -n "$_flag_o"
+            switch $_flag_o
+                case yaml json
+                    command kubectl $args | bat --language "$_flag_o"
+                    return
+            end
+        end
+    end
+    __kubecolor $common_args $original_args
+end
+
+function __get_common_args
+    # Keep original arguments for later use
+    set original_args $argv
+    # Parse global arguments and remove them from argv to determine subcommand and its arguments
+    argparse --ignore-unknown \
+        "n/namespace=" "o/output=" \
+        "context=" "v/v=" "kubeconfig=" \
+        "s/server=" "cluster=" "user=" "username=" "token=" "password=" \
+        "client-certificate=" "client-key=" "tls-server-name=" "certificate-authority=" insecure-skip-tls-verify \
+        "as=" "as-group=" "as-uid=" \
+        -- $original_args 2>/dev/null # Ignore parsing errors from argparse
+    argparse --ignore-unknown \
+        "n/namespace=" "context=" \
+        -- $argv 2>/dev/null
+
+    set common_args ()
+    # If KUBECTL_CONTEXT env var is set and --context is not explicitly specified, auto-append --context
+    if test -z "$_flag_context"; and test -n "$KUBECTL_CONTEXT"
+        set -a common_args --context "$KUBECTL_CONTEXT"
+    end
+    # If namespace is not explicitly specified and KUBECTL_NAMESPACE env var is set, use it
+    if test -z "$_flag_n"; and test -n "$KUBECTL_NAMESPACE"
+        set -a common_args --namespace "$KUBECTL_NAMESPACE"
+    end
+    if test -n "$common_args"
+        echo "$common_args"
+    end
 end
