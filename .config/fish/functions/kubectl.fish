@@ -63,7 +63,7 @@ function __parse_subcommand
             # 3. Other flags: skip next arg as value
             if not string match -q -- '*=*' $arg
                 # Extract flag name (remove leading dashes)
-                set -l flag_name (string replace -r '^-+' '' $arg)
+                set -l flag_name (string replace -r -- '^-+' '' $arg)
                 if not contains $flag_name $bool_flags
                     # Skip the next argument as flag value
                     set i (math $i + 1)
@@ -227,9 +227,9 @@ function __kubectl_get --description "Override kubectl get"
                 echo "empty configmap or secret"
                 return
             end
-            set -l escaped_filename (string replace -a '.' '\\.' $filename)
+            set -l escaped_filename (string replace -a -- '.' '\\.' $filename)
             set -a args -o jsonpath="{.data.$escaped_filename}"
-            set -l result (kubectl get $args | string collect)
+            set -l result (command kubectl get $args | string collect)
             if not test $status -eq 0
                 return
             end
@@ -285,7 +285,7 @@ function __kubectl_get --description "Override kubectl get"
                 set output_format yaml
             end
             set -l filename /tmp/$resource_type-$resource_name.$output_format
-            command kubectl get $args | kubectl neat >$filename && nvim $filename && rm $filename
+            command kubectl get $args | command kubectl neat >$filename && nvim $filename && rm $filename
             return
         end
         # No custom arguments set for kubectl get, try to render content with bat based on "-o/--output" format
