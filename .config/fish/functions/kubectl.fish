@@ -87,11 +87,11 @@ function __get_current_context --description "Get current context name"
 end
 
 function __switch_ns --description "Switch namespace"
-    set -l ns "$argv[1]"
     if set -q KUBIE_ACTIVE
-        kubie ns $argv[2..-1]
+        kubie ns $argv
         return
     end
+    set -l ns "$argv[1]"
     if test -z "$ns"
         set ns (kubectl get namespaces -o json | jq -r '.items[].metadata.name' | fzf --prompt="Select namespace: " --height=40% --reverse)
         if test -z "$ns"
