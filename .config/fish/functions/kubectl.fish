@@ -181,10 +181,10 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
                 end
             end
             __kubecolor $common_args $original_args
-            return $status
+            return
         case ianvs ctx neat krew # 不需要透传全局参数的 kubectl 插件（避免因不支持而报错）
             __kubecolor $original_args
-            return $status
+            return
         case '*' # 默认透传全局参数给子命令（包括 kubectl 插件）
             # 如果第一个参数以 - 开头（是参数而非子命令），将 common_args 放到最前面。
             # 不是的话第一个参数就是子命令，而子命令可能是 kubectl 插件，需要将 common_args
@@ -194,7 +194,7 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
             else
                 __kubecolor $original_args[1] $common_args $original_args[2..-1]
             end
-            return $status
+            return
     end
 end
 function __kubecolor
