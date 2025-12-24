@@ -1,97 +1,97 @@
 function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced feature"
-    # 保留原始参数备用
+    # Keep original arguments for later use
     set original_args $argv
-    # 解析全局参数并从 argv 中移除，以便后续判断子命令与子命令参数
+    # Parse global arguments and remove them from argv to determine subcommand and its arguments
     argparse --ignore-unknown \
         "n/namespace=" "o/output=" \
         "context=" "v/v=" "kubeconfig=" \
         "s/server=" "cluster=" "user=" "username=" "token=" "password=" \
         "client-certificate=" "client-key=" "tls-server-name=" "certificate-authority=" insecure-skip-tls-verify \
         "as=" "as-group=" "as-uid=" \
-        -- $original_args 2>/dev/null # 忽略解析错误，因为 argparse
+        -- $original_args 2>/dev/null # Ignore parsing errors from argparse
 
     set common_args ()
-    # 显式指定 KUBECTL_CONTEXT 环境变量，自动追加 --context 参数
+    # If KUBECTL_CONTEXT env var is set and --context is not explicitly specified, auto-append --context
     if test -z "$_flag_context"; and test -n "$KUBECTL_CONTEXT"
         set -a common_args --context "$KUBECTL_CONTEXT"
     end
-    # 若没有显式指定命名空间且设置了 KUBECTL_NAMESPACE 环境变量，则以该环境变量为准
+    # If namespace is not explicitly specified and KUBECTL_NAMESPACE env var is set, use it
     if test -z "$_flag_n"; and test -n "$KUBECTL_NAMESPACE"
         set -a common_args --namespace "$KUBECTL_NAMESPACE"
     end
 
-    # 包装、增强指定的子命令
+    # Wrap and enhance specific subcommands
     set subcommand "$argv[1]"
     switch $subcommand
         case ns
             __switch_ns $argv[2..-1]
-        case clear # clear kubeconfig
+        case clear # Clear kubeconfig
             __clear_kube_env
             return
         case color
             if not command -sq kubecolor
-                echo "kubecolor 未安装"
+                echo "kubecolor is not installed"
                 return
             end
             if set -q __kubectl_disable_color
                 set -e __kubectl_disable_color
-                echo 彩色已启用
+                echo "Color output enabled"
             else
                 set -g __kubectl_disable_color 1
-                echo 彩色已禁用
+                echo "Color output disabled"
             end
             return
-        case node-shell # kubectl node-shell 登录节点，支持 fzf 补全节点
+        case node-shell # kubectl node-shell to login to node, supports fzf completion for nodes
             set -l node $argv[2]
-            if test -z "$node" # 子命令后没有参数，列出所有节点并用 fzf 选择（不包含无法登录的虚拟节点）
-                # 利用 node-shell 登录节点
+            if test -z "$node" # No argument after subcommand, list all nodes and select with fzf (excluding virtual nodes that cannot be logged into)
+                # Use node-shell to login to node
                 set node (command kubectl get node $common_args -o json | jq -r '.items[].metadata.name' | grep -v eklet- | fzf -0)
                 if test -z "$node"
-                    echo "no node selected"
+                    echo "No node selected"
                 end
             end
             command kubectl node-shell $node $common_args $argv[3..-1]
             return
-        case pod-shell # kubectl pod-shell 登录 pod，支持 fzf 补全 pod
+        case pod-shell # kubectl pod-shell to login to pod, supports fzf completion for pods
             set -l pod_list (command kubectl get pod $common_args -o json)
             set -l pod $argv[2]
             if test -z "$pod"
-                # 利用 node-shell 登录节点
+                # Select pod with fzf
                 set pod (printf "%s" "$pod_list" | jq -r '.items[].metadata.name' | fzf --prompt "select pod: " -0)
                 if test -z "$pod"
-                    echo "没有选择 Pod"
+                    echo "No pod selected"
                     return
                 end
             end
             set -l container (printf "%s" "$pod_list" | jq -r ".items[] | select(.metadata.name == \"$pod\") | .status.containerStatuses[]?.name" | fzf --prompt "select container: " -0 -1)
             if test -z "$container"
-                echo 没有选择容器
+                echo "No container selected"
                 return
             end
             set -l shell (printf "/bin/bash\n/bin/sh\nfish\nzsh" | fzf --prompt "select shell: ")
             if test -z "$shell"
                 read --prompt-str "input shell manually: " shell
                 if test -z "$shell"
-                    echo "no shell specified"
+                    echo "No shell specified"
                     return
                 end
             end
             echo "login container $container in pod $pod with shell $shell"
             command kubectl exec $common_args -it $pod -c $container -- $shell
             return
-        case get # 增强 kubectl get，支持用 bat 美化输出、用 neovim 以 yaml 格式打开、用 fx 以 json 格式打开、获取 configmap/secret 中的文件内容、查看证书信息、watch 资源相关事件等
+        case get # Enhanced kubectl get: supports bat for pretty output, neovim for yaml, fx for json, get configmap/secret file content, view certificate info, watch resource events, etc.
             set -l resource_type $argv[2]
             set -l resource_name $argv[3]
-            # 如果没有指定资源类型和资源名，不再执行后面的解析
+            # If resource type and name are not specified, skip the following parsing
             if test -n "$resource_type" -a -n "$resource_name"
-                # 解析增加的自定义参数 -e -E -j -p -P -c -C -W 来扩展 get 命令的功能
+                # Parse custom arguments -e -E -j -p -P -c -C -W to extend get command functionality
                 argparse --ignore-unknown e E j p P c C W -- $original_args
                 set -l args $common_args $argv
 
-                if set -q _flag_c; or set -q _flag_C # 设置了 -c/-C 参数，查看证书信息，支持 certificate 和 secret 资源类型
-                    if string match -rq '^cert' -- "$resource_type" # 证书类型资源
+                if set -q _flag_c; or set -q _flag_C # -c/-C flag set, view certificate info, supports certificate and secret resource types
+                    if string match -rq '^cert' -- "$resource_type" # Certificate resource type
                         set cmd cmctl status certificate $common_args $resource_name
-                    else if string match -rq '^secrets?$' -- "$resource_type" # secret 类型资源
+                    else if string match -rq '^secrets?$' -- "$resource_type" # Secret resource type
                         set cmd cmctl inspect secret $common_args $resource_name
                     end
                     if set -q cmd
@@ -101,12 +101,12 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
                             command $cmd | less
                         end
                     else
-                        echo "'-c' 和 '-C' 参数仅支持 certificate 和 secret 资源类型"
+                        echo "'-c' and '-C' flags only support certificate and secret resource types"
                     end
                     return
-                else if set -q _flag_p; or set -q _flag_P # 设置了 -p/-P 参数，选择 configmap/secret 中的文件名打开。-p 直接将文件内容打印到终端；-P 使用 neovim 打开文件内容。
+                else if set -q _flag_p; or set -q _flag_P # -p/-P flag set, select filename from configmap/secret to open. -p prints content to terminal; -P opens content in neovim.
                     set -l filename (command kubectl $args -o json | jq -r '.data | keys | .[]' | fzf -1 -0)
-                    if test -z "$filename" # 空 configmap/secret，直接返回
+                    if test -z "$filename" # Empty configmap/secret, return directly
                         echo "empty configmap or secret"
                         return
                     end
@@ -116,35 +116,35 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
                     if not test $status -eq 0
                         return
                     end
-                    if string match -rq '^secrets?$' -- "$resource_type" # secret 资源需 base64 解码
+                    if string match -rq '^secrets?$' -- "$resource_type" # Secret resource needs base64 decoding
                         set result (printf "%s" "$result" | base64 -d | string collect)
                         if not test $status -eq 0
                             return
                         end
                     end
-                    if set -q _flag_P # 指定了 -P，用 nvim 打开
+                    if set -q _flag_P # -P specified, open with nvim
                         set filename /tmp/$filename
                         printf "%s" "$result" >$filename && nvim $filename && rm $filename
                         return
                     end
-                    # 如果没禁用 color，用 bat 打印
+                    # If color is not disabled, print with bat
                     if not test "$__kubectl_disable_color" = 1
                         printf "%s" "$result" | bat --file-name "$filename"
                         return
                     end
-                    # 禁用了 color， 直接打印
+                    # Color disabled, print directly
                     printf "%s" "$result"
                     return
-                else if set -q _flag_j # 设置了 -j 参数，用 json 格式输出并用 fx 打开
+                else if set -q _flag_j # -j flag set, output in json format and open with fx
                     command kubectl $args -o json | fx
                     return
-                else if set -q _flag_W # 设置了 -W 参数，watch 事件
+                else if set -q _flag_W # -W flag set, watch events
                     command kubectl $args -o json 2>&1 | read -z output
                     if not test $status -eq 0
                         echo "Error fetching resource: $output"
                         return
                     end
-                    # watch 该资源的相关事件（根据资源是否是集群范围的来决定是否需要加 -A 参数）
+                    # Watch events for this resource (add -A flag based on whether the resource is cluster-scoped)
                     if echo $output | jq -e '.metadata | has("namespace")' >/dev/null
                         __kubecolor events $common_args --for="$resource_type/$resource_name" -w
                         return
@@ -152,7 +152,7 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
                         __kubecolor events $common_args --for="$resource_type/$resource_name" -w -A
                         return
                     end
-                else if set -q _flag_e # 设置了 -e 参数，将内容存到文件并用 nvim 打开（会启动 LSP，提供提示和补全的能力）
+                else if set -q _flag_e # -e flag set, save content to file and open with nvim (enables LSP for hints and completion)
                     set -l output_format $_flag_o
                     if test -z "$output_format"
                         set -a args -o yaml
@@ -161,7 +161,7 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
                     set -l filename /tmp/$resource_type-$resource_name.$output_format
                     command kubectl $args >$filename && nvim $filename && rm $filename
                     return
-                else if set -q _flag_E # 设置了 -E 参数，将内容通过 kubectl neat 精简后存到文件并用 nvim 打开（会启动 LSP，提供提示和补全的能力）
+                else if set -q _flag_E # -E flag set, clean content with kubectl neat, save to file and open with nvim (enables LSP for hints and completion)
                     set -l output_format $_flag_o
                     if test -z "$output_format"
                         set -a args -o yaml
@@ -171,7 +171,7 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
                     command kubectl $args | kubectl neat >$filename && nvim $filename && rm $filename
                     return
                 end
-                # 没有为 kubectl get 设置任何自定义参数，尝试根据 "-o/--output" 参数指定的格式用 bat 渲染内容
+                # No custom arguments set for kubectl get, try to render content with bat based on "-o/--output" format
                 if not test "$__kubectl_disable_color" = 1; and test -n "$_flag_o"
                     switch $_flag_o
                         case yaml json
@@ -182,13 +182,13 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
             end
             __kubecolor $common_args $original_args
             return
-        case ianvs ctx neat krew # 不需要透传全局参数的 kubectl 插件（避免因不支持而报错）
+        case ianvs ctx neat krew # kubectl plugins that don't need global arguments passed through (to avoid errors from unsupported flags)
             __kubecolor $original_args
             return
-        case '*' # 默认透传全局参数给子命令（包括 kubectl 插件）
-            # 如果第一个参数以 - 开头（是参数而非子命令），将 common_args 放到最前面。
-            # 不是的话第一个参数就是子命令，而子命令可能是 kubectl 插件，需要将 common_args
-            # 放到插件后面，否则会报错参数不能放在插件之前。
+        case '*' # Default: pass global arguments to subcommand (including kubectl plugins)
+            # If first argument starts with - (is a flag, not subcommand), put common_args at the front.
+            # Otherwise, first argument is the subcommand, which might be a kubectl plugin.
+            # common_args must come after the plugin name, otherwise it errors that flags cannot precede plugins.
             if string match -q -- '-*' $original_args[1]
                 __kubecolor $common_args $original_args
             else
@@ -205,7 +205,7 @@ function __kubecolor
     end
 end
 
-function __get_current_context --description "get current context name"
+function __get_current_context --description "Get current context name"
     if set -q KUBECTL_CONTEXT
         echo $KUBECTL_CONTEXT
     else
@@ -213,34 +213,34 @@ function __get_current_context --description "get current context name"
     end
 end
 
-function __switch_ns --description "switch namespace"
+function __switch_ns --description "Switch namespace"
     set -l ns "$argv[1]"
     if set -q KUBIE_ACTIVE
         kubie ns $argv[2..-1]
         return
     end
     if test -z "$ns"
-        set ns (kubectl get namespaces -o json | jq -r '.items[].metadata.name' | fzf --prompt="选择 Namespace: " --height=40% --reverse)
+        set ns (kubectl get namespaces -o json | jq -r '.items[].metadata.name' | fzf --prompt="Select namespace: " --height=40% --reverse)
         if test -z "$ns"
-            echo "请选择一个 Namespace"
+            echo "Please select a namespace"
             return 1
         end
     end
-    # 获取当前 context
+    # Get current context
     set -l current_context (__get_current_context)
     if test -z "$current_context"
-        echo "错误: 无法获取当前 context"
+        echo "Error: unable to get current context"
         return 1
     end
-    # 设置 namespace
+    # Set namespace
     set -gx KUBECTL_NAMESPACE $ns
     command kubectl config set-context "$current_context" --namespace=$ns 2>&1 >/dev/null
-    echo "namespace 已切换到 $ns"
+    echo "Namespace switched to $ns"
 end
 
-function __clear_kube_env --description "clear env"
+function __clear_kube_env --description "Clear env"
     if set -q KUBIE_ACTIVE
-        echo "在 kubie shell 中，无法清理 KUBECONFIG 环境变量 "
+        echo "In kubie shell, cannot clear KUBECONFIG environment variable"
         return 1
     end
     if set -q KUBECONFIG
