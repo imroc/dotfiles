@@ -187,14 +187,14 @@ function __kubectl_get --description "Override kubectl get"
             end
             return
         else if set -q _flag_p; or set -q _flag_P # -p/-P flag set, select filename from configmap/secret to open. -p prints content to terminal; -P opens content in neovim.
-            set -l filename (command kubectl $args -o json | jq -r '.data | keys | .[]' | fzf -1 -0)
+            set -l filename (command kubectl get $args -o json | jq -r '.data | keys | .[]' | fzf -1 -0)
             if test -z "$filename" # Empty configmap/secret, return directly
                 echo "empty configmap or secret"
                 return
             end
             set -l escaped_filename (string replace -a '.' '\\.' $filename)
             set -a args -o jsonpath="{.data.$escaped_filename}"
-            set -l result (kubectl $args | string collect)
+            set -l result (kubectl get $args | string collect)
             if not test $status -eq 0
                 return
             end
@@ -218,10 +218,10 @@ function __kubectl_get --description "Override kubectl get"
             printf "%s" "$result"
             return
         else if set -q _flag_j # -j flag set, output in json format and open with fx
-            command kubectl $args -o json | fx
+            command kubectl get $args -o json | fx
             return
         else if set -q _flag_W # -W flag set, watch events
-            command kubectl $args -o json 2>&1 | read -z output
+            command kubectl get $args -o json 2>&1 | read -z output
             if not test $status -eq 0
                 echo "Error fetching resource: $output"
                 return
@@ -241,7 +241,7 @@ function __kubectl_get --description "Override kubectl get"
                 set output_format yaml
             end
             set -l filename /tmp/$resource_type-$resource_name.$output_format
-            command kubectl $args >$filename && nvim $filename && rm $filename
+            command kubectl get $args >$filename && nvim $filename && rm $filename
             return
         else if set -q _flag_E # -E flag set, clean content with kubectl neat, save to file and open with nvim (enables LSP for hints and completion)
             set -l output_format $_flag_o
@@ -250,46 +250,32 @@ function __kubectl_get --description "Override kubectl get"
                 set output_format yaml
             end
             set -l filename /tmp/$resource_type-$resource_name.$output_format
-            command kubectl $args | kubectl neat >$filename && nvim $filename && rm $filename
+            command kubectl get $args | kubectl neat >$filename && nvim $filename && rm $filename
             return
         end
         # No custom arguments set for kubectl get, try to render content with bat based on "-o/--output" format
         if not test "$__kubectl_disable_color" = 1; and test -n "$_flag_o"
             switch $_flag_o
                 case yaml json
-                    command kubectl $args | bat --language "$_flag_o"
+                    command kubectl get $args | bat --language "$_flag_o"
                     return
             end
         end
     end
-    __kubecolor $common_args $original_args
+    __kubecolor get $common_args $original_args
 end
 
 function __get_common_args
-    # Keep original arguments for later use
-    set original_args $argv
-    # Parse global arguments and remove them from argv to determine subcommand and its arguments
-    argparse --ignore-unknown \
-        "n/namespace=" "o/output=" \
-        "context=" "v/v=" "kubeconfig=" \
-        "s/server=" "cluster=" "user=" "username=" "token=" "password=" \
-        "client-certificate=" "client-key=" "tls-server-name=" "certificate-authority=" insecure-skip-tls-verify \
-        "as=" "as-group=" "as-uid=" \
-        -- $original_args 2>/dev/null # Ignore parsing errors from argparse
     argparse --ignore-unknown \
         "n/namespace=" "context=" \
         -- $argv 2>/dev/null
 
-    set common_args ()
     # If KUBECTL_CONTEXT env var is set and --context is not explicitly specified, auto-append --context
     if test -z "$_flag_context"; and test -n "$KUBECTL_CONTEXT"
-        set -a common_args --context "$KUBECTL_CONTEXT"
+        printf '%s\n' --context "$KUBECTL_CONTEXT"
     end
     # If namespace is not explicitly specified and KUBECTL_NAMESPACE env var is set, use it
     if test -z "$_flag_n"; and test -n "$KUBECTL_NAMESPACE"
-        set -a common_args --namespace "$KUBECTL_NAMESPACE"
-    end
-    if test -n "$common_args"
-        echo "$common_args"
+        printf '%s\n' --namespace "$KUBECTL_NAMESPACE"
     end
 end
