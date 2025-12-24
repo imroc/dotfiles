@@ -23,23 +23,10 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
     # 包装、增强指定的子命令
     set subcommand "$argv[1]"
     switch $subcommand
-        case ns
-            set -l ns "$argv[2]"
-            command kubectl ns $ns
-            return
+        case switch-ns
+            __switch_ns $argv[2..-1]
         case clear # clear kubeconfig
-            set -e KUBECONFIG
-            set -e KUBIE_ACTIVE
-            set -e KUBIE_FISH_USE_RPROMPT
-            set -e KUBIE_SHELL
-            set -e KUBIE_STATE
-            set -e KUBIE_ZSH_USE_RPS1
-            set -e KUBIE_KUBECONFIG
-            set -e KUBIE_PROMPT_DISABLE
-            set -e KUBIE_DEPTH
-            set -e KUBIE_XONSH_USE_RIGHT_PROMPT
-            set -e KUBIE_SESSION
-            echo "KUBECONFIG has been unset"
+            __clear_kubeconfig_env
             return
         case color
             if not command -sq kubecolor
@@ -216,4 +203,42 @@ function __kubecolor
     else
         command kubectl $argv
     end
+end
+
+function __get_current_context --description "get current context name"
+    if set -q KUBECTL_CONTEXT
+        echo $KUBECTL_CONTEXT
+    else
+        command kubectl config view -o jsonpath='{.current-context}' 2>/dev/null
+    end
+end
+
+function __switch_ns --description "switch namespace"
+    set -l ns "$argv[1]"
+    if test -z "$ns"
+        set ns (kubectl get namespaces -o json | jq -r '.items[].metadata.name' | fzf --prompt="选择 Namespace: " --height=40% --reverse)
+        if test -z "$ns"
+            echo "请选择一个 Namespace"
+            return 1
+        end
+    end
+    # 获取当前 context
+    set -l current_context (__get_current_context)
+    if test -z "$current_context"
+        echo "错误: 无法获取当前 context"
+        return 1
+    end
+    # 设置 namespace
+    set -gx KUBECTL_NAMESPACE $ns
+    command kubectl config set-context "$current_context" --namespace=$ns 2>&1 >/dev/null
+    echo "namespace 已切换到 $ns"
+end
+
+function __clear_kubeconfig_env --description "switch namespace"
+    if set -q KUBIE_ACTIVE
+        echo "在 kubie shell 中，无法清理 KUBECONFIG 环境变量 "
+        return 1
+    end
+    set -e KUBECONFIG
+    echo "KUBECONFIG has been unset"
 end
