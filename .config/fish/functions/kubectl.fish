@@ -195,8 +195,8 @@ function __kubectl_get --description "Override kubectl get"
         "as=" "as-group=" "as-uid=" \
         -- $original_args 2>/dev/null # Ignore parsing errors from argparse
 
-    set -l resource_type $argv[1]
-    set -l resource_name $argv[2]
+    set -l resource_type $argv[2]
+    set -l resource_name $argv[3]
     # If resource type and name are not specified, skip the following parsing
     if test -n "$resource_type" -a -n "$resource_name"
         # Parse custom arguments -e -E -j -p -P -c -C -W to extend get command functionality
