@@ -22,16 +22,11 @@ function cilium --wraps=cilium --description "wrap cilium with extra advanced fe
     end
 
     set original_args $argv
-    argparse --ignore-unknown \
-        "n/namespace=" "context=" \
-        -- $original_args 2>/dev/null
+    argparse --ignore-unknown "context=" -- $original_args 2>/dev/null
 
     set common_args ()
     if test -z "$_flag_context"; and test -n "$KUBECTL_CONTEXT"
         set -a common_args --context "$KUBECTL_CONTEXT"
-    end
-    if test -z "$_flag_n"; and test -n "$KUBECTL_NAMESPACE"
-        set -a common_args --namespace "$KUBECTL_NAMESPACE"
     end
 
     if test -z "$common_args"

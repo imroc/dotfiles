@@ -104,7 +104,6 @@ function __switch_ns --description "Switch namespace"
         return 1
     end
     # Set namespace
-    set -gx KUBECTL_NAMESPACE $ns
     command kubectl config set-context "$current_context" --namespace=$ns 2>&1 >/dev/null
     echo "Namespace switched to $ns"
 end
@@ -121,10 +120,6 @@ function __clear_kube_env --description "Clear env"
     if set -q KUBECTL_CONTEXT
         set -e KUBECTL_CONTEXT
         echo "KUBECTL_CONTEXT has been unset"
-    end
-    if set -q KUBECTL_NAMESPACE
-        set -e KUBECTL_NAMESPACE
-        echo "KUBECTL_NAMESPACE has been unset"
     end
 end
 
@@ -299,16 +294,10 @@ function __kubectl_get --description "Override kubectl get"
 end
 
 function __get_common_args
-    argparse --ignore-unknown \
-        "n/namespace=" "context=" \
-        -- $argv 2>/dev/null
+    argparse --ignore-unknown "context=" -- $argv 2>/dev/null
 
     # If KUBECTL_CONTEXT env var is set and --context is not explicitly specified, auto-append --context
     if test -z "$_flag_context"; and test -n "$KUBECTL_CONTEXT"
         printf '%s\n' --context "$KUBECTL_CONTEXT"
-    end
-    # If namespace is not explicitly specified and KUBECTL_NAMESPACE env var is set, use it
-    if test -z "$_flag_n"; and test -n "$KUBECTL_NAMESPACE"
-        printf '%s\n' --namespace "$KUBECTL_NAMESPACE"
     end
 end
