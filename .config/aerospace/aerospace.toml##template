@@ -237,6 +237,11 @@ persistent-workspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9" ]
       'exec-and-forget sketchybar --trigger aerospace_kitty_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
       'exec-and-forget goto-kitty-session.sh yamls'
     ]
+    z = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_kitty_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
+      'exec-and-forget goto-kitty-session.sh zellij'
+    ]
     ctrl-a = [
       'mode main',
       'exec-and-forget sketchybar --trigger aerospace_kitty_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
