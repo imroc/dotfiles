@@ -111,7 +111,6 @@ persistent-workspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9" ]
     # All possible commands: https://nikitabobko.github.io/AeroSpace/commands
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#exec-and-forget
-    cmd-ctrl-semicolon = 'exec-and-forget open -a "kitty.app"'
     cmd-shift-semicolon = 'exec-and-forget kitten quick-access-terminal --config ~/.config/kitty/quick-access-terminal-quick-notes.conf --instance-group todo daily-note.sh'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#layout
@@ -192,6 +191,11 @@ persistent-workspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9" ]
     enter = [
       'mode main',
       'exec-and-forget sketchybar --trigger aerospace_kitty_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
+    ]
+    cmd-semicolon = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_kitty_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
+      'exec-and-forget open -a "kitty.app"'
     ]
     n = [
       'mode main',
