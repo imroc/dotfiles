@@ -16,6 +16,10 @@
     "RegionName": "华南地区(广州微信支付)"
   },
   {
+    "Region": "ap-guangzhou-lwy-cft",
+    "RegionName": "华南地区(广州蓝湾云财付通)"
+  },
+  {
     "Region": "ap-shanghai",
     "RegionName": "华东地区(上海)"
   },
@@ -40,20 +44,12 @@
     "RegionName": "华东地区(福州)"
   },
   {
-    "Region": "ap-guangzhou",
-    "RegionName": "华南地区(广州)"
-  },
-  {
     "Region": "ap-hefei-ec",
     "RegionName": "华东地区(合肥)"
   },
   {
     "Region": "ap-shanghai-adc",
     "RegionName": "华东地区(上海自动驾驶云)"
-  },
-  {
-    "Region": "ap-shenzhen-fsi",
-    "RegionName": "华南地区(深圳金融)"
   },
   {
     "Region": "ap-shanghai-wxzf",
@@ -64,12 +60,20 @@
     "RegionName": "华东地区(南京学府财付通)"
   },
   {
+    "Region": "ap-guangzhou",
+    "RegionName": "华南地区(广州)"
+  },
+  {
     "Region": "ap-shanghai-hq-cft",
     "RegionName": "华东地区(上海花桥财付通)"
   },
   {
     "Region": "ap-shanghai-hq-uat-cft",
     "RegionName": "华东地区(上海花桥财付通仿真环境)"
+  },
+  {
+    "Region": "ap-shenzhen-fsi",
+    "RegionName": "华南地区(深圳金融)"
   },
   {
     "Region": "ap-shanghai-wxp-ops",
@@ -160,11 +164,19 @@
     "RegionName": "欧洲地区(法兰克福)"
   },
   {
+    "Region": "ap-zhongwei",
+    "RegionName": "西北地区(中卫)"
+  },
+  {
     "Region": "na-ashburn",
     "RegionName": "美国东部(弗吉尼亚)"
   },
   {
     "Region": "sa-saopaulo",
     "RegionName": "南美地区(圣保罗)"
+  },
+  {
+    "Region": "me-saudi-arabia",
+    "RegionName": "中东地区(利雅得)"
   }
 ]
