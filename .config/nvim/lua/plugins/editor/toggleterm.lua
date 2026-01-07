@@ -18,7 +18,7 @@ end
 return {
   "akinsho/toggleterm.nvim",
   opts = {
-    open_mapping = [[<C-t>]],
+    open_mapping = [[<C-/>]],
     direction = "float",
     auto_scroll = false,
     size = function(term)
@@ -31,7 +31,7 @@ return {
   },
   keys = {
     {
-      "<C-t>",
+      "<C-/>",
       mode = { "n", "t" },
       "<cmd>ToggleTerm<cr>",
       desc = "[P]Toggle Terminal",
@@ -62,7 +62,7 @@ return {
       desc = "[P]Select Terminal",
     },
     {
-      "<C-/>",
+      "<C-.>",
       mode = { "n", "t" },
       "<cmd>TermSelect<cr>",
       desc = "[P]Select Terminal",
