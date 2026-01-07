@@ -5,7 +5,7 @@ keybinds clear-defaults=true {
         // bind "Super c" { Copy; }
     }
     locked {
-        bind "Super z" { SwitchToMode "Normal"; }
+        bind "Super g" { SwitchToMode "Normal"; }
     }
     resize {
         bind "Super r" { SwitchToMode "Normal"; }
@@ -84,6 +84,7 @@ keybinds clear-defaults=true {
         bind "d" { HalfPageScrollDown; }
         bind "u" { HalfPageScrollUp; }
         bind "Super u" { HalfPageScrollUp; }
+        bind "Super d" { HalfPageScrollDown; }
         // uncomment this and adjust key if using copy_on_select=false
         // bind "Super c" { Copy; }
     }
@@ -155,7 +156,7 @@ keybinds clear-defaults=true {
         bind "q" { Quit; }
     }
     shared_except "locked" {
-        bind "Super z" { SwitchToMode "Locked"; }
+        bind "Super g" { SwitchToMode "Locked"; }
         bind "Super f" { SwitchToMode "EnterSearch"; SearchInput 0; }
         bind "Super e" { TogglePanePinned; SwitchToMode "Normal"; ToggleFloatingPanes; }
         bind "Super /" { ToggleFloatingPanes; }
@@ -163,7 +164,6 @@ keybinds clear-defaults=true {
         bind "Super n" { NewPane; }
         bind "Super -" { NewPane "Down"; }
         bind "Super \\" { NewPane "Right"; }
-        bind "Super d" { NewPane "Right"; }
         bind "Super h" "Super Left" { MoveFocus "Left"; }
         bind "Super l" "Super Right" { MoveFocus "Right"; }
         bind "Super j" "Super Down" { MoveFocus "Down"; }
@@ -219,6 +219,7 @@ keybinds clear-defaults=true {
     }
     shared_except "scroll" "locked" {
         bind "Super u" { SwitchToMode "Scroll"; HalfPageScrollUp; }
+        bind "Super d" { SwitchToMode "Scroll"; HalfPageScrollDown; }
     }
     shared_except "session" "locked" {
         bind "Super s" { SwitchToMode "Session"; }
