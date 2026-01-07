@@ -4,7 +4,11 @@
       "Bash(tree:*)",
       "Bash(wc:*)",
       "Bash(ls:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(kitty:*)",
+      "Bash(kitten:*)",
+      "WebFetch(domain:*)",
+      "WebSearch"
     ]
   }
 }
