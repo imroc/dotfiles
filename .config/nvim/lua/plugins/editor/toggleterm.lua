@@ -73,6 +73,12 @@ return {
       desc = "[P]New Terminal",
     },
     {
+      "<C-\\>",
+      mode = { "n", "t" },
+      "<cmd>TermNew<cr>",
+      desc = "[P]New Terminal",
+    },
+    {
       "<leader>tr",
       rename_terminal,
       desc = "[P]Rename Terminal",
