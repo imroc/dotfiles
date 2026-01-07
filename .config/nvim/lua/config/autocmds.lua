@@ -35,3 +35,16 @@ vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
     end
   end,
 })
+
+-- 避免一些特殊的缓冲区被 LSP 处理导致报错
+vim.api.nvim_create_autocmd("LspAttach", {
+  callback = function(event)
+    local bufname = vim.api.nvim_buf_get_name(event.buf)
+    if bufname:find("^fugitive://") or bufname:find("^diffview://") then
+      vim.schedule(function()
+        vim.lsp.buf_detach_client(event.buf, event.data.client_id)
+      end)
+      return
+    end
+  end,
+})
