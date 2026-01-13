@@ -146,8 +146,10 @@ function __login_node --description "Login to node"
         if test -z "$node"
             echo "No node selected"
         end
+        command kubectl node-shell $node $common_args
+    else
+        command kubectl node-shell $node $common_args $argv[2..-1]
     end
-    command kubectl node-shell $node $common_args $argv[3..-1]
 end
 
 function __login_pod --description "Login to pod"
