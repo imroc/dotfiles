@@ -62,7 +62,7 @@ return {
       desc = "[P]Select Terminal",
     },
     {
-      "<C-.>",
+      "<C-,>",
       mode = { "n", "t" },
       "<cmd>TermSelect<cr>",
       desc = "[P]Select Terminal",
