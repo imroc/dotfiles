@@ -10,8 +10,8 @@ return {
     },
     keymaps = {
       toggle = {
-        normal = "<C-`>",
-        terminal = "<C-`>",
+        normal = "<C-,>",
+        terminal = "<C-,>",
         variants = {
           continue = false,
           verbose = false,
