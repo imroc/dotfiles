@@ -6,7 +6,7 @@ return {
   opts = {
     command = "claude-internal",
     window = {
-      position = "vertical",
+      position = "float",
     },
     keymaps = {
       toggle = {
@@ -17,6 +17,8 @@ return {
           verbose = false,
         },
       },
+      window_navigation = false,
+      scrolling = false,
     },
   },
 }

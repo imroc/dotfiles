@@ -9,3 +9,5 @@ _output
 gradle/
 gradlew
 gradlew.bat
+
+**/.claude/settings.local.json
