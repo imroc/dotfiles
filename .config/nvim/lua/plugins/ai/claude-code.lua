@@ -7,6 +7,9 @@ return {
     command = "claude-internal",
     window = {
       position = "float",
+      float = {
+        width = "95%",
+      },
     },
     keymaps = {
       toggle = {
