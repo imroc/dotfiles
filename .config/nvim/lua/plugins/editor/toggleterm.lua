@@ -83,6 +83,49 @@ return {
       rename_terminal,
       desc = "[P]Rename Terminal",
     },
+    {
+      "<C-.>",
+      mode = { "n", "t" },
+      function()
+        local Terminal = require("toggleterm.terminal").Terminal
+        local terms = require("toggleterm.terminal")
+
+        -- Lazy create ai terminal
+        if not _G._ai_terminal then
+          _G._ai_terminal = Terminal:new({
+            direction = "float",
+            float_opts = {
+              width = function()
+                return math.floor(vim.o.columns * 0.95)
+              end,
+            },
+            display_name = "ai",
+            hidden = true,
+          })
+        end
+
+        local ai_terminal = _G._ai_terminal
+        local focused_id = terms.get_focused_id()
+
+        -- If currently in ai terminal, close it
+        if focused_id == ai_terminal.id then
+          ai_terminal:close()
+          return
+        end
+
+        -- If ai terminal is open but not focused, switch to it
+        if ai_terminal:is_open() then
+          ai_terminal:focus()
+          return
+        end
+
+        -- If ai terminal is not open, open it
+        ai_terminal:open()
+      end,
+      desc = "[P]Toggle AI Terminal",
+    },
   },
-  config = true,
+  config = function(_, opts)
+    require("toggleterm").setup(opts)
+  end,
 }
