@@ -27,5 +27,5 @@ set -gx MANPAGER 'nvim +Man!'
 
 # kitty 下使用 ssh 登录远程机器可能奇怪问题，用 ssh alias 解决: https://wiki.archlinux.org/title/Kitty#Terminal_issues_with_SSH
 if test "$TERM" = xterm-kitty
-    alias ssh="kitty +kitten ssh"
+    alias ssh="kitten ssh"
 end
