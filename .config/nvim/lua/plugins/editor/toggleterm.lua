@@ -112,13 +112,22 @@ return {
 
         -- Lazy create ai terminal
         if not _G._ai_terminal then
+          -- Define highlight for AI terminal border (linked to DiagnosticInfo for blue)
+          vim.api.nvim_set_hl(0, "ToggleTermAIBorder", { link = "DiagnosticInfo" })
+
           _G._ai_terminal = Terminal:new({
             direction = "float",
             float_opts = {
               width = function()
-                return math.floor(vim.o.columns * 0.95)
+                return math.floor(vim.o.columns * 0.99)
+              end,
+              height = function()
+                return math.floor(vim.o.lines * 0.99)
               end,
             },
+            on_open = function(term)
+              vim.api.nvim_win_set_option(term.window, "winhl", "FloatBorder:ToggleTermAIBorder")
+            end,
             display_name = "AI",
             hidden = true,
           })
