@@ -73,13 +73,19 @@ return {
       desc = "[P]New Terminal",
     },
     {
-      "<C-\\>",
+      "<M-/>",
       mode = { "n", "t" },
       "<cmd>TermNew<cr>",
       desc = "[P]New Terminal",
     },
     {
       "<leader>tr",
+      rename_terminal,
+      desc = "[P]Rename Terminal",
+    },
+    {
+      "<M-,>",
+      mode = { "n", "t" },
       rename_terminal,
       desc = "[P]Rename Terminal",
     },
@@ -99,7 +105,7 @@ return {
                 return math.floor(vim.o.columns * 0.95)
               end,
             },
-            display_name = "ai",
+            display_name = "AI",
             hidden = true,
           })
         end
