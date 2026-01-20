@@ -16,6 +16,12 @@ end
 
 ---@param script string
 M.run_script = function(script)
+  if _G._ai_terminal and _G._ai_terminal:is_open() then
+    _G._ai_terminal:close()
+    vim.cmd("ToggleTerm")
+    vim.cmd('TermExec cmd="' .. script .. '"')
+    return
+  end
   local last_focused = require("toggleterm.terminal").get_last_focused()
   if last_focused then
     vim.cmd(last_focused.id .. 'TermExec cmd="' .. script .. '"')
