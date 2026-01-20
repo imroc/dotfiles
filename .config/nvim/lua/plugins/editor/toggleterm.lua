@@ -18,7 +18,7 @@ end
 return {
   "akinsho/toggleterm.nvim",
   opts = {
-    open_mapping = [[<C-/>]],
+    open_mapping = false,
     direction = "float",
     auto_scroll = false,
     size = function(term)
@@ -32,8 +32,22 @@ return {
   keys = {
     {
       "<C-/>",
-      mode = { "n", "t" },
-      "<cmd>ToggleTerm<cr>",
+      mode = { "n", "t", "i" },
+      function()
+        local count = vim.v.count
+
+        -- Close AI terminal if it is open
+        if _G._ai_terminal and _G._ai_terminal:is_open() then
+          _G._ai_terminal:close()
+        end
+
+        -- Toggle terminal with count support
+        if count > 0 then
+          vim.cmd(count .. "ToggleTerm")
+        else
+          vim.cmd("ToggleTerm")
+        end
+      end,
       desc = "[P]Toggle Terminal",
     },
     {
@@ -91,7 +105,7 @@ return {
     },
     {
       "<C-.>",
-      mode = { "n", "t" },
+      mode = { "n", "t", "i" },
       function()
         local Terminal = require("toggleterm.terminal").Terminal
         local terms = require("toggleterm.terminal")
