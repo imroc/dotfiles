@@ -472,9 +472,6 @@ persistent-workspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9" ]
     if.app-id = 'com.tencent.WeWorkMac'      # 企业微信主界面
     if.window-title-regex-substring = '^企业微信$'
     run = ['move-node-to-workspace 4']
-[[on-window-detected]]
-    if.app-id = 'com.tencent.WeWorkMac'      # 企业微信其它界面
-    run = ['layout floating']
 
 # 5：其它聊天工具
 [[on-window-detected]]
