@@ -4,7 +4,7 @@ abbr --add m make
 abbr --add typora "open -a typora"
 
 abbr --add gi gemini-internal
-abbr --add ci claude-internal
+abbr --add ci claude-internal --permission-mode bypassPermissions
 abbr --add tf terraform
 abbr --add ta "terraform apply -auto-approve"
 abbr --add td "terraform apply -destroy -auto-approve"
