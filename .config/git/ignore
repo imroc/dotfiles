@@ -11,3 +11,4 @@ gradlew
 gradlew.bat
 
 **/.claude/settings.local.json
+.codebuddy/
