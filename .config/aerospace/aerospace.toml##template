@@ -508,6 +508,9 @@ persistent-workspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9" ]
 [[on-window-detected]]
     if.app-id = 'com.tencent.yuanbao'
     run = ['move-node-to-workspace 6']
+[[on-window-detected]]
+    if.app-id = 'com.alibaba.tongyi'
+    run = ['move-node-to-workspace 6']
 
 # 7: 媒体
 [[on-window-detected]]
