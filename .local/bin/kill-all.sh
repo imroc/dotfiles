@@ -1,14 +1,19 @@
 #!/bin/bash
 
+command="${1}"
+if [ -z "$command" ]; then
+  echo "请指定要终止的命令。"
+  exit 1
+fi
 # 查找所有 nvim 进程的 PID
-pids=$(pgrep -f nvim)
+pids=$(pgrep -f $command)
 
 if [ -z "$pids" ]; then
   echo "没有找到正在运行的 nvim 进程。"
   exit 0
 fi
 
-echo "找到以下 nvim 进程："
+echo "找到以下 $command 进程："
 
 # 使用 BSD ps 兼容方式显示进程信息（避免 -o）
 # 方法1：直接用 pgrep 显示
@@ -26,7 +31,7 @@ kill $pids
 sleep 1
 
 # 检查是否还有 nvim 进程
-remaining_pids=$(pgrep -f nvim)
+remaining_pids=$(pgrep -f $command)
 
 if [ -n "$remaining_pids" ]; then
   echo "部分进程未终止，强制终止..."
