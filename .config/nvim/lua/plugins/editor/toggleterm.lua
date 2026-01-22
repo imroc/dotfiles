@@ -15,6 +15,73 @@ local function rename_terminal()
   end
 end
 
+---@param buf integer
+---@return boolean
+local function comparator(buf)
+  if vim.bo[buf].filetype ~= "toggleterm" then
+    return false
+  end
+  return vim.b[buf].toggle_number ~= nil
+end
+
+--- @param num number
+local function toggle_nth_term(num)
+  local terms = require("toggleterm.terminal")
+  local ui = require("toggleterm.ui")
+  local term = terms.get_or_create_term(num)
+  ui.update_origin_window(term.window)
+  term:toggle()
+  -- Save the terminal in view if it was last closed terminal.
+  if not ui.find_open_windows() then
+    ui.save_terminal_view({ term.id }, term.id)
+  end
+end
+
+local function smart_toggle()
+  local ui = require("toggleterm.ui")
+  local has_open, windows = ui.find_open_windows(comparator)
+  local terms = require("toggleterm.terminal")
+  if not has_open then
+    if not ui.open_terminal_view() then
+      local term_id = terms.get_toggled_id()
+      terms.get_or_create_term(term_id):open()
+    end
+  else
+    ui.close_and_save_terminal_view(windows)
+  end
+end
+
+local ai_terminal = nil
+
+---@return Terminal
+local function get_ai_terminal()
+  local Terminal = require("toggleterm.terminal").Terminal
+  -- Lazy create ai terminal
+  if not ai_terminal then
+    -- Define highlight for AI terminal border (linked to DiagnosticInfo for blue)
+    vim.api.nvim_set_hl(0, "ToggleTermAIBorder", { link = "DiagnosticInfo" })
+
+    ai_terminal = Terminal:new({
+      direction = "float",
+      float_opts = {
+        width = function()
+          return math.floor(vim.o.columns * 0.99)
+        end,
+        height = function()
+          return math.floor(vim.o.lines * 0.99)
+        end,
+      },
+      on_open = function(term)
+        vim.wo[term.window].winhl = "FloatBorder:ToggleTermAIBorder"
+        vim.bo[term.bufnr].filetype = "aiterm"
+      end,
+      display_name = "AI",
+      hidden = true,
+    })
+  end
+  return ai_terminal
+end
+
 return {
   "akinsho/toggleterm.nvim",
   opts = {
@@ -35,17 +102,10 @@ return {
       mode = { "n", "t", "i" },
       function()
         local count = vim.v.count
-
-        -- Close AI terminal if it is open
-        if _G._ai_terminal and _G._ai_terminal:is_open() then
-          _G._ai_terminal:close()
-        end
-
-        -- Toggle terminal with count support
-        if count > 0 then
-          vim.cmd(count .. "ToggleTerm")
+        if count and count >= 1 then
+          toggle_nth_term(count)
         else
-          vim.cmd("ToggleTerm")
+          smart_toggle()
         end
       end,
       desc = "[P]Toggle Terminal",
@@ -107,49 +167,17 @@ return {
       "<C-.>",
       mode = { "n", "t", "i" },
       function()
-        local Terminal = require("toggleterm.terminal").Terminal
+        local term = get_ai_terminal()
         local terms = require("toggleterm.terminal")
-
-        -- Lazy create ai terminal
-        if not _G._ai_terminal then
-          -- Define highlight for AI terminal border (linked to DiagnosticInfo for blue)
-          vim.api.nvim_set_hl(0, "ToggleTermAIBorder", { link = "DiagnosticInfo" })
-
-          _G._ai_terminal = Terminal:new({
-            direction = "float",
-            float_opts = {
-              width = function()
-                return math.floor(vim.o.columns * 0.99)
-              end,
-              height = function()
-                return math.floor(vim.o.lines * 0.99)
-              end,
-            },
-            on_open = function(term)
-              vim.api.nvim_win_set_option(term.window, "winhl", "FloatBorder:ToggleTermAIBorder")
-            end,
-            display_name = "AI",
-            hidden = true,
-          })
-        end
-
-        local ai_terminal = _G._ai_terminal
         local focused_id = terms.get_focused_id()
 
-        -- If currently in ai terminal, close it
-        if focused_id == ai_terminal.id then
-          ai_terminal:close()
-          return
+        if focused_id == term.id then
+          -- If currently in ai terminal, close it
+          term:close()
+        else
+          -- Otherwise, open it
+          term:open()
         end
-
-        -- If ai terminal is open but not focused, switch to it
-        if ai_terminal:is_open() then
-          ai_terminal:focus()
-          return
-        end
-
-        -- If ai terminal is not open, open it
-        ai_terminal:open()
       end,
       desc = "[P]Toggle AI Terminal",
     },
