@@ -82,6 +82,29 @@ local function get_ai_terminal()
   return ai_terminal
 end
 
+local function toggle_ai_terminal()
+  local term = get_ai_terminal()
+  local terms = require("toggleterm.terminal")
+  local focused_id = terms.get_focused_id()
+
+  if focused_id == term.id then
+    -- If currently in ai terminal, close it
+    term:close()
+  else
+    -- Otherwise, open it
+    term:open()
+  end
+end
+
+local function toggle_terminal()
+  local count = vim.v.count
+  if count and count >= 1 then
+    toggle_nth_term(count)
+  else
+    smart_toggle()
+  end
+end
+
 return {
   "akinsho/toggleterm.nvim",
   opts = {
@@ -100,14 +123,7 @@ return {
     {
       "<C-/>",
       mode = { "n", "t", "i" },
-      function()
-        local count = vim.v.count
-        if count and count >= 1 then
-          toggle_nth_term(count)
-        else
-          smart_toggle()
-        end
-      end,
+      toggle_terminal,
       desc = "[P]Toggle Terminal",
     },
     {
@@ -166,19 +182,7 @@ return {
     {
       "<C-.>",
       mode = { "n", "t", "i" },
-      function()
-        local term = get_ai_terminal()
-        local terms = require("toggleterm.terminal")
-        local focused_id = terms.get_focused_id()
-
-        if focused_id == term.id then
-          -- If currently in ai terminal, close it
-          term:close()
-        else
-          -- Otherwise, open it
-          term:open()
-        end
-      end,
+      toggle_ai_terminal,
       desc = "[P]Toggle AI Terminal",
     },
   },
