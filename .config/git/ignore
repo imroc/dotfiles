@@ -12,3 +12,4 @@ gradlew.bat
 
 **/.claude/settings.local.json
 .codebuddy/
+.worktrees/
