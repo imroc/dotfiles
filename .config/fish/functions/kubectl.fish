@@ -296,7 +296,7 @@ function __kubectl_get --description "Override kubectl get"
 end
 
 function __get_common_args
-    argparse --ignore-unknown "context=" -- $argv 2>/dev/null
+    argparse --ignore-unknown --strict-longopts "context=" -- $argv 2>/dev/null
 
     # If KUBECTL_CONTEXT env var is set and --context is not explicitly specified, auto-append --context
     if test -z "$_flag_context"; and test -n "$KUBECTL_CONTEXT"
