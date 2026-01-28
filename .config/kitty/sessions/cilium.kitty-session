@@ -1,3 +1,3 @@
 new_tab main
-cd ~/dev/tke/cilium/main
+cd ~/dev/tke/cilium
 launch
