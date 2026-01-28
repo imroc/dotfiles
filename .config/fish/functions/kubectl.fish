@@ -185,7 +185,7 @@ function __kubectl_get --description "Override kubectl get"
     set -l common_args (__get_common_args $argv)
     set original_args $argv
     # Parse global arguments and remove them from argv to determine subcommand and its arguments
-    argparse --ignore-unknown \
+    argparse --ignore-unknown --strict-longopts \
         "o/output=" "v/v=" "kubeconfig=" \
         "s/server=" "cluster=" "user=" "username=" "token=" "password=" \
         "client-certificate=" "client-key=" "tls-server-name=" "certificate-authority=" insecure-skip-tls-verify \
