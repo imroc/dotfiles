@@ -96,6 +96,37 @@ local function toggle_ai_terminal()
   end
 end
 
+--- Send file or selection to AI terminal as @ reference
+local function send_to_ai_terminal()
+  local term = get_ai_terminal()
+  local file_path = vim.fn.expand("%:p")
+
+  if file_path == "" then
+    vim.notify("No file to send", vim.log.levels.WARN)
+    return
+  end
+
+  local cmd
+  local mode = vim.fn.mode()
+  if mode == "v" or mode == "V" or mode == "\22" then -- visual, visual line, visual block
+    -- Get visual selection range
+    local start_line = vim.fn.line("'<")
+    local end_line = vim.fn.line("'>")
+    cmd = string.format('@"%s:%d-%d"', file_path, start_line, end_line)
+  else
+    -- Normal mode: send entire file
+    cmd = '@"' .. file_path .. '"'
+  end
+
+  -- Open AI terminal if not open
+  if not term:is_open() then
+    term:open()
+  end
+
+  -- Send the command to terminal
+  term:send(cmd, false)
+end
+
 local function toggle_terminal()
   local count = vim.v.count
   if count and count >= 1 then
@@ -184,6 +215,12 @@ return {
       mode = { "n", "t", "i" },
       toggle_ai_terminal,
       desc = "[P]Toggle AI Terminal",
+    },
+    {
+      "<leader>aa",
+      send_to_ai_terminal,
+      mode = { "n", "v" },
+      desc = "[P]Send file/selection to AI Terminal",
     },
   },
   config = function(_, opts)
