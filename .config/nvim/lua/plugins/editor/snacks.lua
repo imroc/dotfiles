@@ -1,6 +1,7 @@
 -- 虽然变量没被引用，但这个却是必须的，参考snacks 官方示例
 
 local picker = require("util.picker")
+local iwiki = require("util.iwiki")
 
 local get_copy_opts = function(what)
   return {
@@ -312,6 +313,8 @@ return {
       },
       image = {
         enabled = true,
+        -- 自定义图片路径解析，用于处理 iwiki 需要鉴权的图片
+        resolve = iwiki.resolve_image,
         convert = {
           notify = false, -- disable notification on error
         },
@@ -331,8 +334,8 @@ return {
           -- max_width = 60,
           -- max_width = vim.g.neovim_mode == "skitty" and 20 or 60,
           -- max_height = vim.g.neovim_mode == "skitty" and 10 or 30,
-          max_width = vim.g.neovim_mode == "skitty" and 5 or 60,
-          max_height = vim.g.neovim_mode == "skitty" and 2.5 or 30,
+          -- max_width = vim.g.neovim_mode == "skitty" and 5 or 60,
+          -- max_height = vim.g.neovim_mode == "skitty" and 2.5 or 30,
           -- max_width = 80,
           -- max_height = 40,
           -- max_height = 30,
