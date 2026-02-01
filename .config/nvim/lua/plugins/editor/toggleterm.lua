@@ -106,16 +106,16 @@ local function send_to_ai_terminal()
     return
   end
 
-  local cmd
+  local text
   local mode = vim.fn.mode()
   if mode == "v" or mode == "V" or mode == "\22" then -- visual, visual line, visual block
     -- Get visual selection range
     local start_line = vim.fn.line("'<")
     local end_line = vim.fn.line("'>")
-    cmd = string.format('@"%s:%d-%d"', file_path, start_line, end_line)
+    text = string.format('@"%s:%d-%d" ', file_path, start_line, end_line)
   else
     -- Normal mode: send entire file
-    cmd = '@"' .. file_path .. '"'
+    text = '@"' .. file_path .. '" '
   end
 
   -- Open AI terminal if not open
@@ -123,8 +123,12 @@ local function send_to_ai_terminal()
     term:open()
   end
 
-  -- Send the command to terminal
-  term:send(cmd, false)
+  -- Send the command to terminal without trailing newline
+  -- Use chansend directly to avoid the automatic newline from term:send()
+  vim.fn.chansend(term.job_id, text)
+  if not term:is_focused() then
+    term:focus()
+  end
 end
 
 local function toggle_terminal()
