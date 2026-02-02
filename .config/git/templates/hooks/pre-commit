@@ -1,0 +1,41 @@
+#!/bin/bash
+# Git pre-commit hook: 自动检查并修正腾讯内部仓库的用户配置
+#
+# 匹配域名: git.woa.com, git.code.oa.com
+# 公司账户: rockerchen <rockerchen@tencent.com>
+
+COMPANY_NAME="rockerchen"
+COMPANY_EMAIL="rockerchen@tencent.com"
+INTERNAL_DOMAINS="git.woa.com|git.code.oa.com"
+
+# 获取所有 remote URL
+remote_urls=$(git remote -v 2>/dev/null | awk '{print $2}' | sort -u)
+
+if [ -z "$remote_urls" ]; then
+    exit 0
+fi
+
+# 检查是否为腾讯内部仓库
+is_internal=false
+for url in $remote_urls; do
+    if echo "$url" | grep -qE "$INTERNAL_DOMAINS"; then
+        is_internal=true
+        break
+    fi
+done
+
+if [ "$is_internal" = false ]; then
+    exit 0
+fi
+
+# 检查当前仓库的 user 配置
+current_email=$(git config user.email)
+
+if [ "$current_email" != "$COMPANY_EMAIL" ]; then
+    echo "🔧 检测到腾讯内部仓库，自动切换为公司账户..."
+    git config user.name "$COMPANY_NAME"
+    git config user.email "$COMPANY_EMAIL"
+    echo "✅ 已设置: $COMPANY_NAME <$COMPANY_EMAIL>"
+fi
+
+exit 0
