@@ -41,7 +41,6 @@ return {
     })
   end,
   keys = {
-    { "<leader>r", "", desc = "+[P]replace", mode = { "n", "v" } },
     {
       "<leader>rs",
       function()
