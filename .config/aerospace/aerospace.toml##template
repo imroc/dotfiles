@@ -131,15 +131,15 @@ persistent-workspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9" ]
     # See: https://nikitabobko.github.io/AeroSpace/commands#workspace
     # 一些开发者工具
     ctrl-1 = 'workspace 1'
-    # 日常开发：terminal / editor / IDE
+    # 日常开发：terminal
     ctrl-2 = 'workspace 2'
-    # 常用聊天工具
-    ctrl-3 = 'workspace 3'
     # 浏览器
+    ctrl-3 = 'workspace 3'
+    # 常用聊天工具
     ctrl-4 = 'workspace 4'
-    # AI 工具
+    # 其它聊天工具
     ctrl-5 = 'workspace 5'
-    # 非高频聊天工具
+    # AI 工具
     ctrl-6 = 'workspace 6'
     # 视频相关：剪映、ScreenStudio、ScreenFlow、QuickTime Player
     ctrl-7 = 'workspace 7'
@@ -499,6 +499,9 @@ persistent-workspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9" ]
     run = ['move-node-to-workspace 5']
 [[on-window-detected]]
     if.app-id = 'com.tinyspeck.slackmacgap' # Slack
+    run = ['move-node-to-workspace 5']
+[[on-window-detected]]
+    if.app-id = 'com.hnc.Discord' # Discord
     run = ['move-node-to-workspace 5']
 
 # 6: AI 聊天
