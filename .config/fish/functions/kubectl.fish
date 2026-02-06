@@ -16,7 +16,7 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
             __login_node $argv[2..-1]
         case pod-shell # kubectl pod-shell to login to pod, supports fzf completion for pods
             __login_pod $argv[2..-1]
-        case get # Enhanced kubectl get: supports bat for pretty output, neovim for yaml, fx for json, get configmap/secret file content, view certificate info, watch resource events, etc.
+        case get # Enhanced kubectl get: supports bat for pretty output, neovim for yaml, fx for json, get configmap/secret file content, view certificate info, watch resource events, kubectl neat for clean yaml, etc.
             __kubectl_get $argv
         case ianvs ctx neat krew # kubectl plugins that don't need global arguments passed through (to avoid errors from unsupported flags)
             __kubecolor $argv
@@ -196,8 +196,8 @@ function __kubectl_get --description "Override kubectl get"
     set -l resource_name $argv[3]
     # If resource type and name are not specified, skip the following parsing
     if test -n "$resource_type" -a -n "$resource_name"
-        # Parse custom arguments -e -E -j -p -P -c -C -W to extend get command functionality
-        argparse --ignore-unknown e E j p P c C W -- $original_args
+        # Parse custom arguments -e -E -j -p -P -c -C -W -d to extend get command functionality
+        argparse --ignore-unknown e E j p P c C W d -- $original_args
         set -l args $common_args $argv # Remove custom flags, add common flags(-n/--context)
 
         if set -q _flag_c; or set -q _flag_C # -c/-C flag set, view certificate info, supports certificate and secret resource types
@@ -281,6 +281,19 @@ function __kubectl_get --description "Override kubectl get"
             end
             set -l filename /tmp/$resource_type-$resource_name.$output_format
             command kubectl $args | command kubectl neat >$filename && nvim $filename && rm $filename
+            return
+        else if set -q _flag_d # -d flag set, clean content with kubectl neat (auto add -o yaml if not specified)
+            if test -z "$_flag_o"
+                set -a args -o yaml
+            else if test "$_flag_o" ~= yaml
+                echo "-d is only supported for yaml output format"
+                return 1
+            end
+            if not test "$__kubectl_disable_color" = 1
+                command kubectl $args | command kubectl neat | bat --language yaml
+            else
+                command kubectl $args | command kubectl neat
+            end
             return
         end
         # No custom arguments set for kubectl get, try to render content with bat based on "-o/--output" format

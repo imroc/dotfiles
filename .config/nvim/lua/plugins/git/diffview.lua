@@ -165,6 +165,15 @@ return {
         end,
         desc = "[P]Git Diff",
       },
+      {
+        "<leader>yc",
+        function()
+          local yadm = require("util.yadm")
+          yadm.set_git_env()
+          vim.cmd("DiffviewOpen")
+        end,
+        desc = "[P]Yadm diff (git changes)",
+      },
       { "<C-S-h>", "<cmd>DiffviewFileHistory<CR>", desc = "[P]Git History" },
     },
   },

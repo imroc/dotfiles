@@ -11,9 +11,19 @@ function M.open_lazygit()
   )
 end
 
+local current_git_work_tree = nil
+local current_git_dir = nil
+
 function M.set_git_env()
+  current_git_work_tree = vim.env.GIT_WORK_TREE
+  current_git_dir = vim.env.GIT_DIR
   vim.env.GIT_WORK_TREE = vim.fn.expand("$HOME")
   vim.env.GIT_DIR = vim.fn.expand("$HOME/.local/share/yadm/repo.git")
+end
+
+function M.remove_git_env()
+  vim.env.GIT_WORK_TREE = current_git_work_tree
+  vim.env.GIT_DIR = current_git_dir
 end
 
 -- add file to yadm
