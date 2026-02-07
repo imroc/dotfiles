@@ -6,3 +6,4 @@ abbr --add cr ccr code
 abbr --add oc opencode
 abbr --add ow openclaw
 abbr --add ot openclaw tui
+abbr --add or openclaw gateway restart
