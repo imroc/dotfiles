@@ -171,6 +171,7 @@ return {
           local yadm = require("util.yadm")
           yadm.set_git_env()
           vim.cmd("DiffviewOpen")
+          vim.cmd("DiffviewToggleFiles")
         end,
         desc = "[P]Yadm diff (git changes)",
       },
