@@ -70,6 +70,34 @@ end
 
 local ai_terminal = nil
 
+--- Cycle to next/prev terminal, skipping hidden (AI) terminals
+---@param direction 1|-1
+local function cycle_terminal(direction)
+  local terms = require("toggleterm.terminal")
+  local all = terms.get_all() -- excludes hidden terminals (AI)
+  if #all == 0 then
+    return
+  end
+
+  local focused_id = terms.get_focused_id()
+  local current_idx = nil
+  for i, t in ipairs(all) do
+    if t.id == focused_id then
+      current_idx = i
+      break
+    end
+  end
+
+  if not current_idx then
+    -- No focused terminal, open the first one
+    toggle_nth_term(all[1].id)
+    return
+  end
+
+  local next_idx = ((current_idx - 1 + direction) % #all) + 1
+  toggle_nth_term(all[next_idx].id)
+end
+
 ---@return Terminal
 local function get_ai_terminal()
   local Terminal = require("toggleterm.terminal").Terminal
@@ -242,10 +270,26 @@ return {
       desc = "[P]Rename Terminal",
     },
     {
-      "<M-,>",
+      "<C-.>",
       mode = { "n", "t" },
       rename_terminal,
       desc = "[P]Rename Terminal",
+    },
+    {
+      "<M-.>",
+      mode = { "n", "t" },
+      function()
+        cycle_terminal(1)
+      end,
+      desc = "[P]Next Terminal",
+    },
+    {
+      "<M-,>",
+      mode = { "n", "t" },
+      function()
+        cycle_terminal(-1)
+      end,
+      desc = "[P]Prev Terminal",
     },
     {
       "<C-S-/>",
