@@ -20,7 +20,9 @@ local function rename_terminal()
   local terms = require("toggleterm.terminal")
   local focused_id = terms.get_focused_id()
   local term = focused_id and terms.get(focused_id)
-  if not term then return end
+  if not term then
+    return
+  end
 
   vim.ui.input({ prompt = "Terminal name: ", default = term.display_name or "" }, function(name)
     if name and #name > 0 then
@@ -163,6 +165,19 @@ return {
     auto_scroll = false,
     on_open = function(term)
       update_float_title(term)
+      -- Double vim.schedule to ensure startinsert runs after toggleterm's
+      -- __restore_mode (which uses a single vim.schedule internally)
+      vim.schedule(function()
+        vim.schedule(function()
+          if
+            term.window
+            and vim.api.nvim_win_is_valid(term.window)
+            and term.window == vim.api.nvim_get_current_win()
+          then
+            vim.cmd("startinsert")
+          end
+        end)
+      end)
     end,
     size = function(term)
       if term.direction == "horizontal" then
