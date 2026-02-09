@@ -16,18 +16,45 @@ local function update_float_title(term)
   end
 end
 
-local function rename_terminal()
-  local terms = require("toggleterm.terminal")
-  local focused_id = terms.get_focused_id()
-  local term = focused_id and terms.get(focused_id)
-  if not term then
-    return
-  end
-
+---@param term table
+local function do_rename(term)
   vim.ui.input({ prompt = "Terminal name: ", default = term.display_name or "" }, function(name)
     if name and #name > 0 then
       term.display_name = name
       update_float_title(term)
+    end
+  end)
+  -- noice.nvim replaces vim.ui.input with a float window;
+  -- schedule startinsert so it runs after the float is created
+  vim.schedule(function()
+    vim.cmd("startinsert")
+  end)
+end
+
+local function rename_terminal()
+  local terms = require("toggleterm.terminal")
+  local focused_id = terms.get_focused_id()
+  local term = focused_id and terms.get(focused_id)
+  if term then
+    do_rename(term)
+    return
+  end
+
+  -- No focused terminal, let user pick from list
+  local all = terms.get_all()
+  if #all == 0 then
+    vim.notify("No terminals to rename", vim.log.levels.WARN)
+    return
+  end
+
+  vim.ui.select(all, {
+    prompt = "Select terminal to rename:",
+    format_item = function(t)
+      return string.format("%d: %s", t.id, t:_display_name())
+    end,
+  }, function(selected)
+    if selected then
+      do_rename(selected)
     end
   end)
 end
