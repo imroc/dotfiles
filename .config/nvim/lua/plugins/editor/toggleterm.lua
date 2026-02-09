@@ -146,6 +146,19 @@ local function get_ai_terminal()
       on_open = function(term)
         vim.wo[term.window].winhl = "FloatBorder:ToggleTermAIBorder"
         vim.bo[term.bufnr].filetype = "aiterm"
+        vim.api.nvim_win_set_config(term.window, { title = " AI ", title_pos = "left" })
+        -- Double vim.schedule to run after __restore_mode's vim.schedule
+        vim.schedule(function()
+          vim.schedule(function()
+            if
+              term.window
+              and vim.api.nvim_win_is_valid(term.window)
+              and term.window == vim.api.nvim_get_current_win()
+            then
+              vim.cmd("startinsert")
+            end
+          end)
+        end)
       end,
       display_name = "AI",
       hidden = true,
