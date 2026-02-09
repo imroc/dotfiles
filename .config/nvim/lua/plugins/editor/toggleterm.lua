@@ -6,13 +6,28 @@ end
 -- if you only want these mappings for toggle term use term://*toggleterm#* instead
 vim.cmd("autocmd! TermOpen term://* lua set_terminal_keymaps()")
 
-local function rename_terminal()
-  local focused_id = require("toggleterm.terminal").get_focused_id()
-  if focused_id then
-    vim.cmd(focused_id .. "ToggleTermSetName")
-  else
-    vim.cmd("ToggleTermSetName")
+--- Update the float window title to show "id:name"
+---@param term table
+local function update_float_title(term)
+  if term:is_float() and term.window and vim.api.nvim_win_is_valid(term.window) then
+    local name = term.display_name or vim.split(term.name or "", ";")[1] or ""
+    local title = string.format(" %d:%s ", term.id, name)
+    vim.api.nvim_win_set_config(term.window, { title = title, title_pos = "left" })
   end
+end
+
+local function rename_terminal()
+  local terms = require("toggleterm.terminal")
+  local focused_id = terms.get_focused_id()
+  local term = focused_id and terms.get(focused_id)
+  if not term then return end
+
+  vim.ui.input({ prompt = "Terminal name: ", default = term.display_name or "" }, function(name)
+    if name and #name > 0 then
+      term.display_name = name
+      update_float_title(term)
+    end
+  end)
 end
 
 ---@param buf integer
@@ -146,6 +161,9 @@ return {
     open_mapping = false,
     direction = "float",
     auto_scroll = false,
+    on_open = function(term)
+      update_float_title(term)
+    end,
     size = function(term)
       if term.direction == "horizontal" then
         return vim.o.lines * 0.4
@@ -215,7 +233,7 @@ return {
       desc = "[P]Rename Terminal",
     },
     {
-      "<C-.>",
+      "<C-S-/>",
       mode = { "n", "t", "i" },
       toggle_ai_terminal,
       desc = "[P]Toggle AI Terminal",
