@@ -252,7 +252,7 @@ return {
       desc = "[P]New Terminal",
     },
     {
-      "<M-/>",
+      "<C-S-n>",
       mode = { "n", "t" },
       "<cmd>TermNew<cr>",
       desc = "[P]New Terminal",
@@ -263,7 +263,7 @@ return {
       desc = "[P]Rename Terminal",
     },
     {
-      "<C-.>",
+      "<M-;>",
       mode = { "n", "t" },
       rename_terminal,
       desc = "[P]Rename Terminal",
@@ -285,13 +285,13 @@ return {
       desc = "[P]Prev Terminal",
     },
     {
-      "<C-S-/>",
+      "<M-/>",
       mode = { "n", "t", "i" },
       switch_to_ai_terminal,
       desc = "[P]Switch to AI Terminal",
     },
     {
-      "<C-S-,>",
+      "<C-.>",
       mode = { "n", "t" },
       switch_to_last_terminal,
       desc = "[P]Switch to Last Terminal",
