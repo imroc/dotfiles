@@ -1,4 +1,16 @@
 {
+  "kns": {
+    "prefix": [
+      "kns"
+    ],
+    "description": "kubernetes namespace template",
+    "body": [
+      "apiVersion: v1",
+      "kind: Namespace",
+      "metadata:",
+      "  name: ${1:test}"
+    ]
+  },
   "net-debug": {
     "prefix": [
       "netdebug"
