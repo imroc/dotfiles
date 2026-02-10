@@ -59,43 +59,28 @@ local function rename_terminal()
   end)
 end
 
----@param buf integer
----@return boolean
-local function comparator(buf)
-  if vim.bo[buf].filetype ~= "toggleterm" then
-    return false
-  end
-  return vim.b[buf].toggle_number ~= nil
-end
-
---- @param num number
-local function toggle_nth_term(num)
-  local terms = require("toggleterm.terminal")
-  local ui = require("toggleterm.ui")
-  local term = terms.get_or_create_term(num)
-  ui.update_origin_window(term.window)
-  term:toggle()
-  -- Save the terminal in view if it was last closed terminal.
-  if not ui.find_open_windows() then
-    ui.save_terminal_view({ term.id }, term.id)
-  end
-end
-
-local function smart_toggle()
-  local ui = require("toggleterm.ui")
-  local has_open, windows = ui.find_open_windows(comparator)
-  local terms = require("toggleterm.terminal")
-  if not has_open then
-    if not ui.open_terminal_view() then
-      local term_id = terms.get_toggled_id()
-      terms.get_or_create_term(term_id):open()
-    end
-  else
-    ui.close_and_save_terminal_view(windows)
-  end
-end
-
 local ai_terminal = nil
+local ai_was_last_closed = false
+
+--- Terminal focus history: prev_terminal_id is the one before current.
+--- Updated in on_open so every terminal open (toggle, cycle, explicit) is tracked.
+local prev_terminal_id = nil
+local current_terminal_id = nil
+
+--- Called from global on_open to track terminal focus history
+---@param term table
+local function on_terminal_open(term)
+  if current_terminal_id and current_terminal_id ~= term.id then
+    prev_terminal_id = current_terminal_id
+  end
+  current_terminal_id = term.id
+
+  -- AI terminal specific styling
+  if ai_terminal and term.id == ai_terminal.id then
+    vim.wo[term.window].winhl = "FloatBorder:ToggleTermAIBorder"
+    vim.api.nvim_win_set_config(term.window, { title = " AI ", title_pos = "left" })
+  end
+end
 
 --- Cycle to next/prev terminal, skipping hidden (AI) terminals
 ---@param direction 1|-1
@@ -116,13 +101,12 @@ local function cycle_terminal(direction)
   end
 
   if not current_idx then
-    -- No focused terminal, open the first one
-    toggle_nth_term(all[1].id)
+    all[1]:open()
     return
   end
 
   local next_idx = ((current_idx - 1 + direction) % #all) + 1
-  toggle_nth_term(all[next_idx].id)
+  all[next_idx]:open()
 end
 
 ---@return Terminal
@@ -143,23 +127,7 @@ local function get_ai_terminal()
           return math.floor(vim.o.lines * 0.99)
         end,
       },
-      on_open = function(term)
-        vim.wo[term.window].winhl = "FloatBorder:ToggleTermAIBorder"
-        vim.bo[term.bufnr].filetype = "aiterm"
-        vim.api.nvim_win_set_config(term.window, { title = " AI ", title_pos = "left" })
-        -- Double vim.schedule to run after __restore_mode's vim.schedule
-        vim.schedule(function()
-          vim.schedule(function()
-            if
-              term.window
-              and vim.api.nvim_win_is_valid(term.window)
-              and term.window == vim.api.nvim_get_current_win()
-            then
-              vim.cmd("startinsert")
-            end
-          end)
-        end)
-      end,
+      -- No on_open here; global on_open handles tracking and AI styling
       display_name = "AI",
       hidden = true,
     })
@@ -167,18 +135,45 @@ local function get_ai_terminal()
   return ai_terminal
 end
 
-local function toggle_ai_terminal()
-  local term = get_ai_terminal()
-  local terms = require("toggleterm.terminal")
-  local focused_id = terms.get_focused_id()
-
-  if focused_id == term.id then
-    -- If currently in ai terminal, close it
-    term:close()
-  else
-    -- Otherwise, open it
-    term:open()
+local function switch_to_ai_terminal()
+  if ai_terminal and ai_terminal:is_focused() then
+    return
   end
+  ai_was_last_closed = false
+  get_ai_terminal():open()
+end
+
+local function toggle_terminal()
+  -- Close AI terminal if it's open
+  if ai_terminal and ai_terminal:is_open() then
+    ai_terminal:close()
+    ai_was_last_closed = true
+    return
+  end
+  -- Reopen AI terminal if it was the last one closed by <C-/> (only without count)
+  local count = vim.v.count
+  if count == 0 and ai_was_last_closed and ai_terminal then
+    ai_was_last_closed = false
+    ai_terminal:open()
+    return
+  end
+  ai_was_last_closed = false
+  vim.cmd(count .. "ToggleTerm")
+end
+
+local function switch_to_last_terminal()
+  if not prev_terminal_id then
+    vim.notify("No previous terminal", vim.log.levels.WARN)
+    return
+  end
+  local terms = require("toggleterm.terminal")
+  local term = terms.get(prev_terminal_id, true)
+  if not term then
+    vim.notify("Previous terminal no longer exists", vim.log.levels.WARN)
+    prev_terminal_id = nil
+    return
+  end
+  term:open()
 end
 
 --- Send file or selection to AI terminal as @ reference
@@ -216,15 +211,6 @@ local function send_to_ai_terminal()
   end
 end
 
-local function toggle_terminal()
-  local count = vim.v.count
-  if count and count >= 1 then
-    toggle_nth_term(count)
-  else
-    smart_toggle()
-  end
-end
-
 return {
   "akinsho/toggleterm.nvim",
   opts = {
@@ -233,6 +219,7 @@ return {
     auto_scroll = false,
     on_open = function(term)
       update_float_title(term)
+      on_terminal_open(term)
       -- Double vim.schedule to ensure startinsert runs after toggleterm's
       -- __restore_mode (which uses a single vim.schedule internally)
       vim.schedule(function()
@@ -334,8 +321,14 @@ return {
     {
       "<C-S-/>",
       mode = { "n", "t", "i" },
-      toggle_ai_terminal,
-      desc = "[P]Toggle AI Terminal",
+      switch_to_ai_terminal,
+      desc = "[P]Switch to AI Terminal",
+    },
+    {
+      "<C-S-,>",
+      mode = { "n", "t" },
+      switch_to_last_terminal,
+      desc = "[P]Switch to Last Terminal",
     },
     {
       "<leader>aa",
