@@ -166,10 +166,20 @@ return {
         desc = "[P]Git Diff",
       },
       {
-        "<leader>yc",
+        "<leader>yid",
         function()
           local yadm = require("util.yadm")
-          yadm.set_git_env()
+          yadm.set_git_env("private")
+          vim.cmd("DiffviewOpen")
+          vim.cmd("DiffviewToggleFiles")
+        end,
+        desc = "[P]Yadm diff (git changes)",
+      },
+      {
+        "<leader>yud",
+        function()
+          local yadm = require("util.yadm")
+          yadm.set_git_env("public")
           vim.cmd("DiffviewOpen")
           vim.cmd("DiffviewToggleFiles")
         end,
