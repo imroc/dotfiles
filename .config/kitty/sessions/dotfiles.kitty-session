@@ -1,9 +1,9 @@
-new_tab dotfiles
-cd ~/dotfiles
+new_tab private
+cd ~/dev/dotfiles/dotfiles-private
 launch
 
-new_tab dotfiles-public
-cd ~/dotfiles-public
+new_tab public
+cd ~/dev/dotfiles/dotfiles-public
 launch
 
 new_tab
