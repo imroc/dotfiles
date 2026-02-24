@@ -5,6 +5,8 @@ local M = {}
 local buffer = require("util.buffer")
 local job = require("util.job")
 
+local cmd = "iwiki"
+
 -- 图片下载相关
 local image_cache_dir = vim.fn.stdpath("cache") .. "/iwiki/images"
 local downloading = {} -- 正在下载的 attachment id 集合
@@ -16,7 +18,7 @@ end
 
 function M.save_iwiki()
   local file_path = buffer.absolute_path()
-  job.run_script('iwiki.sh save "' .. file_path .. '"', {
+  job.run_script(cmd .. ' save "' .. file_path .. '"', {
     on_exit = function(job, code, signal)
       if code == 0 then
         vim.notify("Successfully synced to iwiki")
@@ -36,7 +38,7 @@ end
 
 function M.open_iwiki()
   local file_path = buffer.absolute_path()
-  job.run_script('iwiki.sh open "' .. file_path .. '"')
+  job.run_script(cmd .. ' open "' .. file_path .. '"')
 end
 
 -- function insert_at_cursor(text)
@@ -49,7 +51,7 @@ function M.insert_image()
   local file_path = buffer.absolute_path()
   local Job = require("plenary.job")
   local result, code = Job:new({
-    command = "iwiki.sh",
+    command = cmd,
     args = { "upload", file_path },
   }):sync()
 
@@ -74,7 +76,7 @@ function M.copy_url()
   local file_path = buffer.absolute_path()
   local Job = require("plenary.job")
   local result, code = Job:new({
-    command = "iwiki.sh",
+    command = cmd,
     args = { "url", file_path },
   }):sync()
 
@@ -131,7 +133,7 @@ function M.download_image_async(id, on_done)
 
   downloading[id] = true
 
-  vim.system({ "iwiki.sh", "download", id, cache_path }, { text = true }, function(result)
+  vim.system({ cmd, "download", id, cache_path }, { text = true }, function(result)
     downloading[id] = nil
     if result.code == 0 and on_done then
       vim.schedule(on_done)
