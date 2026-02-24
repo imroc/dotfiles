@@ -40,7 +40,7 @@ return {
     "Kicamon/markdown-table-mode.nvim",
     opts = {},
     keys = {
-      { "<localleader>tm", "<cmd>Mtm<cr>", ft = "markdown", desc = "[P]Toggle Table Mode" },
+      { "<localleader>t", "<cmd>Mtm<cr>", ft = "markdown", desc = "[P]Toggle Table Mode" },
     },
   },
   {
@@ -143,12 +143,6 @@ return {
     keys = {
       {
         "<localleader>i",
-        "",
-        ft = "markdown",
-        desc = "[P]insert",
-      },
-      {
-        "<localleader>ip",
         function()
           require("nvim-picgo").upload_clipboard()
         end,
@@ -194,7 +188,7 @@ return {
     },
     keys = {
       -- suggested keymap
-      { "<localleader>p", "<cmd>PasteImage<cr>", desc = "Paste image from system clipboard" },
+      { "<localleader>p", "<cmd>PasteImage<cr>", desc = "[P]Paste Image (Clipboard)" },
     },
   },
   {
