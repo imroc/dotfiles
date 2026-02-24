@@ -22,3 +22,12 @@ local iwiki = require("util.iwiki")
 map("n", "<localleader>ws", iwiki.save_iwiki, { buffer = 0, desc = "[P]Save" })
 map("n", "<localleader>wo", iwiki.open_iwiki, { buffer = 0, desc = "[P]Open in browser" })
 map("n", "<localleader>wi", iwiki.insert_image, { buffer = 0, desc = "[P]Insert image" })
+map("n", "<localleader>wu", iwiki.copy_url, { buffer = 0, desc = "[P]Copy iwiki URL" })
+
+map("n", "<localleader>s", function()
+  if iwiki.is_iwiki() then
+    iwiki.save_iwiki()
+  else
+    vim.notify("未识别的 markdown 同步目标", vim.log.levels.WARN)
+  end
+end, { buffer = 0, desc = "[P]Sync markdown file" })

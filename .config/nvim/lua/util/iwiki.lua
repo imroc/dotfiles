@@ -9,6 +9,11 @@ local job = require("util.job")
 local image_cache_dir = vim.fn.stdpath("cache") .. "/iwiki/images"
 local downloading = {} -- 正在下载的 attachment id 集合
 
+function M.is_iwiki()
+  local dir = vim.fn.expand("%:p:h")
+  return vim.fn.filereadable(dir .. "/iwiki.json") == 1
+end
+
 function M.save_iwiki()
   local file_path = buffer.absolute_path()
   job.run_script('iwiki.sh save "' .. file_path .. '"', {
@@ -62,6 +67,24 @@ function M.insert_image()
     end
   else
     vim.notify("failed to upload image to iwiki:" .. msg, vim.log.levels.ERROR)
+  end
+end
+
+function M.copy_url()
+  local file_path = buffer.absolute_path()
+  local Job = require("plenary.job")
+  local result, code = Job:new({
+    command = "iwiki.sh",
+    args = { "url", file_path },
+  }):sync()
+
+  if code == 0 and result and next(result) ~= nil then
+    local url = result[1]
+    vim.fn.setreg("+", url)
+    vim.notify("Copied: " .. url)
+  else
+    local msg = (result and next(result) ~= nil) and table.concat(result, "\n") or "无法获取文档 URL"
+    vim.notify(msg, vim.log.levels.ERROR)
   end
 end
 
