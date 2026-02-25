@@ -212,6 +212,13 @@ return {
   keys = {
     {
       "<C-/>",
+      "<cmd>ToggleTerm<cr>",
+      mode = { "n", "t", "i" },
+      desc = "[P]Toggle Terminal",
+    },
+    {
+      "<C-_>",
+      "<cmd>ToggleTerm<cr>",
       mode = { "n", "t", "i" },
       desc = "[P]Toggle Terminal",
     },

@@ -1,6 +1,7 @@
 theme = tokyonight
 font-family = JetBrainsMono Nerd Font
-font-size = 13
+font-family = Sarasa Mono SC
+font-size = 14
 shell-integration-features = no-cursor
 cursor-style = block
 # window-colorspace = display-p3
