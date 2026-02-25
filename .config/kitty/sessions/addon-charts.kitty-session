@@ -1,3 +1,3 @@
 new_tab addon-charts
-cd ~/dev/tke/addon-charts/master
+cd ~/dev/tke/addon-charts
 launch fish -C 'nvim'
