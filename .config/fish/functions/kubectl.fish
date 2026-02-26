@@ -25,11 +25,20 @@ function kubectl --wraps=kubectl --description "wrap kubectl with extra advanced
     end
 end
 
+function __kubectl_cmd
+    if set -q KUBECTL_CLI
+        echo $KUBECTL_CLI
+    else
+        echo kubectl
+    end
+end
+
 function __kubecolor
-    if not test "$__kubectl_disable_color" = 1; and command -sq kubecolor
+    set -l kc (__kubectl_cmd)
+    if not test "$__kubectl_disable_color" = 1; and not set -q KUBECTL_CLI; and command -sq kubecolor
         command kubecolor $argv
     else
-        command kubectl $argv
+        command $kc $argv
     end
 end
 
@@ -80,7 +89,8 @@ function __get_current_context --description "Get current context name"
     if set -q KUBECTL_CONTEXT
         echo $KUBECTL_CONTEXT
     else
-        command kubectl config view -o jsonpath='{.current-context}' 2>/dev/null
+        set -l kc (__kubectl_cmd)
+        command $kc config view -o jsonpath='{.current-context}' 2>/dev/null
     end
 end
 
@@ -104,7 +114,8 @@ function __switch_ns --description "Switch namespace"
         return 1
     end
     # Set namespace
-    command kubectl config set-context "$current_context" --namespace=$ns 2>&1 >/dev/null
+    set -l kc (__kubectl_cmd)
+    command $kc config set-context "$current_context" --namespace=$ns 2>&1 >/dev/null
     echo "Namespace switched to $ns"
 end
 
@@ -139,22 +150,24 @@ end
 
 function __login_node --description "Login to node"
     set -l common_args (__get_common_args $argv)
+    set -l kc (__kubectl_cmd)
     set -l node $argv[1]
     if test -z "$node" # No argument after subcommand, list all nodes and select with fzf (excluding virtual nodes that cannot be logged into)
         # Use node-shell to login to node
-        set node (command kubectl get node $common_args -o json | jq -r '.items[].metadata.name' | grep -v eklet- | fzf -0)
+        set node (command $kc get node $common_args -o json | jq -r '.items[].metadata.name' | grep -v eklet- | fzf -0)
         if test -z "$node"
             echo "No node selected"
         end
-        command kubectl node-shell $node $common_args
+        command $kc node-shell $node $common_args
     else
-        command kubectl node-shell $node $common_args $argv[2..-1]
+        command $kc node-shell $node $common_args $argv[2..-1]
     end
 end
 
 function __login_pod --description "Login to pod"
     set -l common_args (__get_common_args $argv)
-    set -l pod_list (command kubectl get pod $common_args -o json)
+    set -l kc (__kubectl_cmd)
+    set -l pod_list (command $kc get pod $common_args -o json)
     set -l pod $argv[1]
     if test -z "$pod"
         # Select pod with fzf
@@ -183,6 +196,7 @@ end
 
 function __kubectl_get --description "Override kubectl get"
     set -l common_args (__get_common_args $argv)
+    set -l kc (__kubectl_cmd)
     set original_args $argv
     # Parse global arguments and remove them from argv to determine subcommand and its arguments
     argparse --ignore-unknown --strict-longopts \
@@ -217,14 +231,14 @@ function __kubectl_get --description "Override kubectl get"
             end
             return
         else if set -q _flag_p; or set -q _flag_P # -p/-P flag set, select filename from configmap/secret to open. -p prints content to terminal; -P opens content in neovim.
-            set -l filename (command kubectl $args -o json | jq -r '.data | keys | .[]' | fzf -1 -0)
+            set -l filename (command $kc $args -o json | jq -r '.data | keys | .[]' | fzf -1 -0)
             if test -z "$filename" # Empty configmap/secret, return directly
                 echo "empty configmap or secret"
                 return
             end
             set -l escaped_filename (string replace -a -- '.' '\\.' $filename)
             set -a args -o jsonpath="{.data.$escaped_filename}"
-            set -l result (command kubectl $args | string collect)
+            set -l result (command $kc $args | string collect)
             if not test $status -eq 0
                 return
             end
@@ -248,10 +262,10 @@ function __kubectl_get --description "Override kubectl get"
             printf "%s" "$result"
             return
         else if set -q _flag_j # -j flag set, output in json format and open with fx
-            command kubectl $args -o json | fx
+            command $kc $args -o json | fx
             return
         else if set -q _flag_W # -W flag set, watch events
-            command kubectl $args -o json 2>&1 | read -z output
+            command $kc $args -o json 2>&1 | read -z output
             if not test $status -eq 0
                 echo "Error fetching resource: $output"
                 return
@@ -271,7 +285,7 @@ function __kubectl_get --description "Override kubectl get"
                 set output_format yaml
             end
             set -l filename /tmp/$resource_type-$resource_name.$output_format
-            command kubectl $args >$filename && nvim $filename && rm $filename
+            command $kc $args >$filename && nvim $filename && rm $filename
             return
         else if set -q _flag_E # -E flag set, clean content with kubectl neat, save to file and open with nvim (enables LSP for hints and completion)
             set -l output_format $_flag_o
@@ -280,7 +294,7 @@ function __kubectl_get --description "Override kubectl get"
                 set output_format yaml
             end
             set -l filename /tmp/$resource_type-$resource_name.$output_format
-            command kubectl $args | command kubectl neat >$filename && nvim $filename && rm $filename
+            command $kc $args | command $kc neat >$filename && nvim $filename && rm $filename
             return
         else if set -q _flag_d # -d flag set, clean content with kubectl neat (auto add -o yaml if not specified)
             if test -z "$_flag_o"
@@ -290,9 +304,9 @@ function __kubectl_get --description "Override kubectl get"
                 return 1
             end
             if not test "$__kubectl_disable_color" = 1
-                command kubectl $args | command kubectl neat | bat --language yaml
+                command $kc $args | command $kc neat | bat --language yaml
             else
-                command kubectl $args | command kubectl neat
+                command $kc $args | command $kc neat
             end
             return
         end
@@ -300,7 +314,7 @@ function __kubectl_get --description "Override kubectl get"
         if not test "$__kubectl_disable_color" = 1; and test -n "$_flag_o"
             switch $_flag_o
                 case yaml json
-                    command kubectl $args | bat --language "$_flag_o"
+                    command $kc $args | bat --language "$_flag_o"
                     return
             end
         end
