@@ -1,11 +1,2 @@
-new_tab private
-cd ~/dev/dotfiles/dotfiles-private
-launch
-
-new_tab public
-cd ~/dev/dotfiles/dotfiles-public
-launch
-
-new_tab
 cd ~/.config
 launch

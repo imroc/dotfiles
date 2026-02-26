@@ -1,3 +1,0 @@
-new_tab dashboard
-cd ~/dev/tke/dashboard
-launch fish -c 'nvim go.mod'
