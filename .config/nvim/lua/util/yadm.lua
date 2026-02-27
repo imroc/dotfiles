@@ -4,6 +4,10 @@ local function git_dir(type)
   return vim.fn.expand("$HOME/.local/share/yadm-" .. type .. "/repo.git")
 end
 
+local function yadm_data(type)
+  return vim.fn.expand("$HOME/.local/share/yadm-" .. type)
+end
+
 local function yadm_dir(type)
   return vim.fn.expand("$HOME/.config/yadm-" .. type)
 end
@@ -44,11 +48,12 @@ function M.add_current_file(type)
       vim.notify("No file in current buffer", vim.log.levels.WARN)
       return
     end
-    vim.fn.system({ "yadm", "--yadm-dir", yadm_dir(type), "--yadm-data", git_dir(type), "add", filepath })
+    local output =
+      vim.fn.system({ "yadm", "--yadm-dir", yadm_dir(type), "--yadm-data", yadm_data(type), "add", filepath })
     if vim.v.shell_error == 0 then
       vim.notify(string.format("Yadm added (%s): %s", type, filepath), vim.log.levels.INFO)
     else
-      vim.notify(string.format("Yadm add failed (%s): %s", type, filepath), vim.log.levels.ERROR)
+      vim.notify(string.format("Yadm add failed (%s): %s\n%s", type, filepath, vim.trim(output)), vim.log.levels.ERROR)
     end
   end
 end
