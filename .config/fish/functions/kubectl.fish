@@ -27,7 +27,7 @@ end
 
 function __kubectl_cmd
     if set -q KUBECTL_CLI
-        echo $KUBECTL_CLI
+        string split ' ' -- $KUBECTL_CLI
     else
         echo kubectl
     end
