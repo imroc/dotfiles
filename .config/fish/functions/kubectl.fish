@@ -231,14 +231,14 @@ function __kubectl_get --description "Override kubectl get"
             end
             return
         else if set -q _flag_p; or set -q _flag_P # -p/-P flag set, select filename from configmap/secret to open. -p prints content to terminal; -P opens content in neovim.
-            set -l filename (command $kc $args -o json | jq -r '.data | keys | .[]' | fzf -1 -0)
+            set -l filename (command $kc $args -o json 2>/dev/null | jq -r '.data | keys | .[]' | fzf -1 -0)
             if test -z "$filename" # Empty configmap/secret, return directly
                 echo "empty configmap or secret"
                 return
             end
             set -l escaped_filename (string replace -a -- '.' '\\.' $filename)
             set -a args -o jsonpath="{.data.$escaped_filename}"
-            set -l result (command $kc $args | string collect)
+            set -l result (command $kc $args 2>/dev/null | string collect)
             if not test $status -eq 0
                 return
             end
@@ -262,10 +262,10 @@ function __kubectl_get --description "Override kubectl get"
             printf "%s" "$result"
             return
         else if set -q _flag_j # -j flag set, output in json format and open with fx
-            command $kc $args -o json | fx
+            command $kc $args -o json 2>/dev/null | fx
             return
         else if set -q _flag_W # -W flag set, watch events
-            command $kc $args -o json 2>&1 | read -z output
+            command $kc $args -o json 2>/dev/null | read -z output
             if not test $status -eq 0
                 echo "Error fetching resource: $output"
                 return
@@ -285,7 +285,7 @@ function __kubectl_get --description "Override kubectl get"
                 set output_format yaml
             end
             set -l filename /tmp/$resource_type-$resource_name.$output_format
-            command $kc $args >$filename && nvim $filename && rm $filename
+            command $kc $args 2>/dev/null >$filename && nvim $filename && rm $filename
             return
         else if set -q _flag_E # -E flag set, clean content with kubectl neat, save to file and open with nvim (enables LSP for hints and completion)
             set -l output_format $_flag_o
@@ -294,7 +294,7 @@ function __kubectl_get --description "Override kubectl get"
                 set output_format yaml
             end
             set -l filename /tmp/$resource_type-$resource_name.$output_format
-            command $kc $args | command $kc neat >$filename && nvim $filename && rm $filename
+            command $kc $args 2>/dev/null | command $kc neat >$filename && nvim $filename && rm $filename
             return
         else if set -q _flag_d # -d flag set, clean content with kubectl neat (auto add -o yaml if not specified)
             if test -z "$_flag_o"
@@ -304,9 +304,9 @@ function __kubectl_get --description "Override kubectl get"
                 return 1
             end
             if not test "$__kubectl_disable_color" = 1
-                command $kc $args | command $kc neat | bat --language yaml
+                command $kc $args 2>/dev/null | command $kc neat | bat --language yaml
             else
-                command $kc $args | command $kc neat
+                command $kc $args 2>/dev/null | command $kc neat
             end
             return
         end
@@ -314,7 +314,7 @@ function __kubectl_get --description "Override kubectl get"
         if not test "$__kubectl_disable_color" = 1; and test -n "$_flag_o"
             switch $_flag_o
                 case yaml json
-                    command $kc $args | bat --language "$_flag_o"
+                    command $kc $args 2>/dev/null | bat --language "$_flag_o"
                     return
             end
         end
