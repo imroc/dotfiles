@@ -68,21 +68,10 @@ persistent-workspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9" ]
 [gaps]
     inner.horizontal = 5
     inner.vertical = 5
-    {% if yadm.class == "M1" %}
     outer.left = 0
     outer.right = 0
     outer.bottom = 0
     outer.top = 29
-    {% else %}
-    outer.left = 2
-    outer.right = 2
-    outer.bottom = 2
-    outer.top = [
-      # 内建显示器是刘海屏，本身占用的高度足以容纳 SketchyBar，所以不需要 gaps
-      { monitor.'built-in' = 0 },
-      29,
-    ]
-    {% endif %}
 
 [exec.env-vars]
     PATH = '${HOME}/.local/bin:/opt/homebrew/bin:${PATH}'

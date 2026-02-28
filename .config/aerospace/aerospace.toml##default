@@ -1,0 +1,538 @@
+# vim: set ft=toml :
+
+# Place a copy of this config to ~/.aerospace.toml
+# After that, you can edit ~/.aerospace.toml to your liking
+
+# Config version for compatibility and deprecations
+# Fallback value (if you omit the key): config-version = 1
+config-version = 2
+
+# Start AeroSpace at login
+start-at-login = true
+
+# Normalizations. See: https://nikitabobko.github.io/AeroSpace/guide#normalization
+enable-normalization-flatten-containers = true
+enable-normalization-opposite-orientation-for-nested-containers = true
+
+# See: https://nikitabobko.github.io/AeroSpace/guide#layouts
+# The 'accordion-padding' specifies the size of accordion padding
+# You can set 0 to disable the padding feature
+accordion-padding = 10
+
+# Possible values: tiles|accordion
+default-root-container-layout = 'accordion'
+
+# Possible values: horizontal|vertical|auto
+# 'auto' means: wide monitor (anything wider than high) gets horizontal orientation,
+#               tall monitor (anything higher than wide) gets vertical orientation
+default-root-container-orientation = 'auto'
+
+# Mouse follows focus when focused monitor changes
+# Drop it from your config, if you don't like this behavior
+# See https://nikitabobko.github.io/AeroSpace/guide#on-focus-changed-callbacks
+# See https://nikitabobko.github.io/AeroSpace/commands#move-mouse
+# Fallback value (if you omit the key): on-focused-monitor-changed = []
+on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
+
+exec-on-workspace-change = [
+  '/bin/bash',
+  '-c',
+  'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE',
+]
+
+
+# You can effectively turn off macOS "Hide application" (cmd-h) feature by toggling this flag
+# Useful if you don't use this macOS feature, but accidentally hit cmd-h or cmd-alt-h key
+# Also see: https://nikitabobko.github.io/AeroSpace/goodies#disable-hide-app
+automatically-unhide-macos-hidden-apps = true
+
+# List of workspaces that should stay alive even when they contain no windows,
+# even when they are invisible.
+# This config version is only available since 'config-version = 2'
+# Fallback value (if you omit the key): persistent-workspaces = []
+persistent-workspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9" ]
+
+# Possible values: (qwerty|dvorak|colemak)
+# See https://nikitabobko.github.io/AeroSpace/guide#key-mapping
+[key-mapping]
+    preset = 'qwerty'
+
+# Gaps between windows (inner-*) and between monitor edges (outer-*).
+# Possible values:
+# - Constant:     gaps.outer.top = 8
+# - Per monitor:  gaps.outer.top = [{ monitor.main = 16 }, { monitor."some-pattern" = 32 }, 24]
+#                 In this example, 24 is a default value when there is no match.
+#                 Monitor pattern is the same as for 'workspace-to-monitor-force-assignment'.
+#                 See:
+#                 https://nikitabobko.github.io/AeroSpace/guide#assign-workspaces-to-monitors
+[gaps]
+    inner.horizontal = 5
+    inner.vertical = 5
+    outer.left = 2
+    outer.right = 2
+    outer.bottom = 2
+    outer.top = [
+      # 内建显示器是刘海屏，本身占用的高度足以容纳 SketchyBar，所以不需要 gaps
+      { monitor.'built-in' = 0 },
+      29,
+    ]
+
+[exec.env-vars]
+    PATH = '${HOME}/.local/bin:/opt/homebrew/bin:${PATH}'
+
+# 'main' binding mode declaration
+# See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
+# 'main' binding mode must be always presented
+# Fallback value (if you omit the key): mode.main.binding = {}
+[mode.main.binding]
+
+    # All possible keys:
+    # - Letters.        a, b, c, ..., z
+    # - Numbers.        0, 1, 2, ..., 9
+    # - Keypad numbers. keypad0, keypad1, keypad2, ..., keypad9
+    # - F-keys.         f1, f2, ..., f20
+    # - Special keys.   minus, equal, period, comma, slash, backslash, quote, semicolon,
+    #                   backtick, leftSquareBracket, rightSquareBracket, space, enter, esc,
+    #                   backspace, tab, pageUp, pageDown, home, end, forwardDelete,
+    #                   sectionSign (ISO keyboards only, european keyboards only)
+    # - Keypad special. keypadClear, keypadDecimalMark, keypadDivide, keypadEnter, keypadEqual,
+    #                   keypadMinus, keypadMultiply, keypadPlus
+    # - Arrows.         left, down, up, right
+
+    # All possible modifiers: cmd, alt, ctrl, shift
+
+    # All possible commands: https://nikitabobko.github.io/AeroSpace/commands
+
+    # See: https://nikitabobko.github.io/AeroSpace/commands#layout
+    alt-ctrl-slash = 'layout tiles horizontal vertical'
+    alt-ctrl-comma = 'layout accordion horizontal vertical'
+    alt-ctrl-enter = 'fullscreen'
+    alt-ctrl-f = 'layout floating tiling'
+    alt-ctrl-x = 'close'
+    alt-ctrl-o = 'close-all-windows-but-current'
+
+    # See: https://nikitabobko.github.io/AeroSpace/commands#focus
+    alt-ctrl-h = 'focus left'
+    alt-ctrl-j = 'focus down'
+    alt-ctrl-k = 'focus up'
+    alt-ctrl-l = 'focus right'
+
+    # See: https://nikitabobko.github.io/AeroSpace/commands#resize
+    alt-ctrl-minus = 'resize smart -50'
+    alt-ctrl-equal = 'resize smart +50'
+
+    # See: https://nikitabobko.github.io/AeroSpace/commands#workspace
+    # 一些开发者工具
+    ctrl-1 = 'workspace 1'
+    # 日常开发：terminal
+    ctrl-2 = 'workspace 2'
+    # 浏览器
+    ctrl-3 = 'workspace 3'
+    # 常用聊天工具
+    ctrl-4 = 'workspace 4'
+    # 其它聊天工具
+    ctrl-5 = 'workspace 5'
+    # AI 工具
+    ctrl-6 = 'workspace 6'
+    # 视频相关：剪映、ScreenStudio、ScreenFlow、QuickTime Player
+    ctrl-7 = 'workspace 7'
+    # 会议相关
+    ctrl-8 = 'workspace 8'
+    # 其它
+    ctrl-9 = 'workspace 9'
+
+    # See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
+    alt-ctrl-1 = 'move-node-to-workspace 1 --focus-follows-window'
+    alt-ctrl-2 = 'move-node-to-workspace 2 --focus-follows-window'
+    alt-ctrl-3 = 'move-node-to-workspace 3 --focus-follows-window'
+    alt-ctrl-4 = 'move-node-to-workspace 4 --focus-follows-window'
+    alt-ctrl-5 = 'move-node-to-workspace 5 --focus-follows-window'
+    alt-ctrl-6 = 'move-node-to-workspace 6 --focus-follows-window'
+    alt-ctrl-7 = 'move-node-to-workspace 7 --focus-follows-window'
+    alt-ctrl-8 = 'move-node-to-workspace 8 --focus-follows-window'
+    alt-ctrl-9 = 'move-node-to-workspace 9 --focus-follows-window'
+    alt-ctrl-leftSquareBracket = 'exec-and-forget aerospace workspace "$(aerospace list-workspaces --monitor mouse --visible)" && aerospace workspace prev'
+    alt-ctrl-rightSquareBracket = 'exec-and-forget aerospace workspace "$(aerospace list-workspaces --monitor mouse --visible)" && aerospace workspace next'
+
+    # See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
+    alt-ctrl-tab = 'workspace-back-and-forth'
+    # See: https://nikitabobko.github.io/AeroSpace/commands#move-workspace-to-monitor
+    alt-ctrl-shift-tab = 'move-workspace-to-monitor --wrap-around next'
+
+    # See: https://nikitabobko.github.io/AeroSpace/commands#mode
+    alt-ctrl-space = [
+      'mode service',
+      'exec-and-forget sketchybar --trigger aerospace_service_mode_enabled_changed AEROSPACE_SERVICE_MODE_ENABLED=true',
+    ]
+    cmd-quote = [
+      'mode app',
+      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=true',
+    ]
+    cmd-semicolon = [
+      'mode kitty',
+      'exec-and-forget sketchybar --trigger aerospace_kitty_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=true',
+    ]
+
+[mode.kitty.binding]
+    esc = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_kitty_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
+    ]
+    enter = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_kitty_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
+    ]
+    cmd-semicolon = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_kitty_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
+      'exec-and-forget kitten quick-access-terminal --config ~/.config/kitty/quick-access-terminal-quick-notes.conf --instance-group todo daily-note.sh'
+    ]
+    semicolon = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_kitty_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
+      'exec-and-forget open -a "kitty.app"'
+    ]
+    n = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_kitty_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
+      'exec-and-forget goto-kitty-session.sh note'
+    ]
+    d = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_kitty_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
+      'exec-and-forget goto-kitty-session.sh dotfiles'
+    ]
+    c = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_kitty_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
+      'exec-and-forget goto-kitty-session.sh coding'
+    ]
+    h = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_kitty_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
+      'exec-and-forget goto-kitty-session.sh home'
+    ]
+    w = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_kitty_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
+      'exec-and-forget goto-kitty-session.sh website'
+    ]
+    i = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_kitty_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
+      'exec-and-forget goto-kitty-session.sh iac'
+    ]
+    t = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_kitty_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
+      'exec-and-forget goto-kitty-session.sh troubleshooting'
+    ]
+    y = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_kitty_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
+      'exec-and-forget goto-kitty-session.sh yamls'
+    ]
+    z = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_kitty_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
+      'exec-and-forget goto-kitty-session.sh zellij'
+    ]
+    ctrl-a = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_kitty_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
+      'exec-and-forget goto-kitty-session.sh addon-charts'
+    ]
+    ctrl-s = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_kitty_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
+      'exec-and-forget goto-kitty-session.sh kateway-server'
+    ]
+    ctrl-c = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_kitty_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
+      'exec-and-forget goto-kitty-session.sh cilium'
+    ]
+    ctrl-r = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_kitty_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
+      'exec-and-forget goto-kitty-session.sh req'
+    ]
+    ctrl-e = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_kitty_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
+      'exec-and-forget goto-kitty-session.sh tke-extend-network-controller'
+    ]
+    ctrl-k = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_kitty_mode_enabled_changed AEROSPACE_KITTY_MODE_ENABLED=false',
+      'exec-and-forget goto-kitty-session.sh kubernetes'
+    ]
+
+[mode.app.binding]
+    esc = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
+    ]
+    enter = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
+    ]
+    w = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
+      'exec-and-forget open -a "WeChat.app"'
+    ]
+    q = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
+      'exec-and-forget open -a "企业微信.app"'
+    ]
+    t = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
+      'exec-and-forget open -a "WeTERM.app"'
+    ]
+    c = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
+      'exec-and-forget open -a "Google Chrome.app"'
+    ]
+    b = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
+      'exec-and-forget open -a "CodeBuddy CN.app"'
+    ]
+    v = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
+      'exec-and-forget open -a "Visual Studio Code.app"'
+    ]
+    j = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
+      'exec-and-forget open -a "OK JSON.app"'
+    ]
+    z = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
+      'exec-and-forget open -a "WezTerm.app"'
+    ]
+
+# 'service' binding mode declaration.
+# See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
+[mode.service.binding]
+    esc = [
+      'reload-config',
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_service_mode_enabled_changed AEROSPACE_SERVICE_MODE_ENABLED=false',
+    ]
+    enter = [
+      'reload-config',
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_service_mode_enabled_changed AEROSPACE_SERVICE_MODE_ENABLED=false',
+    ]
+    # Reset layout
+    # See: https://nikitabobko.github.io/AeroSpace/commands#flatten-workspace-tree
+    r = [
+      'flatten-workspace-tree',
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_service_mode_enabled_changed AEROSPACE_SERVICE_MODE_ENABLED=false',
+    ]
+    # Close all windows on focused workspace
+    # See: https://nikitabobko.github.io/AeroSpace/commands#close-all-windows-but-current
+    backspace = [
+      'close-all-windows-but-current',
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_service_mode_enabled_changed AEROSPACE_SERVICE_MODE_ENABLED=false',
+    ]
+    # See: https://nikitabobko.github.io/AeroSpace/commands#move
+    h = 'move left'
+    j = 'move down'
+    k = 'move up'
+    l = 'move right'
+
+    # sticky is not yet supported https://github.com/nikitabobko/AeroSpace/issues/2
+    #s = ['layout sticky tiling', 'mode main']
+    alt-ctrl-h = ['join-with left', 'mode main']
+    alt-ctrl-j = ['join-with down', 'mode main']
+    alt-ctrl-k = ['join-with up', 'mode main']
+    alt-ctrl-l = ['join-with right', 'mode main']
+
+    down = 'volume down'
+    up = 'volume up'
+    shift-down = ['volume set 0', 'mode main']
+
+# ----------------------
+# 应用窗口自动放置规则
+# ----------------------
+
+# 默认 float 的窗口
+[[on-window-detected]]
+    if.app-id = 'com.apple.iCal'
+    check-further-callbacks = true
+    run = ['layout floating']
+[[on-window-detected]]
+    if.app-id = 'com.apple.finder'
+    check-further-callbacks = true
+    run = ['layout floating']
+[[on-window-detected]]
+    if.app-id = 'com.raycast.macos'
+    check-further-callbacks = true
+    run = ['layout floating']
+[[on-window-detected]]
+    check-further-callbacks = true
+    if.window-title-regex-substring = '预览|图片和视频|画中画|导出'
+    run = ['layout floating']
+[[on-window-detected]]
+    check-further-callbacks = false
+    if.window-title-regex-substring = 'Screen Studio Display Window Picker Highlighter'
+    run = ['layout floating']
+[[on-window-detected]]
+    if.app-id = 'com.apple.Preview'
+    run = ['layout floating']
+[[on-window-detected]]
+    if.app-id = 'com.apple.ActivityMonitor'
+    run = ['layout floating']
+
+# 1: 非高频开发工具
+[[on-window-detected]]
+    if.app-id = 'net.shinystone.OKJSON'
+    run = ['move-node-to-workspace 1']
+[[on-window-detected]]
+    if.app-id = 'is.follow'
+    run = ['move-node-to-workspace 1']
+[[on-window-detected]]
+    if.app-id = 'com.microsoft.VSCode'
+    run = ['move-node-to-workspace 1']
+[[on-window-detected]]
+    if.app-id = 'com.tencent.codebuddycn'
+    run = ['move-node-to-workspace 1']
+[[on-window-detected]]
+    if.app-id = 'com.github.wez.wezterm'
+    run = ['move-node-to-workspace 1']
+[[on-window-detected]]
+    if.app-id = 'com.googlecode.iterm2'
+    run = ['move-node-to-workspace 1']
+[[on-window-detected]]
+    if.app-id = 'com.mitchellh.ghostty'
+    run = ['move-node-to-workspace 1']
+[[on-window-detected]]
+    if.app-id = 'org.alacritty'
+    run = ['move-node-to-workspace 1']
+[[on-window-detected]]
+    if.app-id = 'com.tencent.weterm'
+    if.window-title-regex-substring = '^WeTERM$'
+    run = ['move-node-to-workspace 1']
+[[on-window-detected]]
+    if.app-id = 'dev.zed.Zed'
+    run = ['move-node-to-workspace 1']
+[[on-window-detected]]
+    if.app-id = 'com.neovide.neovide'
+    run = ['move-node-to-workspace 1']
+[[on-window-detected]]
+    if.app-id = 'com.apple.Terminal'
+    run = ['move-node-to-workspace 1']
+[[on-window-detected]]
+    if.app-id = 'dev.zed.Zed'
+    run = ['move-node-to-workspace 1']
+
+# 2: 高频开发工具
+[[on-window-detected]]
+    if.app-id = 'net.kovidgoyal.kitty'
+    run = ['move-node-to-workspace 2']
+
+# 3：浏览器
+[[on-window-detected]]
+    if.app-id = 'com.google.Chrome'
+    run = ['move-node-to-workspace 3']
+[[on-window-detected]]
+    if.app-id = 'org.mozilla.firefo4'
+    run = ['move-node-to-workspace 3']
+[[on-window-detected]]
+    if.app-id = 'com.apple.Safari'
+    run = ['move-node-to-workspace 3']
+[[on-window-detected]]
+    if.app-id = 'com.microsoft.edgemac'
+    run = ['move-node-to-workspace 3']
+
+#  4: 高频聊天工具
+[[on-window-detected]]
+    if.app-id = 'com.tencent.WeWorkMac'      # 企业微信主界面
+    if.window-title-regex-substring = '^企业微信$'
+    run = ['move-node-to-workspace 4']
+
+# 5：其它聊天工具
+[[on-window-detected]]
+    if.app-id = 'com.tencent.xinWeChat'    # 微信主界面
+    if.window-title-regex-substring = '^微信$'
+    run = ['move-node-to-workspace 5']
+[[on-window-detected]]
+    if.app-id = 'com.tencent.xinWeChat'    # 微信其它主界面
+    run = ['layout floating']
+[[on-window-detected]]
+    if.app-id = 'com.tencent.qq'           # QQ 主界面
+    if.window-title-regex-substring = 'QQ'
+    run = ['move-node-to-workspace 5']
+[[on-window-detected]]
+    if.app-id = 'com.tencent.qq' # QQ 其它界面默认 float
+    run = ['layout floating']
+[[on-window-detected]]
+    if.app-id = 'com.electron.lark'    # 飞书
+    run = ['move-node-to-workspace 5']
+[[on-window-detected]]
+    if.app-id = 'com.alibaba.DingTalkMac' # 钉钉
+    run = ['move-node-to-workspace 5']
+[[on-window-detected]]
+    if.app-id = 'com.tdesktop.Telegram' # Telegram
+    run = ['move-node-to-workspace 5']
+[[on-window-detected]]
+    if.app-id = 'com.tinyspeck.slackmacgap' # Slack
+    run = ['move-node-to-workspace 5']
+[[on-window-detected]]
+    if.app-id = 'com.hnc.Discord' # Discord
+    run = ['move-node-to-workspace 5']
+
+# 6: AI 聊天
+[[on-window-detected]]
+    if.app-id = 'com.tencent.yuanbao'
+    run = ['move-node-to-workspace 6']
+[[on-window-detected]]
+    if.app-id = 'com.alibaba.tongyi'
+    run = ['move-node-to-workspace 6']
+
+# 7: 媒体
+[[on-window-detected]]
+    if.app-id = 'com.lemon.lvpro'      # 剪映
+    run = ['move-node-to-workspace 7']
+[[on-window-detected]]
+    if.app-id = 'com.timpler.screenstudio' # ScreenStudio
+    run = ['move-node-to-workspace 7']
+[[on-window-detected]]
+    if.app-id = 'net.telestream.screenflow10' # ScreenFlow
+    run = ['move-node-to-workspace 7']
+[[on-window-detected]]
+    if.app-id = 'com.apple.QuickTimePlayerX' # QuickTime Player
+    run = ['move-node-to-workspace 7']
+[[on-window-detected]]
+    if.app-id = 'com.tencent.tenvideo' # 腾讯视频
+    run = ['move-node-to-workspace 7']
+
+# 8: 会议
+[[on-window-detected]]
+    if.app-id = 'com.tencent.meeting'  # 腾讯会议
+    if.window-title-regex-substring = '腾讯会议'
+    run = ['move-node-to-workspace 8']
+[[on-window-detected]]
+    if.app-id = 'com.tencent.wwmapp'   # 企微微信·会议
+    run = ['move-node-to-workspace 8']
+[[on-window-detected]]
+    if.app-id = 'com.electron.lark.iron'   # 飞书会议
+    run = ['move-node-to-workspace 8', 'layout floating']
+
+# 9: 其它（不常用）
+[[on-window-detected]]
+    if.app-id = 'com.omnigroup.OmniGraffle7'
+    run = ['move-node-to-workspace 9']
+[[on-window-detected]]
+    if.app-id = '2dust.v2rayN'
+    run = ['move-node-to-workspace 9']
