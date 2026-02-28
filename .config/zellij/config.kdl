@@ -156,7 +156,6 @@ keybinds clear-defaults=true {
     }
     shared_except "locked" {
         bind "Super g" { SwitchToMode "Locked"; }
-        bind "Super f" { SwitchToMode "EnterSearch"; SearchInput 0; }
         bind "Super e" { TogglePanePinned; SwitchToMode "Normal"; ToggleFloatingPanes; }
         bind "Super /" { ToggleFloatingPanes; }
         bind "Super w" { CloseFocus; }
@@ -172,6 +171,13 @@ keybinds clear-defaults=true {
         // bind "Super p" { ToggleTab; }
         bind "Super y" { TogglePaneInGroup; }
         bind "Alt Super y" { ToggleGroupMarking; }
+        bind "Super f" {
+            LaunchOrFocusPlugin "https://github.com/rvcas/room/releases/latest/download/room.wasm" {
+                floating true
+                ignore_case true
+                quick_jump true
+            }
+        }
 
         bind "Super 1" { GoToTab 1; }
         bind "Super 2" { GoToTab 2; }
