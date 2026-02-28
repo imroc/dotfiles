@@ -28,6 +28,7 @@ function j --description "Jump to bookmarked directories"
             echo "  j rm <alias>   删除书签"
             echo "  j tab [alias]  在 zellij 中新建 tab 并跳转"
             echo "  j list         列出所有书签"
+            echo "  j wn           打开本周笔记"
             echo ""
             echo "Config: $__j_config"
         case add
@@ -85,6 +86,8 @@ function j --description "Jump to bookmarked directories"
             zellij action new-tab --name $alias --cwd $dir
         case list ls
             yq e 'to_entries | .[] | [.key, .value] | @tsv' $__j_config | column -t -s (printf '\t')
+        case wn
+            weekly-note.sh
         case '*'
             # 当作别名直接跳转
             __j_cd $subcmd

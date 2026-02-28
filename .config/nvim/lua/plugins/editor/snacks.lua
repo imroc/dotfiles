@@ -2,6 +2,7 @@
 
 local picker = require("util.picker")
 local iwiki = require("util.iwiki")
+local bookmark = require("util.bookmark")
 
 local get_copy_opts = function(what)
   return {
@@ -167,6 +168,16 @@ return {
         Snacks.picker.zoxide({})
       end,
       desc = "[P]Find Zoxide Directory",
+    },
+    {
+      "<leader>fj",
+      bookmark.find_files,
+      desc = "[P]Find Bookmark Files",
+    },
+    {
+      "<leader>fJ",
+      bookmark.find_files_subdir,
+      desc = "[P]Find Bookmark Subdir Files",
     },
     {
       "<leader>sg",
