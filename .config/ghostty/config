@@ -4,8 +4,7 @@ theme = tokyonight
 font-family = JetBrainsMono Nerd Font
 font-family = Sarasa Mono SC
 
-font-size = 15
-shell-integration-features = no-cursor
+font-size = 14
 cursor-style = block
 macos-option-as-alt = true
 
@@ -81,3 +80,12 @@ keybind = super+shift+h=goto_split:left
 keybind = super+shift+j=goto_split:down
 keybind = super+shift+k=goto_split:up
 keybind = super+shift+l=goto_split:right
+
+custom-shader = shaders/bloom025.glsl
+custom-shader = shaders/cursor_blaze_no_trail.glsl
+custom-shader = shaders/cursor_smear.glsl
+window-padding-x = 4,2
+window-padding-y = 6,0
+confirm-close-surface = false
+macos-icon = official
+unfocused-split-opacity = 0.7
