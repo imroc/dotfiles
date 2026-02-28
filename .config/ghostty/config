@@ -1,4 +1,4 @@
-theme = tokyonight
+theme = TokyoNight Night
 # JetBrainsMono 作为默认字体，中文 fallback 到等距的更纱黑体，
 # 以便在终端看含中文的 ASCII 图时能够对齐
 font-family = JetBrainsMono Nerd Font
