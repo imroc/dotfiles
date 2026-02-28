@@ -145,25 +145,15 @@ local function switch_to_last_terminal()
 end
 
 --- Send file or selection to AI terminal as @ reference
-local function send_to_ai_terminal()
-  local term = get_ai_terminal()
-  local file_path = vim.fn.expand("%:p")
-
-  if file_path == "" then
+---@param is_visual? boolean
+local function send_to_ai_terminal(is_visual)
+  local text = require("util.clipboard").get_ai_ref_text(is_visual)
+  if not text then
     vim.notify("No file to send", vim.log.levels.WARN)
     return
   end
 
-  local text
-  local mode = vim.fn.mode()
-  if mode == "v" or mode == "V" or mode == "\22" then -- visual, visual line, visual block
-    local start_line = vim.fn.line("'<")
-    local end_line = vim.fn.line("'>")
-    text = string.format('@"%s:%d-%d" ', file_path, start_line, end_line)
-  else
-    text = '@"' .. file_path .. '" '
-  end
-
+  local term = get_ai_terminal()
   if not term:is_open() then
     term:open()
   end
@@ -305,12 +295,24 @@ return {
     },
     {
       "<leader>aa",
-      send_to_ai_terminal,
-      mode = { "n", "v" },
-      desc = "[P]Send file/selection to AI Terminal",
+      function()
+        send_to_ai_terminal(false)
+      end,
+      mode = "n",
+      desc = "[P]Send file to AI Terminal",
     },
   },
   config = function(_, opts)
     require("toggleterm").setup(opts)
+    -- Register visual mapping here (not in lazy keys) to avoid lazy's
+    -- feedkeys replay losing the visual selection on first trigger.
+    -- Use <Esc> prefix so '< '> marks are reliably set before the callback.
+    vim.keymap.set("v", "<leader>aa", function()
+      -- feedkeys <Esc> and schedule the actual work so marks are set
+      vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "nx", false)
+      vim.schedule(function()
+        send_to_ai_terminal(true)
+      end)
+    end, { desc = "[P]Send selection to AI Terminal" })
   end,
 }
