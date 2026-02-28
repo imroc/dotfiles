@@ -206,7 +206,7 @@ keybinds clear-defaults=true {
         }
     }
     shared_except "normal" "locked" {
-        bind "Enter" "Esc" { SwitchToMode "Normal"; }
+        bind "Enter" "Esc" "Super ." { SwitchToMode "Normal"; }
     }
     shared_except "pane" "locked" {
         // Ctrl p --> Super p 避免与 neovim 和 shell 中 “上翻” 的快捷键冲突，另外还有 neovim normal 模式下打开 project manager 的快捷键冲突。
