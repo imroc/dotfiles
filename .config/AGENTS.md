@@ -26,14 +26,35 @@
 同步 dotfiles：
 
 ```bash
-yadm pull
-yadm status
+yadm --yadm-dir ~/.config/yadm-public --yadm-data ~/.local/share/yadm-public pull
+yadm --yadm-dir ~/.config/yadm-public --yadm-data ~/.local/share/yadm-public status
 ```
 
 强制覆盖本地文件：
 
 ```bash
-yadm reset --hard HEAD
+yadm --yadm-dir ~/.config/yadm-public --yadm-data ~/.local/share/yadm-public reset --hard HEAD
+```
+
+## Commit 规则
+
+当用户明确要求提交 dotfiles 改动时，使用以下命令替代 git：
+
+```bash
+yadm --yadm-dir ~/.config/yadm-public --yadm-data ~/.local/share/yadm-public
+```
+
+具体流程：
+
+1. **add**：仅添加当前会话中实际修改过的文件，逐个指定路径，禁止使用 `-A` 或 `.`
+2. **commit**：message 使用中文，详细描述本次改动内容（改了什么、为什么改）
+3. 不要主动 push，除非用户明确要求
+
+示例：
+
+```bash
+yadm --yadm-dir ~/.config/yadm-public --yadm-data ~/.local/share/yadm-public add ~/.config/fish/functions/j.fish
+yadm --yadm-dir ~/.config/yadm-public --yadm-data ~/.local/share/yadm-public commit -m "j.fish: 新增 tab 子命令，支持在 zellij 中新建 tab 并跳转到书签目录"
 ```
 
 ## Fish Shell

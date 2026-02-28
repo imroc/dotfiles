@@ -26,6 +26,7 @@ function j --description "Jump to bookmarked directories"
             echo "  j <alias>      直接跳转到别名对应目录"
             echo "  j add [alias]  添加当前目录（默认用目录名作为别名）"
             echo "  j rm <alias>   删除书签"
+            echo "  j tab [alias]  在 zellij 中新建 tab 并跳转"
             echo "  j list         列出所有书签"
             echo ""
             echo "Config: $__j_config"
@@ -59,6 +60,29 @@ function j --description "Jump to bookmarked directories"
             end
             yq -i "del(.$alias)" $__j_config
             echo "已删除: $alias"
+        case tab
+            if not set -q ZELLIJ
+                echo "不在 zellij 中"
+                return 1
+            end
+            set -l alias $argv[2]
+            if test -z "$alias"
+                set alias (yq e 'keys | .[]' $__j_config | fzf --height=40% --reverse --prompt="Tab to: ")
+                if test -z "$alias"
+                    return
+                end
+            end
+            set -l dir (yq e ".$alias // \"\"" $__j_config)
+            if test -z "$dir"
+                echo "别名 '$alias' 不存在"
+                return 1
+            end
+            set dir (string replace '~' $HOME $dir)
+            if not test -d $dir
+                echo "目录不存在: $dir"
+                return 1
+            end
+            zellij action new-tab --name $alias --cwd $dir
         case list ls
             yq e 'to_entries | .[] | [.key, .value] | @tsv' $__j_config | column -t -s (printf '\t')
         case '*'
