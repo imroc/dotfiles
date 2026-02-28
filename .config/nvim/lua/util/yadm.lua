@@ -69,30 +69,17 @@ function M.sync(type)
     local home = work_tree()
     vim.notify(string.format("[%s] syncing...", prefix))
 
-    --- Run a yadm command asynchronously via vim.system
     ---@param args string
     ---@param on_done fun(ok: boolean, stdout: string, stderr: string)
     local function run(args, on_done)
-      local cmd = yadm_cmd .. " " .. args
-      vim.notify(string.format("[%s][DEBUG] running: %s", prefix, cmd))
-      vim.system({ "bash", "-c", cmd }, { text = true, cwd = home }, function(result)
+      vim.system({ "bash", "-c", yadm_cmd .. " " .. args }, { text = true, cwd = home }, function(result)
         vim.schedule(function()
-          vim.notify(
-            string.format(
-              "[%s][DEBUG] done: code=%s stdout=%s stderr=%s",
-              prefix,
-              result.code,
-              result.stdout,
-              result.stderr
-            )
-          )
           on_done(result.code == 0, result.stdout or "", vim.trim(result.stderr or ""))
         end)
       end)
     end
 
     local function do_push()
-      vim.notify(string.format("[%s] pushing...", prefix))
       run("push", function(ok, _, stderr)
         if not ok then
           vim.notify(string.format("[%s] push failed:\n%s", prefix, stderr), vim.log.levels.ERROR)
@@ -103,7 +90,6 @@ function M.sync(type)
     end
 
     local function do_pull_and_push()
-      vim.notify(string.format("[%s] pulling...", prefix))
       run("pull --rebase", function(ok, _, stderr)
         if not ok then
           vim.notify(string.format("[%s] pull failed:\n%s", prefix, stderr), vim.log.levels.ERROR)
@@ -120,7 +106,6 @@ function M.sync(type)
           vim.notify(string.format("[%s] commit failed:\n%s", prefix, stderr), vim.log.levels.ERROR)
           return
         end
-        vim.notify(string.format("[%s] committed: %s", prefix, msg))
         do_pull_and_push()
       end)
     end
@@ -135,19 +120,16 @@ function M.sync(type)
       local has_changes = vim.trim(stdout) ~= ""
 
       if not has_changes then
-        vim.notify(string.format("[%s] no local changes", prefix))
         do_pull_and_push()
         return
       end
 
       -- Step 2: add changed files (not -A, which scans entire $HOME)
-      -- Parse status output to extract file paths
       -- status --porcelain format: "XY filename" (XY = 2 char status, then space, then path)
       local files = {}
       for line in stdout:gmatch("[^\n]+") do
         local file = line:sub(4)
         if file ~= "" then
-          -- Handle renames: "old -> new"
           local renamed = file:match("-> (.+)$")
           if renamed then
             file = renamed
