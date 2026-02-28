@@ -35,10 +35,10 @@ vim.keymap.set("n", "<M-p>", "[c", { desc = "[P]Previous change", noremap = true
 
 -- yank AI reference
 local clipboard = require("util.clipboard")
-vim.keymap.set("n", "<leader>ay", function()
+vim.keymap.set("n", "<leader>ya", function()
   clipboard.copy_ai_ref_text(false)
 end, { desc = "[P]Yank file ref to clipboard" })
-vim.keymap.set("v", "<leader>ay", function()
+vim.keymap.set("v", "<leader>ya", function()
   vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "nx", false)
   vim.schedule(function()
     clipboard.copy_ai_ref_text(true)
