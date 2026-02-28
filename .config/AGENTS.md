@@ -38,7 +38,7 @@ yadm --yadm-dir ~/.config/yadm-public --yadm-data ~/.local/share/yadm-public res
 
 ## Commit 规则
 
-当用户明确要求提交 dotfiles 改动时，使用以下命令替代 git：
+当用户明确要求提交 dotfiles 改动或使用 "commit dotfiles" 关键词时，使用以下命令替代 git：
 
 ```bash
 yadm --yadm-dir ~/.config/yadm-public --yadm-data ~/.local/share/yadm-public
