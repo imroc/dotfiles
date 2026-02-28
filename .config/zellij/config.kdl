@@ -197,13 +197,12 @@ keybinds clear-defaults=true {
             };
             SwitchToMode "Normal"
         }
-        // 搜索文件
+        // 通过 j tab 在 zellij 中新建 tab 并跳转到书签目录
         bind "Super o" {
-            LaunchOrFocusPlugin "filepicker" {
+            Run "fish" "-c" "j tab" {
                 floating true
-                close_on_selection true
-            };
-            SwitchToMode "Normal"
+                close_on_exit true
+            }
         }
     }
     shared_except "normal" "locked" {
