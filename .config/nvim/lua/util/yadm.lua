@@ -187,14 +187,11 @@ function M.sync(type)
                 end
                 committed = true
                 vim.bo[buf].modified = false
-                if vim.api.nvim_win_is_valid(win) then
-                  vim.api.nvim_win_close(win, true)
-                end
                 do_commit(msg)
               end,
             })
 
-            vim.api.nvim_create_autocmd("BufWipeout", {
+            vim.api.nvim_create_autocmd("BufUnload", {
               buffer = buf,
               callback = function()
                 if not committed then
