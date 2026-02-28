@@ -152,19 +152,10 @@ function M.sync(type)
             vim.bo[buf].filetype = "gitcommit"
             vim.api.nvim_buf_set_name(buf, "yadm-public-commit-msg")
 
-            local width = math.floor(vim.o.columns * 0.6)
-            local height = math.floor(vim.o.lines * 0.4)
-            local win = vim.api.nvim_open_win(buf, true, {
-              relative = "editor",
-              width = width,
-              height = height,
-              col = math.floor(vim.o.columns * 0.2),
-              row = math.floor(vim.o.lines * 0.2),
-              style = "minimal",
-              border = "rounded",
-              title = " yadm-public commit ",
-              title_pos = "center",
-            })
+            vim.cmd("topleft split")
+            local win = vim.api.nvim_get_current_win()
+            vim.api.nvim_win_set_buf(win, buf)
+            vim.api.nvim_win_set_height(win, #lines)
             vim.api.nvim_win_set_cursor(win, { 1, 0 })
             vim.cmd("startinsert")
 
