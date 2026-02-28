@@ -124,28 +124,7 @@ function M.sync(type)
         return
       end
 
-      -- Step 2: add changed files (not -A, which scans entire $HOME)
-      -- status --porcelain format: "XY filename" (XY = 2 char status, then space, then path)
-      local files = {}
-      for line in stdout:gmatch("[^\n]+") do
-        local file = line:sub(4)
-        if file ~= "" then
-          local renamed = file:match("-> (.+)$")
-          if renamed then
-            file = renamed
-          end
-          table.insert(files, file)
-        end
-      end
-
-      vim.notify(string.format("[%s] changed:\n  %s", prefix, table.concat(files, "\n  ")))
-
-      local add_args = "add"
-      for _, f in ipairs(files) do
-        add_args = add_args .. " '" .. f:gsub("'", "'\\''") .. "'"
-      end
-
-      run(add_args, function(ok2, _, stderr2)
+      run("add -u", function(ok2, _, stderr2)
         if not ok2 then
           vim.notify(string.format("[%s] add failed:\n%s", prefix, stderr2), vim.log.levels.ERROR)
           return
@@ -160,15 +139,10 @@ function M.sync(type)
             table.insert(lines, "")
             table.insert(lines, "# 请为你的变更输入提交说明。以 '#' 开始的行将被忽略。")
             table.insert(lines, "#")
-            table.insert(lines, "# 变更的文件：")
-            for _, f in ipairs(files) do
-              table.insert(lines, "#   " .. f)
-            end
             if vim.trim(diff_stat) ~= "" then
-              table.insert(lines, "#")
-              table.insert(lines, "# diff stat:")
+              table.insert(lines, "# 变更：")
               for stat_line in diff_stat:gmatch("[^\n]+") do
-                table.insert(lines, "#  " .. stat_line)
+                table.insert(lines, "#   " .. stat_line)
               end
             end
 
