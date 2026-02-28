@@ -1,83 +1,10 @@
 theme = tokyonight
+# JetBrainsMono 作为默认字体，中文 fallback 到等距的更纱黑体，
+# 以便在终端看含中文的 ASCII 图时能够对齐
 font-family = JetBrainsMono Nerd Font
 font-family = Sarasa Mono SC
-font-size = 14
+
+font-size = 15
 shell-integration-features = no-cursor
 cursor-style = block
-# window-colorspace = display-p3
-
-# If `true`, the *Option* key will be treated as *Alt*. This makes terminal
-# sequences expecting *Alt* to work properly, but will break Unicode input
-# sequences on macOS if you use them via the *Alt* key. You may set this to
-# `false` to restore the macOS *Alt* key unicode sequences but this will break
-# terminal sequences expecting *Alt* to work.
-# 
-# The values `left` or `right` enable this for the left or right *Option*
-# key, respectively.
-# 
-# Note that if an *Option*-sequence doesn't produce a printable character, it
-# will be treated as *Alt* regardless of this setting. (i.e. `alt+ctrl+a`).
-# 
-# This does not work with GLFW builds.
 macos-option-as-alt = true
-
-# Duration (in seconds) of the quick terminal enter and exit animation.
-# Set it to 0 to disable animation completely. This can be changed at
-# runtime.
-# quick-terminal-animation-duration = 0.1
-quick-terminal-animation-duration = 0.08
-
-# Valid values:
-# 
-#   * `true`
-#   * `false` - windows won't have native decorations, i.e. titlebar and
-#      borders. On macOS this also disables tabs and tab overview.
-# 
-# The "toggle_window_decoration" keybind action can be used to create
-# a keybinding to toggle this setting at runtime.
-# 
-# Changing this configuration in your configuration and reloading will
-# only affect new windows. Existing windows will not be affected.
-# 
-# macOS: To hide the titlebar without removing the native window borders
-#        or rounded corners, use `macos-titlebar-style = hidden` instead.
-macos-titlebar-style = hidden
-
-# Horizontal window padding. This applies padding between the terminal cells
-# and the left and right window borders. The value is in points, meaning that
-# it will be scaled appropriately for screen DPI.
-# 
-# If this value is set too large, the screen will render nothing, because the
-# grid will be completely squished by the padding. It is up to you as the user
-# to pick a reasonable value. If you pick an unreasonable value, a warning
-# will appear in the logs.
-# 
-# Changing this configuration at runtime will only affect new terminals, i.e.
-# new windows, tabs, etc.
-# 
-# To set a different left and right padding, specify two numerical values
-# separated by a comma. For example, `window-padding-x = 2,4` will set the
-# left padding to 2 and the right padding to 4. If you want to set both
-# paddings to the same value, you can use a single value. For example,
-# `window-padding-x = 2` will set both paddings to 2.
-window-padding-x = 4,2
-
-# Vertical window padding. This applies padding between the terminal cells and
-# the top and bottom window borders. The value is in points, meaning that it
-# will be scaled appropriately for screen DPI.
-# 
-# If this value is set too large, the screen will render nothing, because the
-# grid will be completely squished by the padding. It is up to you as the user
-# to pick a reasonable value. If you pick an unreasonable value, a warning
-# will appear in the logs.
-# 
-# Changing this configuration at runtime will only affect new terminals,
-# i.e. new windows, tabs, etc.
-# 
-# To set a different top and bottom padding, specify two numerical values
-# separated by a comma. For example, `window-padding-y = 2,4` will set the
-# top padding to 2 and the bottom padding to 4. If you want to set both
-# paddings to the same value, you can use a single value. For example,
-# `window-padding-y = 2` will set both paddings to 2.
-window-padding-y = 6,0
-
