@@ -84,7 +84,6 @@ keybinds clear-defaults=true {
         bind "d" { HalfPageScrollDown; }
         bind "u" { HalfPageScrollUp; }
         bind "Super u" { HalfPageScrollUp; }
-        bind "Super d" { HalfPageScrollDown; }
         // uncomment this and adjust key if using copy_on_select=false
         // bind "Super c" { Copy; }
     }
@@ -219,7 +218,6 @@ keybinds clear-defaults=true {
     }
     shared_except "scroll" "locked" {
         bind "Super u" { SwitchToMode "Scroll"; HalfPageScrollUp; }
-        bind "Super d" { SwitchToMode "Scroll"; HalfPageScrollDown; }
     }
     shared_except "session" "locked" {
         bind "Super s" { SwitchToMode "Session"; }

@@ -8,3 +8,76 @@ font-size = 15
 shell-integration-features = no-cursor
 cursor-style = block
 macos-option-as-alt = true
+
+# ============================================================
+# 快捷键重映射：避免与 zellij 的 Cmd 快捷键冲突
+# zellij 占用了大量 Cmd+<key> 组合，ghostty 冲突的键
+# 要么禁用（让 zellij 处理），要么改为 Cmd+Shift 前缀
+# ============================================================
+
+# --- 禁用：zellij 已有对应功能 ---
+
+# Cmd+1~9: zellij 用于切换 tab
+keybind = super+1=unbind
+keybind = super+2=unbind
+keybind = super+3=unbind
+keybind = super+4=unbind
+keybind = super+5=unbind
+keybind = super+6=unbind
+keybind = super+7=unbind
+keybind = super+8=unbind
+keybind = super+9=unbind
+keybind = super+digit_1=unbind
+keybind = super+digit_2=unbind
+keybind = super+digit_3=unbind
+keybind = super+digit_4=unbind
+keybind = super+digit_5=unbind
+keybind = super+digit_6=unbind
+keybind = super+digit_7=unbind
+keybind = super+digit_8=unbind
+
+# Cmd+Enter: zellij 全屏
+keybind = super+enter=unbind
+
+# Cmd+k: zellij 上移焦点
+keybind = super+k=unbind
+
+# Cmd+[/]: zellij 切换 tab
+keybind = super+bracket_left=unbind
+keybind = super+bracket_right=unbind
+
+# Cmd+,: zellij 切换布局
+keybind = super+,=unbind
+
+# Cmd+Left/Right/Up/Down: zellij 移动焦点
+keybind = super+arrow_left=unbind
+keybind = super+arrow_right=unbind
+keybind = super+arrow_up=unbind
+keybind = super+arrow_down=unbind
+
+# --- 重映射：ghostty 功能改用 Cmd+Shift ---
+
+# Cmd+t -> Cmd+Shift+t: 新建 tab（zellij 的 Cmd+t 进入 tab 模式）
+keybind = super+t=unbind
+keybind = super+shift+t=new_tab
+
+# Cmd+w -> Cmd+Shift+w: 关闭 surface（zellij 的 Cmd+w 关闭焦点 pane）
+keybind = super+w=unbind
+# super+shift+w 默认是 close_window，改为 close_surface
+keybind = super+shift+w=close_surface
+
+# Cmd+n -> Cmd+Shift+n: 新建窗口（zellij 的 Cmd+n 新建 pane）
+keybind = super+n=unbind
+keybind = super+shift+n=new_window
+
+# Cmd+- -> Cmd+Shift+-: 缩小字体（zellij 的 Cmd+- 向下新建 pane）
+keybind = super+-=unbind
+keybind = super+shift+-=decrease_font_size:1
+
+# Cmd+Shift+h/j/k/l: ghostty split 面板导航
+# Cmd+Shift+j 默认是 write_screen_file:paste，先解绑再重新分配
+# keybind = super+shift+j=unbind
+keybind = super+shift+h=goto_split:left
+keybind = super+shift+j=goto_split:down
+keybind = super+shift+k=goto_split:up
+keybind = super+shift+l=goto_split:right
