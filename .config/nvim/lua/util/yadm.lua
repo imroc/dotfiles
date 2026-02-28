@@ -138,6 +138,8 @@ function M.sync(type)
         end
       end
 
+      vim.notify(string.format("[%s] changed:\n  %s", prefix, table.concat(files, "\n  ")))
+
       local add_args = "add"
       for _, f in ipairs(files) do
         add_args = add_args .. " '" .. f:gsub("'", "'\\''") .. "'"
