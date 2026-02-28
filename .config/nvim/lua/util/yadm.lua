@@ -154,12 +154,89 @@ function M.sync(type)
         if type == "private" then
           do_commit("update at " .. os.date("%Y-%m-%d %H:%M:%S"))
         else
-          vim.ui.input({ prompt = string.format("[%s] Commit message: ", prefix) }, function(input)
-            if not input or input == "" then
-              vim.notify(string.format("[%s] sync cancelled", prefix), vim.log.levels.WARN)
-              return
+          -- 获取 diff stat 后打开 commit 编辑窗口
+          run("diff --cached --stat", function(_, diff_stat)
+            local lines = { "" }
+            table.insert(lines, "")
+            table.insert(lines, "# 请为你的变更输入提交说明。以 '#' 开始的行将被忽略。")
+            table.insert(lines, "#")
+            table.insert(lines, "# 变更的文件：")
+            for _, f in ipairs(files) do
+              table.insert(lines, "#   " .. f)
             end
-            do_commit(input)
+            if vim.trim(diff_stat) ~= "" then
+              table.insert(lines, "#")
+              table.insert(lines, "# diff stat:")
+              for stat_line in diff_stat:gmatch("[^\n]+") do
+                table.insert(lines, "#  " .. stat_line)
+              end
+            end
+
+            local buf = vim.api.nvim_create_buf(false, true)
+            vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+            vim.bo[buf].buftype = "acwrite"
+            vim.bo[buf].filetype = "gitcommit"
+            vim.api.nvim_buf_set_name(buf, "yadm-public-commit-msg")
+
+            local width = math.floor(vim.o.columns * 0.6)
+            local height = math.floor(vim.o.lines * 0.4)
+            local win = vim.api.nvim_open_win(buf, true, {
+              relative = "editor",
+              width = width,
+              height = height,
+              col = math.floor(vim.o.columns * 0.2),
+              row = math.floor(vim.o.lines * 0.2),
+              style = "minimal",
+              border = "rounded",
+              title = " yadm-public commit ",
+              title_pos = "center",
+            })
+            vim.api.nvim_win_set_cursor(win, { 1, 0 })
+            vim.cmd("startinsert")
+
+            local committed = false
+            vim.api.nvim_create_autocmd("BufWriteCmd", {
+              buffer = buf,
+              callback = function()
+                if committed then
+                  return
+                end
+                local buf_lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+                local msg_lines = {}
+                for _, l in ipairs(buf_lines) do
+                  if not l:match("^#") then
+                    table.insert(msg_lines, l)
+                  end
+                end
+                -- 去掉首尾空行
+                while #msg_lines > 0 and vim.trim(msg_lines[1]) == "" do
+                  table.remove(msg_lines, 1)
+                end
+                while #msg_lines > 0 and vim.trim(msg_lines[#msg_lines]) == "" do
+                  table.remove(msg_lines)
+                end
+                local msg = table.concat(msg_lines, "\n")
+                if msg == "" then
+                  vim.notify(string.format("[%s] commit message 为空，取消提交", prefix), vim.log.levels.WARN)
+                  return
+                end
+                committed = true
+                vim.bo[buf].modified = false
+                if vim.api.nvim_win_is_valid(win) then
+                  vim.api.nvim_win_close(win, true)
+                end
+                do_commit(msg)
+              end,
+            })
+
+            vim.api.nvim_create_autocmd("BufWipeout", {
+              buffer = buf,
+              callback = function()
+                if not committed then
+                  vim.notify(string.format("[%s] sync cancelled", prefix), vim.log.levels.WARN)
+                end
+              end,
+            })
           end)
         end
       end)

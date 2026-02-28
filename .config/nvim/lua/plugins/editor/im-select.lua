@@ -15,4 +15,17 @@ return {
     set_default_events = { "InsertLeave", "CmdlineLeave", "TermLeave", "TermEnter" },
     set_previous_events = { "InsertEnter" },
   },
+  config = function(_, opts)
+    require("im_select").setup(opts)
+    -- 从其它面板切回 Neovim 时，仅在非插入模式下切换到英文输入法
+    vim.api.nvim_create_autocmd("FocusGained", {
+      group = vim.api.nvim_create_augroup("im-select-focus", { clear = true }),
+      callback = function()
+        local mode = vim.api.nvim_get_mode().mode
+        if mode ~= "i" and mode ~= "ic" and mode ~= "ix" then
+          vim.fn.system({ "macism", "com.apple.keylayout.ABC" })
+        end
+      end,
+    })
+  end,
 }
