@@ -83,7 +83,9 @@ function j --description "Jump to bookmarked directories"
                 echo "目录不存在: $dir"
                 return 1
             end
-            zellij action new-tab --name $alias --cwd $dir
+            zellij action new-tab --name $alias
+            sleep 0.1
+            zellij action write-chars "cd $dir && clear" && zellij action write 10
         case list ls
             yq e 'to_entries | .[] | [.key, .value] | @tsv' $__j_config | column -t -s (printf '\t')
         case wn
