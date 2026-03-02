@@ -1,6 +1,7 @@
 local clipboard = require("util.clipboard")
 local job = require("util.job")
 local file = require("util.file")
+local picker = require("util.picker")
 
 -- copy file path
 vim.keymap.set("n", "<leader>yf", clipboard.copy_absolute_path, { desc = "[P]Copy Absolute Path" })
@@ -32,6 +33,17 @@ end, { desc = "[P]Open Neovide (Root Dir)" })
 vim.keymap.set("n", "<leader>ob", function()
   job.run("buddycn", { args = { "-r", LazyVim.root() } })
 end, { desc = "[P]Open CodeBuddy (Root Dir)" })
+
+-- dotfiles
+vim.keymap.set("n", "<leader>odn", function()
+  picker.files({ cwd = vim.fn.expand("~/.config/nvim") })
+end, { desc = "[P]Nvim" })
+vim.keymap.set("n", "<leader>odf", function()
+  picker.files({ cwd = vim.fn.expand("~/.config/fish") })
+end, { desc = "[P]Fish" })
+vim.keymap.set("n", "<leader>oda", "<cmd>edit ~/.config/aerospace/aerospace.toml<cr>", { desc = "[P]Aerospace" })
+vim.keymap.set("n", "<leader>odg", "<cmd>edit ~/.config/ghostty/config<cr>", { desc = "[P]Ghostty" })
+vim.keymap.set("n", "<leader>odz", "<cmd>edit ~/.config/zellij/config.kdl<cr>", { desc = "[P]Zellij" })
 
 -- rename file with iwiki.json sync
 vim.keymap.set("n", "<leader>rn", file.rename, { desc = "[P]Rename current filename" })

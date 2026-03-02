@@ -9,6 +9,7 @@ return {
         { "<leader>k", group = "kube" },
         { "<leader>r", group = "replace/rename" },
         { "<leader>o", group = "open" },
+        { "<leader>od", group = "[P]Dotfiles" },
         { "<leader>og", group = "git repo" },
         { "<leader>ka", group = "kubectl apply" },
         { "<leader>kd", group = "kubectl delete" },
