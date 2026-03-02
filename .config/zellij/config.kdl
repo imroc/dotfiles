@@ -190,6 +190,7 @@ keybinds clear-defaults=true {
         bind "Super w" { CloseFocus; }
         bind "Alt Super y" { ToggleGroupMarking; }
         bind "Super y" { TogglePaneInGroup; }
+        bind "Alt Super p" { ToggleTab; }
         bind "Super enter" { ToggleFocusFullscreen; }
         // Pass Shift+Enter to apps (workaround for zellij-org/zellij#4159)
         // ref: https://github.com/luckenco/nix-config/blob/main/modules/common/zellij.nix
