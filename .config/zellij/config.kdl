@@ -28,7 +28,7 @@ keybinds clear-defaults=true {
             Run "bash" "-c" "claude-zjstatus-rename.sh" {
                 floating true
                 close_on_exit true
-     jj       }
+            }
             SwitchToMode "normal"
         }
     }
