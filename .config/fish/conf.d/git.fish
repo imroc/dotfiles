@@ -11,7 +11,6 @@ abbr --add gc1 "git clone --depth=1"
 
 abbr --add lg lazygit
 
-abbr --add gw git worktree
 abbr --add gwa git worktree add
 abbr --add gwl git worktree list
 abbr --add gwr git worktree remove
