@@ -47,13 +47,35 @@ C_PURPLE="#b10dc9"  # base0E - Agent/Skill
 C_GRAY="#666666"    # base03 - Thinking/Idle
 # zjstatus bar background color, override via ZJSTATUS_BG env var
 C_BG="${ZJSTATUS_BG:-#313244}"
+# zjstatus pill background color for pipe_status (matches $surface1 in Catppuccin Mocha)
+C_PILL_BG="${ZJSTATUS_PILL_BG:-#45475a}"
+# Pill foreground color for text (matches $lavender in Catppuccin Mocha)
+C_PILL_FG="${ZJSTATUS_PILL_FG:-#b4befe}"
+# Icon background color (matches $lavender in Catppuccin Mocha)
+C_ICON_BG="${ZJSTATUS_ICON_BG:-#b4befe}"
+# Icon foreground color (matches $crust in Catppuccin Mocha)
+C_ICON_FG="${ZJSTATUS_ICON_FG:-#11111b}"
+
+# =============================================================================
+# Helper: wrap content in Powerline pill style (icon + content + closing)
+# Usage: wrap_pill "$content"
+# =============================================================================
+# Powerline characters (literal UTF-8, not escape sequences for bash 3.2 compat)
+PL_LEFT=""  # U+E0B6 left half-circle
+PL_RIGHT="" # U+E0B4 right half-circle
+ICON="󰚩"    # U+F06A9 robot face
+
+wrap_pill() {
+    local content="$1"
+    echo "#[bg=${C_BG},fg=${C_ICON_BG}]${PL_LEFT}#[bg=${C_ICON_BG},fg=${C_ICON_FG},bold]${ICON} #[bg=${C_PILL_BG},fg=${C_PILL_FG},bold] ${content}#[bg=${C_BG},fg=${C_PILL_BG}]${PL_RIGHT}"
+}
 
 # =============================================================================
 # jq helper: build style with bg color for zjstatus dynamic rendermode
 # =============================================================================
-JQ_STYLE_DEF='def style($fg): "#[fg=\($fg),bg=\($bg)]";'
+JQ_STYLE_DEF='def style($fg): "#[fg=\($fg),bg=\($pill_bg)]";'
 JQ_FORMAT='to_entries | sort_by(.key)[] |
-    "\(style(.value.color))\(.value.symbol) \(style("#4166F5"))\(.value.project)" +
+    "\(style(.value.color))\(.value.symbol) \("#[fg=\($pill_fg),bg=\($pill_bg),bold]")\(.value.project)" +
     (if .value.context_pct then " \(style(.value.ctx_color // "#2ecc40"))\(.value.context_pct)%" else "" end)'
 
 # =============================================================================
@@ -116,12 +138,13 @@ case "$HOOK_EVENT" in
                 [ -z "$line" ] && continue
                 [ -n "$SESSIONS" ] && SESSIONS="${SESSIONS}  "
                 SESSIONS="${SESSIONS}${line}"
-            done < <(jq -r --arg bg "$C_BG" "${JQ_STYLE_DEF} ${JQ_FORMAT}" "$STATE_FILE" 2>/dev/null)
+            done < <(jq -r --arg bg "$C_BG" --arg pill_bg "$C_PILL_BG" --arg pill_fg "$C_PILL_FG" "${JQ_STYLE_DEF} ${JQ_FORMAT}" "$STATE_FILE" 2>/dev/null)
 
             if [ -z "$SESSIONS" ]; then
                 zellij -s "$ZELLIJ_SESSION" pipe "zjstatus::pipe::pipe_status::" 2>/dev/null || true
             else
-                zellij -s "$ZELLIJ_SESSION" pipe "zjstatus::pipe::pipe_status::${SESSIONS}" 2>/dev/null || true
+                PILL=$(wrap_pill "$SESSIONS")
+                zellij -s "$ZELLIJ_SESSION" pipe "zjstatus::pipe::pipe_status::${PILL}" 2>/dev/null || true
             fi
         fi
         exit 0
@@ -194,11 +217,12 @@ while IFS= read -r line; do
     [ -z "$line" ] && continue
     [ -n "$SESSIONS" ] && SESSIONS="${SESSIONS}  "
     SESSIONS="${SESSIONS}${line}"
-done < <(jq -r --arg bg "$C_BG" "${JQ_STYLE_DEF} ${JQ_FORMAT}" "$STATE_FILE" 2>/dev/null)
+done < <(jq -r --arg bg "$C_BG" --arg pill_bg "$C_PILL_BG" --arg pill_fg "$C_PILL_FG" "${JQ_STYLE_DEF} ${JQ_FORMAT}" "$STATE_FILE" 2>/dev/null)
 
 # Send to zjstatus
 if [ -n "$SESSIONS" ]; then
-    zellij -s "$ZELLIJ_SESSION" pipe "zjstatus::pipe::pipe_status::${SESSIONS}" 2>/dev/null || true
+    PILL=$(wrap_pill "$SESSIONS")
+    zellij -s "$ZELLIJ_SESSION" pipe "zjstatus::pipe::pipe_status::${PILL}" 2>/dev/null || true
 fi
 
 # Send zjstatus notification for important events
