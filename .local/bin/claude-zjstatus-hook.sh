@@ -28,8 +28,16 @@ CWD=$(echo "$INPUT" | jq -r '.cwd // ""' 2>/dev/null || echo "")
 # Get short session ID (last 4 chars for compactness)
 SHORT_SESSION="${SESSION_ID: -4}"
 
-# Get repo/project name and truncate to 12 chars max
-PROJECT_NAME=$(basename "$CWD" 2>/dev/null || echo "?")
+# Get display name: pane custom name > project dir name
+PANE_NAMES_FILE="${STATE_DIR}/pane-names.json"
+PANE_KEY="${ZELLIJ_SESSION}:${ZELLIJ_PANE}"
+PROJECT_NAME=""
+if [ -f "$PANE_NAMES_FILE" ]; then
+    PROJECT_NAME=$(jq -r --arg k "$PANE_KEY" '.[$k] // ""' "$PANE_NAMES_FILE" 2>/dev/null || echo "")
+fi
+if [ -z "$PROJECT_NAME" ]; then
+    PROJECT_NAME=$(basename "$CWD" 2>/dev/null || echo "?")
+fi
 if [ ${#PROJECT_NAME} -gt 12 ]; then
     PROJECT_NAME="${PROJECT_NAME:0:6}..."
 fi
