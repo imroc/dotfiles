@@ -73,6 +73,7 @@ persistent-workspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9" ]
     outer.bottom = 0
     outer.top = 29
 
+
 [exec.env-vars]
     PATH = '${HOME}/.local/bin:/opt/homebrew/bin:${PATH}'
 
@@ -410,9 +411,6 @@ persistent-workspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9" ]
     if.app-id = 'com.googlecode.iterm2'
     run = ['move-node-to-workspace 1']
 [[on-window-detected]]
-    if.app-id = 'com.mitchellh.ghostty'
-    run = ['move-node-to-workspace 1']
-[[on-window-detected]]
     if.app-id = 'org.alacritty'
     run = ['move-node-to-workspace 1']
 [[on-window-detected]]
@@ -436,6 +434,9 @@ persistent-workspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9" ]
 [[on-window-detected]]
     if.app-id = 'net.kovidgoyal.kitty'
     run = ['move-node-to-workspace 2']
+[[on-window-detected]]
+    if.app-id = 'com.mitchellh.ghostty'
+    run = ['move-node-to-workspace 2', 'layout floating', 'fullscreen']
 
 # 3：浏览器
 [[on-window-detected]]
