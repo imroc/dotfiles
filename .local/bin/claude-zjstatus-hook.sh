@@ -29,7 +29,7 @@ CWD=$(echo "$INPUT" | jq -r '.cwd // ""' 2>/dev/null || echo "")
 SHORT_SESSION="${SESSION_ID: -4}"
 
 # Get display name: pane custom name > project dir name
-PANE_NAMES_FILE="${STATE_DIR}/pane-names.json"
+PANE_NAMES_FILE="$HOME/.local/state/zellij-pane-names.json"
 PANE_KEY="${ZELLIJ_SESSION}:${ZELLIJ_PANE}"
 PROJECT_NAME=""
 if [ -f "$PANE_NAMES_FILE" ]; then
