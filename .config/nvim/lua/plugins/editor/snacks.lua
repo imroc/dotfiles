@@ -142,6 +142,20 @@ return {
       desc = "[P]Find Dotfiles",
     },
     {
+      "<leader>fDn",
+      function()
+        picker.files({ cwd = vim.fn.expand("$HOME/.config/nvim") })
+      end,
+      desc = "[P]Find Dotfiles (Nvim)",
+    },
+    {
+      "<leader>fDf",
+      function()
+        picker.files({ cwd = vim.fn.expand("$HOME/.config/fish") })
+      end,
+      desc = "[P]Find Dotfiles (Fish)",
+    },
+    {
       "<leader><space>",
       function()
         picker.files({ cwd = LazyVim.root() })

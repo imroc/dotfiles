@@ -35,12 +35,6 @@ vim.keymap.set("n", "<leader>ob", function()
 end, { desc = "[P]Open CodeBuddy (Root Dir)" })
 
 -- dotfiles
-vim.keymap.set("n", "<leader>odn", function()
-  picker.files({ cwd = vim.fn.expand("~/.config/nvim") })
-end, { desc = "[P]Nvim" })
-vim.keymap.set("n", "<leader>odf", function()
-  picker.files({ cwd = vim.fn.expand("~/.config/fish") })
-end, { desc = "[P]Fish" })
 vim.keymap.set("n", "<leader>oda", "<cmd>edit ~/.config/aerospace/aerospace.toml<cr>", { desc = "[P]Aerospace" })
 vim.keymap.set("n", "<leader>odg", "<cmd>edit ~/.config/ghostty/config<cr>", { desc = "[P]Ghostty" })
 vim.keymap.set("n", "<leader>odz", "<cmd>edit ~/.config/zellij/config.kdl<cr>", { desc = "[P]Zellij" })
