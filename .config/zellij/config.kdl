@@ -177,7 +177,7 @@ keybinds clear-defaults=true {
         bind "Super o" {
             Run "fish" "-c" "j tab" {
                 floating true
-                hold_on_close false
+                close_on_exit true
             }
         }
         bind "Super w" { CloseFocus; }
