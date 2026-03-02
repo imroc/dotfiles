@@ -24,6 +24,13 @@ keybinds clear-defaults=true {
         bind "w" { ToggleFloatingPanes; SwitchToMode "normal"; }
         bind "x" { CloseFocus; SwitchToMode "normal"; }
         bind "z" { TogglePaneFrames; SwitchToMode "normal"; }
+        bind "C" {
+            Run "bash" "-c" "claude-zjstatus-rename.sh" {
+                floating true
+                close_on_exit true
+            }
+            SwitchToMode "normal"
+        }
     }
     tab {
         bind "left" { GoToPreviousTab; }
