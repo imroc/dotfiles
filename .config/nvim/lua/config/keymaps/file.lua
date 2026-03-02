@@ -34,6 +34,35 @@ vim.keymap.set("n", "<leader>ob", function()
   job.run("buddycn", { args = { "-r", LazyVim.root() } })
 end, { desc = "[P]Open CodeBuddy (Root Dir)" })
 
+-- weekly note
+vim.keymap.set("n", "<leader>ow", function()
+  local now = os.time()
+  local weekday = tonumber(os.date("%w", now)) -- 0=Sunday, 1=Monday, ...
+  -- 转换为 1=Monday, 7=Sunday
+  weekday = weekday == 0 and 7 or weekday
+
+  local monday = now - (weekday - 1) * 86400
+  local sunday = now + (7 - weekday) * 86400
+
+  local monday_year = os.date("%Y", monday)
+  local monday_mmdd = os.date("%m%d", monday)
+  local sunday_mmdd = os.date("%m%d", sunday)
+
+  local note_dir = vim.fn.expand("~/dev/note/weekly/" .. monday_year)
+  local full_path = note_dir .. "/" .. monday_mmdd .. "-" .. sunday_mmdd .. ".md"
+
+  vim.fn.mkdir(note_dir, "p")
+  if vim.fn.filereadable(full_path) == 0 then
+    local f = io.open(full_path, "w")
+    if f then
+      f:write("## 待办列表\n")
+      f:close()
+    end
+  end
+
+  vim.cmd.edit(full_path)
+end, { desc = "[P]Open Weekly Note" })
+
 -- dotfiles
 vim.keymap.set("n", "<leader>oda", "<cmd>edit ~/.config/aerospace/aerospace.toml<cr>", { desc = "[P]Aerospace" })
 vim.keymap.set("n", "<leader>odg", "<cmd>edit ~/.config/ghostty/config<cr>", { desc = "[P]Ghostty" })
