@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # 脚本用于动态分析指定iptables表的链关系并以树状结构展示
 #set -x
