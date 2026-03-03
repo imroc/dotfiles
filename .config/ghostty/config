@@ -92,3 +92,9 @@ window-padding-y = 6,0
 confirm-close-surface = false
 macos-icon = official
 unfocused-split-opacity = 0.7
+
+# quick terminal
+keybind = global:cmd+/=toggle_quick_terminal
+quick-terminal-position = bottom
+quick-terminal-screen = mouse
+quick-terminal-animation-duration = 0.08

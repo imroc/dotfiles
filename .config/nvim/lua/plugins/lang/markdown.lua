@@ -46,6 +46,13 @@ return {
   {
     "bngarren/checkmate.nvim",
     ft = "markdown", -- Lazy loads for Markdown files matching patterns in 'files'
+    keys = {
+      {
+        "<C-t>",
+        mode = { "n", "i" },
+        "<cmd>Checkmate toggle<cr>",
+      },
+    },
     opts = {
       files = {
         "*.md", -- Any markdown file (basename matching)
