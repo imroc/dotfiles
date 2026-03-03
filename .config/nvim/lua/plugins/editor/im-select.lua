@@ -24,8 +24,9 @@ local function handle_focus_change()
       else
         saved_im_before_focus_lost = nil
       end
-      -- 清理上次聚焦时的输入法记录
+      -- 失焦时恢复聚焦时记录的输入法清理上次聚焦时的输入法记录
       if saved_im_before_focus_gained then
+        vim.fn.system({ "macism", saved_im_before_focus_gained })
         saved_im_before_focus_gained = nil
       end
     end,
@@ -39,15 +40,15 @@ local function handle_focus_change()
       saved_im_before_focus_gained = vim.fn.system({ "macism" }):gsub("%s+", "")
       local mode = vim.api.nvim_get_mode().mode
       -- 插入模式：聚焦时恢复之前失焦时使用的输入法
+      -- 非插入模式：默认切英文输入法
       if mode == "i" or mode == "ic" or mode == "ix" then
         if saved_im_before_focus_lost then
           vim.fn.system({ "macism", saved_im_before_focus_lost })
-          saved_im_before_focus_lost = nil
         end
       else
-        -- 非插入模式，默认切英文输入法
         vim.fn.system({ "macism", "com.apple.keylayout.ABC" })
       end
+      saved_im_before_focus_lost = nil
     end,
   })
 end
