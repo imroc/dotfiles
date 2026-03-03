@@ -10,7 +10,7 @@ return {
         { "<leader>r", group = "replace/rename" },
         { "<leader>o", group = "open" },
         { "<leader>od", group = "[P]Dotfiles" },
-        { "<leader>fD", group = "[P]Find Dotfiles (Specific)" },
+        { "<leader>fd", group = "[P]Find Dotfiles" },
         { "<leader>og", group = "git repo" },
         { "<leader>ka", group = "kubectl apply" },
         { "<leader>kd", group = "kubectl delete" },

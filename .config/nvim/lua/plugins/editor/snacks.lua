@@ -133,35 +133,56 @@ return {
       desc = "[P]Find Lazy Plugin Files",
     },
     {
-      "<leader>fd",
+      "<leader>fc",
       function()
         picker.files({
           cwd = vim.fn.expand("$HOME/.config"),
         })
       end,
-      desc = "[P]Find Dotfiles",
+      desc = "[P]Find Config File (~/.config)",
     },
     {
-      "<leader>fDn",
+      "<leader>fdn",
       function()
         picker.files({ cwd = vim.fn.expand("$HOME/.config/nvim") })
       end,
-      desc = "[P]Find Dotfiles (Nvim)",
+      desc = "[P]Find Neovim Dotfiles",
     },
     {
-      "<leader>fDf",
+      "<leader>fdf",
       function()
         picker.files({ cwd = vim.fn.expand("$HOME/.config/fish") })
       end,
-      desc = "[P]Find Dotfiles (Fish)",
+      desc = "[P]Find Fish Dotfiles",
     },
     {
-      "<leader><space>",
+      "<leader>fda",
       function()
-        picker.files({ cwd = LazyVim.root() })
+        picker.files({ cwd = vim.fn.expand("$HOME/.config/fish") })
       end,
-      desc = "[P]Find Files (Root Dir)",
+      desc = "[P]Find Aerospace Dotfiles",
     },
+    {
+      "<leader>fdz",
+      function()
+        picker.files({ cwd = vim.fn.expand("$HOME/.config/zellij") })
+      end,
+      desc = "[P]Find Zellij Dotfiles",
+    },
+    {
+      "<leader>fdk",
+      function()
+        picker.files({ cwd = vim.fn.expand("$HOME/.config/kitty") })
+      end,
+      desc = "[P]Find Kitty Dotfiles",
+    },
+    -- {
+    --   "<leader><space>",
+    --   function()
+    --     picker.files({ cwd = LazyVim.root() })
+    --   end,
+    --   desc = "[P]Find Files (Root Dir)",
+    -- },
     {
       "<leader>ff",
       function()
@@ -204,13 +225,13 @@ return {
       end,
       desc = "[P]Grep (Plain Text)",
     },
-    {
-      "<leader>/",
-      function()
-        picker.grep({ cwd = LazyVim.root() })
-      end,
-      desc = "[P]Grep (Regex)",
-    },
+    -- {
+    --   "<leader>/",
+    --   function()
+    --     picker.grep({ cwd = LazyVim.root() })
+    --   end,
+    --   desc = "[P]Grep (Regex)",
+    -- },
   },
   opts = function(_, opts)
     return vim.tbl_deep_extend("force", opts or {}, {

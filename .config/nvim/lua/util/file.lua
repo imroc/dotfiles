@@ -58,4 +58,32 @@ function M.rename()
   end)
 end
 
+function M.open_weekly_note()
+  local now = os.time()
+  local weekday = tonumber(os.date("%w", now)) -- 0=Sunday, 1=Monday, ...
+  -- 转换为 1=Monday, 7=Sunday
+  weekday = weekday == 0 and 7 or weekday
+
+  local monday = now - (weekday - 1) * 86400
+  local sunday = now + (7 - weekday) * 86400
+
+  local monday_year = os.date("%Y", monday)
+  local monday_mmdd = os.date("%m%d", monday)
+  local sunday_mmdd = os.date("%m%d", sunday)
+
+  local note_dir = vim.fn.expand("~/dev/note/weekly/" .. monday_year)
+  local full_path = note_dir .. "/" .. monday_mmdd .. "-" .. sunday_mmdd .. ".md"
+
+  vim.fn.mkdir(note_dir, "p")
+  if vim.fn.filereadable(full_path) == 0 then
+    local f = io.open(full_path, "w")
+    if f then
+      f:write("## 待办列表\n")
+      f:close()
+    end
+  end
+
+  vim.cmd.edit(full_path)
+end
+
 return M
