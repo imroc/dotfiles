@@ -1,4 +1,4 @@
-set -g __j_config "$HOME/.config/j.yaml"
+set -g __j_config "$HOME/.config/jumplist.yaml"
 
 function j --description "Jump to bookmarked directories"
     if not test -f $__j_config

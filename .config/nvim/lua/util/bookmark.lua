@@ -4,9 +4,9 @@ local picker = require("util.picker")
 
 local M = {}
 
-local config_path = vim.fn.expand("$HOME/.config/j.yaml")
+local config_path = vim.fn.expand("$HOME/.config/jumplist.yaml")
 
---- 解析 j.yaml，返回 { {alias, dir}, ... }
+--- 解析 jumplist.yaml，返回 { {alias, dir}, ... }
 ---@return {alias: string, dir: string}[]
 function M.parse_bookmarks()
   local entries = {}
@@ -30,7 +30,7 @@ end
 function M.pick_alias(on_select)
   local bookmarks = M.parse_bookmarks()
   if #bookmarks == 0 then
-    vim.notify("j.yaml 为空或不存在", vim.log.levels.WARN)
+    vim.notify("jumplist.yaml 为空或不存在", vim.log.levels.WARN)
     return
   end
 
