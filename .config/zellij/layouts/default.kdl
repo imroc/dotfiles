@@ -4,6 +4,7 @@ layout {
         pane size=1 borderless=true {
             plugin location="https://github.com/dj95/zjstatus/releases/latest/download/zjstatus.wasm" {
 
+                // based on https://github.com/merikan/.dotfiles/tree/main/config/zellij/themes/zjstatus
                 // -- Catppuccin Mocha --
                 color_rosewater "#f5e0dc"
                 color_flamingo "#f2cdcd"
