@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+# Rename zellij pane and save name for claude zjstatus
+
+names_file="$HOME/.local/state/zellij-pane-names.json"
+
+# -s: open state file in nvim
+if [[ "${1:-}" == "-s" ]]; then
+  if [[ -f "$names_file" ]]; then
+    nvim "$names_file"
+  else
+    echo "State file not found: $names_file"
+  fi
+  exit 0
+fi
+
+if [[ $# -eq 0 ]]; then
+  echo "Usage: zrp <name>"
+  echo "       zrp -s  # edit state file in nvim"
+  exit 1
+fi
+
+name="$1"
+
+# Rename zellij pane
+zellij action rename-pane "$name"
+
+# Save name mapping: ZELLIJ_SESSION_NAME:ZELLIJ_PANE_ID -> name
+if [[ -n "${ZELLIJ_SESSION_NAME:-}" && -n "${ZELLIJ_PANE_ID:-}" ]]; then
+  key="${ZELLIJ_SESSION_NAME}:${ZELLIJ_PANE_ID}"
+
+  if [[ -f "$names_file" ]]; then
+    jq --arg k "$key" --arg v "$name" '.[$k] = $v' "$names_file" >"$names_file.tmp" 2>/dev/null &&
+      mv "$names_file.tmp" "$names_file"
+  else
+    mkdir -p "$(dirname "$names_file")"
+    jq -n --arg k "$key" --arg v "$name" '{($k): $v}' >"$names_file"
+  fi
+fi
