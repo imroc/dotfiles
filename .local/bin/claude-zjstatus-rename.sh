@@ -77,48 +77,32 @@ else
 fi
 
 # =============================================================================
-# Step 4: Update Claude status state and refresh zjstatus
+# Step 4: Update project name in state and re-render zjstatus
 # =============================================================================
 if [ -f "$STATE_FILE" ] && [ -s "$STATE_FILE" ]; then
-  # Truncate display name (same logic as hook script)
+  # Only update the project field, preserving activity/color/symbol etc.
   DISPLAY_NAME="$NEW_NAME"
   if [ -z "$DISPLAY_NAME" ]; then
-    # Fallback: try to get project dir from state
     DISPLAY_NAME=$(jq -r --arg pane "$ORIGINAL_PANE" '.[$pane].project // "?"' "$STATE_FILE" 2>/dev/null || echo "?")
   fi
-  if [ ${#DISPLAY_NAME} -gt 12 ]; then
-    DISPLAY_NAME="${DISPLAY_NAME:0:6}..."
-  fi
 
-  # Update project name in state file
   TMP_FILE=$(mktemp)
   jq --arg pane "$ORIGINAL_PANE" --arg name "$DISPLAY_NAME" \
     'if .[$pane] then .[$pane].project = $name else . end' \
     "$STATE_FILE" >"$TMP_FILE" 2>/dev/null
+  [ -s "$TMP_FILE" ] && mv "$TMP_FILE" "$STATE_FILE" || rm -f "$TMP_FILE"
 
-  if [ -s "$TMP_FILE" ]; then
-    mv "$TMP_FILE" "$STATE_FILE"
-  else
-    rm -f "$TMP_FILE"
-  fi
-
-  # Re-render zjstatus pill (same rendering logic as hook script)
-  # Colors
+  # Re-render zjstatus (reuse hook.sh constants)
   C_BG="${ZJSTATUS_BG:-#313244}"
   C_PILL_BG="${ZJSTATUS_PILL_BG:-#45475a}"
   C_PILL_FG="${ZJSTATUS_PILL_FG:-#b4befe}"
   C_ICON_BG="${ZJSTATUS_ICON_BG:-#b4befe}"
   C_ICON_FG="${ZJSTATUS_ICON_FG:-#11111b}"
 
-  # Powerline characters (literal UTF-8)
-  PL_LEFT=""
-  PL_RIGHT=""
-  ICON="󰚩"
-
   JQ_STYLE_DEF='def style($fg): "#[fg=\($fg),bg=\($pill_bg)]";'
   JQ_FORMAT='to_entries | sort_by(.key)[] |
-        "\(style(.value.color))\(.value.symbol) \("#[fg=\($pill_fg),bg=\($pill_bg),bold]")\(.value.project)" +
-        (if .value.context_pct then " \(style(.value.ctx_color // "#2ecc40"))\(.value.context_pct)%" else "" end)'
+      "\(style(.value.color))\(.value.symbol) \("#[fg=\($pill_fg),bg=\($pill_bg),bold]")\(.value.project)" +
+      (if .value.context_pct then " \(style(.value.ctx_color // "#2ecc40"))\(.value.context_pct)%" else "" end)'
 
   SESSIONS=""
   while IFS= read -r line; do
@@ -128,6 +112,7 @@ if [ -f "$STATE_FILE" ] && [ -s "$STATE_FILE" ]; then
   done < <(jq -r --arg bg "$C_BG" --arg pill_bg "$C_PILL_BG" --arg pill_fg "$C_PILL_FG" "${JQ_STYLE_DEF} ${JQ_FORMAT}" "$STATE_FILE" 2>/dev/null)
 
   if [ -n "$SESSIONS" ]; then
+    PL_LEFT="" PL_RIGHT="" ICON="󰚩"
     PILL="#[bg=${C_BG},fg=${C_ICON_BG}]${PL_LEFT}#[bg=${C_ICON_BG},fg=${C_ICON_FG},bold]${ICON} #[bg=${C_PILL_BG},fg=${C_PILL_FG},bold] ${SESSIONS}#[bg=${C_BG},fg=${C_PILL_BG}]${PL_RIGHT}"
     zellij -s "$ZELLIJ_SESSION" pipe "zjstatus::pipe::pipe_status::${PILL}" 2>/dev/null || true
   fi
