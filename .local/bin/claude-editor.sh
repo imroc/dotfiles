@@ -8,7 +8,7 @@ fi
 pipe=$(mktemp -u /tmp/claude-editor-pipe.XXXXXX)
 mkfifo "$pipe"
 
-zellij run -n "提示词" -cf -- bash -c "nvim '+normal G$' +startinsert! \"$1\"; zellij action toggle-floating-panes; echo done > \"$pipe\""
+zellij run -n "提示词" -ci -- bash -c "nvim '+normal G$' +startinsert! \"$1\"; echo done > \"$pipe\""
 
 # 阻塞等待管道写入
 read <"$pipe"
