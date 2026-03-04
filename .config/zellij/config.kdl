@@ -1,6 +1,6 @@
 keybinds clear-defaults=true {
     locked {
-        bind "Super g" { SwitchToMode "normal"; }
+        bind "Super x" { SwitchToMode "normal"; }
     }
     pane {
         bind "left" { MoveFocus "left"; }
@@ -89,7 +89,7 @@ keybinds clear-defaults=true {
         bind "j" { MovePane "down"; }
         bind "k" { MovePane "up"; }
         bind "l" { MovePane "right"; }
-        bind "Super m" { SwitchToMode "normal"; }
+        bind "Ctrl Super m" { SwitchToMode "normal"; }
         bind "n" { MovePane; }
         bind "p" { MovePaneBackwards; }
         bind "tab" { MovePane; }
@@ -176,26 +176,27 @@ keybinds clear-defaults=true {
             }
         }
         // session 跳转
-        bind "Shift Super f" {
+        bind "Super g" {
             LaunchOrFocusPlugin "https://github.com/JoseMM2002/zellij-favs/releases/download/v1.0.1/zellij-favs.wasm" {
                 floating true
                 display_tab_panes true
                 cache_dir "~/.cache/zellij-favs"
             }
         }
-        bind "Super g" { SwitchToMode "locked"; }
-        bind "Super h" { MoveFocus "left"; }
-        bind "Super i" { EditScrollback; SwitchToMode "normal"; }
-        bind "Super j" { MoveFocus "down"; }
-        bind "Super k" { MoveFocus "up"; }
-        bind "Super l" { MoveFocus "right"; }
-        bind "Super n" { NewPane; }
+        // 通过 jumplist 根据常用目录快速创建tab
         bind "Super o" {
             Run "fish" "-c" "j tab" {
                 floating true
                 close_on_exit true
             }
         }
+        bind "Super x" { SwitchToMode "locked"; }
+        bind "Super h" { MoveFocus "left"; }
+        bind "Super i" { EditScrollback; SwitchToMode "normal"; }
+        bind "Super j" { MoveFocus "down"; }
+        bind "Super k" { MoveFocus "up"; }
+        bind "Super l" { MoveFocus "right"; }
+        bind "Super n" { NewPane; }
         bind "Super w" { CloseFocus; }
         bind "Ctrl Super y" { ToggleGroupMarking; }
         bind "Super y" { TogglePaneInGroup; }
@@ -206,7 +207,7 @@ keybinds clear-defaults=true {
         // bind "Shift Enter" { Write 27 91 49 51 59 50 117; }
     }
     shared_except "locked" "move" {
-        bind "Super m" { SwitchToMode "move"; }
+        bind "Ctrl Super m" { SwitchToMode "move"; }
     }
     shared_except "locked" "session" {
         bind "Super s" { SwitchToMode "session"; }
