@@ -187,6 +187,13 @@ keybinds clear-defaults=true {
                 close_on_exit true
             }
         }
+        bind "Shift Super f" {
+            LaunchOrFocusPlugin "https://github.com/JoseMM2002/zellij-favs/releases/download/v1.0.1/zellij-favs.wasm" {
+                floating true
+                display_tab_panes true
+                cache_dir "~/.cache/zellij-favs"
+            }
+        }
         bind "Super w" { CloseFocus; }
         bind "Ctrl Super y" { ToggleGroupMarking; }
         bind "Super y" { TogglePaneInGroup; }
