@@ -167,11 +167,20 @@ keybinds clear-defaults=true {
         bind "Super \\" { NewPane "right"; }
         bind "Super ]" { GoToNextTab; }
         bind "Super e" { TogglePanePinned; SwitchToMode "normal"; ToggleFloatingPanes; }
+        // tab 跳转（session 内）
         bind "Super f" {
             LaunchOrFocusPlugin "https://github.com/rvcas/room/releases/latest/download/room.wasm" {
                 floating true
                 ignore_case "true"
                 quick_jump "true"
+            }
+        }
+        // session 跳转
+        bind "Shift Super f" {
+            LaunchOrFocusPlugin "https://github.com/JoseMM2002/zellij-favs/releases/download/v1.0.1/zellij-favs.wasm" {
+                floating true
+                display_tab_panes true
+                cache_dir "~/.cache/zellij-favs"
             }
         }
         bind "Super g" { SwitchToMode "locked"; }
@@ -185,13 +194,6 @@ keybinds clear-defaults=true {
             Run "fish" "-c" "j tab" {
                 floating true
                 close_on_exit true
-            }
-        }
-        bind "Shift Super f" {
-            LaunchOrFocusPlugin "https://github.com/JoseMM2002/zellij-favs/releases/download/v1.0.1/zellij-favs.wasm" {
-                floating true
-                display_tab_panes true
-                cache_dir "~/.cache/zellij-favs"
             }
         }
         bind "Super w" { CloseFocus; }
