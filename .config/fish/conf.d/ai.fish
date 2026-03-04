@@ -1,7 +1,7 @@
 abbr --add gi gemini-internal
-abbr --add ci claude-internal
-abbr --add cis claude-internal --permission-mode bypassPermissions
-abbr --add cir claude-internal --permission-mode bypassPermissions --resume
+abbr --add ci hapi claude-internal
+abbr --add cis hapi claude-internal --permission-mode bypassPermissions
+abbr --add cir hapi claude-internal --permission-mode bypassPermissions --resume
 abbr --add crs ccr code --permission-mode bypassPermissions
 abbr --add cr ccr code
 abbr --add oc opencode
