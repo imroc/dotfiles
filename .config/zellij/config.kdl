@@ -279,6 +279,12 @@ plugins {
 // eg. "file:/path/to/my-plugin.wasm"
 // eg. "https://example.com/my-plugin.wasm"
 load_plugins {
+    "https://github.com/KiryuuLight/zellij-attention/releases/latest/download/zellij-attention.wasm" {
+        // All options are optional — defaults shown
+        enabled "true"
+        waiting_icon "⏳"
+        completed_icon "✅"
+    }
 }
 web_client {
     font "monospace"
