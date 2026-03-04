@@ -3,7 +3,14 @@
 # Based on: https://github.com/thoo/claude-code-zellij-status
 # Self-maintained version with zjstatus background color support
 
-STATE_DIR="/tmp/claude-zellij-status"
+# Watchdog: kill self after 5s to prevent blocking Claude
+(
+  sleep 5
+  kill $$ 2>/dev/null
+) &
+WATCHDOG_PID=$!
+
+STATE_DIR="$HOME/.local/state/claude-zellij-status"
 ZELLIJ_SESSION="${ZELLIJ_SESSION_NAME:-}"
 ZELLIJ_PANE="${ZELLIJ_PANE_ID:-0}"
 
@@ -11,9 +18,10 @@ ZELLIJ_PANE="${ZELLIJ_PANE_ID:-0}"
 [ -z "$ZELLIJ_SESSION" ] && exit 0
 
 STATE_FILE="${STATE_DIR}/${ZELLIJ_SESSION}.json"
+LOCK_FILE="${STATE_FILE}.lock"
 mkdir -p "$STATE_DIR"
 
-# Read JSON from stdin
+# Read JSON from stdin (before acquiring lock to avoid holding lock during stdin read)
 INPUT=$(cat)
 
 # Parse hook event and related fields (with error handling)
@@ -28,20 +36,8 @@ CWD=$(echo "$INPUT" | jq -r '.cwd // ""' 2>/dev/null || echo "")
 # Get short session ID (last 4 chars for compactness)
 SHORT_SESSION="${SESSION_ID: -4}"
 
-# Get display name: pane custom name > project dir name
-PANE_NAMES_FILE="$HOME/.local/state/zellij-pane-names.json"
-PANE_KEY="${ZELLIJ_SESSION}:${ZELLIJ_PANE}"
-PROJECT_NAME=""
-if [ -f "$PANE_NAMES_FILE" ]; then
-  PROJECT_NAME=$(jq -r --arg k "$PANE_KEY" '.[$k] // ""' "$PANE_NAMES_FILE" 2>/dev/null || echo "")
-fi
-if [ -z "$PROJECT_NAME" ]; then
-  PROJECT_NAME=$(basename "$CWD" 2>/dev/null || echo "?")
-fi
-# 注释掉名称自动截断(如果名字长了可以配合 claude-zjstatus-rename.sh 来重命名)
-# if [ ${#PROJECT_NAME} -gt 12 ]; then
-#   PROJECT_NAME="${PROJECT_NAME:0:6}..."
-# fi
+# Default project name from cwd (may be overridden by custom_name in state file later)
+PROJECT_NAME=$(basename "$CWD" 2>/dev/null || echo "?")
 
 # =============================================================================
 # COLOR SCHEME (clrs.cc - bright but not vivid)
@@ -86,6 +82,40 @@ JQ_STYLE_DEF='def style($fg): "#[fg=\($fg),bg=\($pill_bg)]";'
 JQ_FORMAT='to_entries | sort_by(.key)[] |
     "\(style(.value.color))\(.value.symbol) \("#[fg=\($pill_fg),bg=\($pill_bg),bold]")\(.value.project)" +
     (if .value.context_pct then " \(style(.value.ctx_color // "#2ecc40"))\(.value.context_pct)%" else "" end)'
+
+# =============================================================================
+# File locking: use mkdir as atomic lock (portable, no flock on macOS)
+# =============================================================================
+acquire_lock() {
+  local attempts=0
+  while ! mkdir "$LOCK_FILE" 2>/dev/null; do
+    attempts=$((attempts + 1))
+    if [ $attempts -ge 20 ]; then
+      # Stale lock? Check if lock is older than 10s and force-remove
+      if [ -d "$LOCK_FILE" ]; then
+        local lock_age
+        lock_age=$(($(date +%s) - $(stat -f %m "$LOCK_FILE" 2>/dev/null || echo 0)))
+        if [ "$lock_age" -gt 10 ]; then
+          rmdir "$LOCK_FILE" 2>/dev/null
+          continue
+        fi
+      fi
+      return 1 # give up
+    fi
+    sleep 0.1
+  done
+}
+
+release_lock() {
+  rmdir "$LOCK_FILE" 2>/dev/null || true
+}
+
+# Ensure lock is released on exit (watchdog kill, errors, etc.)
+cleanup() {
+  release_lock
+  kill "$WATCHDOG_PID" 2>/dev/null || true
+}
+trap cleanup EXIT
 
 # =============================================================================
 # SYMBOLS
@@ -170,8 +200,9 @@ PostToolUse)
   ;;
 Notification)
   # Check if session is already done - don't overwrite completion status
-  if [ -f "$STATE_FILE" ]; then
+  if [ -f "$STATE_FILE" ] && acquire_lock; then
     EXISTING_DONE=$(jq -r --arg pane "$ZELLIJ_PANE" '.[$pane].done // false' "$STATE_FILE" 2>/dev/null || echo "false")
+    release_lock
     if [ "$EXISTING_DONE" = "true" ]; then
       PROJECT_NAME_NOTIFY=$(basename "$CWD" 2>/dev/null || echo "?")
       zellij -s "$ZELLIJ_SESSION" pipe "zjstatus::notify::${PROJECT_NAME_NOTIFY} ! notification" 2>/dev/null || true
@@ -214,22 +245,23 @@ SessionStart)
   DONE=false
   ;;
 SessionEnd)
-  # Session ended - remove from state
-  if [ -f "$STATE_FILE" ]; then
+  # Session ended - remove from state (with lock)
+  if [ -f "$STATE_FILE" ] && acquire_lock; then
     TMP_FILE=$(mktemp)
     jq --arg pane "$ZELLIJ_PANE" 'del(.[$pane])' "$STATE_FILE" >"$TMP_FILE" 2>/dev/null && mv "$TMP_FILE" "$STATE_FILE"
     rm -f "$TMP_FILE"
-  fi
-  # Update zjstatus with remaining sessions
-  if [ -f "$STATE_FILE" ] && [ -s "$STATE_FILE" ]; then
-    SESSIONS=""
-    while IFS= read -r line; do
-      [ -z "$line" ] && continue
-      [ -n "$SESSIONS" ] && SESSIONS="${SESSIONS}  "
-      SESSIONS="${SESSIONS}${line}"
-    done < <(jq -r --arg bg "$C_BG" --arg pill_bg "$C_PILL_BG" --arg pill_fg "$C_PILL_FG" "${JQ_STYLE_DEF} ${JQ_FORMAT}" "$STATE_FILE" 2>/dev/null)
+    # Update zjstatus with remaining sessions
+    if [ -s "$STATE_FILE" ]; then
+      SESSIONS=""
+      while IFS= read -r line; do
+        [ -z "$line" ] && continue
+        [ -n "$SESSIONS" ] && SESSIONS="${SESSIONS}  "
+        SESSIONS="${SESSIONS}${line}"
+      done < <(jq -r --arg bg "$C_BG" --arg pill_bg "$C_PILL_BG" --arg pill_fg "$C_PILL_FG" "${JQ_STYLE_DEF} ${JQ_FORMAT}" "$STATE_FILE" 2>/dev/null)
+    fi
+    release_lock
 
-    if [ -z "$SESSIONS" ]; then
+    if [ -z "${SESSIONS:-}" ]; then
       zellij -s "$ZELLIJ_SESSION" pipe "zjstatus::pipe::pipe_status::" 2>/dev/null || true
     else
       PILL=$(wrap_pill "$SESSIONS")
@@ -250,6 +282,9 @@ esac
 TIMESTAMP=$(date +%s)
 TIME_FMT=$(date +%H:%M)
 
+# Acquire lock for state file read-modify-write
+acquire_lock || exit 0
+
 # Initialize state file if it doesn't exist or is empty
 if [ ! -f "$STATE_FILE" ] || [ ! -s "$STATE_FILE" ]; then
   echo "{}" >"$STATE_FILE"
@@ -264,12 +299,18 @@ if ! echo "$CURRENT_STATE" | jq empty 2>/dev/null; then
   echo "{}" >"$STATE_FILE"
 fi
 
-# Get existing values for this pane (preserve context data from status line script)
+# Get existing values for this pane (preserve context data)
 EXISTING=$(echo "$CURRENT_STATE" | jq -r --arg pane "$ZELLIJ_PANE" '.[$pane] // {}' 2>/dev/null)
 EXISTING_CTX_PCT=$(echo "$EXISTING" | jq -r '.context_pct // null' 2>/dev/null)
 EXISTING_CTX_COLOR=$(echo "$EXISTING" | jq -r '.ctx_color // null' 2>/dev/null)
 
-# Update state with this pane's activity (preserving context from status line)
+# Preserve existing project name if set (may have been renamed)
+EXISTING_PROJECT=$(echo "$EXISTING" | jq -r '.project // ""' 2>/dev/null)
+if [ -n "$EXISTING_PROJECT" ]; then
+  PROJECT_NAME="$EXISTING_PROJECT"
+fi
+
+# Update state with this pane's activity
 TMP_FILE=$(mktemp)
 echo "$CURRENT_STATE" | jq \
   --arg pane "$ZELLIJ_PANE" \
@@ -311,6 +352,9 @@ while IFS= read -r line; do
   [ -n "$SESSIONS" ] && SESSIONS="${SESSIONS}  "
   SESSIONS="${SESSIONS}${line}"
 done < <(jq -r --arg bg "$C_BG" --arg pill_bg "$C_PILL_BG" --arg pill_fg "$C_PILL_FG" "${JQ_STYLE_DEF} ${JQ_FORMAT}" "$STATE_FILE" 2>/dev/null)
+
+# Release lock after all state file operations
+release_lock
 
 # Send to zjstatus
 if [ -n "$SESSIONS" ]; then

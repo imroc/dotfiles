@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Rename the Claude status display name for the currently focused pane.
 # Designed to run inside a floating pane launched from zellij keybinding.
-# Updates ~/.local/state/zellij-pane-names.json and refreshes zjstatus.
+# Directly modifies the project field in STATE_FILE, then triggers hook to re-render.
 
 set -euo pipefail
 
@@ -13,20 +13,18 @@ ZELLIJ_SESSION="${ZELLIJ_SESSION_NAME:-}"
   exit 1
 }
 
-PANE_NAMES_FILE="$HOME/.local/state/zellij-pane-names.json"
-STATE_DIR="/tmp/claude-zellij-status"
+STATE_DIR="$HOME/.local/state/claude-zellij-status"
 STATE_FILE="${STATE_DIR}/${ZELLIJ_SESSION}.json"
+LOCK_FILE="${STATE_FILE}.lock"
 
 # =============================================================================
 # Step 1: Get the ORIGINAL focused pane ID (before this floating pane appeared)
 # =============================================================================
-# Hide floating panes -> focus returns to original pane -> query -> show again
 zellij action toggle-floating-panes
 sleep 0.05
 ORIGINAL_PANE_RAW=$(zellij action list-clients | awk 'NR==2 {print $2}')
 zellij action toggle-floating-panes
 
-# Extract numeric ID from "terminal_N"
 ORIGINAL_PANE="${ORIGINAL_PANE_RAW#terminal_}"
 if [ -z "$ORIGINAL_PANE" ] || ! [[ "$ORIGINAL_PANE" =~ ^[0-9]+$ ]]; then
   echo "Failed to detect original pane ID"
@@ -34,88 +32,92 @@ if [ -z "$ORIGINAL_PANE" ] || ! [[ "$ORIGINAL_PANE" =~ ^[0-9]+$ ]]; then
   exit 1
 fi
 
-PANE_KEY="${ZELLIJ_SESSION}:${ORIGINAL_PANE}"
+# =============================================================================
+# File locking (same as hook.sh)
+# =============================================================================
+acquire_lock() {
+  local attempts=0
+  while ! mkdir "$LOCK_FILE" 2>/dev/null; do
+    attempts=$((attempts + 1))
+    if [ $attempts -ge 20 ]; then
+      if [ -d "$LOCK_FILE" ]; then
+        local lock_age
+        lock_age=$(($(date +%s) - $(stat -f %m "$LOCK_FILE" 2>/dev/null || echo 0)))
+        if [ "$lock_age" -gt 10 ]; then
+          rmdir "$LOCK_FILE" 2>/dev/null
+          continue
+        fi
+      fi
+      return 1
+    fi
+    sleep 0.1
+  done
+}
+
+release_lock() {
+  rmdir "$LOCK_FILE" 2>/dev/null || true
+}
+
+trap 'release_lock' EXIT
 
 # =============================================================================
 # Step 2: Show current name and prompt for new one
 # =============================================================================
-# Ensure pane names file exists
-mkdir -p "$(dirname "$PANE_NAMES_FILE")"
-[ -f "$PANE_NAMES_FILE" ] || echo "{}" >"$PANE_NAMES_FILE"
+CURRENT_NAME=""
+if [ -f "$STATE_FILE" ] && [ -s "$STATE_FILE" ]; then
+  CURRENT_NAME=$(jq -r --arg pane "$ORIGINAL_PANE" '.[$pane].project // ""' "$STATE_FILE" 2>/dev/null || echo "")
+fi
 
-CURRENT_NAME=$(jq -r --arg k "$PANE_KEY" '.[$k] // ""' "$PANE_NAMES_FILE" 2>/dev/null || echo "")
-
-echo "Pane: ${PANE_KEY}"
+echo "Pane: ${ZELLIJ_SESSION}:${ORIGINAL_PANE}"
 if [ -n "$CURRENT_NAME" ]; then
   echo "Current name: ${CURRENT_NAME}"
 fi
-echo "(empty to remove custom name)"
+echo "(empty to keep current name)"
 echo ""
 read -r -p "New name: " NEW_NAME
 
+[ -z "$NEW_NAME" ] && {
+  echo "No change."
+  sleep 0.5
+  exit 0
+}
+
 # =============================================================================
-# Step 3: Update pane names JSON
+# Step 3: Update project field in STATE_FILE (with lock)
 # =============================================================================
-TMP_FILE=$(mktemp)
-if [ -z "$NEW_NAME" ]; then
-  # Remove custom name
-  jq --arg k "$PANE_KEY" 'del(.[$k])' "$PANE_NAMES_FILE" >"$TMP_FILE" 2>/dev/null
-  echo "Removed custom name for ${PANE_KEY}"
-else
-  # Set custom name
-  jq --arg k "$PANE_KEY" --arg v "$NEW_NAME" '.[$k] = $v' "$PANE_NAMES_FILE" >"$TMP_FILE" 2>/dev/null
-  echo "Set name: ${PANE_KEY} -> ${NEW_NAME}"
+acquire_lock || {
+  echo "Failed to acquire lock"
+  sleep 1
+  exit 1
+}
+
+mkdir -p "$STATE_DIR"
+if [ ! -f "$STATE_FILE" ] || [ ! -s "$STATE_FILE" ]; then
+  echo "{}" >"$STATE_FILE"
 fi
 
+TMP_FILE=$(mktemp)
+jq --arg pane "$ORIGINAL_PANE" --arg name "$NEW_NAME" \
+  '.[$pane] = ((.[$pane] // {}) | .project = $name)' \
+  "$STATE_FILE" >"$TMP_FILE" 2>/dev/null
+
 if [ -s "$TMP_FILE" ]; then
-  mv "$TMP_FILE" "$PANE_NAMES_FILE"
+  mv "$TMP_FILE" "$STATE_FILE"
+  echo "Renamed: pane ${ORIGINAL_PANE} -> ${NEW_NAME}"
 else
   rm -f "$TMP_FILE"
-  echo "Failed to update pane names"
+  release_lock
+  echo "Failed to update state (pane ${ORIGINAL_PANE} not found in state)"
   sleep 2
   exit 1
 fi
 
+release_lock
+
 # =============================================================================
-# Step 4: Update project name in state and re-render zjstatus
+# Step 4: Trigger hook to re-render zjstatus
 # =============================================================================
-if [ -f "$STATE_FILE" ] && [ -s "$STATE_FILE" ]; then
-  # Only update the project field, preserving activity/color/symbol etc.
-  DISPLAY_NAME="$NEW_NAME"
-  if [ -z "$DISPLAY_NAME" ]; then
-    DISPLAY_NAME=$(jq -r --arg pane "$ORIGINAL_PANE" '.[$pane].project // "?"' "$STATE_FILE" 2>/dev/null || echo "?")
-  fi
-
-  TMP_FILE=$(mktemp)
-  jq --arg pane "$ORIGINAL_PANE" --arg name "$DISPLAY_NAME" \
-    'if .[$pane] then .[$pane].project = $name else . end' \
-    "$STATE_FILE" >"$TMP_FILE" 2>/dev/null
-  [ -s "$TMP_FILE" ] && mv "$TMP_FILE" "$STATE_FILE" || rm -f "$TMP_FILE"
-
-  # Re-render zjstatus (reuse hook.sh constants)
-  C_BG="${ZJSTATUS_BG:-#313244}"
-  C_PILL_BG="${ZJSTATUS_PILL_BG:-#45475a}"
-  C_PILL_FG="${ZJSTATUS_PILL_FG:-#b4befe}"
-  C_ICON_BG="${ZJSTATUS_ICON_BG:-#b4befe}"
-  C_ICON_FG="${ZJSTATUS_ICON_FG:-#11111b}"
-
-  JQ_STYLE_DEF='def style($fg): "#[fg=\($fg),bg=\($pill_bg)]";'
-  JQ_FORMAT='to_entries | sort_by(.key)[] |
-      "\(style(.value.color))\(.value.symbol) \("#[fg=\($pill_fg),bg=\($pill_bg),bold]")\(.value.project)" +
-      (if .value.context_pct then " \(style(.value.ctx_color // "#2ecc40"))\(.value.context_pct)%" else "" end)'
-
-  SESSIONS=""
-  while IFS= read -r line; do
-    [ -z "$line" ] && continue
-    [ -n "$SESSIONS" ] && SESSIONS="${SESSIONS}  "
-    SESSIONS="${SESSIONS}${line}"
-  done < <(jq -r --arg bg "$C_BG" --arg pill_bg "$C_PILL_BG" --arg pill_fg "$C_PILL_FG" "${JQ_STYLE_DEF} ${JQ_FORMAT}" "$STATE_FILE" 2>/dev/null)
-
-  if [ -n "$SESSIONS" ]; then
-    PL_LEFT="" PL_RIGHT="" ICON="󰚩"
-    PILL="#[bg=${C_BG},fg=${C_ICON_BG}]${PL_LEFT}#[bg=${C_ICON_BG},fg=${C_ICON_FG},bold]${ICON} #[bg=${C_PILL_BG},fg=${C_PILL_FG},bold] ${SESSIONS}#[bg=${C_BG},fg=${C_PILL_BG}]${PL_RIGHT}"
-    zellij -s "$ZELLIJ_SESSION" pipe "zjstatus::pipe::pipe_status::${PILL}" 2>/dev/null || true
-  fi
-fi
+printf '{"hook_event_name":"PostToolUse","tool_name":"","session_id":"rename","cwd":""}' |
+  ZELLIJ_SESSION_NAME="$ZELLIJ_SESSION" ZELLIJ_PANE_ID="$ORIGINAL_PANE" claude-zjstatus-hook.sh
 
 sleep 0.5
