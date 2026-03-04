@@ -190,6 +190,12 @@ keybinds clear-defaults=true {
                 close_on_exit true
             }
         }
+        bind "Super y" {
+            LaunchOrFocusPlugin "https://github.com/Nacho114/harpoon/releases/download/v0.3.0/harpoon.wasm" {
+                floating true;
+                move_to_focused_tab true;
+            }
+        }
         bind "Super x" { SwitchToMode "locked"; }
         bind "Super h" { MoveFocus "left"; }
         bind "Super i" { EditScrollback; SwitchToMode "normal"; }
@@ -198,8 +204,8 @@ keybinds clear-defaults=true {
         bind "Super l" { MoveFocus "right"; }
         bind "Super n" { NewPane; }
         bind "Super w" { CloseFocus; }
-        bind "Ctrl Super y" { ToggleGroupMarking; }
-        bind "Super y" { TogglePaneInGroup; }
+        // bind "Ctrl Super y" { ToggleGroupMarking; }
+        // bind "Super y" { TogglePaneInGroup; }
         bind "Ctrl Super p" { ToggleTab; }
         bind "Super enter" { ToggleFocusFullscreen; }
         // Pass Shift+Enter to apps (workaround for zellij-org/zellij#4159)
