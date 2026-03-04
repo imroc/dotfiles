@@ -38,9 +38,10 @@ fi
 if [ -z "$PROJECT_NAME" ]; then
   PROJECT_NAME=$(basename "$CWD" 2>/dev/null || echo "?")
 fi
-if [ ${#PROJECT_NAME} -gt 12 ]; then
-  PROJECT_NAME="${PROJECT_NAME:0:6}..."
-fi
+# 注释掉名称自动截断(如果名字长了可以配合 claude-zjstatus-rename.sh 来重命名)
+# if [ ${#PROJECT_NAME} -gt 12 ]; then
+#   PROJECT_NAME="${PROJECT_NAME:0:6}..."
+# fi
 
 # =============================================================================
 # COLOR SCHEME (clrs.cc - bright but not vivid)

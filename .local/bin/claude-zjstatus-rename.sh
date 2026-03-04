@@ -5,6 +5,8 @@
 
 set -euo pipefail
 
+zellij action rename-pane "Rename Claude Title"
+
 ZELLIJ_SESSION="${ZELLIJ_SESSION_NAME:-}"
 [ -z "$ZELLIJ_SESSION" ] && {
   echo "Not in a Zellij session"
