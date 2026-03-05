@@ -149,6 +149,13 @@ return {
       desc = "[P]Find Aerospace Dotfiles",
     },
     {
+      "<leader>fdb",
+      function()
+        picker.files({ cwd = vim.fn.expand("$HOME/.local/bin") })
+      end,
+      desc = "[P]Find Bin",
+    },
+    {
       "<leader>fdf",
       function()
         picker.files({ cwd = vim.fn.expand("$HOME/.config/fish") })
