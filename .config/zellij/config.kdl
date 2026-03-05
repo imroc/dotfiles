@@ -25,7 +25,7 @@ keybinds clear-defaults=true {
         bind "x" { CloseFocus; SwitchToMode "normal"; }
         bind "z" { TogglePaneFrames; SwitchToMode "normal"; }
         bind "C" {
-            Run "bash" "-c" "claude-zjstatus-rename.sh" {
+            Run "claude-zjstatus-rename.sh" {
                 floating true
                 close_on_exit true
             }
@@ -176,13 +176,13 @@ keybinds clear-defaults=true {
             }
         }
         // session 跳转
-        bind "Super g" {
-            LaunchOrFocusPlugin "https://github.com/JoseMM2002/zellij-favs/releases/download/v1.0.1/zellij-favs.wasm" {
-                floating true
-                display_tab_panes true
-                cache_dir "~/.cache/zellij-favs"
-            }
-        }
+        // bind "Super g" {
+        //     LaunchOrFocusPlugin "https://github.com/JoseMM2002/zellij-favs/releases/download/v1.0.1/zellij-favs.wasm" {
+        //         floating true
+        //         display_tab_panes true
+        //         cache_dir "~/.cache/zellij-favs"
+        //     }
+        // }
         // 通过 jumplist 根据常用目录快速创建tab
         bind "Super o" {
             Run "fish" "-c" "j tab" {
@@ -294,14 +294,8 @@ plugins {
 // Plugins to load in the background when a new session starts
 // eg. "file:/path/to/my-plugin.wasm"
 // eg. "https://example.com/my-plugin.wasm"
-load_plugins {
-    "https://github.com/KiryuuLight/zellij-attention/releases/latest/download/zellij-attention.wasm" {
-        // All options are optional — defaults shown
-        enabled "true"
-        waiting_icon "⏳"
-        completed_icon "✅"
-    }
-}
+// load_plugins {
+// }
 web_client {
     font "monospace"
 }
@@ -444,7 +438,7 @@ scrollback_editor "nvim"
 //   - true (default)
 //   - false
 // 
-// session_serialization false
+session_serialization false
  
 // Whether pane viewports are serialized along with the session, default is false
 // Options:

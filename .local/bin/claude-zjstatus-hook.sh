@@ -66,8 +66,8 @@ C_ICON_FG="${ZJSTATUS_ICON_FG:-#11111b}"
 # Usage: wrap_pill "$content"
 # =============================================================================
 # Powerline characters (literal UTF-8, not escape sequences for bash 3.2 compat)
-PL_LEFT=""  # U+E0B6 left half-circle
-PL_RIGHT="" # U+E0B4 right half-circle
+PL_LEFT=""  # U+E0B6 left half-circle
+PL_RIGHT="" # U+E0B4 right half-circle
 ICON="󰚩"     # U+F06A9 robot face
 
 wrap_pill() {
@@ -77,10 +77,12 @@ wrap_pill() {
 
 # =============================================================================
 # jq helper: build style with bg color for zjstatus dynamic rendermode
+# Appends attention icon (⏳/✅) after project name if present.
 # =============================================================================
 JQ_STYLE_DEF='def style($fg): "#[fg=\($fg),bg=\($pill_bg)]";'
 JQ_FORMAT='to_entries | sort_by(.key)[] |
     "\(style(.value.color))\(.value.symbol) \("#[fg=\($pill_fg),bg=\($pill_bg),bold]")\(.value.project)" +
+    (if .value.attention and .value.attention_ts and (now - .value.attention_ts < 60) then " \(.value.attention)" else "" end) +
     (if .value.context_pct then " \(style(.value.ctx_color // "#2ecc40"))\(.value.context_pct)%" else "" end)'
 
 # =============================================================================
@@ -120,6 +122,12 @@ trap cleanup EXIT
 # =============================================================================
 # SYMBOLS
 # =============================================================================
+# ATTENTION: persistent notification icon shown after project name in pipe_status.
+# Set on Notification (⏳) and Stop (✅), cleared on UserPromptSubmit (user resumed).
+# Other events preserve the existing attention value.
+ATTENTION=""       # empty = inherit from existing state
+CLEAR_ATTENTION=false
+
 # Determine activity, color, and symbol based on hook event
 case "$HOOK_EVENT" in
 PreToolUse)
@@ -205,31 +213,35 @@ Notification)
     release_lock
     if [ "$EXISTING_DONE" = "true" ]; then
       PROJECT_NAME_NOTIFY=$(basename "$CWD" 2>/dev/null || echo "?")
-      zellij -s "$ZELLIJ_SESSION" pipe "zjstatus::notify::${PROJECT_NAME_NOTIFY} ! notification" 2>/dev/null || true
+      zellij -s "$ZELLIJ_SESSION" pipe "zjstatus::notify::${PROJECT_NAME_NOTIFY} ⏳" 2>/dev/null || true
       exit 0
     fi
   fi
-  ACTIVITY="!"
+  ACTIVITY="wait"
   COLOR="$C_RED"
-  SYMBOL="!"
+  SYMBOL="⏳"
+  ATTENTION="⏳"
   DONE=false
   ;;
 UserPromptSubmit)
   ACTIVITY="start"
   COLOR="$C_YELLOW"
   SYMBOL="●"
+  CLEAR_ATTENTION=true
   DONE=false
   ;;
 PermissionRequest)
   ACTIVITY="perm?"
   COLOR="$C_RED"
   SYMBOL="⚠"
+  ATTENTION="⚠"
   DONE=false
   ;;
 Stop)
   ACTIVITY="done"
   COLOR="$C_GREEN"
-  SYMBOL="✓"
+  SYMBOL="✅"
+  ATTENTION="✅"
   DONE=true
   ;;
 SubagentStop)
@@ -242,6 +254,7 @@ SessionStart)
   ACTIVITY="init"
   COLOR="$C_BLUE"
   SYMBOL="◆"
+  CLEAR_ATTENTION=true
   DONE=false
   ;;
 SessionEnd)
@@ -310,6 +323,23 @@ if [ -n "$EXISTING_PROJECT" ]; then
   PROJECT_NAME="$EXISTING_PROJECT"
 fi
 
+# Resolve attention: explicit set > clear > inherit from existing
+if [ -n "$ATTENTION" ]; then
+  # Notification/Stop/PermissionRequest explicitly set attention
+  RESOLVED_ATTENTION="$ATTENTION"
+  RESOLVED_ATTENTION_TS="$TIMESTAMP"
+elif [ "$CLEAR_ATTENTION" = "true" ]; then
+  # UserPromptSubmit/SessionStart clear attention
+  RESOLVED_ATTENTION=""
+  RESOLVED_ATTENTION_TS=""
+else
+  # All other events: inherit existing attention
+  RESOLVED_ATTENTION=$(echo "$EXISTING" | jq -r '.attention // null' 2>/dev/null)
+  [ "$RESOLVED_ATTENTION" = "null" ] && RESOLVED_ATTENTION=""
+  RESOLVED_ATTENTION_TS=$(echo "$EXISTING" | jq -r '.attention_ts // null' 2>/dev/null)
+  [ "$RESOLVED_ATTENTION_TS" = "null" ] && RESOLVED_ATTENTION_TS=""
+fi
+
 # Update state with this pane's activity
 TMP_FILE=$(mktemp)
 echo "$CURRENT_STATE" | jq \
@@ -324,6 +354,8 @@ echo "$CURRENT_STATE" | jq \
   --arg session "$SESSION_ID" \
   --arg ctx_pct "$EXISTING_CTX_PCT" \
   --arg ctx_color "$EXISTING_CTX_COLOR" \
+  --arg attention "$RESOLVED_ATTENTION" \
+  --arg attention_ts "$RESOLVED_ATTENTION_TS" \
   --argjson done "$DONE" \
   '.[$pane] = {
         project: $project,
@@ -336,6 +368,8 @@ echo "$CURRENT_STATE" | jq \
         session_id: $session,
         context_pct: (if $ctx_pct == "null" then null else $ctx_pct end),
         ctx_color: (if $ctx_color == "null" then null else $ctx_color end),
+        attention: (if $attention == "" then null else $attention end),
+        attention_ts: (if $attention_ts == "" then null else ($attention_ts | tonumber) end),
         done: $done
     }' >"$TMP_FILE" 2>/dev/null
 
@@ -365,6 +399,6 @@ fi
 # Send zjstatus notification for important events
 case "$HOOK_EVENT" in
 Notification | Stop | SubagentStop | AskUserQuestion | PermissionRequest)
-  zellij -s "$ZELLIJ_SESSION" pipe "zjstatus::notify::${PROJECT_NAME} ${SYMBOL} ${ACTIVITY}" 2>/dev/null || true
+  zellij -s "$ZELLIJ_SESSION" pipe "zjstatus::notify::${PROJECT_NAME} ${SYMBOL}" 2>/dev/null || true
   ;;
 esac

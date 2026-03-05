@@ -128,7 +128,7 @@ function __switch_ns --description "Switch namespace"
     end
     # Set namespace
     set -l kc (__kubectl_cmd)
-    command $kc config set-context "$current_context" --namespace=$ns 2>&1 >/dev/null
+    command $kc config set-context "$current_context" --namespace=$ns >/dev/null 2>&1
     echo "Namespace switched to $ns"
 end
 
@@ -170,6 +170,7 @@ function __login_node --description "Login to node"
         set node (__kubectl_pipe get node $common_args -o json | jq -r '.items[].metadata.name' | grep -v eklet- | fzf -0)
         if test -z "$node"
             echo "No node selected"
+            return 1
         end
         command $kc node-shell $node $common_args
     else
@@ -204,13 +205,13 @@ function __login_pod --description "Login to pod"
         end
     end
     echo "login container $container in pod $pod with shell $shell"
-    kubectl exec $common_args -it $pod -c $container -- $shell
+    __kubecolor exec $common_args -it $pod -c $container -- $shell
 end
 
 function __kubectl_get --description "Override kubectl get"
     set -l common_args (__get_common_args $argv)
     set -l kc (__kubectl_cmd)
-    set original_args $argv
+    set -l original_args $argv
     # Parse global arguments and remove them from argv to determine subcommand and its arguments
     argparse --ignore-unknown --strict-longopts \
         "o/output=" "v/v=" "kubeconfig=" \
@@ -312,7 +313,7 @@ function __kubectl_get --description "Override kubectl get"
         else if set -q _flag_d # -d flag set, clean content with kubectl neat (auto add -o yaml if not specified)
             if test -z "$_flag_o"
                 set -a args -o yaml
-            else if test "$_flag_o" ~= yaml
+            else if test "$_flag_o" != yaml
                 echo "-d is only supported for yaml output format"
                 return 1
             end
