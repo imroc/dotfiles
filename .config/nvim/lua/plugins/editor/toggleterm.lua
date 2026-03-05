@@ -144,12 +144,26 @@ local function switch_to_last_terminal()
   term:open()
 end
 
+--- Send text to the previous zellij pane via write-chars
+---@param text string
+local function send_to_zellij_prev_pane(text)
+  vim.system({ "zellij", "action", "focus-previous-pane" }, {}, function()
+    vim.system({ "zellij", "action", "write-chars", text })
+  end)
+end
+
 --- Send file or selection to AI terminal as @ reference
 ---@param is_visual? boolean
 local function send_to_ai_terminal(is_visual)
   local text = require("util.clipboard").get_ai_ref_text(is_visual)
   if not text then
     vim.notify("No file to send", vim.log.levels.WARN)
+    return
+  end
+
+  -- In zellij, if no AI toggleterm is active, send to previous pane
+  if vim.env.ZELLIJ and (not ai_terminal or not ai_terminal:is_open()) then
+    send_to_zellij_prev_pane(text)
     return
   end
 

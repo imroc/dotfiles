@@ -142,11 +142,11 @@ return {
       desc = "[P]Find Config File (~/.config)",
     },
     {
-      "<leader>fdn",
+      "<leader>fda",
       function()
-        picker.files({ cwd = vim.fn.expand("$HOME/.config/nvim") })
+        picker.files({ cwd = vim.fn.expand("$HOME/.config/aerospace") })
       end,
-      desc = "[P]Find Neovim Dotfiles",
+      desc = "[P]Find Aerospace Dotfiles",
     },
     {
       "<leader>fdf",
@@ -156,11 +156,18 @@ return {
       desc = "[P]Find Fish Dotfiles",
     },
     {
-      "<leader>fda",
+      "<leader>fdk",
       function()
-        picker.files({ cwd = vim.fn.expand("$HOME/.config/fish") })
+        picker.files({ cwd = vim.fn.expand("$HOME/.config/kitty") })
       end,
-      desc = "[P]Find Aerospace Dotfiles",
+      desc = "[P]Find Kitty Dotfiles",
+    },
+    {
+      "<leader>fdn",
+      function()
+        picker.files({ cwd = vim.fn.expand("$HOME/.config/nvim") })
+      end,
+      desc = "[P]Find Neovim Dotfiles",
     },
     {
       "<leader>fdz",
@@ -170,19 +177,12 @@ return {
       desc = "[P]Find Zellij Dotfiles",
     },
     {
-      "<leader>fdk",
+      "<leader><space>",
       function()
-        picker.files({ cwd = vim.fn.expand("$HOME/.config/kitty") })
+        picker.files({ cwd = LazyVim.root() })
       end,
-      desc = "[P]Find Kitty Dotfiles",
+      desc = "[P]Find Files (Root Dir)",
     },
-    -- {
-    --   "<leader><space>",
-    --   function()
-    --     picker.files({ cwd = LazyVim.root() })
-    --   end,
-    --   desc = "[P]Find Files (Root Dir)",
-    -- },
     {
       "<leader>ff",
       function()
@@ -225,13 +225,13 @@ return {
       end,
       desc = "[P]Grep (Plain Text)",
     },
-    -- {
-    --   "<leader>/",
-    --   function()
-    --     picker.grep({ cwd = LazyVim.root() })
-    --   end,
-    --   desc = "[P]Grep (Regex)",
-    -- },
+    {
+      "<leader>/",
+      function()
+        picker.grep({ cwd = LazyVim.root() })
+      end,
+      desc = "[P]Grep (Regex)",
+    },
   },
   opts = function(_, opts)
     return vim.tbl_deep_extend("force", opts or {}, {
