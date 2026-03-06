@@ -190,6 +190,15 @@ keybinds clear-defaults=true {
                 close_on_exit true
             }
         }
+        // 选择并重载 zellij 插件
+        bind "Ctrl Super r" {
+            Run "fish" "-c" "set -l wasm (command ls ~/.config/zellij/plugins/*.wasm | path basename | fzf --height=40% --reverse --prompt='Reload plugin: '); and zellij action start-or-reload-plugin \"file:$HOME/.config/zellij/plugins/$wasm\"" {
+                floating true
+                close_on_exit true
+            }
+        }
+        // 进入 scroll 模式并向上滚动
+        bind "Ctrl Super k" { SwitchToMode "scroll"; ScrollUp; }
         // 通过 jumplist 选择常用目录并用 nvim 打开
         bind "Ctrl Super o" {
             Run "fish" "-c" "j -e" {
