@@ -190,6 +190,13 @@ keybinds clear-defaults=true {
                 close_on_exit true
             }
         }
+        // 通过 jumplist 选择常用目录并用 nvim 打开
+        bind "Ctrl Super o" {
+            Run "fish" "-c" "j -e" {
+                floating true
+                close_on_exit true
+            }
+        }
         bind "Super y" {
             LaunchOrFocusPlugin "https://github.com/Nacho114/harpoon/releases/download/v0.3.0/harpoon.wasm" {
                 floating true;

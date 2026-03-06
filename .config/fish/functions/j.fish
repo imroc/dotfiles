@@ -5,7 +5,19 @@ function j --description "Jump to bookmarked directories"
         touch $__j_config
     end
 
-    set -l subcmd $argv[1]
+    # 解析全局 -e 参数
+    set -l open_editor 0
+    set -l args
+    for arg in $argv
+        switch $arg
+            case -e
+                set open_editor 1
+            case '*'
+                set args $args $arg
+        end
+    end
+
+    set -l subcmd $args[1]
 
     if test -z "$subcmd"
         # fzf 选择别名
@@ -13,20 +25,23 @@ function j --description "Jump to bookmarked directories"
         if test -z "$alias"
             return
         end
-        __j_cd $alias
+        __j_cd $alias $open_editor
         return
     end
 
     switch $subcmd
         case -h --help help
-            echo "Usage: j [<alias>|<command>]"
+            echo "Usage: j [-e] [<alias>|<command>]"
+            echo ""
+            echo "Options:"
+            echo "  -e             跳转后用 nvim 打开目录"
             echo ""
             echo "Commands:"
             echo "  j              fzf 选择别名跳转"
             echo "  j <alias>      直接跳转到别名对应目录"
             echo "  j add [alias]  添加当前目录（默认用目录名作为别名）"
             echo "  j rm <alias>   删除书签"
-            echo "  j tab [alias]  在 zellij 中新建 tab 并跳转"
+            echo "  j tab [-e] [alias]  在 zellij 中新建 tab 并跳转（-e 用 nvim 打开）"
             echo "  j list         列出所有书签"
             echo "  j wn           打开本周笔记"
             echo ""
@@ -66,7 +81,7 @@ function j --description "Jump to bookmarked directories"
                 echo "不在 zellij 中"
                 return 1
             end
-            set -l alias $argv[2]
+            set -l alias $args[2]
             if test -z "$alias"
                 set alias (yq e 'keys | .[]' $__j_config | fzf --height=40% --reverse --prompt="Tab to: ")
                 if test -z "$alias"
@@ -85,19 +100,24 @@ function j --description "Jump to bookmarked directories"
             end
             zellij action new-tab --name $alias
             sleep 0.1
-            zellij action write-chars "cd $dir && clear" && zellij action write 10
+            if test $open_editor -eq 1
+                zellij action write-chars "cd $dir && clear && nvim ." && zellij action write 10
+            else
+                zellij action write-chars "cd $dir && clear" && zellij action write 10
+            end
         case list ls
             yq e 'to_entries | .[] | [.key, .value] | @tsv' $__j_config | column -t -s (printf '\t')
         case wn
             weekly-note.sh
         case '*'
             # 当作别名直接跳转
-            __j_cd $subcmd
+            __j_cd $subcmd $open_editor
     end
 end
 
 function __j_cd --description "cd to bookmarked directory by alias"
     set -l alias $argv[1]
+    set -l open_editor $argv[2]
     set -l dir (yq e ".$alias // \"\"" $__j_config)
     if test -z "$dir"
         echo "别名 '$alias' 不存在"
@@ -109,4 +129,7 @@ function __j_cd --description "cd to bookmarked directory by alias"
         return 1
     end
     cd $dir
+    if test "$open_editor" = 1
+        nvim .
+    end
 end
