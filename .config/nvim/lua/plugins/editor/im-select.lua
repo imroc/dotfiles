@@ -60,7 +60,7 @@ return {
   enabled = vim.g.simpler_scrollback ~= "deeznuts",
   opts = {
     default_im_select = "com.apple.keylayout.ABC",
-    default_command = "macism",
+    -- default_command = "macism",
     -- 在默认事件基础上增加终端进入和离开的事件，确保终端使用场景也能自动切换输入方法
     set_default_events = { "InsertLeave", "CmdlineLeave", "TermLeave", "TermEnter" },
     set_previous_events = { "InsertEnter" },
@@ -68,5 +68,14 @@ return {
   config = function(_, opts)
     require("im_select").setup(opts)
     handle_focus_change()
+    -- 启动时记录当前输入法，然后切换到英文
+    local im_before_nvim = vim.fn.system({ "macism" }):gsub("%s+", "")
+    vim.fn.system({ "macism", "com.apple.keylayout.ABC" })
+    -- 退出时恢复启动前的输入法
+    vim.api.nvim_create_autocmd("VimLeavePre", {
+      callback = function()
+        vim.fn.system({ "macism", im_before_nvim })
+      end,
+    })
   end,
 }
