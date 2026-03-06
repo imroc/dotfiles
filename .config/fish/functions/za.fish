@@ -5,7 +5,7 @@ function za --description "zellij attach"
         if command zellij list-sessions 2>/dev/null | sed -e 's/\x1b\[[0-9;]*m//g' | awk '{print $1}' | grep -qx "$session"
             command zellij attach $session
         else
-            command zellij -s $session -n default
+            command zellij -s $session
         end
         __za_set_zellij_user_var leave
     else
