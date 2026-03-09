@@ -1,3 +1,5 @@
 abbr --add zr "zellij run -- "
+abbr --add zl "zellij list-sessions"
+abbr --add zd "zellij delete-session"
 abbr --add zrf "zellij run -f --"
 abbr --add zka "zellij kill-all-sessions"
