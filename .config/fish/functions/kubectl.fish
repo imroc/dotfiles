@@ -35,8 +35,12 @@ end
 
 function __kubecolor
     set -l kc (__kubectl_cmd)
-    if not test "$__kubectl_disable_color" = 1; and not set -q KUBECTL_CLI; and command -sq kubecolor
-        command kubecolor $argv
+    if not test "$__kubectl_disable_color" = 1; and command -sq kubecolor
+        if set -q KUBECTL_CLI
+            env KUBECTL_COMMAND="$KUBECTL_CLI" kubecolor $argv
+        else
+            command kubecolor $argv
+        end
     else
         command $kc $argv
     end
@@ -144,6 +148,10 @@ function __clear_kube_env --description "Clear env"
     if set -q KUBECTL_CONTEXT
         set -e KUBECTL_CONTEXT
         echo "KUBECTL_CONTEXT has been unset"
+    end
+    if set -q KUBECTL_CLI
+        set -e KUBECTL_CLI
+        echo "KUBECTL_CLI has been unset"
     end
 end
 
