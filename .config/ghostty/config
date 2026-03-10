@@ -35,6 +35,11 @@ keybind = super+digit_6=unbind
 keybind = super+digit_7=unbind
 keybind = super+digit_8=unbind
 
+# Cmd+Shift+f: 搜索
+keybind = super+f=unbind
+keybind = super+shift+f=start_search
+
+
 # Cmd+Enter: zellij 全屏
 keybind = super+enter=unbind
 
