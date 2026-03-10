@@ -6,6 +6,7 @@ function gw --description "Git worktree manager"
         echo "Commands:"
         echo "  (none)      fzf select a worktree and cd into it"
         echo "  a, add      create a new worktree from remote branch/tag"
+        echo "  b, branch   create a new worktree with a new branch from current HEAD"
         echo "  -h, --help  show this help"
         return 0
     end
@@ -23,6 +24,8 @@ function gw --description "Git worktree manager"
         switch $argv[1]
             case a add
                 _gw_add
+            case b branch
+                _gw_branch $argv[2..]
             case '*'
                 echo "gw: unknown command '$argv[1]'" >&2
                 echo "Run 'gw -h' for help" >&2
@@ -129,6 +132,36 @@ function _gw_add
 
     if test $status -eq 0
         echo "Worktree created: $wt_dir"
+        cd $wt_dir
+    else
+        echo "gw: failed to create worktree" >&2
+        return 1
+    end
+end
+
+function _gw_branch
+    if test (count $argv) -eq 0
+        echo "gw branch: missing branch name" >&2
+        echo "Usage: gw branch <name>" >&2
+        return 1
+    end
+
+    set -l branch_name $argv[1]
+    set -l git_root (git rev-parse --show-toplevel)
+    set -l dir_name (string replace --all '/' '-' $branch_name)
+    set -l wt_dir "$git_root/.worktrees/$dir_name"
+
+    if test -d "$wt_dir"
+        echo "gw: worktree directory already exists: $wt_dir" >&2
+        cd $wt_dir
+        return 0
+    end
+
+    mkdir -p "$git_root/.worktrees"
+    git worktree add -b $branch_name "$wt_dir"
+
+    if test $status -eq 0
+        echo "Worktree created: $wt_dir (branch: $branch_name)"
         cd $wt_dir
     else
         echo "gw: failed to create worktree" >&2

@@ -30,8 +30,8 @@ vim.keymap.set("n", "<leader>oo", function()
   picker.files({ cwd = vim.fn.expand("$HOME/dev/note") })
 end, { desc = "[P]Open Note" })
 
-vim.keymap.set("n", "<M-]>", "]c", { desc = "[P]Next change", noremap = true, silent = true })
-vim.keymap.set("n", "<M-[>", "[c", { desc = "[P]Previous change", noremap = true, silent = true })
+vim.keymap.set("n", "<C-]>", "]c", { desc = "[P]Next change", noremap = true, silent = true })
+vim.keymap.set("n", "<C-[>", "[c", { desc = "[P]Previous change", noremap = true, silent = true })
 
 -- yank AI reference
 local clipboard = require("util.clipboard")

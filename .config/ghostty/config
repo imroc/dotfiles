@@ -81,6 +81,8 @@ keybind = super+shift+-=decrease_font_size:1
 # Cmd+Shift+h/j/k/l: ghostty split 面板导航
 # Cmd+Shift+j 默认是 write_screen_file:paste，先解绑再重新分配
 # keybind = super+shift+j=unbind
+keybind = super+]=unbind
+keybind = super+[=unbind
 keybind = super+shift+h=goto_split:left
 keybind = super+shift+j=goto_split:down
 keybind = super+shift+k=goto_split:up
