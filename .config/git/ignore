@@ -11,7 +11,6 @@ gradlew
 gradlew.bat
 
 **/.claude/settings.local.json
-.codebuddy/
 .worktrees/
 node_modules
 CLAUDE.local.md
