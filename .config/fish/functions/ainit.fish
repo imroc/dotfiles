@@ -1,6 +1,14 @@
 function ainit --description "Unify AI init files: content in AGENTS.md, others as symlinks"
+    argparse l/local -- $argv
+    or return
+
     set -l target AGENTS.md
     set -l files CLAUDE.md AGENTS.md CODEBUDDY.md GEMINI.md
+
+    if set -q _flag_local
+        set target AGENTS.local.md
+        set files CLAUDE.local.md AGENTS.local.md CODEBUDDY.local.md GEMINI.local.md
+    end
 
     # 分类：有实际内容的普通文件 vs 已经是正确软链的 vs 存在但需要处理的
     set -l content_files

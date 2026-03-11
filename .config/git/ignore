@@ -14,3 +14,6 @@ gradlew.bat
 .worktrees/
 node_modules
 CLAUDE.local.md
+AGENTS.local.md
+GEMINI.local.md
+CODEBUDDY.local.md
