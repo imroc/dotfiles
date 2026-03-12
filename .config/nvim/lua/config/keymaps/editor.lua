@@ -26,7 +26,11 @@ vim.keymap.set("n", "<leader>cT", "<cmd>%s/  /\t/g<cr>", { desc = "[P]Convert 2 
 
 -- open quick note
 local picker = require("util.picker")
+local buffer = require("util.buffer")
 vim.keymap.set("n", "<leader>oo", function()
+  vim.fn.system("open '" .. buffer.absolute_path() .. "'")
+end, { desc = "[P]Open current file with system" })
+vim.keymap.set("n", "<leader>on", function()
   picker.files({ cwd = vim.fn.expand("$HOME/dev/note") })
 end, { desc = "[P]Open Note" })
 
