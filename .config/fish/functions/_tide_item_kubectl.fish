@@ -3,6 +3,12 @@ function _tide_item_kubectl
         return
     end
 
+    # 远程模式：直接使用 KUBECTL_CONTEXT_NAME 显示
+    if set -q KUBECTL_CLI; and set -q KUBECTL_CONTEXT_NAME
+        _tide_print_item kubectl $tide_kubectl_icon' ' "$KUBECTL_CONTEXT_NAME"
+        return
+    end
+
     set kubectl (command -s kubectl) # 避免调用到 kubectl 函数
 
     # 获取当前 context

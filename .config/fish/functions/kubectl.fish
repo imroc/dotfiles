@@ -133,6 +133,16 @@ function __switch_ns --description "Switch namespace"
     # Set namespace
     set -l kc (__kubectl_cmd)
     command $kc config set-context "$current_context" --namespace=$ns >/dev/null 2>&1
+    # 远程模式下更新 KUBECTL_CONTEXT_NAME 中的 namespace 部分
+    if set -q KUBECTL_CLI; and set -q KUBECTL_CONTEXT_NAME
+        # 移除旧的 |namespace 后缀，追加新的
+        set -l base (string replace -r '\|.*$' '' $KUBECTL_CONTEXT_NAME)
+        if test "$ns" != default
+            set -gx KUBECTL_CONTEXT_NAME "$base|$ns"
+        else
+            set -gx KUBECTL_CONTEXT_NAME "$base"
+        end
+    end
     echo "Namespace switched to $ns"
 end
 
