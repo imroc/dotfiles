@@ -12,3 +12,5 @@ abbr --add ot openclaw tui
 abbr --add ol openclaw logs --follow
 abbr --add og openclaw gateway
 abbr --add ogr openclaw gateway restart
+
+set -gx CLAUDE_INTERNAL_ALLOW_ROOT 1
