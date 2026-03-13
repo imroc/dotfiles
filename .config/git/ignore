@@ -11,10 +11,11 @@ gradlew
 gradlew.bat
 
 **/.claude/settings.local.json
+**/.codebuddy/settings.local.json
+
 .worktrees/
 node_modules
 CLAUDE.local.md
 AGENTS.local.md
 GEMINI.local.md
 CODEBUDDY.local.md
-setttings.local.json
