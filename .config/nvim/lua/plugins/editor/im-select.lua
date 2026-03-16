@@ -3,31 +3,18 @@ if vim.fn.has("mac") ~= 1 then
   return {}
 end
 
--- 聚焦时: 如果在插入模式，恢复失焦时的输入法
--- 失焦时: 恢复聚焦前的输入法
+-- 聚焦时: 非插入模式切英文，插入模式恢复失焦前的输入法
 local function handle_focus_change()
   local group = vim.api.nvim_create_augroup("im-select-focus", { clear = true })
-  -- 用于记录失焦时插入模式下的输入法
-  local saved_im_before_focus_lost = nil
-  -- 用于记录聚焦时插入模式下的输入法
-  local saved_im_before_focus_gained = nil
-
-  -- 失焦时：如果在插入模式，记录当前输入法，恢复聚焦前使用的输入法
+  -- 失焦时：如果在插入模式，记录当前输入法（供聚焦时恢复）
   vim.api.nvim_create_autocmd("FocusLost", {
     group = group,
     callback = function()
       local mode = vim.api.nvim_get_mode().mode
-      -- 插入模式：失焦时记录当前输入法
-      -- 非插入模式：清理之前失焦时的输入法记录
       if mode == "i" or mode == "ic" or mode == "ix" then
         saved_im_before_focus_lost = vim.fn.system({ "macism" }):gsub("%s+", "")
       else
         saved_im_before_focus_lost = nil
-      end
-      -- 失焦时恢复聚焦时记录的输入法清理上次聚焦时的输入法记录
-      if saved_im_before_focus_gained then
-        vim.fn.system({ "macism", saved_im_before_focus_gained })
-        saved_im_before_focus_gained = nil
       end
     end,
   })
@@ -36,8 +23,6 @@ local function handle_focus_change()
   vim.api.nvim_create_autocmd("FocusGained", {
     group = group,
     callback = function()
-      -- 聚焦时记录聚焦前的输入法
-      saved_im_before_focus_gained = vim.fn.system({ "macism" }):gsub("%s+", "")
       local mode = vim.api.nvim_get_mode().mode
       -- 插入模式：聚焦时恢复之前失焦时使用的输入法
       -- 非插入模式：默认切英文输入法
