@@ -38,6 +38,7 @@ vim.keymap.set("v", "<leader>oo", function()
     local lines = vim.api.nvim_buf_get_text(0, start_pos[1] - 1, start_pos[2], end_pos[1] - 1, end_pos[2] + 1, {})
     local text = vim.fn.trim(table.concat(lines, "\n"))
     if text ~= "" then
+      text = text:gsub("^~", vim.env.HOME)
       vim.fn.system("open '" .. text .. "'")
     end
   end)
