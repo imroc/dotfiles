@@ -222,6 +222,44 @@ return {
       desc = "[P]Find Bookmark Subdir Files",
     },
     {
+      "<leader>fw",
+      function()
+        local output = vim.fn.systemlist("git worktree list --porcelain")
+        if vim.v.shell_error ~= 0 then
+          vim.notify("Not in a git repository", vim.log.levels.WARN)
+          return
+        end
+        local worktrees = {}
+        for _, line in ipairs(output) do
+          local path = line:match("^worktree (.+)$")
+          if path then
+            table.insert(worktrees, path)
+          end
+        end
+        if #worktrees == 0 then
+          vim.notify("No worktrees found", vim.log.levels.WARN)
+          return
+        end
+        if #worktrees == 1 then
+          picker.files({ cwd = worktrees[1] })
+          return
+        end
+        local names = {}
+        local name_to_path = {}
+        for _, path in ipairs(worktrees) do
+          local name = vim.fn.fnamemodify(path, ":t")
+          table.insert(names, name)
+          name_to_path[name] = path
+        end
+        Snacks.picker.select(names, { prompt = "Worktree" }, function(name)
+          if name then
+            picker.files({ cwd = name_to_path[name] })
+          end
+        end)
+      end,
+      desc = "[P]Find Worktree Files",
+    },
+    {
       "<leader>sg",
       function()
         picker.grep({
