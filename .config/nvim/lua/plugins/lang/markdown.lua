@@ -40,7 +40,7 @@ return {
     "Kicamon/markdown-table-mode.nvim",
     opts = {},
     keys = {
-      { "<localleader>t", "<cmd>Mtm<cr>", ft = "markdown", desc = "[P]Toggle Table Mode" },
+      { "<localleader>T", "<cmd>Mtm<cr>", ft = "markdown", desc = "[P]Toggle Table Mode" },
     },
   },
   {
@@ -52,8 +52,14 @@ return {
         mode = { "n", "i" },
         "<cmd>Checkmate toggle<cr>",
       },
+      {
+        "<localleader>t",
+        mode = { "n" },
+        "<cmd>Checkmate create<cr>",
+      },
     },
     opts = {
+      enter_insert_after_new = false,
       files = {
         "*.md", -- Any markdown file (basename matching)
       },
