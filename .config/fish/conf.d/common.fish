@@ -22,6 +22,9 @@ set -gx EDITOR nvim
 # man 默认使用 neovim 打开
 set -gx MANPAGER 'nvim +Man!'
 
+# task 启用远程 include
+set -gx TASK_X_REMOTE_TASKFILES 1
+
 # kitty 下使用 ssh 登录远程机器可能奇怪问题，用 ssh alias 解决: https://wiki.archlinux.org/title/Kitty#Terminal_issues_with_SSH
 alias kssh="kitten ssh"
 alias wn="weekly-note.sh"

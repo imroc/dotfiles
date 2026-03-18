@@ -26,19 +26,14 @@ function M.open_lazygit(type)
   end
 end
 
-local current_git_work_tree = nil
-local current_git_dir = nil
-
 function M.set_git_env(type)
-  current_git_work_tree = vim.env.GIT_WORK_TREE
-  current_git_dir = vim.env.GIT_DIR
   vim.env.GIT_WORK_TREE = work_tree()
   vim.env.GIT_DIR = git_dir(type)
 end
 
 function M.remove_git_env()
-  vim.env.GIT_WORK_TREE = current_git_work_tree
-  vim.env.GIT_DIR = current_git_dir
+  vim.env.GIT_WORK_TREE = nil
+  vim.env.GIT_DIR = nil
 end
 
 function M.add_current_file(type)
