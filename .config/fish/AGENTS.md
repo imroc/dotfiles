@@ -34,9 +34,9 @@ update_fish_plugins   # 重新生成 conf.d/003-fisher-plugin-variables.fish
 
 Fisher 插件安装在 `plugins/` 子目录，通过 `004-fisher.fish` 将 `plugins/{functions,completions,conf.d}` 注入到 fish 搜索路径中，与用户自定义函数隔离。
 
-### KUBECTL_CONTEXT 环境变量
+### KUBE_CONTEXT 环境变量
 
-这是贯穿多个工具的核心设计：`functions/kubectl.fish`、`functions/helm.fish`、`functions/k9s.fish`、`functions/cilium.fish` 等包装函数都会读取 `$KUBECTL_CONTEXT` 并自动传递 `--context` 参数。通过 `kubectl ctx` 子命令切换上下文。
+这是贯穿多个工具的核心设计：`functions/kubectl.fish`、`functions/helm.fish`、`functions/k9s.fish`、`functions/cilium.fish` 等包装函数都会读取 `$KUBE_CONTEXT` 并自动传递 `--context` 参数。通过 `kubectl ctx` 子命令切换上下文。
 
 ### kubectl 增强函数 (`functions/kubectl.fish`)
 

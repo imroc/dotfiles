@@ -35,14 +35,18 @@ end
 
 function __kubecolor
     set -l kc (__kubectl_cmd)
+    set -l proxy_env
+    if set -q KUBE_PROXY
+        set proxy_env HTTPS_PROXY=$KUBE_PROXY
+    end
     if not test "$__kubectl_disable_color" = 1; and command -sq kubecolor
         if set -q KUBECTL_CLI
-            env KUBECTL_COMMAND="$KUBECTL_CLI" kubecolor $argv
+            env $proxy_env KUBECTL_COMMAND="$KUBECTL_CLI" kubecolor $argv
         else
-            command kubecolor $argv
+            env $proxy_env kubecolor $argv
         end
     else
-        command $kc $argv
+        env $proxy_env $kc $argv
     end
 end
 
@@ -52,10 +56,14 @@ end
 # and suppressing stderr hides the "Unable to use a TTY" warning.
 function __kubectl_pipe
     set -l kc (__kubectl_cmd)
+    set -l proxy_env
+    if set -q KUBE_PROXY
+        set proxy_env HTTPS_PROXY=$KUBE_PROXY
+    end
     if set -q KUBECTL_CLI
-        command $kc $argv </dev/null 2>/dev/null
+        env $proxy_env $kc $argv </dev/null 2>/dev/null
     else
-        command $kc $argv
+        env $proxy_env $kc $argv
     end
 end
 
@@ -103,8 +111,8 @@ function __parse_subcommand
 end
 
 function __get_current_context --description "Get current context name"
-    if set -q KUBECTL_CONTEXT
-        echo $KUBECTL_CONTEXT
+    if set -q KUBE_CONTEXT
+        echo $KUBE_CONTEXT
     else
         set -l kc (__kubectl_cmd)
         command $kc config view -o jsonpath='{.current-context}' 2>/dev/null
@@ -133,14 +141,14 @@ function __switch_ns --description "Switch namespace"
     # Set namespace
     set -l kc (__kubectl_cmd)
     command $kc config set-context "$current_context" --namespace=$ns >/dev/null 2>&1
-    # 远程模式下更新 KUBECTL_CONTEXT_NAME 中的 namespace 部分
-    if set -q KUBECTL_CLI; and set -q KUBECTL_CONTEXT_NAME
+    # 远程模式下更新 KUBE_CONTEXT_NAME 中的 namespace 部分
+    if set -q KUBECTL_CLI; and set -q KUBE_CONTEXT_NAME
         # 移除旧的 |namespace 后缀，追加新的
-        set -l base (string replace -r '\|.*$' '' $KUBECTL_CONTEXT_NAME)
+        set -l base (string replace -r '\|.*$' '' $KUBE_CONTEXT_NAME)
         if test "$ns" != default
-            set -gx KUBECTL_CONTEXT_NAME "$base|$ns"
+            set -gx KUBE_CONTEXT_NAME "$base|$ns"
         else
-            set -gx KUBECTL_CONTEXT_NAME "$base"
+            set -gx KUBE_CONTEXT_NAME "$base"
         end
     end
     echo "Namespace switched to $ns"
@@ -155,9 +163,9 @@ function __clear_kube_env --description "Clear env"
         set -e KUBECONFIG
         echo "KUBECONFIG has been unset"
     end
-    if set -q KUBECTL_CONTEXT
-        set -e KUBECTL_CONTEXT
-        echo "KUBECTL_CONTEXT has been unset"
+    if set -q KUBE_CONTEXT
+        set -e KUBE_CONTEXT
+        echo "KUBE_CONTEXT has been unset"
     end
     if set -q KUBECTL_CLI
         set -e KUBECTL_CLI
@@ -357,8 +365,8 @@ end
 function __get_common_args
     argparse --ignore-unknown --strict-longopts "context=" -- $argv 2>/dev/null
 
-    # If KUBECTL_CONTEXT env var is set and --context is not explicitly specified, auto-append --context
-    if test -z "$_flag_context"; and test -n "$KUBECTL_CONTEXT"
-        printf '%s\n' --context "$KUBECTL_CONTEXT"
+    # If KUBE_CONTEXT env var is set and --context is not explicitly specified, auto-append --context
+    if test -z "$_flag_context"; and test -n "$KUBE_CONTEXT"
+        printf '%s\n' --context "$KUBE_CONTEXT"
     end
 end

@@ -25,13 +25,18 @@ function cilium --wraps=cilium --description "wrap cilium with extra advanced fe
     argparse --ignore-unknown "context=" -- $original_args 2>/dev/null
 
     set common_args ()
-    if test -z "$_flag_context"; and test -n "$KUBECTL_CONTEXT"
-        set -a common_args --context "$KUBECTL_CONTEXT"
+    if test -z "$_flag_context"; and test -n "$KUBE_CONTEXT"
+        set -a common_args --context "$KUBE_CONTEXT"
+    end
+
+    set -l proxy_env
+    if set -q KUBE_PROXY
+        set proxy_env HTTPS_PROXY=$KUBE_PROXY
     end
 
     if test -z "$common_args"
-        command cilium $original_args
+        env $proxy_env cilium $original_args
     else
-        command cilium $common_args $argv
+        env $proxy_env cilium $common_args $argv
     end
 end

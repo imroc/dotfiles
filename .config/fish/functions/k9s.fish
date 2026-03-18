@@ -3,13 +3,18 @@ function k9s --wraps=k9s --description "wrap k9s with extra advanced feature"
     argparse --ignore-unknown "context=" -- $original_args 2>/dev/null
 
     set common_args ()
-    if test -z "$_flag_context"; and test -n "$KUBECTL_CONTEXT"
-        set -a common_args --context "$KUBECTL_CONTEXT"
+    if test -z "$_flag_context"; and test -n "$KUBE_CONTEXT"
+        set -a common_args --context "$KUBE_CONTEXT"
+    end
+
+    set -l proxy_env
+    if set -q KUBE_PROXY
+        set proxy_env HTTPS_PROXY=$KUBE_PROXY
     end
 
     if test -z "$common_args"
-        command k9s $original_args
+        env $proxy_env k9s $original_args
     else
-        command k9s $common_args $argv
+        env $proxy_env k9s $common_args $argv
     end
 end

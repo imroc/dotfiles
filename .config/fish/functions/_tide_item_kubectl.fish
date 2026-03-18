@@ -3,16 +3,16 @@ function _tide_item_kubectl
         return
     end
 
-    # 远程模式：直接使用 KUBECTL_CONTEXT_NAME 显示
-    if set -q KUBECTL_CLI; and set -q KUBECTL_CONTEXT_NAME
-        _tide_print_item kubectl $tide_kubectl_icon' ' "$KUBECTL_CONTEXT_NAME"
+    # 远程模式：直接使用 KUBE_CONTEXT_NAME 显示
+    if set -q KUBECTL_CLI; and set -q KUBE_CONTEXT_NAME
+        _tide_print_item kubectl $tide_kubectl_icon' ' "$KUBE_CONTEXT_NAME"
         return
     end
 
     set kubectl (command -s kubectl) # 避免调用到 kubectl 函数
 
     # 获取当前 context
-    set current_context "$KUBECTL_CONTEXT"
+    set current_context "$KUBE_CONTEXT"
     if test -z "$current_context"
         set -l context ($kubectl config current-context 2>/dev/null)
         if test $status -eq 0; and test -n "$context"
@@ -21,7 +21,7 @@ function _tide_item_kubectl
     end
 
     if test -n "$current_context"
-        set context_name "$KUBECTL_CONTEXT_NAME"
+        set context_name "$KUBE_CONTEXT_NAME"
         if test -z "$context_name"
             set context_name "$current_context"
         end
