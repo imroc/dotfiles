@@ -168,13 +168,19 @@ function M.export_pdf()
     "-o",
     output_path,
     "--pdf-engine=xelatex",
+    "--template=eisvogel",
     "--toc",
+    "--highlight-style=tango",
     "-V",
     "CJKmainfont=PingFang SC",
     "-V",
     "geometry:margin=2.5cm",
     "-V",
     "toc-title=目录",
+    "-V",
+    "toc-own-page=true",
+    "-V",
+    "colorlinks=true",
   }
 
   -- LaTeX preamble（longtable 包加载等）
