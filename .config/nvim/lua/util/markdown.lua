@@ -158,17 +158,35 @@ function M.export_pdf()
   vim.notify("正在导出 PDF ...", vim.log.levels.INFO)
 
   -- 使用 pandoc + xelatex 转换，支持中文
+  local pandoc_dir = vim.fn.stdpath("config") .. "/pandoc"
+  local preamble_path = pandoc_dir .. "/pdf-preamble.tex"
+  local filter_path = pandoc_dir .. "/table-grid.lua"
+
   local cmd = {
     "pandoc",
     filepath,
     "-o",
     output_path,
     "--pdf-engine=xelatex",
+    "--toc",
     "-V",
     "CJKmainfont=PingFang SC",
     "-V",
     "geometry:margin=2.5cm",
+    "-V",
+    "toc-title=目录",
   }
+
+  -- LaTeX preamble（longtable 包加载等）
+  if vim.fn.filereadable(preamble_path) == 1 then
+    table.insert(cmd, "-H")
+    table.insert(cmd, preamble_path)
+  end
+
+  -- Lua filter（表格竖线样式）
+  if vim.fn.filereadable(filter_path) == 1 then
+    table.insert(cmd, "--lua-filter=" .. filter_path)
+  end
 
   -- 确保 pandoc 能找到 xelatex（basictex 安装路径）
   local env_path = (vim.env.PATH or "") .. ":/Library/TeX/texbin"
