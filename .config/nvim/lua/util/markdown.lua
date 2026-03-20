@@ -145,4 +145,64 @@ function M.fold_level_1()
   fold_level(1)
 end
 
+-- 将当前 markdown 文件导出为 PDF 到 ~/Downloads 并复制到系统粘贴板
+function M.export_pdf()
+  -- 保存当前缓冲区
+  vim.cmd("silent update")
+
+  local filepath = vim.fn.expand("%:p")
+  local filename = vim.fn.expand("%:t:r") -- 不含扩展名的文件名
+  local output_dir = vim.fn.expand("~/Downloads")
+  local output_path = output_dir .. "/" .. filename .. ".pdf"
+
+  vim.notify("正在导出 PDF ...", vim.log.levels.INFO)
+
+  -- 使用 pandoc + xelatex 转换，支持中文
+  local cmd = {
+    "pandoc",
+    filepath,
+    "-o",
+    output_path,
+    "--pdf-engine=xelatex",
+    "-V",
+    "CJKmainfont=PingFang SC",
+    "-V",
+    "geometry:margin=2.5cm",
+  }
+
+  -- 确保 pandoc 能找到 xelatex（basictex 安装路径）
+  local env_path = (vim.env.PATH or "") .. ":/Library/TeX/texbin"
+
+  vim.system(cmd, { env = { PATH = env_path } }, function(result)
+    vim.schedule(function()
+      if result.code ~= 0 then
+        vim.notify("PDF 导出失败: " .. (result.stderr or "未知错误"), vim.log.levels.ERROR)
+        return
+      end
+
+      -- 用 NSPasteboard API 将 PDF 文件复制到系统粘贴板
+      local applescript = string.format(
+        [[use framework "AppKit"
+set pb to current application's NSPasteboard's generalPasteboard()
+pb's clearContents()
+set fileURL to current application's NSURL's fileURLWithPath:"%s"
+pb's writeObjects:{fileURL}]],
+        output_path
+      )
+      vim.system({ "osascript", "-e", applescript }, {}, function(cp_result)
+        vim.schedule(function()
+          if cp_result.code == 0 then
+            vim.notify("PDF 已导出到 " .. output_path .. " 并复制到粘贴板", vim.log.levels.INFO)
+          else
+            vim.notify(
+              "PDF 已导出到 " .. output_path .. "，但复制到粘贴板失败: " .. (cp_result.stderr or ""),
+              vim.log.levels.WARN
+            )
+          end
+        end)
+      end)
+    end)
+  end)
+end
+
 return M

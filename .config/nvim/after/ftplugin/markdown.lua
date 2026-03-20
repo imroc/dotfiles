@@ -24,6 +24,8 @@ map("n", "<localleader>wo", iwiki.open_iwiki, { buffer = 0, desc = "[P]Open in b
 map("n", "<localleader>wi", iwiki.insert_image, { buffer = 0, desc = "[P]Insert image" })
 map("n", "<localleader>wu", iwiki.copy_url, { buffer = 0, desc = "[P]Copy iwiki URL" })
 
+map("n", "<localleader>e", md.export_pdf, { buffer = 0, desc = "[P]Export to PDF" })
+
 map("n", "<localleader>s", function()
   if iwiki.is_iwiki() then
     iwiki.save_iwiki()
