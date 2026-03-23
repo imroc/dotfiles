@@ -292,18 +292,11 @@ function M.convert_line_to_link()
     -- 尝试匹配纯 URL
     url = content:match("^(" .. url_pattern .. ")%s*$")
     if url then
-      local placeholder = "链接"
-      local new_line = prefix .. "[" .. placeholder .. "](" .. url .. ")"
+      local new_line = prefix .. "[](" .. url .. ")"
       vim.api.nvim_buf_set_lines(0, row - 1, row, false, { new_line })
-      -- 光标移到 placeholder 并选中，方便用户直接输入替换
-      local link_start = #prefix + 1 -- "[" 后面的位置（0-indexed: #prefix + 1）
-      vim.api.nvim_win_set_cursor(0, { row, link_start })
-      -- 选中 "链接" 两个字（6 字节）用 select mode，输入即替换
-      vim.cmd("normal! v")
-      vim.api.nvim_win_set_cursor(0, { row, link_start + #placeholder - 1 })
-      -- Ctrl-G 切换到 select mode（输入即替换选中内容）
-      local ctrl_g = vim.api.nvim_replace_termcodes("<C-g>", true, false, true)
-      vim.api.nvim_feedkeys(ctrl_g, "n", false)
+      -- 光标移到 [] 中间，进入插入模式等待用户输入链接文本
+      vim.api.nvim_win_set_cursor(0, { row, #prefix + 1 })
+      vim.cmd("startinsert")
     else
       vim.notify("当前行未找到 URL", vim.log.levels.WARN)
     end
@@ -311,9 +304,10 @@ function M.convert_line_to_link()
 end
 
 --- Visual 模式：将选中文本转换为 markdown 链接
---- - 选中的是 URL       →  [](URL)        光标在 [] 中间
---- - 选中的是普通文本   →  [text]()       光标在 () 中间
---- - 选中的是 文本+URL  →  [text](URL)    （冒号/空格分隔）
+--- - 选中的是 URL       →  [](URL)              光标在 [] 中间
+--- - 选中的是普通文本   →  [text](剪贴板URL)    若剪贴板有 URL 则自动填入
+---                      →  [text]()              否则光标在 () 中间
+--- - 选中的是 文本+URL  →  [text](URL)           （冒号/空格分隔）
 function M.convert_selection_to_link()
   -- 获取选区内容
   -- 先退出 visual mode 以更新 marks
@@ -346,14 +340,23 @@ function M.convert_selection_to_link()
   end
 
   -- 情况2：选中的是普通文本
-  local replacement = "[" .. selected .. "]()"
-  vim.fn.setreg("z", replacement)
-  vim.cmd('normal! gv"zp')
-  -- 光标移到 () 中间（等待输入 URL）
-  vim.fn.search("]()", "b", vim.fn.line("."))
-  -- search 找到的是 ] 位置，需要移动到 ( 后面
-  vim.cmd("normal! 2l")
-  vim.cmd("startinsert")
+  -- 检查系统剪贴板中是否有 URL，有则自动填入
+  local clipboard = vim.fn.getreg("+")
+  local clipboard_url = clipboard and clipboard:match("^%s*(https?://[^%s]+)%s*$")
+  if clipboard_url then
+    local replacement = "[" .. selected .. "](" .. clipboard_url .. ")"
+    vim.fn.setreg("z", replacement)
+    vim.cmd('normal! gv"zp')
+  else
+    local replacement = "[" .. selected .. "]()"
+    vim.fn.setreg("z", replacement)
+    vim.cmd('normal! gv"zp')
+    -- 光标移到 () 中间（等待输入 URL）
+    vim.fn.search("]()", "b", vim.fn.line("."))
+    -- search 找到的是 ] 位置，需要移动到 ( 后面
+    vim.cmd("normal! 2l")
+    vim.cmd("startinsert")
+  end
 end
 
 return M
