@@ -229,4 +229,131 @@ pb's writeObjects:{fileURL}]],
   end)
 end
 
+-- URL 匹配模式（Lua pattern）
+local url_pattern = "https?://[%w%-%.%_%~%:%/%?%#%[%]%@%!%$%&%'%(%)%*%+%,%;%%=%{%}]+"
+
+--- 从字符串中提取"文本"和"URL"，按冒号（英文/中文）分隔
+--- 逻辑：先找到 URL，再检查 URL 前面是否有冒号分隔的文本
+--- 中文冒号是 UTF-8 多字节字符（\xef\xbc\x9a），Lua pattern 的字符类无法匹配
+local function extract_text_and_url(s)
+  -- 先提取末尾的 URL
+  local url = s:match("(" .. url_pattern .. ")%s*$")
+  if not url then
+    return nil, nil
+  end
+
+  -- 获取 URL 前面的部分
+  local url_start = s:find(url, 1, true)
+  if not url_start or url_start <= 1 then
+    return nil, url
+  end
+
+  local before_url = s:sub(1, url_start - 1)
+  -- 去掉末尾的冒号和空格（中文冒号 \xef\xbc\x9a 或英文冒号 :）
+  local text = before_url:match("^(.-)%s*\xef\xbc\x9a%s*$")
+    or before_url:match("^(.-)%s*:%s*$")
+    or before_url:match("^(.-)%s+$")
+  if text and text ~= "" then
+    return text, url
+  end
+
+  return nil, url
+end
+
+--- Normal 模式：将当前行的 list item 转换为 markdown 链接
+--- 支持格式：
+---   - 文本: URL  →  - [文本](URL)
+---   - 文本：URL  →  - [文本](URL)    （中文冒号）
+---   - URL         →  - [链接](URL)    （光标选中"链接"方便替换）
+function M.convert_line_to_link()
+  local line = vim.api.nvim_get_current_line()
+  local row = vim.api.nvim_win_get_cursor(0)[1]
+
+  -- 提取 list item 前缀（支持 -, *, + 和有序列表）
+  local prefix = line:match("^(%s*[%-%*%+] )")
+    or line:match("^(%s*[%-%*%+] %[.%] )") -- checkbox: - [x]
+    or line:match("^(%s*%d+%. )")
+  if not prefix then
+    -- 不是 list item，尝试整行处理
+    prefix = ""
+  end
+
+  local content = line:sub(#prefix + 1)
+
+  -- 尝试匹配 "文本: URL" 或 "文本：URL"（冒号后可选空格）
+  local text, url = extract_text_and_url(content)
+
+  if text and url and text ~= "" then
+    -- 有文本和链接
+    text = text:gsub("%s+$", "") -- 去掉文本末尾空格
+    local new_line = prefix .. "[" .. text .. "](" .. url .. ")"
+    vim.api.nvim_buf_set_lines(0, row - 1, row, false, { new_line })
+  else
+    -- 尝试匹配纯 URL
+    url = content:match("^(" .. url_pattern .. ")%s*$")
+    if url then
+      local placeholder = "链接"
+      local new_line = prefix .. "[" .. placeholder .. "](" .. url .. ")"
+      vim.api.nvim_buf_set_lines(0, row - 1, row, false, { new_line })
+      -- 光标移到 placeholder 并选中，方便用户直接输入替换
+      local link_start = #prefix + 1 -- "[" 后面的位置（0-indexed: #prefix + 1）
+      vim.api.nvim_win_set_cursor(0, { row, link_start })
+      -- 选中 "链接" 两个字（6 字节）用 select mode，输入即替换
+      vim.cmd("normal! v")
+      vim.api.nvim_win_set_cursor(0, { row, link_start + #placeholder - 1 })
+      -- Ctrl-G 切换到 select mode（输入即替换选中内容）
+      local ctrl_g = vim.api.nvim_replace_termcodes("<C-g>", true, false, true)
+      vim.api.nvim_feedkeys(ctrl_g, "n", false)
+    else
+      vim.notify("当前行未找到 URL", vim.log.levels.WARN)
+    end
+  end
+end
+
+--- Visual 模式：将选中文本转换为 markdown 链接
+--- - 选中的是 URL       →  [](URL)        光标在 [] 中间
+--- - 选中的是普通文本   →  [text]()       光标在 () 中间
+--- - 选中的是 文本+URL  →  [text](URL)    （冒号/空格分隔）
+function M.convert_selection_to_link()
+  -- 获取选区内容
+  -- 先退出 visual mode 以更新 marks
+  vim.cmd('normal! "zy')
+  local selected = vim.fn.getreg("z")
+  -- 去掉首尾空白
+  selected = selected:gsub("^%s+", ""):gsub("%s+$", "")
+
+  -- 情况3：文本 + URL（冒号或空格分隔）
+  local text, url = extract_text_and_url(selected)
+  if text and url and text ~= "" then
+    text = text:gsub("%s+$", "")
+    local replacement = "[" .. text .. "](" .. url .. ")"
+    vim.fn.setreg("z", replacement)
+    vim.cmd('normal! gv"zp')
+    return
+  end
+
+  -- 情况1：选中的是纯 URL
+  url = selected:match("^(" .. url_pattern .. ")$")
+  if url then
+    local replacement = "[](" .. url .. ")"
+    vim.fn.setreg("z", replacement)
+    vim.cmd('normal! gv"zp')
+    -- 光标移到 [] 中间（等待输入链接文本）
+    vim.fn.search("\\[\\]", "b")
+    vim.cmd("normal! l")
+    vim.cmd("startinsert")
+    return
+  end
+
+  -- 情况2：选中的是普通文本
+  local replacement = "[" .. selected .. "]()"
+  vim.fn.setreg("z", replacement)
+  vim.cmd('normal! gv"zp')
+  -- 光标移到 () 中间（等待输入 URL）
+  vim.fn.search("]()", "b", vim.fn.line("."))
+  -- search 找到的是 ] 位置，需要移动到 ( 后面
+  vim.cmd("normal! 2l")
+  vim.cmd("startinsert")
+end
+
 return M

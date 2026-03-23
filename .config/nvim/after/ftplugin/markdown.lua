@@ -25,6 +25,8 @@ map("n", "<localleader>wi", iwiki.insert_image, { buffer = 0, desc = "[P]Insert 
 map("n", "<localleader>wu", iwiki.copy_url, { buffer = 0, desc = "[P]Copy iwiki URL" })
 
 map("n", "<localleader>e", md.export_pdf, { buffer = 0, desc = "[P]Export to PDF" })
+map("n", "<localleader>l", md.convert_line_to_link, { buffer = 0, desc = "[P]Convert to markdown link" })
+map("v", "<localleader>l", md.convert_selection_to_link, { buffer = 0, desc = "[P]Convert selection to markdown link" })
 
 map("n", "<localleader>s", function()
   if iwiki.is_iwiki() then
