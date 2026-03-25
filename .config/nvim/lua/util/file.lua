@@ -58,6 +58,10 @@ function M.rename()
   end)
 end
 
+function M.open_troubleshooting_note()
+  vim.cmd.edit(vim.fn.expand("~/work/troubleshooting/troubleshooting.md"))
+end
+
 function M.open_weekly_note()
   local now = os.time()
   local weekday = tonumber(os.date("%w", now)) -- 0=Sunday, 1=Monday, ...
@@ -71,10 +75,10 @@ function M.open_weekly_note()
   local monday_mmdd = os.date("%m%d", monday)
   local sunday_mmdd = os.date("%m%d", sunday)
 
-  local note_dir = vim.fn.expand("~/dev/note/weekly/" .. monday_year)
-  local full_path = note_dir .. "/" .. monday_mmdd .. "-" .. sunday_mmdd .. ".md"
+  local weekly_dir = vim.fn.expand("~/work/weekly/" .. monday_year)
+  local full_path = weekly_dir .. "/" .. monday_mmdd .. "-" .. sunday_mmdd .. ".md"
 
-  vim.fn.mkdir(note_dir, "p")
+  vim.fn.mkdir(weekly_dir, "p")
   if vim.fn.filereadable(full_path) == 0 then
     local f = io.open(full_path, "w")
     if f then

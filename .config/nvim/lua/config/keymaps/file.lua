@@ -34,8 +34,9 @@ vim.keymap.set("n", "<leader>ob", function()
   job.run("buddycn", { args = { "-r", LazyVim.root() } })
 end, { desc = "[P]Open CodeBuddy (Root Dir)" })
 
--- weekly note
+-- weekly note / troubleshooting note
 vim.keymap.set("n", "<leader>ow", file.open_weekly_note, { desc = "[P]Open Weekly Note" })
+vim.keymap.set("n", "<leader>ot", file.open_troubleshooting_note, { desc = "[P]Open Troubleshooting Note" })
 
 -- dotfiles
 vim.keymap.set("n", "<leader>oda", "<cmd>edit ~/.config/aerospace/aerospace.toml<cr>", { desc = "[P]Aerospace" })
