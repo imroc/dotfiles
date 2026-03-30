@@ -1,10 +1,10 @@
-function ailink --description "Ensure all AI prompt files are symlinked to CLAUDE.md (and .local.md to CLAUDE.local.md)"
-    # AI 工具对应的提示词文件名（不含 CLAUDE.md 本身，它是 link 目标）
-    set -l names AGENTS CODEBUDDY GEMINI
+function ailink --description "Ensure all AI prompt files are symlinked to AGENTS.md (and .local.md to AGENTS.local.md)"
+    # AI 工具对应的提示词文件名（不含 AGENTS.md 本身，它是 link 目标）
+    set -l names CLAUDE CODEBUDDY GEMINI
 
     # 处理两组：普通文件 → CLAUDE.md，.local.md → CLAUDE.local.md
     for suffix in "" .local
-        set -l target "CLAUDE$suffix.md"
+        set -l target "AGENTS$suffix.md"
 
         # 目标文件不存在时，尝试从有内容的文件 mv 过来
         if not test -e $target; and not test -L $target
