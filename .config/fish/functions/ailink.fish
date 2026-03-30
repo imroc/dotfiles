@@ -6,13 +6,32 @@ function ailink --description "Ensure all AI prompt files are symlinked to CLAUD
     for suffix in "" .local
         set -l target "CLAUDE$suffix.md"
 
-        # 目标文件不存在则跳过这组
+        # 目标文件不存在时，尝试从有内容的文件 mv 过来
         if not test -e $target; and not test -L $target
-            # .local.md 不存在是正常的，静默跳过
-            if test -z "$suffix"
-                echo "跳过：$target 不存在"
+            set -l content_files
+            for name in $names
+                set -l f "$name$suffix.md"
+                if test -f $f; and not test -L $f; and test -s $f
+                    set -a content_files $f
+                end
             end
-            continue
+
+            if test (count $content_files) -eq 0
+                # 没有任何文件，.local.md 静默跳过，普通组提示
+                if test -z "$suffix"
+                    echo "跳过：$target 不存在"
+                end
+                continue
+            else if test (count $content_files) -eq 1
+                mv $content_files[1] $target
+                echo "$content_files[1] → 移动为 $target"
+            else
+                echo "错误：$target 不存在，且多个文件有内容，请手动处理："
+                for f in $content_files
+                    echo "  - $f"
+                end
+                continue
+            end
         end
 
         for name in $names
