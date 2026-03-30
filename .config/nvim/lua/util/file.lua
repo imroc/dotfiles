@@ -82,7 +82,7 @@ function M.open_weekly_note()
   if vim.fn.filereadable(full_path) == 0 then
     local f = io.open(full_path, "w")
     if f then
-      f:write("## 待办列表\n")
+      f:write("# 待办列表\n")
       f:close()
     end
   end
