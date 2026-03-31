@@ -29,14 +29,9 @@ function cilium --wraps=cilium --description "wrap cilium with extra advanced fe
         set -a common_args --context "$KUBE_CONTEXT"
     end
 
-    set -l proxy_env
-    if set -q KUBE_PROXY
-        set proxy_env HTTPS_PROXY=$KUBE_PROXY
-    end
-
     if test -z "$common_args"
-        env $proxy_env cilium $original_args
+        cilium $original_args
     else
-        env $proxy_env cilium $common_args $argv
+        cilium $common_args $argv
     end
 end

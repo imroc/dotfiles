@@ -7,14 +7,9 @@ function helm --wraps=helm --description "wrap helm with extra advanced feature"
         set -a common_args --kube-context "$KUBE_CONTEXT"
     end
 
-    set -l proxy_env
-    if set -q KUBE_PROXY
-        set proxy_env HTTPS_PROXY=$KUBE_PROXY
-    end
-
     if test -z "$common_args"
-        env $proxy_env helm $original_args
+        helm $original_args
     else
-        env $proxy_env helm $common_args $argv
+        helm $common_args $argv
     end
 end

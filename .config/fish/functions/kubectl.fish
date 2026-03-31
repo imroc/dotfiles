@@ -36,9 +36,6 @@ end
 function __kubecolor
     set -l kc (__kubectl_cmd)
     set -l proxy_env
-    if set -q KUBE_PROXY
-        set proxy_env HTTPS_PROXY=$KUBE_PROXY
-    end
     if not test "$__kubectl_disable_color" = 1; and command -sq kubecolor
         if set -q KUBECTL_CLI
             env $proxy_env KUBECTL_COMMAND="$KUBECTL_CLI" kubecolor $argv
@@ -56,14 +53,10 @@ end
 # and suppressing stderr hides the "Unable to use a TTY" warning.
 function __kubectl_pipe
     set -l kc (__kubectl_cmd)
-    set -l proxy_env
-    if set -q KUBE_PROXY
-        set proxy_env HTTPS_PROXY=$KUBE_PROXY
-    end
     if set -q KUBECTL_CLI
-        env $proxy_env $kc $argv </dev/null 2>/dev/null
+        $kc $argv </dev/null 2>/dev/null
     else
-        env $proxy_env $kc $argv
+        $kc $argv
     end
 end
 
