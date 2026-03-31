@@ -35,15 +35,14 @@ end
 
 function __kubecolor
     set -l kc (__kubectl_cmd)
-    set -l proxy_env
     if not test "$__kubectl_disable_color" = 1; and command -sq kubecolor
         if set -q KUBECTL_CLI
-            env $proxy_env KUBECTL_COMMAND="$KUBECTL_CLI" kubecolor $argv
+            KUBECTL_COMMAND="$KUBECTL_CLI" kubecolor $argv
         else
-            env $proxy_env kubecolor $argv
+            kubecolor $argv
         end
     else
-        env $proxy_env $kc $argv
+        command $kc $argv
     end
 end
 
@@ -56,7 +55,7 @@ function __kubectl_pipe
     if set -q KUBECTL_CLI
         $kc $argv </dev/null 2>/dev/null
     else
-        $kc $argv
+        command $kc $argv
     end
 end
 
