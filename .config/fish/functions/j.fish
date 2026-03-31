@@ -98,13 +98,21 @@ function j --description "Jump to bookmarked directories"
                 echo "目录不存在: $dir"
                 return 1
             end
-            zellij action new-tab --name $alias
-            sleep 0.1
+            # Defer zellij actions to a background process so the floating pane
+            # closes first (close_on_exit), avoiding race condition with new-tab
+            # creation that can deadlock Zellij.
+            set -l cmd "cd $dir && clear"
             if test $open_editor -eq 1
-                zellij action write-chars "cd $dir && clear && nvim ." && zellij action write 10
-            else
-                zellij action write-chars "cd $dir && clear" && zellij action write 10
+                set cmd "cd $dir && clear && nvim ."
             end
+            /bin/sh -c "
+                sleep 0.3
+                zellij action new-tab --name '$alias'
+                sleep 0.3
+                zellij action write-chars '$cmd'
+                zellij action write 10
+            " &
+            disown
         case list ls
             yq e 'to_entries | .[] | [.key, .value] | @tsv' $__j_config | column -t -s (printf '\t')
         case wn
