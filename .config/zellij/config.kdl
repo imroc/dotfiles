@@ -164,8 +164,8 @@ keybinds clear-defaults=true {
         bind "Super 8" { GoToTab 8; }
         bind "Super 9" { GoToTab 9; }
         bind "Super \\" { NewPane "right"; }
-        bind "Ctrl Super h" "Super [" { GoToPreviousTab; }
-        bind "Ctrl Super l" "Super ]" { GoToNextTab; }
+        bind "Super [" { GoToPreviousTab; }
+        bind "Super ]" { GoToNextTab; }
         bind "Super e" { TogglePanePinned; SwitchToMode "normal"; ToggleFloatingPanes; }
         // tab 跳转（session 内）
         bind "Super f" {
