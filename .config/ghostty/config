@@ -83,10 +83,10 @@ keybind = super+shift+-=decrease_font_size:1
 # keybind = super+shift+j=unbind
 keybind = super+]=unbind
 keybind = super+[=unbind
-keybind = alt+h=goto_split:left
-keybind = alt+j=goto_split:down
-keybind = alt+k=goto_split:up
-keybind = alt+l=goto_split:right
+keybind = super+ctrl+h=goto_split:left
+keybind = super+ctrl+j=goto_split:down
+keybind = super+ctrl+k=goto_split:up
+keybind = super+ctrl+l=goto_split:right
 
 # Shift+Ejnter 发送换行符（解决 Zellij 下 Shift+Enter 无法换行的问题）
 # keybind = shift+enter=text:\x1b[200~\n\x1b[201~
@@ -106,3 +106,12 @@ keybind = global:ctrl+cmd+;=toggle_quick_terminal
 quick-terminal-position = right
 quick-terminal-screen = mouse
 quick-terminal-animation-duration = 0.08
+
+# tab
+keybind = super+shift+r=prompt_tab_title
+
+# resize
+keybind = super+shift+h=resize_split:left,100
+keybind = super+shift+l=resize_split:right,100
+keybind = super+shift+k=resize_split:up,100
+keybind = super+shift+j=resize_split:down,100
