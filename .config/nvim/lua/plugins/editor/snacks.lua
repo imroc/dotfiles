@@ -14,6 +14,16 @@ local get_copy_opts = function(what)
   }
 end
 
+local gitbrowse_line_suffix = function(line_start, line_end)
+  if not line_start then
+    return ""
+  end
+  if not line_end or line_start == line_end then
+    return ("#L%s"):format(line_start)
+  end
+  return ("#L%s-%s"):format(line_start, line_end)
+end
+
 return {
   "folke/snacks.nvim",
   keys = {
@@ -280,6 +290,28 @@ return {
   },
   opts = function(_, opts)
     return vim.tbl_deep_extend("force", opts or {}, {
+      gitbrowse = {
+        url_patterns = {
+          ["git%.woa%.com"] = {
+            branch = "/tree/{branch}",
+            file = function(fields)
+              return ("/blob/%s/%s%s"):format(
+                fields.branch,
+                fields.file,
+                gitbrowse_line_suffix(fields.line_start, fields.line_end)
+              )
+            end,
+            permalink = function(fields)
+              return ("/blob/%s/%s%s"):format(
+                fields.commit,
+                fields.file,
+                gitbrowse_line_suffix(fields.line_start, fields.line_end)
+              )
+            end,
+            commit = "/commit/{commit}",
+          },
+        },
+      },
       scroll = { enabled = false },
       dashboard = {
         enabled = vim.g.simpler_scrollback ~= "deeznuts",
