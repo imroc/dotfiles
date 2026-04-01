@@ -1,12 +1,11 @@
-theme = TokyoNight Night
+# 外观
 # JetBrainsMono 作为默认字体，中文 fallback 到等距的更纱黑体，
 # 以便在终端看含中文的 ASCII 图时能够对齐
 font-family = JetBrainsMono Nerd Font
 font-family = Sarasa Mono SC
-
 font-size = 14
+theme = TokyoNight Night
 cursor-style = block
-macos-option-as-alt = true
 
 # split (pane)
 keybind = super+enter=toggle_split_zoom
@@ -61,3 +60,6 @@ keybind = scroll/escape=deactivate_key_table
 keybind = scroll/enter=deactivate_key_table
 keybind = scroll/catch_all=ignore
 keybind = super+s=activate_key_table:scroll
+
+# 其它
+macos-option-as-alt = true
