@@ -1,6 +1,6 @@
 keybinds clear-defaults=true {
     locked {
-        bind "Super x" { SwitchToMode "normal"; }
+        bind "Super Ctrl x" { SwitchToMode "normal"; }
     }
     pane {
         bind "left" { MoveFocus "left"; }
@@ -18,7 +18,7 @@ keybinds clear-defaults=true {
         bind "l" { MoveFocus "right"; }
         bind "n" { NewPane; SwitchToMode "normal"; }
         bind "p" { SwitchFocus; }
-        bind "Super p" { SwitchToMode "normal"; }
+        bind "Super Ctrl p" { SwitchToMode "normal"; }
         bind "r" { NewPane "right"; SwitchToMode "normal"; }
         bind "s" { NewPane "stacked"; SwitchToMode "normal"; }
         bind "w" { ToggleFloatingPanes; SwitchToMode "normal"; }
@@ -58,7 +58,7 @@ keybinds clear-defaults=true {
         bind "n" { NewTab; SwitchToMode "normal"; }
         bind "r" { SwitchToMode "renametab"; TabNameInput 0; }
         bind "s" { ToggleActiveSyncTab; SwitchToMode "normal"; }
-        bind "Super t" { SwitchToMode "normal"; }
+        bind "Super Ctrl t" { SwitchToMode "normal"; }
         bind "x" { CloseTab; SwitchToMode "normal"; }
         bind "tab" { ToggleTab; }
     }
@@ -78,7 +78,7 @@ keybinds clear-defaults=true {
         bind "j" { Resize "Increase down"; }
         bind "k" { Resize "Increase up"; }
         bind "l" { Resize "Increase right"; }
-        bind "Super r" { SwitchToMode "normal"; }
+        bind "Super Ctrl r" { SwitchToMode "normal"; }
     }
     move {
         bind "left" { MovePane "left"; }
@@ -97,7 +97,7 @@ keybinds clear-defaults=true {
     scroll {
         bind "e" { EditScrollback; SwitchToMode "normal"; }
         bind "s" { SwitchToMode "entersearch"; SearchInput 0; }
-        bind "Super u" { HalfPageScrollUp; }
+        bind "Super Ctrl u" { HalfPageScrollUp; }
     }
     search {
         bind "c" { SearchToggleOption "CaseSensitivity"; }
@@ -137,7 +137,7 @@ keybinds clear-defaults=true {
             }
             SwitchToMode "normal"
         }
-        bind "Super s" { SwitchToMode "normal"; }
+        bind "Super Ctrl s" { SwitchToMode "normal"; }
         bind "w" {
             LaunchOrFocusPlugin "session-manager" {
                 floating true
@@ -147,28 +147,19 @@ keybinds clear-defaults=true {
         }
     }
     shared_except "locked" {
-        bind "Super left" { MoveFocus "left"; }
-        bind "Super down" { MoveFocus "down"; }
-        bind "Super up" { MoveFocus "up"; }
-        bind "Super right" { MoveFocus "right"; }
-        bind "Super ," { NextSwapLayout; }
-        bind "Super -" { NewPane "down"; }
-        bind "Super /" { ToggleFloatingPanes; }
-        bind "Super 1" { GoToTab 1; }
-        bind "Super 2" { GoToTab 2; }
-        bind "Super 3" { GoToTab 3; }
-        bind "Super 4" { GoToTab 4; }
-        bind "Super 5" { GoToTab 5; }
-        bind "Super 6" { GoToTab 6; }
-        bind "Super 7" { GoToTab 7; }
-        bind "Super 8" { GoToTab 8; }
-        bind "Super 9" { GoToTab 9; }
-        bind "Super \\" { NewPane "right"; }
-        bind "Super [" { GoToPreviousTab; }
-        bind "Super ]" { GoToNextTab; }
-        bind "Super e" { TogglePanePinned; SwitchToMode "normal"; ToggleFloatingPanes; }
+        bind "Super Ctrl left" { MoveFocus "left"; }
+        bind "Super Ctrl down" { MoveFocus "down"; }
+        bind "Super Ctrl up" { MoveFocus "up"; }
+        bind "Super Ctrl right" { MoveFocus "right"; }
+        bind "Super Ctrl ," { NextSwapLayout; }
+        bind "Super Ctrl -" { NewPane "down"; }
+        bind "Super Ctrl /" { ToggleFloatingPanes; }
+        bind "Super Ctrl \\" { NewPane "right"; }
+        bind "Super Ctrl [" { GoToPreviousTab; }
+        bind "Super Ctrl ]" { GoToNextTab; }
+        bind "Super Ctrl e" { TogglePanePinned; SwitchToMode "normal"; ToggleFloatingPanes; }
         // tab 跳转（session 内）
-        bind "Super f" {
+        bind "Super Ctrl f" {
             LaunchOrFocusPlugin "https://github.com/rvcas/room/releases/latest/download/room.wasm" {
                 floating true
                 ignore_case "true"
@@ -176,7 +167,7 @@ keybinds clear-defaults=true {
             }
         }
         // session 跳转
-        // bind "Super g" {
+        // bind "Super Ctrl g" {
         //     LaunchOrFocusPlugin "https://github.com/JoseMM2002/zellij-favs/releases/download/v1.0.1/zellij-favs.wasm" {
         //         floating true
         //         display_tab_panes true
@@ -184,7 +175,7 @@ keybinds clear-defaults=true {
         //     }
         // }
         // 通过 jumplist 根据常用目录快速创建tab
-        bind "Super o" {
+        bind "Super Ctrl o" {
             Run "fish" "-c" "j tab" {
                 floating true
                 close_on_exit true
@@ -204,24 +195,24 @@ keybinds clear-defaults=true {
                 close_on_exit true
             }
         }
-        bind "Super y" {
+        bind "Super Ctrl y" {
             LaunchOrFocusPlugin "https://github.com/Nacho114/harpoon/releases/download/v0.3.0/harpoon.wasm" {
                 floating true;
                 move_to_focused_tab true;
             }
         }
-        bind "Super x" { SwitchToMode "locked"; }
-        bind "Super h" { MoveFocus "left"; }
-        bind "Super i" { EditScrollback; SwitchToMode "normal"; }
-        bind "Super j" { MoveFocus "down"; }
-        bind "Super k" { MoveFocus "up"; }
-        bind "Super l" { MoveFocus "right"; }
-        bind "Super n" { NewPane; }
-        bind "Super w" { CloseFocus; }
+        bind "Super Ctrl x" { SwitchToMode "locked"; }
+        bind "Super Ctrl h" { MoveFocus "left"; }
+        bind "Super Ctrl i" { EditScrollback; SwitchToMode "normal"; }
+        bind "Super Ctrl j" { MoveFocus "down"; }
+        bind "Super Ctrl k" { MoveFocus "up"; }
+        bind "Super Ctrl l" { MoveFocus "right"; }
+        bind "Super Ctrl n" { NewPane; }
+        bind "Super Ctrl w" { CloseFocus; }
         // bind "Ctrl Super y" { ToggleGroupMarking; }
-        // bind "Super y" { TogglePaneInGroup; }
+        // bind "Super Ctrl y" { TogglePaneInGroup; }
         bind "Ctrl Super p" { ToggleTab; }
-        bind "Super enter" { ToggleFocusFullscreen; }
+        bind "Super Ctrl enter" { ToggleFocusFullscreen; }
         // Pass Shift+Enter to apps (workaround for zellij-org/zellij#4159)
         // ref: https://github.com/luckenco/nix-config/blob/main/modules/common/zellij.nix
         // bind "Shift Enter" { Write 27 91 49 51 59 50 117; }
@@ -230,22 +221,22 @@ keybinds clear-defaults=true {
         bind "Ctrl Super m" { SwitchToMode "move"; }
     }
     shared_except "locked" "session" {
-        bind "Super s" { SwitchToMode "session"; }
+        bind "Super Ctrl s" { SwitchToMode "session"; }
     }
     shared_except "locked" "scroll" {
-        bind "Super u" { SwitchToMode "scroll"; HalfPageScrollUp; }
+        bind "Super Ctrl u" { SwitchToMode "scroll"; HalfPageScrollUp; }
     }
     shared_except "locked" "tab" {
-        bind "Super t" { SwitchToMode "tab"; }
+        bind "Super Ctrl t" { SwitchToMode "tab"; }
     }
     shared_except "locked" "pane" {
-        bind "Super p" { SwitchToMode "pane"; }
+        bind "Super Ctrl p" { SwitchToMode "pane"; }
     }
     shared_except "locked" "resize" {
-        bind "Super r" { SwitchToMode "resize"; }
+        bind "Super Ctrl r" { SwitchToMode "resize"; }
     }
     shared_except "normal" "locked" {
-        bind "Super ." { SwitchToMode "normal"; }
+        bind "Super Ctrl ." { SwitchToMode "normal"; }
     }
     shared_except "normal" "locked" "entersearch" {
         bind "enter" { SwitchToMode "normal"; }
