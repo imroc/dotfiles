@@ -49,11 +49,12 @@ keybind = super+r=activate_key_table:resize
 
 # scroll
 keybind = super+u=scroll_page_up
-keybind = super+d=scroll_page_down
+keybind = chain=activate_key_table:scroll
 keybind = scroll/k=scroll_page_lines:-3
 keybind = scroll/j=scroll_page_lines:3
 keybind = scroll/b=scroll_page_up
 keybind = scroll/f=scroll_page_down
+keybind = scroll/super+u=scroll_page_fractional:-0.5
 keybind = scroll/u=scroll_page_fractional:-0.5
 keybind = scroll/d=scroll_page_fractional:0.5
 keybind = scroll/escape=deactivate_key_table
