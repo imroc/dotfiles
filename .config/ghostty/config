@@ -14,6 +14,7 @@ keybind = super+h=goto_split:left
 keybind = super+j=goto_split:down
 keybind = super+k=goto_split:up
 keybind = super+l=goto_split:right
+split-inherit-working-directory = true
 
 # Shift+Ejnter 发送换行符（解决 Zellij 下 Shift+Enter 无法换行的问题）
 # keybind = shift+enter=text:\x1b[200~\n\x1b[201~
@@ -35,6 +36,7 @@ quick-terminal-animation-duration = 0.08
 
 # tab
 keybind = super+shift+r=prompt_tab_title
+tab-inherit-working-directory = true
 
 # resize
 keybind = resize/k=resize_split:up,100
@@ -45,3 +47,17 @@ keybind = resize/escape=deactivate_key_table
 keybind = resize/enter=deactivate_key_table
 keybind = resize/catch_all=ignore
 keybind = super+r=activate_key_table:resize
+
+# scroll
+keybind = super+u=scroll_page_up
+keybind = super+d=scroll_page_down
+keybind = scroll/k=scroll_page_lines:-3
+keybind = scroll/j=scroll_page_lines:3
+keybind = scroll/b=scroll_page_up
+keybind = scroll/f=scroll_page_down
+keybind = scroll/u=scroll_page_fractional:-0.5
+keybind = scroll/d=scroll_page_fractional:0.5
+keybind = scroll/escape=deactivate_key_table
+keybind = scroll/enter=deactivate_key_table
+keybind = scroll/catch_all=ignore
+keybind = super+s=activate_key_table:scroll
