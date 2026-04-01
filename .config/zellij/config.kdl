@@ -197,8 +197,6 @@ keybinds clear-defaults=true {
                 close_on_exit true
             }
         }
-        // 进入 scroll 模式并向上滚动
-        bind "Ctrl Super k" { SwitchToMode "scroll"; ScrollUp; }
         // 通过 jumplist 选择常用目录并用 nvim 打开
         bind "Ctrl Super o" {
             Run "fish" "-c" "j -e" {
@@ -371,7 +369,7 @@ default_layout "zjbar"
 //   - true (default, enabled)
 //   - false
 // 
-pane_frames false
+pane_frames true
  
 // When attaching to an existing session with other users,
 // should the session be mirrored (true)
