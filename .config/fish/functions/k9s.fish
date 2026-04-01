@@ -8,8 +8,8 @@ function k9s --wraps=k9s --description "wrap k9s with extra advanced feature"
     end
 
     if test -z "$common_args"
-        k9s $original_args
+        command k9s $original_args
     else
-        k9s $common_args $argv
+        command k9s $common_args $argv
     end
 end
