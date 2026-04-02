@@ -36,12 +36,13 @@ quick-terminal-screen = mouse
 quick-terminal-animation-duration = 0.08
 
 # tab
+keybind = super+n=new_tab
 keybind = super+]=next_tab
 keybind = super+[=previous_tab
 keybind = super+shift+]=move_tab:1
 keybind = super+shift+[=move_tab:-1
 keybind = super+t=activate_key_table:tab
-keybind = tab/n=new_tab
+keybind = super+shift+r=prompt_tab_title
 keybind = chain=deactivate_key_table
 keybind = tab/r=prompt_tab_title
 keybind = chain=deactivate_key_table
@@ -80,6 +81,9 @@ keybind = scroll/escape=deactivate_key_table
 keybind = scroll/enter=deactivate_key_table
 keybind = scroll/catch_all=ignore
 keybind = super+s=activate_key_table:scroll
+
+# window
+keybind = super+shift+n=new_window
 
 # 其它
 macos-option-as-alt = true
