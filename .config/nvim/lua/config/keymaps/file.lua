@@ -41,6 +41,7 @@ vim.keymap.set("n", "<leader>ot", file.open_troubleshooting_note, { desc = "[P]O
 -- dotfiles
 vim.keymap.set("n", "<leader>oda", "<cmd>edit ~/.config/aerospace/aerospace.toml<cr>", { desc = "[P]Aerospace" })
 vim.keymap.set("n", "<leader>odc", "<cmd>edit ~/.claude-internal/settings.json<cr>", { desc = "[P]Claude" })
+vim.keymap.set("n", "<leader>odb", "<cmd>edit ~/.codebuddy/settings.json<cr>", { desc = "[P]CodeBuddy" })
 vim.keymap.set("n", "<leader>odf", "<cmd>edit ~/.config/fish/config.fish<cr>", { desc = "[P]Fish" })
 vim.keymap.set("n", "<leader>odg", "<cmd>edit ~/.config/ghostty/config<cr>", { desc = "[P]Ghostty" })
 vim.keymap.set("n", "<leader>odG", "<cmd>edit ~/.config/git/config<cr>", { desc = "[P]Git" })
