@@ -36,11 +36,13 @@ quick-terminal-screen = mouse
 quick-terminal-animation-duration = 0.08
 
 # tab
+keybind = super+]=next_tab
+keybind = super+[=previous_tab
 keybind = super+t=activate_key_table:tab
 keybind = tab/n=new_tab
+keybind = chain=deactivate_key_table
 keybind = tab/r=prompt_tab_title
-keybind = tab/h=previous_tab
-keybind = tab/l=next_tab
+keybind = chain=deactivate_key_table
 keybind = tab/shift+l=move_tab:1
 keybind = tab/shift+h=move_tab:-1
 keybind = tab/escape=deactivate_key_table
@@ -68,6 +70,11 @@ keybind = scroll/f=scroll_page_down
 keybind = scroll/super+u=scroll_page_fractional:-0.5
 keybind = scroll/u=scroll_page_fractional:-0.5
 keybind = scroll/d=scroll_page_fractional:0.5
+keybind = scroll/super+enter=toggle_split_zoom
+keybind = scroll/super+h=goto_split:left
+keybind = scroll/super+j=goto_split:down
+keybind = scroll/super+k=goto_split:up
+keybind = scroll/super+l=goto_split:right
 keybind = scroll/escape=deactivate_key_table
 keybind = scroll/enter=deactivate_key_table
 keybind = scroll/catch_all=ignore
