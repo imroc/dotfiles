@@ -170,7 +170,7 @@ function M.export_pdf()
     "--pdf-engine=xelatex",
     "--template=eisvogel",
     "--toc",
-    "--highlight-style=tango",
+    "--syntax-highlighting=tango",
     "-V",
     "CJKmainfont=PingFang SC",
     "-V",
