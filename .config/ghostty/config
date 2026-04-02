@@ -43,6 +43,7 @@ keybind = tab/n=new_tab
 keybind = chain=deactivate_key_table
 keybind = tab/r=prompt_tab_title
 keybind = chain=deactivate_key_table
+keybind = tab/x=close_tab
 keybind = tab/shift+l=move_tab:1
 keybind = tab/shift+h=move_tab:-1
 keybind = tab/escape=deactivate_key_table
