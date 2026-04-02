@@ -34,7 +34,16 @@ quick-terminal-screen = mouse
 quick-terminal-animation-duration = 0.08
 
 # tab
-keybind = super+shift+r=prompt_tab_title
+keybind = super+t=activate_key_table:tab
+keybind = tab/n=new_tab
+keybind = tab/r=prompt_tab_title
+keybind = tab/h=previous_tab
+keybind = tab/l=next_tab
+keybind = tab/shift+l=move_tab:1
+keybind = tab/shift+h=move_tab:-1
+keybind = tab/escape=deactivate_key_table
+keybind = tab/enter=deactivate_key_table
+keybind = tab/catch_all=ignore
 tab-inherit-working-directory = true
 
 # resize
