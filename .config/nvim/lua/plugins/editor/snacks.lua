@@ -15,7 +15,7 @@ local get_copy_opts = function(what)
 end
 
 local gitbrowse_line_suffix = function(line_start, line_end)
-  if not line_start then
+  if not line_start or line_start == 0 then
     return ""
   end
   if not line_end or line_start == line_end then
@@ -106,17 +106,33 @@ return {
     {
       "<leader>ogf",
       function()
+        Snacks.gitbrowse({ what = "file", line_start = 0, line_end = 0 })
+      end,
+      mode = "n",
+      desc = "[P]Open File In Browser",
+    },
+    {
+      "<leader>ogf",
+      function()
         Snacks.gitbrowse({ what = "file" })
       end,
-      mode = { "n", "v" },
+      mode = "v",
       desc = "[P]Open File In Browser",
+    },
+    {
+      "<leader>ogp",
+      function()
+        Snacks.gitbrowse({ what = "permalink", line_start = 0, line_end = 0 })
+      end,
+      mode = "n",
+      desc = "[P]Open Permalink In Browser",
     },
     {
       "<leader>ogp",
       function()
         Snacks.gitbrowse({ what = "permalink" })
       end,
-      mode = { "n", "v" },
+      mode = "v",
       desc = "[P]Open Permalink In Browser",
     },
     {
@@ -293,6 +309,24 @@ return {
       gitbrowse = {
         url_patterns = {
           ["git%.woa%.com"] = {
+            branch = "/tree/{branch}",
+            file = function(fields)
+              return ("/blob/%s/%s%s"):format(
+                fields.branch,
+                fields.file,
+                gitbrowse_line_suffix(fields.line_start, fields.line_end)
+              )
+            end,
+            permalink = function(fields)
+              return ("/blob/%s/%s%s"):format(
+                fields.commit,
+                fields.file,
+                gitbrowse_line_suffix(fields.line_start, fields.line_end)
+              )
+            end,
+            commit = "/commit/{commit}",
+          },
+          ["gitee%.com"] = {
             branch = "/tree/{branch}",
             file = function(fields)
               return ("/blob/%s/%s%s"):format(
