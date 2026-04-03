@@ -33,7 +33,7 @@ return {
   {
     "iamcco/markdown-preview.nvim",
     keys = {
-      { "<localleader>P", "<cmd>MarkdownPreviewToggle<cr>", ft = "markdown", desc = "[P]Toggle Preview" },
+      { "<localleader>o", "<cmd>MarkdownPreviewToggle<cr>", ft = "markdown", desc = "[P]Toggle Preview" },
     },
   },
   {
