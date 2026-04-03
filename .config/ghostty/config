@@ -87,4 +87,9 @@ keybind = super+s=activate_key_table:scroll
 keybind = super+shift+n=new_window
 
 # 其它
+scrollback-limit = 10000000
+# scrollback copy mode - super+y 用 nvim 打开 scrollback 供选择复制
+# new_split 确保在任何应用中都能用，fish 启动钩子自动运行脚本
+keybind = super+y=write_scrollback_file:copy
+keybind = chain=new_split:right
 macos-option-as-alt = true
