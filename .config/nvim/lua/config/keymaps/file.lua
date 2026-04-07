@@ -47,6 +47,12 @@ vim.keymap.set("n", "<leader>odg", "<cmd>edit ~/.config/ghostty/config<cr>", { d
 vim.keymap.set("n", "<leader>odG", "<cmd>edit ~/.config/git/config<cr>", { desc = "[P]Git" })
 vim.keymap.set("n", "<leader>odk", "<cmd>edit ~/.config/kitty/kitty.conf<cr>", { desc = "[P]Kitty" })
 vim.keymap.set("n", "<leader>odK", "<cmd>edit ~/.config/karabiner/karabiner.json<cr>", { desc = "[P]Karabiner" })
+vim.keymap.set(
+  "n",
+  "<leader>odm",
+  "<cmd>edit ~/Library/Containers/net.sonuscape.mouseless/Data/.mouseless/configs/config.yaml<cr>",
+  { desc = "[P]Mouseless" }
+)
 vim.keymap.set("n", "<leader>odn", "<cmd>edit ~/.config/nvim/init.lua<cr>", { desc = "[P]Neovim" })
 vim.keymap.set("n", "<leader>ods", "<cmd>edit ~/.config/sketchybar/sketchybarrc<cr>", { desc = "[P]Sketchybar" })
 vim.keymap.set("n", "<leader>odt", "<cmd>edit ~/.config/tmux/tmux.conf.local<cr>", { desc = "[P]Tmux" })
