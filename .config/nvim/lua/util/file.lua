@@ -45,8 +45,8 @@ function M.rename()
           if out_file then
             out_file:write(vim.json.encode(iwiki))
             out_file:close()
-            -- format with jq
-            vim.fn.system({ "jq", ".", iwiki_path, "--sort-keys", "-o", iwiki_path })
+            -- format with prettier
+            vim.fn.system({ "prettier", "--write", iwiki_path })
             vim.notify("Renamed file and updated iwiki.json", vim.log.levels.INFO)
             return
           end
