@@ -86,6 +86,9 @@ keybind = super+s=activate_key_table:scroll
 # window
 keybind = super+shift+n=new_window
 
+# 修复微信输入法导致终端 IRM 被切换为覆盖模式的问题（Cmd+Shift+I 重置）
+keybind = super+shift+i=text:\x1b[4l
+
 # 其它
 scrollback-limit = 10000000
 # scrollback copy mode - 用 nvim 打开终端内容供选择复制
