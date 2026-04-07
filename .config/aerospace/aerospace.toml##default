@@ -422,6 +422,10 @@ persistent-workspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9" ]
 [[on-window-detected]]
     if.app-id = 'com.tencent.tenvideo' # 腾讯视频
     run = ['move-node-to-workspace 7']
+[[on-window-detected]]
+    if.app-id = 'com.siddharthvaddem.openscreen' # OpenScreen
+    run = ['layout floating', 'move-node-to-workspace 7']
+
 
 # 8: 会议
 [[on-window-detected]]
