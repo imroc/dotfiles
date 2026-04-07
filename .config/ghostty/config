@@ -92,9 +92,8 @@ keybind = super+shift+i=text:\x1b[4l
 # 其它
 scrollback-limit = 10000000
 # scrollback copy mode - 用 nvim 打开终端内容供选择复制
-# super+i: 当前屏幕内容 | super+y: 完整 scrollback 历史
+# super+i: 当前屏幕内容
 # new_split 确保在任何应用中都能用，fish 启动钩子自动运行脚本
-keybind = super+i=write_screen_file:open
-keybind = super+y=write_scrollback_file:copy
+keybind = super+i=write_screen_file:copy
 keybind = chain=new_split:right
 macos-option-as-alt = true
