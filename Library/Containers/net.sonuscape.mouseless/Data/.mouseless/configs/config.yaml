@@ -283,7 +283,9 @@ keymaps:
     enter free mode: null
     execute mouse action: Space
     execute mouse move: OptionLeft tap
-    exit free mode: Escape
+    exit free mode:
+    - Escape
+    - Enter
     forward click: null
     forward mouse button: Q
     forward mouse button (w/o overlay): null
@@ -315,7 +317,7 @@ keymaps:
     move up: K
     release hold/drag: Escape
     repeat last mouse action: null
-    right click: null
+    right click: CommandRight tap
     right mouse button: R
     right mouse button (w/o overlay): null
     show overlay: "CommandLeft tap\_"
@@ -336,7 +338,9 @@ keymaps:
     toggle app enabled: null
     toggle continuous mode: null
     toggle continuous mode until closed: '1'
-    toggle free mode: OptionLeft tap
+    toggle free mode:
+    - OptionLeft tap
+    - Command+.
     toggle overlay: null
     toggle overlay lock: null
     undo last key: Backspace
@@ -455,7 +459,7 @@ style_configs:
   - 0.02
   - 0.04
   - 0.06
-  - 1
+  - 0.7
   text_y_offset: 0.0
   use_bg_color_transforms: false
   window_opacity: 1
