@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# 从剪贴板获取 scrollback 临时文件路径，用 nvim 打开供选择复制
+
+file="$(pbpaste)"
+
+# 校验：确保文件存在且是可读的临时文件
+if [[ ! -f "$file" || ! -r "$file" ]]; then
+  echo "Error: invalid scrollback file path" >&2
+  exit 1
+fi
+
+# 只读打开，光标定位到末尾，yank 后自动退出
+nvim -R \
+  -c 'normal G' \
+  -c 'autocmd TextYankPost * ++once call timer_start(50, {-> execute("qa!")})' \
+  "$file"
+
+# 清理临时文件
+rm -f "$file"
