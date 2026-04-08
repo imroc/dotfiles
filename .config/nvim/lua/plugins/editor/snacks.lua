@@ -306,6 +306,10 @@ return {
   },
   opts = function(_, opts)
     return vim.tbl_deep_extend("force", opts or {}, {
+      bigfile = {
+        enabled = true,
+        size = 10 * 1024 * 1024,
+      },
       gitbrowse = {
         url_patterns = {
           ["git%.woa%.com"] = {
