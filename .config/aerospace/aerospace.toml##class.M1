@@ -174,6 +174,11 @@ persistent-workspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9" ]
       'mode main',
       'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
     ]
+    cmd-semicolon = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
+      'exec-and-forget open -a "Ghostty.app"'
+    ]
     w = [
       'mode main',
       'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
@@ -198,11 +203,6 @@ persistent-workspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9" ]
       'mode main',
       'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
       'exec-and-forget open -a "CodeBuddy CN.app"'
-    ]
-    g = [
-      'mode main',
-      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
-      'exec-and-forget open -a "Ghostty.app"'
     ]
     v = [
       'mode main',
