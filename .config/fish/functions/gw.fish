@@ -61,8 +61,17 @@ function _gw_select
     end
 end
 
+function _gw_main_root
+    set -l common_dir (git rev-parse --git-common-dir)
+    if string match -q '/*' $common_dir
+        dirname $common_dir
+    else
+        git rev-parse --show-toplevel
+    end
+end
+
 function _gw_add
-    set -l git_root (git rev-parse --show-toplevel)
+    set -l git_root (_gw_main_root)
 
     # Determine remote
     set -l remotes (git remote)
@@ -147,7 +156,7 @@ function _gw_branch
     end
 
     set -l branch_name $argv[1]
-    set -l git_root (git rev-parse --show-toplevel)
+    set -l git_root (_gw_main_root)
     set -l dir_name (string replace --all '/' '-' $branch_name)
     set -l wt_dir "$git_root/.worktrees/$dir_name"
 
