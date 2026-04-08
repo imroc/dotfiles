@@ -62,12 +62,7 @@ function _gw_select
 end
 
 function _gw_main_root
-    set -l common_dir (git rev-parse --git-common-dir)
-    if string match -q '/*' $common_dir
-        dirname $common_dir
-    else
-        git rev-parse --show-toplevel
-    end
+    git worktree list --porcelain | string match --regex '^worktree .+' | head -1 | string replace 'worktree ' ''
 end
 
 function _gw_add
