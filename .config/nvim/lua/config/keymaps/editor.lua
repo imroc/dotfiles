@@ -12,9 +12,6 @@ vim.keymap.set({ "n", "v" }, "<leader>X", "<cmd>qa!<cr>", { desc = "[P]Quit all 
 vim.keymap.set({ "n" }, "go", "<cmd>qa!<cr>", { desc = "[P]Quit all without save" })
 vim.keymap.set({ "n", "v", "i" }, "<C-q>", "<cmd>wq<cr>", { desc = "[P]Save and quit current window" })
 
--- esc
-vim.keymap.set("i", "kj", "<Esc>")
-
 -- select / copy
 vim.keymap.set("n", "<C-c>", "ggVGy", { desc = "[P]Copy All" })
 vim.keymap.set("n", "<M-C-a>", "ggVG", { desc = "[P]Select All" })
