@@ -77,6 +77,10 @@ keybind = scroll/super+h=goto_split:left
 keybind = scroll/super+j=goto_split:down
 keybind = scroll/super+k=goto_split:up
 keybind = scroll/super+l=goto_split:right
+keybind = scroll/space=deactivate_key_table
+keybind = chain=scroll_to_bottom
+keybind = scroll/i=deactivate_key_table
+keybind = chain=scroll_to_bottom
 keybind = scroll/escape=deactivate_key_table
 keybind = chain=scroll_to_bottom
 keybind = scroll/enter=deactivate_key_table
