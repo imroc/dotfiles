@@ -72,6 +72,8 @@ keybind = scroll/f=scroll_page_down
 keybind = scroll/super+u=scroll_page_fractional:-0.5
 keybind = scroll/u=scroll_page_fractional:-0.5
 keybind = scroll/d=scroll_page_fractional:0.5
+keybind = scroll/g=scroll_to_top
+keybind = scroll/shift+g=scroll_to_bottom
 keybind = scroll/super+enter=toggle_split_zoom
 keybind = scroll/super+h=goto_split:left
 keybind = scroll/super+j=goto_split:down
