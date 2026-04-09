@@ -71,6 +71,7 @@ keybind = scroll/b=scroll_page_up
 keybind = scroll/f=scroll_page_down
 keybind = scroll/super+u=scroll_page_fractional:-0.5
 keybind = scroll/u=scroll_page_fractional:-0.5
+keybind = scroll/e=scroll_page_fractional:-0.5
 keybind = scroll/d=scroll_page_fractional:0.5
 keybind = scroll/g=scroll_to_top
 keybind = scroll/shift+g=scroll_to_bottom
