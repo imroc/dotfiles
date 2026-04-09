@@ -423,7 +423,7 @@ style_configs:
   font_family: JetBrainsMonoNF-Bold
   font_size_multiplier: 0.4
   font_weight: 500
-  grid_line_style: lines
+  grid_line_style: dots
   grid_rgba:
   - 1
   - 1
