@@ -11,7 +11,7 @@ behavior_configs:
   move_duration_ms: 100
   move_real_cursor_with_virtual: false
   move_speed_multiplier: 3.0
-  movement_easing: 0.2
+  movement_easing: 0.9
   multi_action_timeout_ms: 400
   name: main_behavior
   send_escape_after_global_alt_tap__windows: true
@@ -282,7 +282,9 @@ keymaps:
     edit config: Tab
     enter free mode: null
     execute mouse action: Space
-    execute mouse move: OptionLeft tap
+    execute mouse move:
+    - OptionLeft tap
+    - Enter tap
     exit free mode:
     - Escape
     - Enter
