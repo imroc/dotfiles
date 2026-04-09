@@ -137,6 +137,59 @@
                         ]
                     },
                     {
+                        "description": "Ghostty: Cmd+U/S switch to English input method",
+                        "manipulators": [
+                            {
+                                "from": {
+                                    "key_code": "u",
+                                    "modifiers": {
+                                        "mandatory": ["command"]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "u",
+                                        "modifiers": ["command"]
+                                    },
+                                    {
+                                        "shell_command": "/opt/homebrew/bin/macism com.apple.keylayout.ABC"
+                                    }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "frontmost_application_if",
+                                        "bundle_identifiers": ["com.mitchellh.ghostty"]
+                                    }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "from": {
+                                    "key_code": "s",
+                                    "modifiers": {
+                                        "mandatory": ["command"]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "s",
+                                        "modifiers": ["command"]
+                                    },
+                                    {
+                                        "shell_command": "/opt/homebrew/bin/macism com.apple.keylayout.ABC"
+                                    }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "frontmost_application_if",
+                                        "bundle_identifiers": ["com.mitchellh.ghostty"]
+                                    }
+                                ],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
                         "description": "Hyper Key: Right Option → left shift + left option + left command (⌃⇧⌥⌘)",
                         "manipulators": [
                             {

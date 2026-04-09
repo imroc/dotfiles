@@ -78,10 +78,14 @@ keybind = scroll/super+j=goto_split:down
 keybind = scroll/super+k=goto_split:up
 keybind = scroll/super+l=goto_split:right
 keybind = scroll/escape=deactivate_key_table
+keybind = chain=scroll_to_bottom
 keybind = scroll/enter=deactivate_key_table
+keybind = chain=scroll_to_bottom
 keybind = scroll/super+s=deactivate_key_table
 keybind = scroll/catch_all=ignore
 keybind = super+s=activate_key_table:scroll
+keybind = scroll/super+i=write_screen_file:copy
+keybind = chain=new_split:right
 
 # window
 keybind = super+shift+n=new_window
