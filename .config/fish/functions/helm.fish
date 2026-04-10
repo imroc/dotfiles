@@ -8,8 +8,8 @@ function helm --wraps=helm --description "wrap helm with extra advanced feature"
     end
 
     if test -z "$common_args"
-        helm $original_args
+        command helm $original_args
     else
-        helm $common_args $argv
+        command helm $common_args $argv
     end
 end
