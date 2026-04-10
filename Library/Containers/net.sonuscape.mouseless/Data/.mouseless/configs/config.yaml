@@ -319,7 +319,7 @@ keymaps:
     move up: K
     release hold/drag: Escape
     repeat last mouse action: null
-    right click: CommandRight tap
+    right click: Control tap
     right mouse button: R
     right mouse button (w/o overlay): null
     show overlay: "CommandLeft tap\_"
@@ -464,4 +464,4 @@ style_configs:
   - 0.7
   text_y_offset: 0.0
   use_bg_color_transforms: false
-  window_opacity: 1
+  window_opacity: 1.0
