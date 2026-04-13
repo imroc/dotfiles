@@ -3,7 +3,7 @@ return {
   {
     "mikavilpas/yazi.nvim",
     enabled = vim.g.simpler_scrollback ~= "deeznuts",
-    event = "VeryLazy",
+    lazy = true,
     keys = {
       {
         "<leader>yz",

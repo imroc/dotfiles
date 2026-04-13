@@ -1,7 +1,7 @@
 return {
   {
     "axieax/urlview.nvim",
-    lazy = false,
+    lazy = true,
     cmd = {
       "UrlView",
     },

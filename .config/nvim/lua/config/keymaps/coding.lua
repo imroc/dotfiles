@@ -2,11 +2,9 @@
 ---@diagnostic disable: undefined-field
 ---@diagnostic disable: undefined-global
 
-local conform = require("util.conform")
 local map = vim.keymap.set
 
 -- format and save
-map({ "n", "v", "i" }, "<leader>;", conform.format_and_save_async, { desc = "[P]Format and Save file asynchronously" })
 map({ "n" }, "<leader>cv", function()
   local config = vim.diagnostic.config() or {}
   vim.notify(vim.inspect(config))
