@@ -38,7 +38,6 @@ return {
     init = function()
       vim.g.mkdp_markdown_css = vim.fn.expand("~/.config/nvim/resources/markdown-preview/github-markdown-light.css")
       vim.g.mkdp_highlight_css = vim.fn.expand("~/.config/nvim/resources/markdown-preview/github-dark.css")
-      vim.g.mkdp_page_title = ""
     end,
   },
   {
