@@ -731,7 +731,7 @@
   padding: 0;
   margin: 0;
   word-break: normal;
-  white-space: pre;
+  white-space: pre-wrap;
   background: rgba(0,0,0,0);
   border: 0;
 }
@@ -754,6 +754,9 @@
   color: #1f2328;
   background-color: #f6f8fa;
   border-radius: 6px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .markdown-body pre code,
@@ -763,7 +766,7 @@
   margin: 0;
   overflow: visible;
   line-height: inherit;
-  word-wrap: normal;
+  word-wrap: break-word;
   background-color: rgba(0,0,0,0);
   border: 0;
 }
@@ -1137,6 +1140,10 @@
 .markdown-body pre {
   color: #c9d1d9;
   background-color: #0d1117;
+  white-space: pre-wrap !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+  overflow: visible !important;
 }
 
 /* Inline code: light gray */

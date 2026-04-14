@@ -12,6 +12,9 @@
 .hljs {
   color: #c9d1d9;
   background: #0d1117;
+  white-space: pre-wrap !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
 }
 
 .hljs-doctag,

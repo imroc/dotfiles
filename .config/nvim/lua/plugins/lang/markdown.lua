@@ -33,11 +33,48 @@ return {
   {
     "iamcco/markdown-preview.nvim",
     keys = {
-      { "<localleader>o", "<cmd>MarkdownPreviewToggle<cr>", ft = "markdown", desc = "[P]Toggle Preview" },
+      {
+        "<localleader>o",
+        function()
+          local buf = vim.api.nvim_get_current_buf()
+          local toc_injected = vim.b[buf].mkdp_toc_injected
+          if toc_injected then
+            -- Closing preview: remove injected TOC lines
+            local inject_line = vim.b[buf].mkdp_toc_line
+            if inject_line then
+              local lines = vim.api.nvim_buf_get_lines(buf, inject_line, inject_line + 4, false)
+              if lines[1] == "" and lines[2] == "## 目录" and lines[3] == "" and lines[4] == "[[toc]]" then
+                vim.api.nvim_buf_set_lines(buf, inject_line, inject_line + 4, false, {})
+              end
+            end
+            vim.b[buf].mkdp_toc_injected = nil
+            vim.b[buf].mkdp_toc_line = nil
+          else
+            -- Find first ## heading
+            local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+            local insert_before = nil
+            for i, line in ipairs(lines) do
+              if line:match("^## ") then
+                insert_before = i - 1 -- 0-indexed
+                break
+              end
+            end
+            if insert_before then
+              vim.api.nvim_buf_set_lines(buf, insert_before, insert_before, false, { "", "## 目录", "", "[[toc]]" })
+              vim.b[buf].mkdp_toc_injected = true
+              vim.b[buf].mkdp_toc_line = insert_before
+            end
+          end
+          vim.cmd("MarkdownPreviewToggle")
+        end,
+        ft = "markdown",
+        desc = "[P]Toggle Preview",
+      },
     },
     init = function()
       vim.g.mkdp_markdown_css = vim.fn.expand("~/.config/nvim/resources/markdown-preview/github-markdown-light.css")
       vim.g.mkdp_highlight_css = vim.fn.expand("~/.config/nvim/resources/markdown-preview/github-dark.css")
+      vim.g.mkdp_page_title = "${name}"
     end,
   },
   {
