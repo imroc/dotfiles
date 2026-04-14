@@ -1,6 +1,6 @@
-app_version: 0.5.0-preview.1
+app_version: 1.0.0-preview.1
 behavior_configs:
-- base_move_speed: 5
+- base_move_speed: 5.0
   base_wheel_speed: 16.0
   free_mode_auto_off_s: 0
   grid_action_level: subgrid
@@ -22,9 +22,17 @@ behavior_configs:
   wheel_step_size_large: 500.0
 classname: AppConfig
 custom_monitor_assignments: []
+custom_mouse_scaling: 1.0
+custom_mouse_screen_offset_scaling: 1.0
+custom_overlay_scaling: 1.0
 debug_options: {}
 display_input: none
 event_tap_location: hid_head
+general_settings:
+  automatically_check_for_updates: true
+  check_for_preview_releases: true
+  hide_welcome_screen: true
+  ignore_update_to_version: null
 grid_configs:
 - always_show_subgrid: false
   grid_defn:
@@ -269,8 +277,9 @@ keyboard_layout:
 keymaps:
 - entries:
     back click: null
-    back mouse button: W
+    back mouse button: null
     back mouse button (w/o overlay): null
+    clear keyboard state: null
     close UI element: Escape
     cycle click count: null
     cycle font: '3'
@@ -288,6 +297,7 @@ keymaps:
     exit free mode:
     - Escape
     - Enter
+    force overlay resize: null
     forward click: null
     forward mouse button: Q
     forward mouse button (w/o overlay): null
@@ -304,6 +314,7 @@ keymaps:
     - D
     - F
     increase overlay opacity: ArrowUp
+    invert colors: null
     jump to bottom: null
     jump to left edge: null
     jump to right edge: null
@@ -311,7 +322,7 @@ keymaps:
     left mouse button: Space
     left mouse button (w/o overlay): null
     middle click: null
-    middle mouse button: E
+    middle mouse button: null
     middle mouse button (w/o overlay): null
     move down: J
     move left: H
@@ -344,9 +355,9 @@ keymaps:
     toggle overlay: null
     toggle overlay lock: null
     undo last key: Backspace
-    wheel down: ','
+    wheel down: m
     wheel down fast: null
-    wheel left: .
+    wheel left: n
     wheel left fast: null
     wheel right: /
     wheel right fast: null
@@ -358,21 +369,25 @@ keymaps:
     wheel step right large: null
     wheel step up: null
     wheel step up large: null
-    wheel up: M
+    wheel up: ','
     wheel up fast: null
   name: mac
+log_level: info
 monitor_assignment_mode: auto
+mouse_scaling: auto
+mouse_screen_offset_scaling: auto
 name: ''
+overlay_scaling: auto
 style_configs:
 - always_on_subgrid_rgba:
-  - 1
-  - 1
-  - 1
+  - 1.0
+  - 1.0
+  - 1.0
   - 0.2
   background_colors:
   - - 0.49
     - 0.4
-    - 0
+    - 0.0
     - 0.35
   bg_color_block_size: 1
   bg_color_transforms_level_1:
@@ -423,9 +438,9 @@ style_configs:
   font_weight: 500
   grid_line_style: dots
   grid_rgba:
-  - 1
-  - 1
-  - 1
+  - 1.0
+  - 1.0
+  - 1.0
   - 0.5
   highlight_animation_ms: 0
   highlight_rgba:
@@ -437,9 +452,9 @@ style_configs:
   show_initial_highlight: false
   subgrid_font_size_multiplier: 0.75
   subgrid_rgba:
-  - 1
-  - 1
-  - 1
+  - 1.0
+  - 1.0
+  - 1.0
   - 0.5
   subgrid_text_rgba:
   - 0.011764705882352941
@@ -447,11 +462,11 @@ style_configs:
   - 0.984313725490196
   - 0.7
   text_rgba:
-  - 1
-  - 1
-  - 1
-  - 1
-  text_shadow_blur_radius: 4
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+  text_shadow_blur_radius: 4.0
   text_shadow_offset:
   - 0.0
   - 0.0
