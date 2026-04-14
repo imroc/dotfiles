@@ -322,7 +322,7 @@ keymaps:
     right click: Control tap
     right mouse button: R
     right mouse button (w/o overlay): null
-    show overlay: CommandRight tap
+    show overlay: Command+.
     subgrid nudge down:
     - D
     - K
@@ -340,9 +340,7 @@ keymaps:
     toggle app enabled: null
     toggle continuous mode: null
     toggle continuous mode until closed: '1'
-    toggle free mode:
-    - OptionLeft tap
-    - Command+.
+    toggle free mode: Command+/
     toggle overlay: null
     toggle overlay lock: null
     undo last key: Backspace
