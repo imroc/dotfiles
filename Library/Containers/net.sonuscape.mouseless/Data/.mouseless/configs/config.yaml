@@ -297,7 +297,7 @@ keymaps:
     hold for forward button: null
     hold for middle button: null
     hold for move: OptionLeft
-    hold for right button: CommandRight
+    hold for right button: null
     hold for speed decrease: A
     hold for speed increase:
     - S
@@ -322,7 +322,7 @@ keymaps:
     right click: Control tap
     right mouse button: R
     right mouse button (w/o overlay): null
-    show overlay: "CommandLeft tap\_"
+    show overlay: CommandRight tap
     subgrid nudge down:
     - D
     - K
