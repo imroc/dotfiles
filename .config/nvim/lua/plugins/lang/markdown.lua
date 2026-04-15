@@ -419,8 +419,8 @@ return {
       legacy_commands = false, -- this will be removed in the next major release
       workspaces = {
         {
-          name = "roc",
-          path = "~/roc",
+          name = "work",
+          path = "~/work",
         },
       },
       disable_frontmatter = true,
