@@ -1,0 +1,169 @@
+#!/usr/bin/env bash
+# doc2md - 文档转 Markdown 工具
+# 用法: doc2md <file> [--engine auto|markitdown|mineru] [-o output.md]
+
+set -euo pipefail
+
+VERSION="0.1.0"
+
+usage() {
+    cat <<'USAGE'
+用法: doc2md <file> [选项]
+
+将文档转换为 Markdown 格式，输出到 stdout。
+
+选项:
+  --engine <auto|markitdown|mineru>  转换引擎 (默认: auto)
+  -o, --output <file>                输出到文件而非 stdout
+  -h, --help                         显示帮助
+  --version                          显示版本
+
+支持格式:
+  markitdown: PDF, DOCX, XLSX, PPTX, HTML, 图片, 音频等
+  mineru:     PDF (含复杂排版/公式/扫描件, 需单独安装)
+
+示例:
+  doc2md document.pdf
+  doc2md report.docx -o report.md
+  doc2md paper.pdf --engine mineru
+USAGE
+}
+
+# --- 参数解析 ---
+ENGINE="auto"
+OUTPUT=""
+FILE=""
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --engine)
+            ENGINE="${2:?--engine 需要参数: auto|markitdown|mineru}"
+            shift 2
+            ;;
+        -o|--output)
+            OUTPUT="${2:?-o 需要输出文件路径}"
+            shift 2
+            ;;
+        -h|--help)
+            usage
+            exit 0
+            ;;
+        --version)
+            echo "doc2md $VERSION"
+            exit 0
+            ;;
+        -*)
+            echo "未知选项: $1" >&2
+            usage >&2
+            exit 1
+            ;;
+        *)
+            if [[ -z "$FILE" ]]; then
+                FILE="$1"
+            else
+                echo "错误: 只能指定一个输入文件" >&2
+                exit 1
+            fi
+            shift
+            ;;
+    esac
+done
+
+if [[ -z "$FILE" ]]; then
+    echo "错误: 请指定输入文件" >&2
+    usage >&2
+    exit 1
+fi
+
+if [[ ! -f "$FILE" ]]; then
+    echo "错误: 文件不存在: $FILE" >&2
+    exit 1
+fi
+
+# --- 引擎检查 ---
+check_markitdown() {
+    if ! command -v markitdown &>/dev/null; then
+        echo "错误: markitdown 未安装，请运行: uv tool install 'markitdown[all]'" >&2
+        exit 1
+    fi
+}
+
+check_mineru() {
+    if ! command -v magic-pdf &>/dev/null; then
+        echo "错误: MinerU 未安装，请参考: https://github.com/opendatalab/MinerU" >&2
+        exit 1
+    fi
+}
+
+# --- 转换函数 ---
+convert_markitdown() {
+    local file="$1"
+    check_markitdown
+    markitdown "$file"
+}
+
+convert_mineru() {
+    local file="$1"
+    check_mineru
+    local tmpdir
+    tmpdir=$(mktemp -d "/tmp/doc2md-mineru-XXXXXX")
+    trap "rm -rf '$tmpdir'" EXIT
+
+    magic-pdf -p "$file" -o "$tmpdir" -m auto 2>/dev/null
+
+    # magic-pdf 输出结构: tmpdir/<filename>/auto/<filename>.md
+    local basename
+    basename=$(basename "$file" | sed 's/\.[^.]*$//')
+    local md_file
+    md_file=$(find "$tmpdir" -name "*.md" -type f | head -1)
+
+    if [[ -z "$md_file" || ! -f "$md_file" ]]; then
+        echo "错误: MinerU 转换失败，未生成 .md 文件" >&2
+        exit 1
+    fi
+    cat "$md_file"
+}
+
+convert_auto() {
+    local file="$1"
+    local ext="${file##*.}"
+    ext=$(echo "$ext" | tr '[:upper:]' '[:lower:]')
+
+    # 非 PDF 文件直接用 markitdown
+    if [[ "$ext" != "pdf" ]]; then
+        convert_markitdown "$file"
+        return
+    fi
+
+    # PDF 文件用 markitdown 尝试
+    check_markitdown
+    local result
+    result=$(markitdown "$file" 2>/dev/null) || true
+
+    # 简单质量检查：输出过短可能表示转换质量差
+    local char_count=${#result}
+    if [[ $char_count -lt 50 ]]; then
+        echo "[doc2md] markitdown 转换结果过短 (${char_count} 字符)，该 PDF 可能需要更强的引擎。" >&2
+        echo "[doc2md] 可尝试: doc2md '$file' --engine mineru" >&2
+        # 仍然输出结果（可能有部分内容）
+    fi
+    echo "$result"
+}
+
+# --- 主逻辑 ---
+case "$ENGINE" in
+    auto)       result=$(convert_auto "$FILE") ;;
+    markitdown) result=$(convert_markitdown "$FILE") ;;
+    mineru)     result=$(convert_mineru "$FILE") ;;
+    *)
+        echo "错误: 未知引擎: $ENGINE (可选: auto, markitdown, mineru)" >&2
+        exit 1
+        ;;
+esac
+
+if [[ -n "$OUTPUT" ]]; then
+    echo "$result" > "$OUTPUT"
+    echo "[doc2md] 已输出到: $OUTPUT" >&2
+else
+    echo "$result"
+fi
