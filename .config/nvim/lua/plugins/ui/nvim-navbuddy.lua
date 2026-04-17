@@ -1,32 +1,19 @@
 return {
-  {
-    "hedyhli/outline.nvim",
-    keys = {
-      { "<leader>cs", false },
-    },
-    opts = {
-      providers = {
-        priority = { "markdown", "lsp", "coc", "norg", "man" },
-      },
+  "SmiteshP/nvim-navbuddy",
+  keys = {
+    {
+      "<leader>cs",
+      function()
+        require("nvim-navbuddy").open()
+      end,
+      desc = "[P]Symbols Outline (Float)",
     },
   },
-  {
-    "SmiteshP/nvim-navbuddy",
-    keys = {
-      {
-        "<leader>cs",
-        function()
-          require("nvim-navbuddy").open()
-        end,
-        desc = "[P]Symbols Outline (Float)",
-      },
-    },
-    dependencies = {
-      "SmiteshP/nvim-navic",
-      "MunifTanjim/nui.nvim",
-      "neovim/nvim-lspconfig",
-    },
-    lazy = true,
-    opts = { lsp = { auto_attach = true } },
+  dependencies = {
+    "SmiteshP/nvim-navic",
+    "MunifTanjim/nui.nvim",
+    "neovim/nvim-lspconfig",
   },
+  lazy = true,
+  opts = { lsp = { auto_attach = true } },
 }
