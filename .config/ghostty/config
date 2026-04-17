@@ -18,6 +18,8 @@ keybind = super+k=goto_split:up
 keybind = super+l=goto_split:right
 split-inherit-working-directory = true
 split-preserve-zoom = navigation
+# split-divider-color = #F0f0f0
+split-divider-color = #999999
 
 # Shift+Ejnter 发送换行符（解决 Zellij 下 Shift+Enter 无法换行的问题）
 # keybind = shift+enter=text:\x1b[200~\n\x1b[201~
@@ -113,3 +115,4 @@ desktop-notifications = false
 keybind = super+i=write_screen_file:copy
 keybind = chain=new_split:right
 macos-option-as-alt = true
+

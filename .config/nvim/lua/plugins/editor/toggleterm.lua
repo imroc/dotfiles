@@ -252,7 +252,7 @@ return {
       desc = "[P]Select Terminal",
     },
     {
-      "<C-,>",
+      "<M-,>",
       mode = { "n", "t" },
       "<cmd>TermSelect<cr>",
       desc = "[P]Select Terminal",
@@ -280,7 +280,7 @@ return {
       desc = "[P]Rename Terminal",
     },
     {
-      "<M-.>",
+      "<C-.>",
       mode = { "n", "t" },
       function()
         cycle_terminal(1)
@@ -288,7 +288,7 @@ return {
       desc = "[P]Next Terminal",
     },
     {
-      "<M-,>",
+      "<C-,>",
       mode = { "n", "t" },
       function()
         cycle_terminal(-1)
@@ -302,7 +302,7 @@ return {
       desc = "[P]Switch to AI Terminal",
     },
     {
-      "<C-.>",
+      "<M-.>",
       mode = { "n", "t" },
       switch_to_last_terminal,
       desc = "[P]Switch to Last Terminal",
