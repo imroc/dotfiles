@@ -89,8 +89,9 @@ check_markitdown() {
 }
 
 check_mineru() {
-    if ! command -v magic-pdf &>/dev/null; then
-        echo "错误: MinerU 未安装，请参考: https://github.com/opendatalab/MinerU" >&2
+    if ! command -v mineru &>/dev/null; then
+        echo "错误: MinerU 未安装，请运行: uv tool install 'mineru[core]' --python 3.12" >&2
+        echo "       然后下载模型: mineru-models-download" >&2
         exit 1
     fi
 }
@@ -109,11 +110,9 @@ convert_mineru() {
     tmpdir=$(mktemp -d "/tmp/doc2md-mineru-XXXXXX")
     trap "rm -rf '$tmpdir'" EXIT
 
-    magic-pdf -p "$file" -o "$tmpdir" -m auto 2>/dev/null
+    mineru -p "$file" -o "$tmpdir" -m auto -b pipeline >/dev/null 2>&1
 
-    # magic-pdf 输出结构: tmpdir/<filename>/auto/<filename>.md
-    local basename
-    basename=$(basename "$file" | sed 's/\.[^.]*$//')
+    # mineru 输出结构: tmpdir/<filename>/auto/<filename>.md
     local md_file
     md_file=$(find "$tmpdir" -name "*.md" -type f | head -1)
 
@@ -121,7 +120,8 @@ convert_mineru() {
         echo "错误: MinerU 转换失败，未生成 .md 文件" >&2
         exit 1
     fi
-    cat "$md_file"
+    # 过滤 MinerU 服务启动日志（会被写入 md 文件头部）
+    sed '/^Start MinerU FastAPI Service:/d;/^API documentation:/d' "$md_file"
 }
 
 convert_auto() {
@@ -135,19 +135,22 @@ convert_auto() {
         return
     fi
 
-    # PDF 文件用 markitdown 尝试
-    check_markitdown
-    local result
-    result=$(markitdown "$file" 2>/dev/null) || true
+    # PDF 文件：优先 mineru（质量更好），fallback 到 markitdown
+    if command -v mineru &>/dev/null; then
+        convert_mineru "$file"
+    else
+        check_markitdown
+        local result
+        result=$(markitdown "$file" 2>/dev/null) || true
 
-    # 简单质量检查：输出过短可能表示转换质量差
-    local char_count=${#result}
-    if [[ $char_count -lt 50 ]]; then
-        echo "[doc2md] markitdown 转换结果过短 (${char_count} 字符)，该 PDF 可能需要更强的引擎。" >&2
-        echo "[doc2md] 可尝试: doc2md '$file' --engine mineru" >&2
-        # 仍然输出结果（可能有部分内容）
+        # 简单质量检查：输出过短可能表示转换质量差
+        local char_count=${#result}
+        if [[ $char_count -lt 50 ]]; then
+            echo "[doc2md] markitdown 转换结果过短 (${char_count} 字符)，该 PDF 可能需要更强的引擎。" >&2
+            echo "[doc2md] 可尝试: doc2md '$file' --engine mineru" >&2
+        fi
+        echo "$result"
     fi
-    echo "$result"
 }
 
 # --- 主逻辑 ---

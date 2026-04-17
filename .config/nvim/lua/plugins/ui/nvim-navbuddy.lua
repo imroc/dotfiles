@@ -4,6 +4,11 @@ return {
     keys = {
       { "<leader>cs", false },
     },
+    opts = {
+      providers = {
+        priority = { "markdown", "lsp", "coc", "norg", "man" },
+      },
+    },
   },
   {
     "SmiteshP/nvim-navbuddy",
