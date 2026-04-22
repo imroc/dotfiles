@@ -152,6 +152,27 @@ local function send_to_zellij_prev_pane(text)
   end)
 end
 
+--- Send text to the right ghostty split via AppleScript keystroke simulation
+---@param text string
+local function send_to_ghostty_right_split(text)
+  vim.fn.setreg("+", text)
+  vim.system({
+    "osascript",
+    "-e",
+    [[
+tell application "System Events"
+  tell process "Ghostty"
+    -- goto_split:right (super+l)
+    keystroke "l" using command down
+    delay 0.05
+    -- paste (super+v)
+    keystroke "v" using command down
+  end tell
+end tell
+]],
+  })
+end
+
 --- Send file or selection to AI terminal as @ reference
 ---@param is_visual? boolean
 local function send_to_ai_terminal(is_visual)
@@ -164,6 +185,12 @@ local function send_to_ai_terminal(is_visual)
   -- In zellij, if no AI toggleterm is active, send to previous pane
   if vim.env.ZELLIJ and (not ai_terminal or not ai_terminal:is_open()) then
     send_to_zellij_prev_pane(text)
+    return
+  end
+
+  -- In ghostty, send to the right split (assumed to be AI terminal)
+  if vim.env.TERM_PROGRAM == "ghostty" and (not ai_terminal or not ai_terminal:is_open()) then
+    send_to_ghostty_right_split(text)
     return
   end
 

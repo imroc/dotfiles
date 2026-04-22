@@ -41,12 +41,6 @@ function M.open_iwiki()
   job.run_script(cmd .. ' open "' .. file_path .. '"')
 end
 
--- function insert_at_cursor(text)
---   local cursor = vim.api.nvim_win_get_cursor(0)
---   vim.api.nvim_buf_set_text(0, cursor[1] - 1, cursor[2], cursor[1] - 1, cursor[2], { text })
---   vim.api.nvim_win_set_cursor(0, { cursor[1], cursor[2] + #text })
--- end
-
 function M.insert_image()
   local file_path = buffer.absolute_path()
   local Job = require("plenary.job")

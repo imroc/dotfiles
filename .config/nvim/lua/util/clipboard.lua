@@ -48,6 +48,9 @@ function M.get_ai_ref_text(is_visual)
     if start_line > end_line then
       start_line, end_line = end_line, start_line
     end
+    if start_line == end_line then
+      return string.format('@"%s:%d" ', file_path, start_line)
+    end
     return string.format('@"%s:%d-%d" ', file_path, start_line, end_line)
   else
     return '@"' .. file_path .. '" '
