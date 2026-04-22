@@ -249,8 +249,11 @@ return {
     "MeanderingProgrammer/render-markdown.nvim",
     opts = {
       bullet = {
-        -- Turn on / off list bullet rendering
         enabled = true,
+        -- 仅给无序列表 bullet 加右侧间距，有序列表不加（数字后已有点号和空格）
+        right_pad = function(ctx)
+          return ctx.value:match("^%d") and 0 or 1
+        end,
       },
       -- anti_conceal = {
       -- ignore = {},
