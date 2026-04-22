@@ -423,7 +423,9 @@ return {
           path = "~/work",
         },
       },
-      disable_frontmatter = true,
+      frontmatter = {
+        enabled = false,
+      },
     },
   },
 }
