@@ -342,18 +342,17 @@ return {
       mode = "n",
       desc = "[P]Send file to AI Terminal",
     },
+    {
+      "<leader>aa",
+      function()
+        -- Exit visual mode first so '< '> marks are reliably set
+        vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "nx", false)
+        vim.schedule(function()
+          send_to_ai_terminal(true)
+        end)
+      end,
+      mode = "v",
+      desc = "[P]Send selection to AI Terminal",
+    },
   },
-  config = function(_, opts)
-    require("toggleterm").setup(opts)
-    -- Register visual mapping here (not in lazy keys) to avoid lazy's
-    -- feedkeys replay losing the visual selection on first trigger.
-    -- Use <Esc> prefix so '< '> marks are reliably set before the callback.
-    vim.keymap.set("v", "<leader>aa", function()
-      -- feedkeys <Esc> and schedule the actual work so marks are set
-      vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "nx", false)
-      vim.schedule(function()
-        send_to_ai_terminal(true)
-      end)
-    end, { desc = "[P]Send selection to AI Terminal" })
-  end,
 }
