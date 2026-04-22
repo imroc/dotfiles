@@ -248,7 +248,7 @@ return {
       desc = "[P]Find Bookmark Subdir Files",
     },
     {
-      "<leader>fw",
+      "<leader>gw",
       function()
         local output = vim.fn.systemlist("git worktree list --porcelain")
         if vim.v.shell_error ~= 0 then
@@ -283,7 +283,7 @@ return {
           end
         end)
       end,
-      desc = "[P]Find Worktree Files",
+      desc = "[P]Git Worktree Files",
     },
     {
       "<leader>sg",
