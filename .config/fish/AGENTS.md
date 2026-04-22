@@ -9,7 +9,7 @@ fisher add <plugin>
 update_fish_plugins   # 重新生成 conf.d/003-fisher-plugin-variables.fish
 ```
 
-当前插件清单在 `fish_plugins` 文件中：autopair、fzf、tide (v6)、fisher、plugin-git。
+当前插件清单在 `fish_plugins` 文件中：autopair、fzf、fisher、plugin-git。
 
 ## conf.d/ 加载顺序
 
