@@ -135,8 +135,7 @@ format = '[$symbol$environment ]($style)'
 ignore_base = false
 
 [kubernetes]
-format = '\[[$symbol$context(\($namespace\))]($style)\]'
-symbol = '☸ '
+format = '[⛵\[$context\($namespace\)\]](dimmed green)'
 disabled = false
 
 [time]
