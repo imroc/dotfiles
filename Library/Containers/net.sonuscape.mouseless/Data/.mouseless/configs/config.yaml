@@ -359,7 +359,7 @@ keymaps:
     wheel down fast: null
     wheel left: n
     wheel left fast: null
-    wheel right: /
+    wheel right: .
     wheel right fast: null
     wheel step down: null
     wheel step down large: null
