@@ -359,88 +359,118 @@ function M.convert_selection_to_link()
   end
 end
 
---- 获取光标所在位置的 markdown 链接 [text](url)
---- 返回 text, url 或 nil, nil
+--- 获取光标所在位置的 markdown 链接
+--- 支持两种格式：
+---   [text](url)  — 标准 markdown 链接，返回 text, url
+---   [[text]]     — wiki link，返回 text, nil
+--- 不在链接上时返回 nil, nil
 local function get_link_under_cursor()
   local line = vim.api.nvim_get_current_line()
   local col = vim.api.nvim_win_get_cursor(0)[2] + 1 -- 转为 1-based
 
-  -- 遍历当前行所有 [text](url) 链接，判断光标是否在其中
+  -- 先检查 wiki link [[text]]
   local search_start = 1
   while true do
-    -- 找 [ 开始
+    local ws = line:find("%[%[", search_start)
+    if not ws then
+      break
+    end
+    local we = line:find("%]%]", ws + 2)
+    if we and col >= ws and col <= we + 1 then
+      local text = line:sub(ws + 2, we - 1)
+      if text ~= "" then
+        return text, nil
+      end
+    end
+    search_start = (we or ws) + 1
+  end
+
+  -- 再检查标准 markdown 链接 [text](url)
+  search_start = 1
+  while true do
     local bracket_start = line:find("%[", search_start)
     if not bracket_start then
       break
     end
-    -- 找匹配的 ]( —— 需要跳过嵌套的 []
-    local depth = 1
-    local pos = bracket_start + 1
-    local bracket_end
-    while pos <= #line do
-      local ch = line:sub(pos, pos)
-      if ch == "[" then
-        depth = depth + 1
-      elseif ch == "]" then
-        depth = depth - 1
-        if depth == 0 then
-          bracket_end = pos
-          break
-        end
-      end
-      pos = pos + 1
-    end
-
-    if bracket_end and line:sub(bracket_end + 1, bracket_end + 1) == "(" then
-      -- 找匹配的 )
-      local paren_start = bracket_end + 2
-      local paren_depth = 1
-      pos = paren_start
-      local paren_end
+    -- 跳过 wiki link 的第二个 [
+    if bracket_start > 1 and line:sub(bracket_start - 1, bracket_start - 1) == "[" then
+      search_start = bracket_start + 1
+    else
+      -- 找匹配的 ]
+      local depth = 1
+      local pos = bracket_start + 1
+      local bracket_end
       while pos <= #line do
         local ch = line:sub(pos, pos)
-        if ch == "(" then
-          paren_depth = paren_depth + 1
-        elseif ch == ")" then
-          paren_depth = paren_depth - 1
-          if paren_depth == 0 then
-            paren_end = pos
+        if ch == "[" then
+          depth = depth + 1
+        elseif ch == "]" then
+          depth = depth - 1
+          if depth == 0 then
+            bracket_end = pos
             break
           end
         end
         pos = pos + 1
       end
 
-      if paren_end and col >= bracket_start and col <= paren_end then
-        local text = line:sub(bracket_start + 1, bracket_end - 1)
-        local url = line:sub(paren_start, paren_end - 1)
-        return text, url
-      end
+      if bracket_end and line:sub(bracket_end + 1, bracket_end + 1) == "(" then
+        local paren_start = bracket_end + 2
+        local paren_depth = 1
+        pos = paren_start
+        local paren_end
+        while pos <= #line do
+          local ch = line:sub(pos, pos)
+          if ch == "(" then
+            paren_depth = paren_depth + 1
+          elseif ch == ")" then
+            paren_depth = paren_depth - 1
+            if paren_depth == 0 then
+              paren_end = pos
+              break
+            end
+          end
+          pos = pos + 1
+        end
 
-      search_start = (paren_end or pos) + 1
-    else
-      search_start = (bracket_end or pos) + 1
+        if paren_end and col >= bracket_start and col <= paren_end then
+          local text = line:sub(bracket_start + 1, bracket_end - 1)
+          local url = line:sub(paren_start, paren_end - 1)
+          return text, url
+        end
+
+        search_start = (paren_end or pos) + 1
+      else
+        search_start = (bracket_end or pos) + 1
+      end
     end
   end
   return nil, nil
 end
 
---- markdown gd 增强：链接文字同名的本地 md 文件优先跳转
---- 条件：[] 文字非空、() 是 URL、项目中存在同名 .md 文件
---- 不满足条件时回退默认 gd
+--- markdown gd 增强：光标在链接上时，优先跳转到项目中同名的本地 md 文件
+--- 支持 [text](url) 和 [[text]] 两种格式
+--- 条件：链接文字非空、项目中存在同名 .md 文件
+---   对于 [text](url)：额外要求 url 是 http(s) 链接
+--- 不满足条件时回退默认 gd（vim.lsp.buf.definition）
 function M.follow_link()
   local text, url = get_link_under_cursor()
 
-  -- 条件检查：文字非空、是 URL
-  if not text or text == "" or not url or not url:match("^https?://") then
-    -- 回退默认 gd
+  if not text or text == "" then
+    vim.lsp.buf.definition()
+    return
+  end
+
+  -- [text](url) 格式：要求 url 是 http(s) 链接才走本地文件搜索
+  if url and not url:match("^https?://") then
     vim.lsp.buf.definition()
     return
   end
 
   -- 在项目根目录下递归搜索同名 .md 文件
   local root = LazyVim.root()
-  local results = vim.fn.globpath(root, "**/" .. vim.fn.escape(text, "[]?*") .. ".md", false, true)
+  local escaped = vim.fn.escape(text, "[]?*")
+  local results = vim.fn.globpath(root, "**/" .. escaped .. ".md", false, true)
 
   -- 过滤掉当前文件自身
   local current_file = vim.fn.expand("%:p")
@@ -449,7 +479,6 @@ function M.follow_link()
   end, results)
 
   if #results == 0 then
-    -- 没找到同名文件，回退默认 gd
     vim.lsp.buf.definition()
     return
   elseif #results == 1 then
@@ -458,7 +487,6 @@ function M.follow_link()
     vim.ui.select(results, {
       prompt = "选择要跳转的文件:",
       format_item = function(item)
-        -- 显示相对于项目根的路径
         return vim.fn.fnamemodify(item, ":~:.")
       end,
     }, function(choice)
