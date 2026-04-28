@@ -25,6 +25,17 @@ return {
         keys = {
           { "<a-n>", false },
           { "<a-p>", false },
+          {
+            "gd",
+            function()
+              require("util.markdown").follow_link()
+            end,
+            desc = "[P]Follow markdown link to local file",
+            has = "definition",
+            enabled = function(buf)
+              return vim.bo[buf].filetype == "markdown"
+            end,
+          },
         },
       },
     },

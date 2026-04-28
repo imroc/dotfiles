@@ -9,6 +9,9 @@ local md = require("util.markdown")
 
 map({ "n", "v" }, "gk", md.goto_previous_header, { buffer = 0, desc = "[P]Go to previous markdown header" })
 map({ "n", "v" }, "gj", md.goto_next_header, { buffer = 0, desc = "[P]Go to next markdown header" })
+
+-- gd: 链接同名本地文件跳转（有 LSP 时通过 lspconfig keys 覆盖，这里覆盖无 LSP 的场景）
+map("n", "gd", md.follow_link, { buffer = 0, desc = "[P]Follow markdown link to local file" })
 map("n", "zu", md.unfold_level_2, { buffer = 0, desc = "[P]Unfold all headings level 2 or above" })
 map("n", "zi", md.fold_current, { buffer = 0, desc = "[P]Fold the heading cursor currently on" })
 map("n", "zj", md.fold_level_1, { buffer = 0, desc = "[P]Fold all headings level 1 or above" })

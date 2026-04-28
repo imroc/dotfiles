@@ -359,4 +359,114 @@ function M.convert_selection_to_link()
   end
 end
 
+--- 获取光标所在位置的 markdown 链接 [text](url)
+--- 返回 text, url 或 nil, nil
+local function get_link_under_cursor()
+  local line = vim.api.nvim_get_current_line()
+  local col = vim.api.nvim_win_get_cursor(0)[2] + 1 -- 转为 1-based
+
+  -- 遍历当前行所有 [text](url) 链接，判断光标是否在其中
+  local search_start = 1
+  while true do
+    -- 找 [ 开始
+    local bracket_start = line:find("%[", search_start)
+    if not bracket_start then
+      break
+    end
+    -- 找匹配的 ]( —— 需要跳过嵌套的 []
+    local depth = 1
+    local pos = bracket_start + 1
+    local bracket_end
+    while pos <= #line do
+      local ch = line:sub(pos, pos)
+      if ch == "[" then
+        depth = depth + 1
+      elseif ch == "]" then
+        depth = depth - 1
+        if depth == 0 then
+          bracket_end = pos
+          break
+        end
+      end
+      pos = pos + 1
+    end
+
+    if bracket_end and line:sub(bracket_end + 1, bracket_end + 1) == "(" then
+      -- 找匹配的 )
+      local paren_start = bracket_end + 2
+      local paren_depth = 1
+      pos = paren_start
+      local paren_end
+      while pos <= #line do
+        local ch = line:sub(pos, pos)
+        if ch == "(" then
+          paren_depth = paren_depth + 1
+        elseif ch == ")" then
+          paren_depth = paren_depth - 1
+          if paren_depth == 0 then
+            paren_end = pos
+            break
+          end
+        end
+        pos = pos + 1
+      end
+
+      if paren_end and col >= bracket_start and col <= paren_end then
+        local text = line:sub(bracket_start + 1, bracket_end - 1)
+        local url = line:sub(paren_start, paren_end - 1)
+        return text, url
+      end
+
+      search_start = (paren_end or pos) + 1
+    else
+      search_start = (bracket_end or pos) + 1
+    end
+  end
+  return nil, nil
+end
+
+--- markdown gd 增强：链接文字同名的本地 md 文件优先跳转
+--- 条件：[] 文字非空、() 是 URL、项目中存在同名 .md 文件
+--- 不满足条件时回退默认 gd
+function M.follow_link()
+  local text, url = get_link_under_cursor()
+
+  -- 条件检查：文字非空、是 URL
+  if not text or text == "" or not url or not url:match("^https?://") then
+    -- 回退默认 gd
+    vim.lsp.buf.definition()
+    return
+  end
+
+  -- 在项目根目录下递归搜索同名 .md 文件
+  local root = LazyVim.root()
+  local results = vim.fn.globpath(root, "**/" .. vim.fn.escape(text, "[]?*") .. ".md", false, true)
+
+  -- 过滤掉当前文件自身
+  local current_file = vim.fn.expand("%:p")
+  results = vim.tbl_filter(function(f)
+    return vim.fn.fnamemodify(f, ":p") ~= current_file
+  end, results)
+
+  if #results == 0 then
+    -- 没找到同名文件，回退默认 gd
+    vim.lsp.buf.definition()
+    return
+  elseif #results == 1 then
+    vim.cmd("edit " .. vim.fn.fnameescape(results[1]))
+  else
+    vim.ui.select(results, {
+      prompt = "选择要跳转的文件:",
+      format_item = function(item)
+        -- 显示相对于项目根的路径
+        return vim.fn.fnamemodify(item, ":~:.")
+      end,
+    }, function(choice)
+      if choice then
+        vim.cmd("edit " .. vim.fn.fnameescape(choice))
+      end
+    end)
+  end
+end
+
 return M
