@@ -232,6 +232,40 @@ end
 -- URL 匹配模式（Lua pattern）
 local url_pattern = "https?://[%w%-%.%_%~%:%/%?%#%[%]%@%!%$%&%'%(%)%*%+%,%;%%=%{%}]+"
 
+--- 从 iwiki URL 中提取 docid
+---@param url string
+---@return string|nil
+local function extract_iwiki_docid(url)
+  return url:match("^https://iwiki%.woa%.com/p/(%d+)")
+end
+
+--- 异步获取 iwiki 文档标题，成功后回调
+--- 返回 true 表示识别为 iwiki 链接（已发起异步请求），false 表示非 iwiki 链接
+---@param url string iwiki URL
+---@param callback fun(title: string) 获取到标题后的回调
+---@return boolean
+local function fetch_iwiki_title(url, callback)
+  local docid = extract_iwiki_docid(url)
+  if not docid then
+    return false
+  end
+  vim.system({ "iwiki-cli", "metadata", docid }, { text = true }, function(result)
+    vim.schedule(function()
+      if result.code ~= 0 then
+        vim.notify("iwiki-cli metadata 失败: " .. (result.stderr or ""), vim.log.levels.ERROR)
+        return
+      end
+      local ok, data = pcall(vim.json.decode, result.stdout)
+      if ok and data and data.title and data.title ~= "" then
+        callback(data.title)
+      else
+        vim.notify("无法解析 iwiki 文档标题", vim.log.levels.WARN)
+      end
+    end)
+  end)
+  return true
+end
+
 --- 从字符串中提取"文本"和"URL"，按冒号（英文/中文）分隔
 --- 逻辑：先找到 URL，再检查 URL 前面是否有冒号分隔的文本
 --- 中文冒号是 UTF-8 多字节字符（\xef\xbc\x9a），Lua pattern 的字符类无法匹配
@@ -292,12 +326,36 @@ function M.convert_line_to_link()
     -- 尝试匹配纯 URL
     url = content:match("^(" .. url_pattern .. ")%s*$")
     if url then
+      -- iwiki 链接：异步获取标题自动填入
+      if
+        fetch_iwiki_title(url, function(title)
+          local new_line = prefix .. "[" .. title .. "](" .. url .. ")"
+          vim.api.nvim_buf_set_lines(0, row - 1, row, false, { new_line })
+        end)
+      then
+        vim.notify("正在获取 iwiki 文档标题...", vim.log.levels.INFO)
+        return
+      end
       local new_line = prefix .. "[](" .. url .. ")"
       vim.api.nvim_buf_set_lines(0, row - 1, row, false, { new_line })
       -- 光标移到 [] 中间，进入插入模式等待用户输入链接文本
       vim.api.nvim_win_set_cursor(0, { row, #prefix + 1 })
       vim.cmd("startinsert")
     else
+      -- 当前行无 URL，检查剪贴板是否有 iwiki 链接
+      local clipboard = vim.fn.getreg("+")
+      local clip_url = clipboard and clipboard:match("^%s*(https://iwiki%.woa%.com/p/%d+)%s*$")
+      if clip_url then
+        if
+          fetch_iwiki_title(clip_url, function(title)
+            local new_line = prefix .. "[" .. title .. "](" .. clip_url .. ")"
+            vim.api.nvim_buf_set_lines(0, row - 1, row, false, { new_line })
+          end)
+        then
+          vim.notify("正在获取 iwiki 文档标题...", vim.log.levels.INFO)
+          return
+        end
+      end
       vim.notify("当前行未找到 URL", vim.log.levels.WARN)
     end
   end
@@ -329,6 +387,17 @@ function M.convert_selection_to_link()
   -- 情况1：选中的是纯 URL
   url = selected:match("^(" .. url_pattern .. ")$")
   if url then
+    -- iwiki 链接：异步获取标题自动填入
+    if
+      fetch_iwiki_title(url, function(title)
+        local replacement = "[" .. title .. "](" .. url .. ")"
+        vim.fn.setreg("z", replacement)
+        vim.cmd('normal! gv"zp')
+      end)
+    then
+      vim.notify("正在获取 iwiki 文档标题...", vim.log.levels.INFO)
+      return
+    end
     local replacement = "[](" .. url .. ")"
     vim.fn.setreg("z", replacement)
     vim.cmd('normal! gv"zp')
@@ -344,6 +413,18 @@ function M.convert_selection_to_link()
   local clipboard = vim.fn.getreg("+")
   local clipboard_url = clipboard and clipboard:match("^%s*(https?://[^%s]+)%s*$")
   if clipboard_url then
+    -- 剪贴板是 iwiki 链接且选中文本为空：异步获取标题
+    if
+      selected == ""
+      and fetch_iwiki_title(clipboard_url, function(title)
+        local replacement = "[" .. title .. "](" .. clipboard_url .. ")"
+        vim.fn.setreg("z", replacement)
+        vim.cmd('normal! gv"zp')
+      end)
+    then
+      vim.notify("正在获取 iwiki 文档标题...", vim.log.levels.INFO)
+      return
+    end
     local replacement = "[" .. selected .. "](" .. clipboard_url .. ")"
     vim.fn.setreg("z", replacement)
     vim.cmd('normal! gv"zp')
