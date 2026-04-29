@@ -25,6 +25,10 @@ function M.copy_filename()
   copy_and_notify(buffer.file_name())
 end
 
+function M.copy_filename_without_ext()
+  copy_and_notify(vim.fn.fnamemodify(buffer.file_name(), ":r"))
+end
+
 function M.copy_relative_path()
   copy_and_notify(buffer.relative_path())
 end
