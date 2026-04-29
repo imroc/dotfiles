@@ -120,7 +120,38 @@ return {
           level = 2, -- e.g. ##
         },
       },
+      list_continuation = {
+        keys = {
+          -- 保留 <CR> 默认行为
+          ["<CR>"] = function()
+            require("checkmate").create({ position = "below", indent = false })
+          end,
+          -- 禁用 checkmate 内置的 <S-CR>，改用下方 config 中的自定义映射
+          -- 原因：checkmate 内置 fallback 返回 <S-CR> 原始按键码，nvim 无法处理，导致插入不可见字符
+        },
+      },
     },
+    config = function(_, opts)
+      require("checkmate").setup(opts)
+
+      -- 自定义 <S-CR> 映射：todo 行创建缩进子 item，非 todo 行 fallback 到普通换行
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = "markdown",
+        callback = function(ev)
+          vim.keymap.set("i", "<S-CR>", function()
+            local line = vim.api.nvim_get_current_line()
+            local ok, ph = pcall(require, "checkmate.parser.helpers")
+            if ok and ph.match_todo(line) then
+              require("checkmate").create({ position = "below", indent = true })
+            else
+              -- 非 todo 行：执行普通换行
+              local cr = vim.api.nvim_replace_termcodes("<CR>", true, false, true)
+              vim.api.nvim_feedkeys(cr, "n", false)
+            end
+          end, { buffer = ev.buf, desc = "Shift-Enter: sub-item or newline" })
+        end,
+      })
+    end,
   },
   {
     -- https://github.com/jakewvincent/mkdnflow.nvim
