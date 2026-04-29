@@ -43,27 +43,30 @@ end
 
 function M.insert_image()
   local file_path = buffer.absolute_path()
+  local register = vim.v.register
+  vim.notify("uploading image to iwiki...")
   local Job = require("plenary.job")
-  local result, code = Job:new({
+  Job:new({
     command = cmd,
     args = { "upload", file_path },
-  }):sync()
+    on_exit = vim.schedule_wrap(function(j, code)
+      local result = j:result()
+      local msg = (result and next(result) ~= nil) and table.concat(result, "\n") or ""
 
-  local msg = ""
-  if next(result) ~= nil then
-    msg = table.concat(result, "\n")
-  end
-
-  if code == 0 then
-    if next(result) ~= nil then
-      vim.notify("successfully upload image to iwiki")
-      vim.fn.setreg(vim.v.register, msg)
-    else
-      vim.notify("empty result", vim.log.levels.WARN)
-    end
-  else
-    vim.notify("failed to upload image to iwiki:" .. msg, vim.log.levels.ERROR)
-  end
+      if code == 0 then
+        if msg ~= "" then
+          vim.notify("successfully upload image to iwiki")
+          vim.fn.setreg(register, msg)
+        else
+          vim.notify("empty result", vim.log.levels.WARN)
+        end
+      else
+        local stderr = j:stderr_result()
+        local err_msg = (stderr and next(stderr) ~= nil) and table.concat(stderr, "\n") or msg
+        vim.notify("failed to upload image to iwiki: " .. err_msg, vim.log.levels.ERROR)
+      end
+    end),
+  }):start()
 end
 
 function M.copy_url()
