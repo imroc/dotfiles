@@ -87,14 +87,53 @@ return {
       vim.g.mkdp_page_title = "${name}"
       if vim.env.CMUX_SOCKET then
         vim.g.mkdp_browserfunc = "CmuxOpenBrowser"
+        -- Lua implementation called via a thin VimScript wrapper (mkdp_browserfunc requires a VimScript function name)
+        _G._cmux_open_browser = function(url)
+          -- Get caller's pane ref via identify
+          local id_out = vim.fn.system({ "cmux", "identify", "--surface", vim.env.CMUX_SURFACE_ID })
+          local caller_pane = id_out:match('"pane_ref"%s*:%s*"(pane:%d+)"')
+
+          -- List all panes in current workspace
+          local panes_out = vim.fn.system("cmux list-panes")
+          local panes = {}
+          for ref in panes_out:gmatch("(pane:%d+)") do
+            table.insert(panes, ref)
+          end
+
+          local target_pane = nil
+          if #panes > 1 and caller_pane then
+            -- Pick the last pane that is NOT ours (rightmost in list)
+            for i = #panes, 1, -1 do
+              if panes[i] ~= caller_pane then
+                target_pane = panes[i]
+                break
+              end
+            end
+          end
+
+          local cmd
+          if target_pane then
+            -- Multiple panes: create browser tab in the other pane
+            cmd = { "cmux", "new-surface", "--type", "browser", "--pane", target_pane, "--url", url }
+          else
+            -- Single pane: create a new browser split on the right
+            cmd = { "cmux", "new-pane", "--type", "browser", "--direction", "right", "--url", url }
+          end
+
+          local output = vim.fn.system(cmd)
+          local surface = output:match("(surface:%d+)")
+          local pane = output:match("(pane:%d+)")
+          if surface then
+            vim.b.mkdp_cmux_surface = surface
+            -- Focus the new browser pane
+            if pane then
+              vim.fn.jobstart({ "cmux", "focus-pane", "--pane", pane })
+            end
+          end
+        end
         vim.cmd([[
           function! CmuxOpenBrowser(url) abort
-            let output = system(['cmux', 'new-surface', '--type', 'browser', '--url', a:url])
-            " Parse surface ref from output like "OK surface:17 pane:8 workspace:3"
-            let ref = matchstr(output, 'surface:\d\+')
-            if ref !=# ''
-              let b:mkdp_cmux_surface = ref
-            endif
+            call v:lua._cmux_open_browser(a:url)
           endfunction
         ]])
       end
