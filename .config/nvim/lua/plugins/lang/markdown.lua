@@ -265,9 +265,8 @@ return {
           return ctx.value:match("^%d") and 0 or 1
         end,
       },
-      -- anti_conceal = {
-      -- ignore = {},
-      -- },
+      -- 禁用 yaml 代码块中 block_sequence_item "-" 的 bullet 渲染，避免与 markdown list 混淆
+      yaml = { enabled = false },
       callout = {
         abstract = {
           raw = "[!ABSTRACT]",
