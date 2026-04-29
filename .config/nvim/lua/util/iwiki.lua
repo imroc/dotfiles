@@ -47,7 +47,21 @@ end
 
 function M.open_iwiki()
   local file_path = buffer.absolute_path()
-  job.run_script(cmd .. ' open "' .. file_path .. '"')
+  local cmux = require("util.cmux")
+  if cmux.is_cmux() then
+    local Job = require("plenary.job")
+    local result, code = Job:new({
+      command = cmd,
+      args = { "url", file_path },
+    }):sync()
+    if code == 0 and result and next(result) ~= nil then
+      cmux.open_browser(result[1])
+    else
+      vim.notify("无法获取文档 URL", vim.log.levels.ERROR)
+    end
+  else
+    job.run_script(cmd .. ' open "' .. file_path .. '"')
+  end
 end
 
 function M.insert_image()
