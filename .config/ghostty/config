@@ -64,8 +64,10 @@ keybind = resize/h=resize_split:left,100
 keybind = resize/l=resize_split:right,100
 keybind = resize/escape=deactivate_key_table
 keybind = resize/enter=deactivate_key_table
+keybind = resize/e=deactivate_key_table
+keybind = chain=equalize_splits
 keybind = resize/catch_all=ignore
-keybind = super+r=activate_key_table:resize
+keybind = super+ctrl+r=activate_key_table:resize
 
 # scroll
 keybind = super+u=scroll_page_up
