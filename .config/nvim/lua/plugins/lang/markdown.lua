@@ -69,6 +69,12 @@ return {
               vim.b[buf].mkdp_toc_line = insert_before
             end
           end
+          -- Close cmux browser surface when toggling off
+          local cmux_surface = vim.b[buf].mkdp_cmux_surface
+          if cmux_surface then
+            vim.fn.jobstart({ "cmux", "close-surface", "--surface", cmux_surface })
+            vim.b[buf].mkdp_cmux_surface = nil
+          end
           vim.cmd("MarkdownPreviewToggle")
         end,
         ft = "markdown",
@@ -79,6 +85,19 @@ return {
       vim.g.mkdp_markdown_css = vim.fn.expand("~/.config/nvim/resources/markdown-preview/github-markdown-light.css")
       vim.g.mkdp_highlight_css = vim.fn.expand("~/.config/nvim/resources/markdown-preview/github-dark.css")
       vim.g.mkdp_page_title = "${name}"
+      if vim.env.CMUX_SOCKET then
+        vim.g.mkdp_browserfunc = "CmuxOpenBrowser"
+        vim.cmd([[
+          function! CmuxOpenBrowser(url) abort
+            let output = system(['cmux', 'new-surface', '--type', 'browser', '--url', a:url])
+            " Parse surface ref from output like "OK surface:17 pane:8 workspace:3"
+            let ref = matchstr(output, 'surface:\d\+')
+            if ref !=# ''
+              let b:mkdp_cmux_surface = ref
+            endif
+          endfunction
+        ]])
+      end
     end,
   },
   {
