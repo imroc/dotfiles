@@ -162,7 +162,7 @@
       //       "toggleFullScreen" : "cmd+ctrl+f",
       //       "toggleReactGrab" : "cmd+shift+g",
       //       "toggleSidebar" : "cmd+b",
-      //       "toggleSplitZoom" : "cmd+shift+\r",
+      "toggleSplitZoom": "cmd+return",
       //       "toggleTerminalCopyMode" : "cmd+shift+m",
       //       "triggerFlash" : "cmd+shift+h",
       //       "useSelectionForFind" : "cmd+e"
