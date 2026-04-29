@@ -39,14 +39,16 @@ return {
           local buf = vim.api.nvim_get_current_buf()
           local toc_injected = vim.b[buf].mkdp_toc_injected
           if toc_injected then
-            -- Closing preview: remove injected TOC lines
+            -- Closing preview: remove injected TOC lines and restore buffer modified state
             local inject_line = vim.b[buf].mkdp_toc_line
+            local was_modified = vim.bo[buf].modified
             if inject_line then
               local lines = vim.api.nvim_buf_get_lines(buf, inject_line, inject_line + 4, false)
               if lines[1] == "" and lines[2] == "## 目录" and lines[3] == "" and lines[4] == "[[toc]]" then
                 vim.api.nvim_buf_set_lines(buf, inject_line, inject_line + 4, false, {})
               end
             end
+            vim.bo[buf].modified = was_modified
             vim.b[buf].mkdp_toc_injected = nil
             vim.b[buf].mkdp_toc_line = nil
           else
@@ -60,7 +62,9 @@ return {
               end
             end
             if insert_before then
+              local was_modified = vim.bo[buf].modified
               vim.api.nvim_buf_set_lines(buf, insert_before, insert_before, false, { "", "## 目录", "", "[[toc]]" })
+              vim.bo[buf].modified = was_modified
               vim.b[buf].mkdp_toc_injected = true
               vim.b[buf].mkdp_toc_line = insert_before
             end
