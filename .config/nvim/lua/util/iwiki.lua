@@ -16,24 +16,33 @@ function M.is_iwiki()
   return vim.fn.filereadable(dir .. "/iwiki.json") == 1
 end
 
-function M.save_iwiki()
+local function save_iwiki_impl(force)
   local file_path = buffer.absolute_path()
-  job.run_script(cmd .. ' save "' .. file_path .. '" --force', {
-    on_exit = function(job, code, signal)
+  local extra = force and " --force" or ""
+  job.run_script(cmd .. ' save "' .. file_path .. '"' .. extra, {
+    on_exit = function(j, code, signal)
       if code == 0 then
         vim.notify("Successfully synced to iwiki")
       else
-        local result = job:stderr_result()
+        local result = j:stderr_result()
         if next(result) == nil then
-          result = job:result()
+          result = j:result()
         end
         if next(result) ~= nil then
           local msg = table.concat(result, "\n")
-          vim.notify(msg)
+          vim.notify(msg, vim.log.levels.ERROR)
         end
       end
     end,
   })
+end
+
+function M.save_iwiki()
+  save_iwiki_impl(false)
+end
+
+function M.save_iwiki_force()
+  save_iwiki_impl(true)
 end
 
 function M.open_iwiki()
