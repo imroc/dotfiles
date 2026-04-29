@@ -102,6 +102,12 @@ return {
         mode = { "n" },
         "<cmd>Checkmate create<cr>",
       },
+      {
+        "<localleader>a",
+        "<cmd>Checkmate archive<cr>",
+        ft = "markdown",
+        desc = "[P]Archive Done Items",
+      },
     },
     opts = {
       enter_insert_after_new = false,
