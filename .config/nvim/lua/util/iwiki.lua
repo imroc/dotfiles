@@ -18,7 +18,7 @@ end
 
 function M.save_iwiki()
   local file_path = buffer.absolute_path()
-  job.run_script(cmd .. ' save "' .. file_path .. '"', {
+  job.run_script(cmd .. ' save "' .. file_path .. '" --force', {
     on_exit = function(job, code, signal)
       if code == 0 then
         vim.notify("Successfully synced to iwiki")
