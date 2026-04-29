@@ -467,8 +467,14 @@ function M.follow_link()
     return
   end
 
-  -- 在项目根目录下递归搜索同名 .md 文件
-  local root = LazyVim.root()
+  -- 获取当前文件所在 git 仓库的根目录，非 git 仓库则 fallback 到默认 gd
+  local file_dir = vim.fn.expand("%:p:h")
+  local git_root = vim.fn.systemlist("git -C " .. vim.fn.shellescape(file_dir) .. " rev-parse --show-toplevel")[1]
+  if vim.v.shell_error ~= 0 or not git_root or git_root == "" then
+    vim.lsp.buf.definition()
+    return
+  end
+  local root = git_root
   local escaped = vim.fn.escape(text, "[]?*")
   local results = vim.fn.globpath(root, "**/" .. escaped .. ".md", false, true)
 
