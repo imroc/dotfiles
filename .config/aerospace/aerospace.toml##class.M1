@@ -223,7 +223,7 @@ persistent-workspaces = ["A", "C", "D", "E", "M", "O", "T", "V", "W" ]
     t = [
       'mode main',
       'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
-      'workspace C'
+      'workspace T'
     ]
     cmd-t = [
       'mode main',
