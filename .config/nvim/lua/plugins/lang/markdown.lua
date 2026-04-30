@@ -80,6 +80,21 @@ return {
         ft = "markdown",
         desc = "[P]Toggle Preview",
       },
+      {
+        "<localleader>O",
+        function()
+          -- Force open with system default browser (bypass cmux)
+          local saved = vim.g.mkdp_browserfunc
+          vim.g.mkdp_browserfunc = ""
+          vim.cmd("MarkdownPreviewToggle")
+          -- Restore after server has read the value
+          vim.defer_fn(function()
+            vim.g.mkdp_browserfunc = saved
+          end, 3000)
+        end,
+        ft = "markdown",
+        desc = "[P]Toggle Preview (Default Browser)",
+      },
     },
     init = function()
       vim.g.mkdp_markdown_css = vim.fn.expand("~/.config/nvim/resources/markdown-preview/github-markdown-light.css")
