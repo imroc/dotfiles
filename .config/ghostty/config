@@ -34,14 +34,6 @@ macos-icon = official
 macos-titlebar-style = transparent
 unfocused-split-opacity = 0.85
 
-# quick terminal
-keybind = global:ctrl+cmd+;=toggle_quick_terminal
-quick-terminal-position = right
-quick-terminal-size = 40%,70%
-quick-terminal-screen = main
-quick-terminal-animation-duration = 0
-quick-terminal-autohide = false
-
 # tab
 keybind = super+n=new_tab
 keybind = super+]=next_tab

@@ -1,0 +1,89 @@
+#!/bin/bash
+# ── Toggle Ghostty 窗口显示/隐藏 ────────────────────────────────────────
+#
+# 用途：作为 todo 专用终端的快捷开关（nvim 编辑待办事项 md 文件）
+# 触发：aerospace 快捷键 Cmd+Ctrl+; → exec-and-forget toggle-ghostty
+#
+# 架构说明：
+#   - ghostty 仅用作 todo 终端，不做日常开发（日常用 cmux）
+#   - ghostty 和 cmux 共享 ~/.config/ghostty/config
+#   - 透明度通过 --args 启动参数传入，不写入共享配置，避免影响 cmux
+#   - aerospace 中 ghostty 设为 layout floating，不分配 workspace
+#
+# 隐藏策略：
+#   不使用 macOS 的 hide（set visible to false / Cmd+H），因为 aerospace
+#   配置了 automatically-unhide-macos-hidden-apps = true 会立刻恢复。
+#   改为记录切换前的前台 app，"隐藏"时激活该 app，ghostty 自然退到后台。
+#
+# 状态文件：
+#   /tmp/.toggle-ghostty-prev-app  — 记录上一个前台 app 的 bundle id
+#   /tmp/.toggle-ghostty-sized     — 标记已完成首次窗口调整（重启后重置）
+#
+# 依赖：
+#   - aerospace（全局快捷键拦截 + exec-and-forget）
+#   - osascript（查询 frontmost app、调整窗口大小）
+#   - open（激活 app，避免 osascript 抢焦点）
+#
+# 相关配置：
+#   - ~/.config/aerospace/aerospace.toml  → cmd-ctrl-semicolon 绑定
+#   - ~/.config/ghostty/config            → 共享终端配置（不含透明度）
+# ─────────────────────────────────────────────────────────────────────────
+
+APP_NAME="Ghostty"
+BUNDLE_ID="com.mitchellh.ghostty"
+STATE_FILE="/tmp/.toggle-ghostty-prev-app"
+SIZED_FLAG="/tmp/.toggle-ghostty-sized"
+
+# 将窗口调整为屏幕 70% 大小并居中
+resize_and_center() {
+    osascript -e '
+        tell application "System Events"
+            tell application process "Ghostty"
+                set frontWindow to first window
+                tell application "Finder"
+                    set screenBounds to bounds of window of desktop
+                    set screenW to item 3 of screenBounds
+                    set screenH to item 4 of screenBounds
+                end tell
+                set winW to round (screenW * 0.7)
+                set winH to round (screenH * 0.7)
+                set posX to round ((screenW - winW) / 2)
+                set posY to round ((screenH - winH) / 2)
+                set position of frontWindow to {posX, posY}
+                set size of frontWindow to {winW, winH}
+            end tell
+        end tell
+    ' 2>/dev/null
+}
+
+# ghostty 未运行 → 启动并设置窗口
+if ! pgrep -xi "$APP_NAME" >/dev/null; then
+    # 透明度通过启动参数传入，不影响共享配置文件（cmux 也读该配置）
+    open -na "$APP_NAME" --args --background-opacity=0.8
+    sleep 0.5
+    resize_and_center
+    touch "$SIZED_FLAG"
+    exit 0
+fi
+
+# 判断 ghostty 是否在前台
+# 注意：用 open -b 而非 osascript activate，避免 System Events 短暂抢焦点
+FRONT_BUNDLE=$(osascript -e 'tell application "System Events" to get bundle identifier of first application process whose frontmost is true' 2>/dev/null)
+
+if [ "$FRONT_BUNDLE" = "$BUNDLE_ID" ]; then
+    # ghostty 在前台 → 切回之前的 app（等效"隐藏"）
+    PREV_BUNDLE=$(cat "$STATE_FILE" 2>/dev/null)
+    if [ -n "$PREV_BUNDLE" ]; then
+        open -b "$PREV_BUNDLE"
+    fi
+else
+    # ghostty 不在前台 → 记录当前 app 并激活 ghostty
+    echo "$FRONT_BUNDLE" > "$STATE_FILE"
+    open -a "$APP_NAME"
+    # 首次激活时调整窗口大小（之后不再重复调整，允许用户手动拖拽）
+    if [ ! -f "$SIZED_FLAG" ]; then
+        sleep 0.3
+        resize_and_center
+        touch "$SIZED_FLAG"
+    fi
+fi
