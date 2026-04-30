@@ -18,7 +18,7 @@ create_workspace_bracket_for_monitor() {
   # 画出所有 workspace 名称
   for workspace_id in ${monitor_workspaces[@]}; do
     sketchybar --add item workspaces."$monitor_id"."$workspace_id" left \
-      --subscribe workspaces."$monitor_id"."$workspace_id" aerospace_workspace_change \
+      --subscribe workspaces."$monitor_id"."$workspace_id" aerospace_workspace_change aerospace_windows_change front_app_switched \
       --set workspaces."$monitor_id"."$workspace_id" \
       background.drawing=off \
       click_script="aerospace workspace $workspace_id" \
@@ -75,6 +75,7 @@ create_workspace_bracket_for_monitor() {
 sketchybar --add event aerospace_workspace_change
 sketchybar --add event aerospace_service_mode_enabled_changed
 sketchybar --add event aerospace_workspace_mode_enabled_changed
+sketchybar --add event aerospace_windows_change
 
 monitor_ids=($(aerospace list-monitors | awk '{print $1}'))
 

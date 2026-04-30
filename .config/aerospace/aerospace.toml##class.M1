@@ -37,7 +37,7 @@ on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
 exec-on-workspace-change = [
   '/bin/bash',
   '-c',
-  'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE',
+  'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE && sketchybar --trigger aerospace_windows_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE',
 ]
 
 
@@ -299,6 +299,11 @@ persistent-workspaces = ["A", "B", "C", "D", "E", "M", "O", "T", "V", "W" ]
 # ----------------------
 # 应用窗口自动放置规则
 # ----------------------
+
+# 新窗口出现时通知 sketchybar 刷新窗口状态
+[[on-window-detected]]
+    check-further-callbacks = true
+    run = ['exec-and-forget sketchybar --trigger aerospace_windows_change']
 
 # 默认 float 的窗口
 [[on-window-detected]]

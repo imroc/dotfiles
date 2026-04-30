@@ -53,3 +53,5 @@ sketchybar --update
 
 # Initialize focused workspace
 sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)
+# Initialize window presence state
+sketchybar --trigger aerospace_windows_change FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)

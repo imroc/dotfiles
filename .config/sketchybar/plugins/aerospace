@@ -19,14 +19,34 @@ elif [ "$SENDER" = "aerospace_workspace_mode_enabled_changed" ]; then
     sketchybar --set workspaces_workspace_mode \
       label.drawing=off
   fi
-elif [ "$SENDER" = "aerospace_workspace_change" ]; then
-  if [ "$1" = "$FOCUSED_WORKSPACE" ]; then
+elif [ "$SENDER" = "aerospace_workspace_change" ] || [ "$SENDER" = "aerospace_windows_change" ] || [ "$SENDER" = "front_app_switched" ]; then
+  # 获取当前聚焦的 workspace（workspace_change 事件通过 env 传入，windows_change 事件需要查询）
+  focused="$FOCUSED_WORKSPACE"
+  if [ -z "$focused" ]; then
+    focused=$(aerospace list-workspaces --focused)
+  fi
+
+  if [ "$1" = "$focused" ]; then
+    # 当前聚焦的 workspace：高亮
     sketchybar --set $NAME \
       label.highlight=on \
+      label.color="$LABEL_COLOR" \
       label.font="$LABEL_HIGHLIGHT_FONT"
   else
-    sketchybar --set $NAME \
-      label.highlight=off \
-      label.font="$LABEL_FONT"
+    # 检查该 workspace 是否有窗口
+    window_count=$(aerospace list-windows --workspace "$1" 2>/dev/null | wc -l | tr -d ' ')
+    if [ "$window_count" -gt 0 ]; then
+      # 有窗口：正常颜色
+      sketchybar --set $NAME \
+        label.highlight=off \
+        label.color="$LABEL_COLOR" \
+        label.font="$LABEL_FONT"
+    else
+      # 无窗口：暗淡颜色
+      sketchybar --set $NAME \
+        label.highlight=off \
+        label.color="$LABEL_DIM_COLOR" \
+        label.font="$LABEL_FONT"
+    fi
   fi
 fi
