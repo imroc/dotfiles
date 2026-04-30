@@ -32,70 +32,82 @@ return {
   },
   {
     "iamcco/markdown-preview.nvim",
-    keys = {
-      {
-        "<localleader>o",
-        function()
-          local buf = vim.api.nvim_get_current_buf()
-          local toc_injected = vim.b[buf].mkdp_toc_injected
-          if toc_injected then
-            -- Closing preview: remove injected TOC lines and restore buffer modified state
-            local inject_line = vim.b[buf].mkdp_toc_line
+    keys = (function()
+      local function toggle_toc(buf)
+        local toc_injected = vim.b[buf].mkdp_toc_injected
+        if toc_injected then
+          -- Closing preview: remove injected TOC lines and restore buffer modified state
+          local inject_line = vim.b[buf].mkdp_toc_line
+          local was_modified = vim.bo[buf].modified
+          if inject_line then
+            local lines = vim.api.nvim_buf_get_lines(buf, inject_line, inject_line + 4, false)
+            if lines[1] == "" and lines[2] == "## 目录" and lines[3] == "" and lines[4] == "[[toc]]" then
+              vim.api.nvim_buf_set_lines(buf, inject_line, inject_line + 4, false, {})
+            end
+          end
+          vim.bo[buf].modified = was_modified
+          vim.b[buf].mkdp_toc_injected = nil
+          vim.b[buf].mkdp_toc_line = nil
+        else
+          -- Find first ## heading
+          local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+          local insert_before = nil
+          for i, line in ipairs(lines) do
+            if line:match("^## ") then
+              insert_before = i - 1 -- 0-indexed
+              break
+            end
+          end
+          if insert_before then
             local was_modified = vim.bo[buf].modified
-            if inject_line then
-              local lines = vim.api.nvim_buf_get_lines(buf, inject_line, inject_line + 4, false)
-              if lines[1] == "" and lines[2] == "## 目录" and lines[3] == "" and lines[4] == "[[toc]]" then
-                vim.api.nvim_buf_set_lines(buf, inject_line, inject_line + 4, false, {})
-              end
-            end
+            vim.api.nvim_buf_set_lines(buf, insert_before, insert_before, false, { "", "## 目录", "", "[[toc]]" })
             vim.bo[buf].modified = was_modified
-            vim.b[buf].mkdp_toc_injected = nil
-            vim.b[buf].mkdp_toc_line = nil
-          else
-            -- Find first ## heading
-            local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
-            local insert_before = nil
-            for i, line in ipairs(lines) do
-              if line:match("^## ") then
-                insert_before = i - 1 -- 0-indexed
-                break
-              end
-            end
-            if insert_before then
-              local was_modified = vim.bo[buf].modified
-              vim.api.nvim_buf_set_lines(buf, insert_before, insert_before, false, { "", "## 目录", "", "[[toc]]" })
-              vim.bo[buf].modified = was_modified
-              vim.b[buf].mkdp_toc_injected = true
-              vim.b[buf].mkdp_toc_line = insert_before
-            end
+            vim.b[buf].mkdp_toc_injected = true
+            vim.b[buf].mkdp_toc_line = insert_before
           end
-          -- Close cmux browser surface when toggling off
-          local cmux_surface = vim.b[buf].mkdp_cmux_surface
-          if cmux_surface then
-            vim.fn.jobstart({ "cmux", "close-surface", "--surface", cmux_surface })
-            vim.b[buf].mkdp_cmux_surface = nil
-          end
-          vim.cmd("MarkdownPreviewToggle")
-        end,
-        ft = "markdown",
-        desc = "[P]Toggle Preview",
-      },
-      {
-        "<localleader>O",
-        function()
-          -- Force open with system default browser (bypass cmux)
-          local saved = vim.g.mkdp_browserfunc
-          vim.g.mkdp_browserfunc = ""
-          vim.cmd("MarkdownPreviewToggle")
-          -- Restore after server has read the value
-          vim.defer_fn(function()
-            vim.g.mkdp_browserfunc = saved
-          end, 3000)
-        end,
-        ft = "markdown",
-        desc = "[P]Toggle Preview (Default Browser)",
-      },
-    },
+        end
+      end
+
+      local function close_cmux_surface(buf)
+        local cmux_surface = vim.b[buf].mkdp_cmux_surface
+        if cmux_surface then
+          vim.fn.jobstart({ "cmux", "close-surface", "--surface", cmux_surface })
+          vim.b[buf].mkdp_cmux_surface = nil
+        end
+      end
+
+      return {
+        {
+          "<localleader>o",
+          function()
+            local buf = vim.api.nvim_get_current_buf()
+            toggle_toc(buf)
+            close_cmux_surface(buf)
+            vim.cmd("MarkdownPreviewToggle")
+          end,
+          ft = "markdown",
+          desc = "[P]Toggle Preview",
+        },
+        {
+          "<localleader>O",
+          function()
+            local buf = vim.api.nvim_get_current_buf()
+            toggle_toc(buf)
+            close_cmux_surface(buf)
+            -- Force open with system default browser (bypass cmux)
+            local saved = vim.g.mkdp_browserfunc
+            vim.g.mkdp_browserfunc = ""
+            vim.cmd("MarkdownPreviewToggle")
+            -- Restore after server has read the value
+            vim.defer_fn(function()
+              vim.g.mkdp_browserfunc = saved
+            end, 3000)
+          end,
+          ft = "markdown",
+          desc = "[P]Toggle Preview (Default Browser)",
+        },
+      }
+    end)(),
     init = function()
       vim.g.mkdp_markdown_css = vim.fn.expand("~/.config/nvim/resources/markdown-preview/github-markdown-light.css")
       vim.g.mkdp_highlight_css = vim.fn.expand("~/.config/nvim/resources/markdown-preview/github-dark.css")
