@@ -1,3 +1,5 @@
+-- cmux 终端集成：环境检测、浏览器打开、pane zoom 控制。
+-- 通过 cmux CLI 和 RPC 接口操作，zoom 检测使用 AppleScript 触发快捷键。
 local M = {}
 
 --- Check if running inside cmux
@@ -56,6 +58,53 @@ end
 ---@param surface_ref string e.g. "surface:17"
 function M.close_surface(surface_ref)
   vim.fn.jobstart({ "cmux", "close-surface", "--surface", surface_ref })
+end
+
+--- Zoom the current pane if workspace has multiple panes and not already zoomed.
+--- Uses AppleScript to trigger Cmd+Return (toggleSplitZoom).
+function M.zoom_if_split()
+  if not M.is_cmux() then
+    return
+  end
+  local output = vim.fn.system("cmux rpc pane.list")
+  local ok, data = pcall(vim.json.decode, output)
+  if not ok or not data or not data.panes then
+    return
+  end
+  if #data.panes <= 1 then
+    return
+  end
+  -- Detect zoom state: cmux freezes pixel_frame on zoom but updates columns/rows
+  -- to reflect the actual (full-container) size. Use a non-focused pane to derive
+  -- the display scale factor, then check if focused pane's columns exceed what
+  -- its pixel_frame can hold at that scale.
+  local focused = nil
+  local ref_pane = nil -- a non-focused pane to derive scale factor
+  for _, pane in ipairs(data.panes) do
+    if pane.focused then
+      focused = pane
+    elseif not ref_pane and (pane.pixel_frame or {}).width and pane.pixel_frame.width > 0 then
+      ref_pane = pane
+    end
+  end
+  if focused and ref_pane then
+    local cell_w = focused.cell_width_px or 0
+    if cell_w > 0 then
+      -- scale = columns * cell_width / pixel_width (≈2.0 on Retina)
+      local scale = (ref_pane.columns * ref_pane.cell_width_px) / ref_pane.pixel_frame.width
+      local expected_cols = (focused.pixel_frame or {}).width and focused.pixel_frame.width * scale / cell_w or 0
+      -- If actual columns exceed expected by >30%, pane is zoomed
+      if expected_cols > 0 and focused.columns > expected_cols * 1.3 then
+        return
+      end
+    end
+  end
+  -- Trigger toggleSplitZoom via AppleScript
+  vim.fn.jobstart({
+    "osascript",
+    "-e",
+    'tell application "System Events" to tell process "cmux" to keystroke return using command down',
+  })
 end
 
 return M

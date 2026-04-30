@@ -1,3 +1,4 @@
+-- 窗口操作：关闭辅助窗口（noice/help/neo-tree 等）、vsplit 创建临时缓冲区。
 local M = {}
 
 local closable_filetypes = {

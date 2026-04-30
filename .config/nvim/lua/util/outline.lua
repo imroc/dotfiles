@@ -1,3 +1,4 @@
+-- Outline 插件辅助：goto_location() 确保 sidebar 存在后跳转到对应符号位置。
 local M = {}
 
 local Outline = require("outline")

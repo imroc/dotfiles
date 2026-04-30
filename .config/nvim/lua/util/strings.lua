@@ -1,3 +1,4 @@
+-- 字符串工具：reverse_str() 按分隔符反转字符串各段顺序。
 local M = {}
 
 local function reverse_table(original)

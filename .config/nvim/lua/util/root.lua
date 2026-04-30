@@ -1,3 +1,6 @@
+-- 自定义项目根目录检测，供 vim.g.root_spec 使用。
+-- 逻辑：git rev-parse 找 git 根目录（跳过名为 debug-roc 的目录），
+-- 非 git 仓库但在 ~/.config 下时以第一级子目录为根。
 local M = {}
 
 local function detect_root_dir(dir)

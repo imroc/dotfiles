@@ -1,3 +1,6 @@
+-- Yadm dotfiles 管理：支持 public/private 双仓库。
+-- type 参数为 "public" 或 "private"，对应不同的 GIT_DIR 和 YADM_DATA。
+-- 核心功能：lazygit 集成、文件暂存、异步同步（add → commit → pull → push）。
 local M = {}
 
 local function git_dir(type)

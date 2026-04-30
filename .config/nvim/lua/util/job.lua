@@ -1,3 +1,6 @@
+-- 异步任务执行，封装 plenary.job。
+-- run() 运行外部命令，run_script() 运行 bash 脚本。
+-- 默认 cwd 为当前 buffer 所在目录，完成后自动通知结果。
 local M = {}
 
 local buffer = require("util.buffer")

@@ -1,3 +1,4 @@
+-- Snacks picker 包装：默认启用 hidden + follow，禁用 ignored。
 ---@diagnostic disable: undefined-global
 
 local M = {}

@@ -1,3 +1,5 @@
+-- LSP 辅助：jump_to_method_name() 跳转到光标所在方法名的起始位置。
+-- 通过 textDocument/documentSymbol 请求递归查找最内层函数符号。
 local M = {}
 
 -- 递归查找最内层的函数/方法符号
