@@ -11,8 +11,10 @@ end
 --- Single-pane: create a right-side browser split.
 --- Returns the surface ref string, or nil on failure.
 ---@param url string
+---@param opts? { focus?: boolean } default: { focus = true }
 ---@return string|nil surface_ref
-function M.open_browser(url)
+function M.open_browser(url, opts)
+  opts = vim.tbl_extend("keep", opts or {}, { focus = true })
   -- Get caller's pane ref
   local id_out = vim.fn.system({ "cmux", "identify", "--surface", vim.env.CMUX_SURFACE_ID })
   local caller_pane = id_out:match('"pane_ref"%s*:%s*"(pane:%d+)"')
@@ -44,7 +46,7 @@ function M.open_browser(url)
   local output = vim.fn.system(cmd)
   local surface = output:match("(surface:%d+)")
   local pane = output:match("(pane:%d+)")
-  if surface and pane then
+  if surface and pane and opts.focus then
     vim.fn.jobstart({ "cmux", "focus-pane", "--pane", pane })
   end
   return surface

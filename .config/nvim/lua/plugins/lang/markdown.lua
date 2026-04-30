@@ -97,7 +97,9 @@ return {
           "<localleader>o",
           function()
             local buf = vim.api.nvim_get_current_buf()
-            toggle_toc(buf)
+            if not vim.env.CMUX_SOCKET then
+              toggle_toc(buf)
+            end
             close_cmux_surface(buf)
             vim.cmd("MarkdownPreviewToggle")
           end,
@@ -131,7 +133,7 @@ return {
       if vim.env.CMUX_SOCKET then
         vim.g.mkdp_browserfunc = "CmuxOpenBrowser"
         _G._cmux_open_browser = function(url)
-          local surface = require("util.cmux").open_browser(url)
+          local surface = require("util.cmux").open_browser(url, { focus = false })
           if surface then
             vim.b.mkdp_cmux_surface = surface
           end
