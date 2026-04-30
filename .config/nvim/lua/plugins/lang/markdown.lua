@@ -36,16 +36,32 @@ return {
       local function toggle_toc(buf)
         local toc_injected = vim.b[buf].mkdp_toc_injected
         if toc_injected then
-          -- Closing preview: remove injected TOC lines and restore buffer modified state
-          local inject_line = vim.b[buf].mkdp_toc_line
+          -- Closing preview: search and remove injected TOC lines
           local was_modified = vim.bo[buf].modified
-          if inject_line then
-            local lines = vim.api.nvim_buf_get_lines(buf, inject_line, inject_line + 4, false)
-            if lines[1] == "" and lines[2] == "## 目录" and lines[3] == "" and lines[4] == "[[toc]]" then
-              vim.api.nvim_buf_set_lines(buf, inject_line, inject_line + 4, false, {})
+          local all_lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+          local removed = false
+          for i = 1, #all_lines - 2 do
+            if all_lines[i] == "## 目录" and all_lines[i + 1] == "" and all_lines[i + 2] == "[[toc]]" then
+              -- Determine range to remove: include leading/trailing empty lines if present
+              local start_line = i - 1 -- 0-indexed
+              if i > 1 and all_lines[i - 1] == "" then
+                start_line = start_line - 1
+              end
+              local end_line = i + 2 -- 0-indexed, exclusive (after [[toc]])
+              if i + 3 <= #all_lines and all_lines[i + 3] == "" then
+                end_line = end_line + 1
+              end
+              vim.api.nvim_buf_set_lines(buf, start_line, end_line, false, {})
+              removed = true
+              break
             end
           end
-          vim.bo[buf].modified = was_modified
+          if removed and not was_modified then
+            -- TOC was persisted to disk by a save during preview, re-save to clean it
+            vim.cmd("silent write")
+          else
+            vim.bo[buf].modified = was_modified
+          end
           vim.b[buf].mkdp_toc_injected = nil
           vim.b[buf].mkdp_toc_line = nil
         else
