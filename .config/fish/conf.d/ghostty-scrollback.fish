@@ -9,13 +9,13 @@
 #   5. 钩子检测到剪贴板中的临时文件路径，自动用 nvim 打开
 #
 # cmux 环境下不触发:
-#   cmux 中 Cmd+I 由 Karabiner 拦截，执行 ~/.local/bin/scrollback-copy
+#   cmux 中 Cmd+I 由 Karabiner 拦截，执行 ~/.local/bin/cmux-scrollback-copy
 #   即使 ghostty keybind 意外触发，此钩子也通过 CMUX_SURFACE_ID 判断跳过
 #
 # 相关文件:
 #   - ~/.config/ghostty/config             — Cmd+I keybind 定义
 #   - ~/.local/bin/ghostty-scrollback-copy — nvim 打开脚本（yank 后自动退出）
-#   - ~/.local/bin/scrollback-copy         — cmux 环境专用脚本
+#   - ~/.local/bin/cmux-scrollback-copy    — cmux 环境专用脚本
 #   - ~/.config/karabiner/karabiner.json   — cmux 环境 Cmd+I 拦截规则
 # ──────────────────────────────────────────────────────────────────────────
 if status is-interactive; and set -q GHOSTTY_RESOURCES_DIR; and not set -q CMUX_SURFACE_ID

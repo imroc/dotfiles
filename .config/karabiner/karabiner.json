@@ -88,7 +88,7 @@
                         ]
                     },
                     {
-                        "description": "cmux: Cmd+I scrollback copy — 捕获当前终端 scrollback 在新 tab 用 nvim 打开 (脚本: ~/.local/bin/scrollback-copy)",
+                        "description": "cmux: Cmd+I scrollback copy — 捕获当前终端 scrollback 在新 tab 用 nvim 打开 (脚本: ~/.local/bin/cmux-scrollback-copy)",
                         "manipulators": [
                             {
                                 "from": {
@@ -99,7 +99,7 @@
                                 },
                                 "to": [
                                     {
-                                        "shell_command": "/Users/roc/.local/bin/scrollback-copy"
+                                        "shell_command": "/Users/roc/.local/bin/cmux-scrollback-copy"
                                     }
                                 ],
                                 "conditions": [

@@ -121,7 +121,7 @@ scrollback-limit = 10000000
 #
 # cmux 环境 (主要使用):
 #   Cmd+I 由 Karabiner 拦截 (条件: frontmost app = com.cmuxterm.app)
-#   执行 ~/.local/bin/scrollback-copy 脚本:
+#   执行 ~/.local/bin/cmux-scrollback-copy 脚本:
 #     cmux capture-pane → 临时文件 → 同 pane 新建 tab → nvim 打开
 #   此处的 ghostty keybind 不会触发（Karabiner 优先级更高）
 #
