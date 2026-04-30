@@ -156,17 +156,6 @@ persistent-workspaces = ["A", "B", "C", "D", "E", "M", "O", "T", "V", "W" ]
       'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
       'move-node-to-workspace A --focus-follows-window'
     ]
-    # browser (浏览器)
-    b = [
-      'mode main',
-      'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
-      'workspace B'
-    ]
-    cmd-b = [
-      'mode main',
-      'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
-      'move-node-to-workspace B --focus-follows-window'
-    ]
     # chat (聊天)
     c = [
       'mode main',
@@ -199,6 +188,17 @@ persistent-workspaces = ["A", "B", "C", "D", "E", "M", "O", "T", "V", "W" ]
       'mode main',
       'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
       'move-node-to-workspace E --focus-follows-window'
+    ]
+    # job chat (工作聊天，企业微信)
+    j = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
+      'workspace J'
+    ]
+    cmd-j = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
+      'move-node-to-workspace J --focus-follows-window'
     ]
     # meeting (会议)
     m = [
@@ -244,7 +244,7 @@ persistent-workspaces = ["A", "B", "C", "D", "E", "M", "O", "T", "V", "W" ]
       'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
       'move-node-to-workspace V --focus-follows-window'
     ]
-    # work chat (工作聊天)
+    # web browser (网络浏览器)
     w = [
       'mode main',
       'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
@@ -344,20 +344,6 @@ persistent-workspaces = ["A", "B", "C", "D", "E", "M", "O", "T", "V", "W" ]
     if.app-id = 'com.alibaba.tongyi'
     run = ['move-node-to-workspace A']
 
-# B: 浏览器
-[[on-window-detected]]
-    if.app-id = 'com.google.Chrome'
-    run = ['move-node-to-workspace B']
-[[on-window-detected]]
-    if.app-id = 'org.mozilla.firefo4'
-    run = ['move-node-to-workspace B']
-[[on-window-detected]]
-    if.app-id = 'com.apple.Safari'
-    run = ['move-node-to-workspace B']
-[[on-window-detected]]
-    if.app-id = 'com.microsoft.edgemac'
-    run = ['move-node-to-workspace B']
-
 # C: 聊天
 [[on-window-detected]]
     if.app-id = 'com.tencent.xinWeChat'    # 微信主界面
@@ -414,6 +400,12 @@ persistent-workspaces = ["A", "B", "C", "D", "E", "M", "O", "T", "V", "W" ]
 [[on-window-detected]]
     if.app-id = 'com.siddharthvaddem.openscreen' # OpenScreen
     run = ['layout floating', 'move-node-to-workspace E']
+
+# J: 工作聊天
+[[on-window-detected]]
+    if.app-id = 'com.tencent.WeWorkMac'      # 企业微信主界面
+    if.window-title-regex-substring = '^企业微信$'
+    run = ['move-node-to-workspace J']
 
 # T: 工具箱
 [[on-window-detected]]
@@ -474,8 +466,16 @@ persistent-workspaces = ["A", "B", "C", "D", "E", "M", "O", "T", "V", "W" ]
     if.app-id = 'com.tencent.tenvideo' # 腾讯视频
     run = ['move-node-to-workspace V']
 
-# W: 工作聊天
+# W: 网络浏览器
 [[on-window-detected]]
-    if.app-id = 'com.tencent.WeWorkMac'      # 企业微信主界面
-    if.window-title-regex-substring = '^企业微信$'
+    if.app-id = 'com.google.Chrome'
+    run = ['move-node-to-workspace W']
+[[on-window-detected]]
+    if.app-id = 'org.mozilla.firefo4'
+    run = ['move-node-to-workspace W']
+[[on-window-detected]]
+    if.app-id = 'com.apple.Safari'
+    run = ['move-node-to-workspace W']
+[[on-window-detected]]
+    if.app-id = 'com.microsoft.edgemac'
     run = ['move-node-to-workspace W']
