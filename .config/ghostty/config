@@ -40,6 +40,7 @@ quick-terminal-position = right
 quick-terminal-size = 40%,70%
 quick-terminal-screen = main
 quick-terminal-animation-duration = 0
+quick-terminal-autohide = false
 
 # tab
 keybind = super+n=new_tab
