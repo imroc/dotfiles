@@ -11,12 +11,12 @@ if [ "$SENDER" = "aerospace_service_mode_enabled_changed" ]; then
     sketchybar --set workspaces_service_mode \
       label.drawing=off
   fi
-elif [ "$SENDER" = "aerospace_app_mode_enabled_changed" ]; then
-  if [ "$AEROSPACE_APP_MODE_ENABLED" = true ]; then
-    sketchybar --set workspaces_app_mode \
+elif [ "$SENDER" = "aerospace_workspace_mode_enabled_changed" ]; then
+  if [ "$AEROSPACE_WORKSPACE_MODE_ENABLED" = true ]; then
+    sketchybar --set workspaces_workspace_mode \
       label.drawing=on
   else
-    sketchybar --set workspaces_app_mode \
+    sketchybar --set workspaces_workspace_mode \
       label.drawing=off
   fi
 elif [ "$SENDER" = "aerospace_workspace_change" ]; then

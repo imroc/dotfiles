@@ -50,7 +50,7 @@ automatically-unhide-macos-hidden-apps = true
 # even when they are invisible.
 # This config version is only available since 'config-version = 2'
 # Fallback value (if you omit the key): persistent-workspaces = []
-persistent-workspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9" ]
+persistent-workspaces = ["A", "B", "C", "D", "E", "M", "O", "T", "V", "W" ]
 
 # Possible values: (qwerty|dvorak|colemak)
 # See https://nikitabobko.github.io/AeroSpace/guide#key-mapping
@@ -121,38 +121,16 @@ persistent-workspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9" ]
     alt-ctrl-minus = 'resize smart -50'
     alt-ctrl-equal = 'resize smart +50'
 
-    # See: https://nikitabobko.github.io/AeroSpace/commands#workspace
-    # 一些开发者工具
-    ctrl-1 = 'workspace 1'
-    # 日常开发：terminal
-    ctrl-2 = 'workspace 2'
-    # 浏览器
-    ctrl-3 = 'workspace 3'
-    # 常用聊天工具
-    ctrl-4 = 'workspace 4'
-    # 其它聊天工具
-    ctrl-5 = 'workspace 5'
-    # AI 工具
-    ctrl-6 = 'workspace 6'
-    # 视频相关：剪映、ScreenStudio、ScreenFlow、QuickTime Player
-    ctrl-7 = 'workspace 7'
-    # 会议相关
-    ctrl-8 = 'workspace 8'
-    # 其它
-    ctrl-9 = 'workspace 9'
-
     # See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
-    alt-ctrl-1 = 'move-node-to-workspace 1 --focus-follows-window'
-    alt-ctrl-2 = 'move-node-to-workspace 2 --focus-follows-window'
-    alt-ctrl-3 = 'move-node-to-workspace 3 --focus-follows-window'
-    alt-ctrl-4 = 'move-node-to-workspace 4 --focus-follows-window'
-    alt-ctrl-5 = 'move-node-to-workspace 5 --focus-follows-window'
-    alt-ctrl-6 = 'move-node-to-workspace 6 --focus-follows-window'
-    alt-ctrl-7 = 'move-node-to-workspace 7 --focus-follows-window'
-    alt-ctrl-8 = 'move-node-to-workspace 8 --focus-follows-window'
-    alt-ctrl-9 = 'move-node-to-workspace 9 --focus-follows-window'
-    alt-ctrl-leftSquareBracket = 'exec-and-forget aerospace workspace "$(aerospace list-workspaces --monitor mouse --visible)" && aerospace workspace prev'
-    alt-ctrl-rightSquareBracket = 'exec-and-forget aerospace workspace "$(aerospace list-workspaces --monitor mouse --visible)" && aerospace workspace next'
+    # alt-ctrl-1 = 'move-node-to-workspace 1 --focus-follows-window'
+    # alt-ctrl-2 = 'move-node-to-workspace 2 --focus-follows-window'
+    # alt-ctrl-3 = 'move-node-to-workspace 3 --focus-follows-window'
+    # alt-ctrl-4 = 'move-node-to-workspace 4 --focus-follows-window'
+    # alt-ctrl-5 = 'move-node-to-workspace 5 --focus-follows-window'
+    # alt-ctrl-6 = 'move-node-to-workspace 6 --focus-follows-window'
+    # alt-ctrl-7 = 'move-node-to-workspace 7 --focus-follows-window'
+    # alt-ctrl-8 = 'move-node-to-workspace 8 --focus-follows-window'
+    # alt-ctrl-9 = 'move-node-to-workspace 9 --focus-follows-window'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
     alt-ctrl-tab = 'workspace-back-and-forth'
@@ -165,63 +143,128 @@ persistent-workspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9" ]
       'exec-and-forget sketchybar --trigger aerospace_service_mode_enabled_changed AEROSPACE_SERVICE_MODE_ENABLED=true',
     ]
     cmd-semicolon = [
-      'mode app',
-      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=true',
+      'mode workspace',
+      'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=true',
     ]
 
-[mode.app.binding]
+[mode.workspace.binding]
     esc = [
       'mode main',
-      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
+      'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
     ]
     enter = [
       'mode main',
-      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
+      'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
     ]
-    cmd-semicolon = [
+    # AI（AI 工具）
+    a = [
       'mode main',
-      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
-      'exec-and-forget open -a "Ghostty.app"'
+      'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
+      'workspace A'
     ]
-    w = [
+    cmd-a = [
       'mode main',
-      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
-      'exec-and-forget open -a "WeChat.app"'
+      'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
+      'move-node-to-workspace A --focus-follows-window'
     ]
-    q = [
-      'mode main',
-      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
-      'exec-and-forget open -a "企业微信.app"'
-    ]
-    t = [
-      'mode main',
-      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
-      'exec-and-forget open -a "WeTERM.app"'
-    ]
-    c = [
-      'mode main',
-      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
-      'exec-and-forget open -a "Google Chrome.app"'
-    ]
+    # browser (浏览器)
     b = [
       'mode main',
-      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
-      'exec-and-forget open -a "CodeBuddy CN.app"'
+      'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
+      'workspace B'
     ]
+    cmd-b = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
+      'move-node-to-workspace B --focus-follows-window'
+    ]
+    # chat (聊天)
+    c = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
+      'workspace C'
+    ]
+    cmd-c = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
+      'move-node-to-workspace C --focus-follows-window'
+    ]
+    # Daily Dev (日常开发)
+    d = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
+      'workspace D'
+    ]
+    cmd-d = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
+      'move-node-to-workspace D --focus-follows-window'
+    ]
+    # editing (剪辑)
+    e = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
+      'workspace E'
+    ]
+    cmd-e = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
+      'move-node-to-workspace E --focus-follows-window'
+    ]
+    # meeting (会议)
+    m = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
+      'workspace M'
+    ]
+    cmd-m = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
+      'move-node-to-workspace M --focus-follows-window'
+    ]
+    # other（其它）
+    o = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
+      'workspace O'
+    ]
+    cmd-o = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
+      'move-node-to-workspace O --focus-follows-window'
+    ]
+    # tool (工具)
+    t = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
+      'workspace C'
+    ]
+    cmd-t = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
+      'move-node-to-workspace T --focus-follows-window'
+    ]
+    # video (视频)
     v = [
       'mode main',
-      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
-      'exec-and-forget open -a "Visual Studio Code.app"'
+      'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
+      'workspace V'
     ]
-    j = [
+    cmd-v = [
       'mode main',
-      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
-      'exec-and-forget open -a "OK JSON.app"'
+      'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
+      'move-node-to-workspace V --focus-follows-window'
     ]
-    z = [
+    # work chat (工作聊天)
+    w = [
       'mode main',
-      'exec-and-forget sketchybar --trigger aerospace_app_mode_enabled_changed AEROSPACE_APP_MODE_ENABLED=false',
-      'exec-and-forget open -a "WezTerm.app"'
+      'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
+      'workspace W'
+    ]
+    cmd-w = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
+      'move-node-to-workspace W --focus-follows-window'
     ]
 
 # 'service' binding mode declaration.
@@ -304,149 +347,146 @@ persistent-workspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9" ]
     run = ['layout floating']
 
 
-# 1: 非高频开发工具
+# A: AI 工具
 [[on-window-detected]]
-    if.app-id = 'net.shinystone.OKJSON'
-    run = ['move-node-to-workspace 1']
+    if.app-id = 'com.tencent.yuanbao'
+    run = ['move-node-to-workspace A']
 [[on-window-detected]]
-    if.app-id = 'is.follow'
-    run = ['move-node-to-workspace 1']
-[[on-window-detected]]
-    if.app-id = 'com.microsoft.VSCode'
-    run = ['move-node-to-workspace 1']
-[[on-window-detected]]
-    if.app-id = 'com.tencent.codebuddycn'
-    run = ['move-node-to-workspace 1']
-[[on-window-detected]]
-    if.app-id = 'com.github.wez.wezterm'
-    run = ['move-node-to-workspace 1']
-[[on-window-detected]]
-    if.app-id = 'com.googlecode.iterm2'
-    run = ['move-node-to-workspace 1']
-[[on-window-detected]]
-    if.app-id = 'org.alacritty'
-    run = ['move-node-to-workspace 1']
-[[on-window-detected]]
-    if.app-id = 'com.tencent.weterm'
-    if.window-title-regex-substring = '^WeTERM$'
-    run = ['move-node-to-workspace 1']
-[[on-window-detected]]
-    if.app-id = 'dev.zed.Zed'
-    run = ['move-node-to-workspace 1']
-[[on-window-detected]]
-    if.app-id = 'com.neovide.neovide'
-    run = ['move-node-to-workspace 1']
-[[on-window-detected]]
-    if.app-id = 'com.apple.Terminal'
-    run = ['move-node-to-workspace 1']
-[[on-window-detected]]
-    if.app-id = 'dev.zed.Zed'
-    run = ['move-node-to-workspace 1']
+    if.app-id = 'com.alibaba.tongyi'
+    run = ['move-node-to-workspace A']
 
-# 2: 高频开发工具
-[[on-window-detected]]
-    if.app-id = 'net.kovidgoyal.kitty'
-    run = ['move-node-to-workspace 2']
-[[on-window-detected]]
-    if.app-id = 'com.mitchellh.ghostty'
-    run = ["layout floating"]
-
-# 3：浏览器
+# B: 浏览器
 [[on-window-detected]]
     if.app-id = 'com.google.Chrome'
-    run = ['move-node-to-workspace 3']
+    run = ['move-node-to-workspace B']
 [[on-window-detected]]
     if.app-id = 'org.mozilla.firefo4'
-    run = ['move-node-to-workspace 3']
+    run = ['move-node-to-workspace B']
 [[on-window-detected]]
     if.app-id = 'com.apple.Safari'
-    run = ['move-node-to-workspace 3']
+    run = ['move-node-to-workspace B']
 [[on-window-detected]]
     if.app-id = 'com.microsoft.edgemac'
-    run = ['move-node-to-workspace 3']
+    run = ['move-node-to-workspace B']
 
-#  4: 高频聊天工具
-[[on-window-detected]]
-    if.app-id = 'com.tencent.WeWorkMac'      # 企业微信主界面
-    if.window-title-regex-substring = '^企业微信$'
-    run = ['move-node-to-workspace 4']
-
-# 5：其它聊天工具
+# C: 聊天
 [[on-window-detected]]
     if.app-id = 'com.tencent.xinWeChat'    # 微信主界面
     if.window-title-regex-substring = '^微信$'
-    run = ['move-node-to-workspace 5']
+    run = ['move-node-to-workspace C']
 [[on-window-detected]]
     if.app-id = 'com.tencent.xinWeChat'    # 微信其它主界面
     run = ['layout floating']
 [[on-window-detected]]
     if.app-id = 'com.tencent.qq'           # QQ 主界面
     if.window-title-regex-substring = 'QQ'
-    run = ['move-node-to-workspace 5']
+    run = ['move-node-to-workspace C']
 [[on-window-detected]]
     if.app-id = 'com.tencent.qq' # QQ 其它界面默认 float
     run = ['layout floating']
 [[on-window-detected]]
     if.app-id = 'com.electron.lark'    # 飞书
-    run = ['move-node-to-workspace 5']
+    run = ['move-node-to-workspace C']
 [[on-window-detected]]
     if.app-id = 'com.alibaba.DingTalkMac' # 钉钉
-    run = ['move-node-to-workspace 5']
+    run = ['move-node-to-workspace C']
 [[on-window-detected]]
     if.app-id = 'com.tdesktop.Telegram' # Telegram
-    run = ['move-node-to-workspace 5']
+    run = ['move-node-to-workspace C']
 [[on-window-detected]]
     if.app-id = 'com.tinyspeck.slackmacgap' # Slack
-    run = ['move-node-to-workspace 5']
+    run = ['move-node-to-workspace C']
 [[on-window-detected]]
     if.app-id = 'com.hnc.Discord' # Discord
-    run = ['move-node-to-workspace 5']
+    run = ['move-node-to-workspace C']
 
-# 6: AI 聊天
+# D: 日常开发
 [[on-window-detected]]
-    if.app-id = 'com.tencent.yuanbao'
-    run = ['move-node-to-workspace 6']
+    if.app-id = 'com.cmuxterm.app'
+    run = ['move-node-to-workspace D']
 [[on-window-detected]]
-    if.app-id = 'com.alibaba.tongyi'
-    run = ['move-node-to-workspace 6']
+    if.app-id = 'com.mitchellh.ghostty'
+    run = ['move-node-to-workspace D', 'layout floating']
+    
 
-# 7: 媒体
+# E: 剪辑
 [[on-window-detected]]
     if.app-id = 'com.lemon.lvpro'      # 剪映
-    run = ['move-node-to-workspace 7']
+    run = ['move-node-to-workspace E']
 [[on-window-detected]]
     if.app-id = 'com.timpler.screenstudio' # ScreenStudio
-    run = ['move-node-to-workspace 7']
+    run = ['move-node-to-workspace E']
 [[on-window-detected]]
     if.app-id = 'net.telestream.screenflow10' # ScreenFlow
-    run = ['move-node-to-workspace 7']
+    run = ['move-node-to-workspace E']
 [[on-window-detected]]
     if.app-id = 'com.apple.QuickTimePlayerX' # QuickTime Player
-    run = ['move-node-to-workspace 7']
-[[on-window-detected]]
-    if.app-id = 'com.tencent.tenvideo' # 腾讯视频
-    run = ['move-node-to-workspace 7']
+    run = ['move-node-to-workspace E']
 [[on-window-detected]]
     if.app-id = 'com.siddharthvaddem.openscreen' # OpenScreen
-    run = ['layout floating', 'move-node-to-workspace 7']
+    run = ['layout floating', 'move-node-to-workspace E']
 
+# T: 工具箱
+[[on-window-detected]]
+    if.app-id = 'net.kovidgoyal.kitty'
+    run = ['move-node-to-workspace T']
+[[on-window-detected]]
+    if.app-id = 'net.shinystone.OKJSON'
+    run = ['move-node-to-workspace T']
+[[on-window-detected]]
+    if.app-id = 'is.follow'
+    run = ['move-node-to-workspace T']
+[[on-window-detected]]
+    if.app-id = 'com.microsoft.VSCode'
+    run = ['move-node-to-workspace T']
+[[on-window-detected]]
+    if.app-id = 'com.tencent.codebuddycn'
+    run = ['move-node-to-workspace T']
+[[on-window-detected]]
+    if.app-id = 'com.github.wez.wezterm'
+    run = ['move-node-to-workspace T']
+[[on-window-detected]]
+    if.app-id = 'com.googlecode.iterm2'
+    run = ['move-node-to-workspace T']
+[[on-window-detected]]
+    if.app-id = 'org.alacritty'
+    run = ['move-node-to-workspace T']
+[[on-window-detected]]
+    if.app-id = 'com.tencent.weterm'
+    if.window-title-regex-substring = '^WeTERM$'
+    run = ['move-node-to-workspace T']
+[[on-window-detected]]
+    if.app-id = 'dev.zed.Zed'
+    run = ['move-node-to-workspace T']
+[[on-window-detected]]
+    if.app-id = 'com.neovide.neovide'
+    run = ['move-node-to-workspace T']
+[[on-window-detected]]
+    if.app-id = 'com.apple.Terminal'
+    run = ['move-node-to-workspace T']
+[[on-window-detected]]
+    if.app-id = 'dev.zed.Zed'
+    run = ['move-node-to-workspace T']
 
-# 8: 会议
+# M: 会议
 [[on-window-detected]]
     if.app-id = 'com.tencent.meeting'  # 腾讯会议
     if.window-title-regex-substring = '腾讯会议'
-    run = ['move-node-to-workspace 8']
+    run = ['move-node-to-workspace M']
 [[on-window-detected]]
     if.app-id = 'com.tencent.wwmapp'   # 企微微信·会议
-    run = ['move-node-to-workspace 8']
+    run = ['move-node-to-workspace M']
 [[on-window-detected]]
     if.app-id = 'com.electron.lark.iron'   # 飞书会议
-    run = ['move-node-to-workspace 8', 'layout floating']
+    run = ['move-node-to-workspace M', 'layout floating']
 
-# 9: 其它（不常用）
+# V：视频
 [[on-window-detected]]
-    if.app-id = 'com.omnigroup.OmniGraffle7'
-    run = ['move-node-to-workspace 9']
+    if.app-id = 'com.tencent.tenvideo' # 腾讯视频
+    run = ['move-node-to-workspace V']
+
+# W: 工作聊天
 [[on-window-detected]]
-    if.app-id = '2dust.v2rayN'
-    run = ['move-node-to-workspace 9']
+    if.app-id = 'com.tencent.WeWorkMac'      # 企业微信主界面
+    if.window-title-regex-substring = '^企业微信$'
+    run = ['move-node-to-workspace W']
