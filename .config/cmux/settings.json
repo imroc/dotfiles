@@ -149,7 +149,7 @@
       //       "renameTab" : "cmd+r",
       //       "renameWorkspace" : "cmd+shift+r",
       //       "reopenClosedBrowserPanel" : "cmd+shift+t",
-      "selectSurfaceByNumber": "cmd+ctrl+1",
+      //       "selectSurfaceByNumber": "ctrl+1",
       //       "selectWorkspaceByNumber" : "cmd+1",
       //       "sendFeedback" : "cmd+opt+f",
       //       "showBrowserJavaScriptConsole" : "cmd+opt+c",
