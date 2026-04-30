@@ -4,7 +4,7 @@ return {
     opts = {
       spec = {
         { "<localleader>", "<cmd>WhichKey <localleader><cr>" },
-        { "f", "<cmd>WhichKey f<cr>" },
+        -- { "f", "<cmd>WhichKey f<cr>" },
         { "<localleader>h", group = "git hunk" },
         { "<leader>y", group = "yazi/yadm/yank" },
         { "<leader>k", group = "kube" },
