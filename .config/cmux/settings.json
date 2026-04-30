@@ -153,7 +153,7 @@
       //       "selectWorkspaceByNumber" : "cmd+1",
       //       "sendFeedback" : "cmd+opt+f",
       //       "showBrowserJavaScriptConsole" : "cmd+opt+c",
-      //       "showNotifications" : "cmd+i",
+      "showNotifications": "cmd+shift+i",
       //       "splitBrowserDown" : "cmd+shift+opt+d",
       //       "splitBrowserRight" : "cmd+opt+d",
       //       "splitDown" : "cmd+shift+d",

@@ -1,0 +1,88 @@
+#!/usr/bin/env bash
+# ── scrollback-copy ──────────────────────────────────────────────────────
+# 功能: 捕获当前聚焦终端的 scrollback 内容，在同 pane 新建 tab 用 nvim 打开
+#       供用户用 vim 操作自由选择复制，yank 后自动退出并清理临时文件
+#
+# 触发方式: Karabiner 快捷键 Cmd+I (仅在 cmux app 中生效)
+#   配置位置: ~/.config/karabiner/karabiner.json
+#   规则: "cmux: Cmd+I scrollback copy"
+#   条件: frontmost_application = com.cmuxterm.app
+#
+# 为什么用 Karabiner 而不是其他方式:
+#   - ghostty keybind: 不支持执行外部命令，只能 chain 内置 action
+#   - ghostty text:: 会把文本输入到当前运行的程序中（如 codebuddy）
+#   - ghostty chain=new_tab: cmux 不支持 ghostty 的 new_tab action
+#   - ghostty chain=new_split: 窗口减半，体验差
+#   - cmux custom command: command 字段也是发送文本到终端，同 text: 问题
+#   - cmux actions + shortcut: 需要 Nightly 版本
+#   → Karabiner shell_command 后台执行，不依赖终端状态，任何程序运行时都能触发
+#
+# 依赖:
+#   - cmux CLI: /Applications/cmux.app/Contents/Resources/bin/cmux
+#   - python3: 解析 JSON
+#   - nvim: 打开 scrollback 供复制
+#
+# 相关文件:
+#   - ~/.config/karabiner/karabiner.json     — Cmd+I 快捷键绑定
+#   - ~/.config/ghostty/config               — ghostty 原生环境的 Cmd+I 绑定
+#   - ~/.config/fish/conf.d/ghostty-scrollback.fish — ghostty 原生环境 fish 钩子
+#   - ~/.local/bin/ghostty-scrollback-copy   — ghostty 原生环境 nvim 打开脚本
+# ─────────────────────────────────────────────────────────────────────────
+
+set -euo pipefail
+
+CMUX=/Applications/cmux.app/Contents/Resources/bin/cmux
+
+# ── 1. 获取当前聚焦的 surface 和 pane ──
+# 由 Karabiner 后台执行，没有 CMUX_SURFACE_ID 等环境变量
+# 使用 identify --no-caller 从 focused 字段获取（不是 caller，因为没有终端上下文）
+read -r surface pane stype < <($CMUX identify --json --no-caller 2>/dev/null | python3 -c "
+import sys, json
+d = json.load(sys.stdin).get('focused', {})
+print(d.get('surface_ref', ''), d.get('pane_ref', ''), d.get('surface_type', ''))
+")
+
+# 仅对终端 surface 有效（browser surface 不支持 capture-pane）
+if [[ -z "$surface" || -z "$pane" || "$stype" != "terminal" ]]; then
+  exit 1
+fi
+
+# ── 2. 捕获当前 surface 的完整 scrollback ──
+tmpfile=$(mktemp /tmp/cmux-scrollback-XXXXXX)
+if ! $CMUX capture-pane --surface "$surface" --scrollback > "$tmpfile" 2>/dev/null; then
+  rm -f "$tmpfile"
+  exit 1
+fi
+
+# ── 3. 在同一 pane 新建 tab（不是 split，不会导致窗口减半）──
+output=$($CMUX new-surface --pane "$pane" 2>&1)
+new_surface=$(echo "$output" | grep -oE 'surface:[0-9]+')
+
+if [[ -z "$new_surface" ]]; then
+  rm -f "$tmpfile"
+  exit 1
+fi
+
+# ── 4. 聚焦到新 tab ──
+# focus-panel 直接切换聚焦的 surface（参考 cmux skill: panes-surfaces.md）
+$CMUX focus-panel --panel "$new_surface" 2>/dev/null
+
+# ── 5. 等待新 tab 的 shell 就绪 ──
+# 轮询 read-screen 检测 prompt 符号，每 0.1s 一次，最多等 2 秒
+for _ in {1..20}; do
+  screen=$($CMUX read-screen --surface "$new_surface" 2>/dev/null || true)
+  if [[ "$screen" == *'$'* || "$screen" == *'❯'* || "$screen" == *'>'* || "$screen" == *'%'* ]]; then
+    break
+  fi
+  sleep 0.1
+done
+
+# ── 6. 发送 nvim 命令 ──
+# nvim -R: 只读模式
+# normal G: 光标定位到文件末尾（最新内容）
+# autocmd TextYankPost: yank 操作后 50ms 自动退出 nvim
+# && rm: 退出后清理临时文件
+# && exit: 关闭新 tab
+# 末尾换行符触发命令执行
+$CMUX send --surface "$new_surface" "nvim -R -c 'normal G' -c 'autocmd TextYankPost * ++once call timer_start(50, {-> execute(\"qa!\")})' '$tmpfile' && rm -f '$tmpfile' && exit
+"

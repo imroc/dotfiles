@@ -1,5 +1,24 @@
 #!/usr/bin/env bash
-# 从剪贴板获取 scrollback 临时文件路径，用 nvim 打开供选择复制
+# ── ghostty-scrollback-copy ──────────────────────────────────────────────
+# 功能: 从剪贴板获取 ghostty write_screen_file 生成的临时文件路径，
+#       用 nvim 只读打开供用户选择复制，yank 后自动退出并清理临时文件
+#
+# 调用方式: 由 fish 钩子 ghostty-scrollback.fish 通过 exec 调用
+#           仅在 ghostty 原生环境中使用（非 cmux）
+#
+# 前置条件:
+#   系统剪贴板中包含 ghostty 生成的临时文件路径
+#   （由 ghostty keybind write_screen_file:copy 写入）
+#
+# nvim 行为:
+#   -R: 只读模式
+#   normal G: 光标定位到文件末尾（最新的终端输出）
+#   autocmd TextYankPost: 用户 yank（复制）操作后 50ms 自动退出 nvim
+#
+# 相关文件:
+#   - ~/.config/fish/conf.d/ghostty-scrollback.fish — 调用此脚本的 fish 钩子
+#   - ~/.config/ghostty/config                      — Cmd+I keybind 定义
+# ─────────────────────────────────────────────────────────────────────────
 
 file="$(pbpaste)"
 

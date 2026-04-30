@@ -88,6 +88,31 @@
                         ]
                     },
                     {
+                        "description": "cmux: Cmd+I scrollback copy — 捕获当前终端 scrollback 在新 tab 用 nvim 打开 (脚本: ~/.local/bin/scrollback-copy)",
+                        "manipulators": [
+                            {
+                                "from": {
+                                    "key_code": "i",
+                                    "modifiers": {
+                                        "mandatory": ["command"]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "shell_command": "/Users/roc/.local/bin/scrollback-copy"
+                                    }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "frontmost_application_if",
+                                        "bundle_identifiers": ["com.cmuxterm.app"]
+                                    }
+                                ],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
                         "description": "Ghostty: Cmd+U/S switch to English input method",
                         "manipulators": [
                             {

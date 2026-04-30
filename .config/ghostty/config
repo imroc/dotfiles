@@ -99,22 +99,39 @@ keybind = chain=scroll_to_bottom
 keybind = scroll/super+s=deactivate_key_table
 keybind = scroll/catch_all=ignore
 keybind = super+s=activate_key_table:scroll
+# scroll mode 中 Cmd+I: 导出屏幕内容到临时文件 → 右侧新 split → 退出 scroll mode
+# 新 split 启动 fish 时钩子 (ghostty-scrollback.fish) 检测剪贴板中的文件路径，自动用 nvim 打开
+# 注意: cmux 环境中此绑定不会触发（Karabiner 先拦截了 Cmd+I）
 keybind = scroll/super+i=write_screen_file:copy
 keybind = chain=new_split:right
+keybind = chain=deactivate_key_table
 
 # window
 keybind = super+shift+n=new_window
 
 # 修复微信输入法导致终端 IRM 被切换为覆盖模式的问题（Cmd+Shift+I 重置）
-keybind = super+shift+i=text:\x1b[4l
+# keybind = super+shift+i=text:\x1b[4l
 
 # 其它
 scrollback-limit = 10000000
 # 禁用通知，AI 工具的状态用 Vibe Island 统一监控和通知
 # desktop-notifications = false
-# scrollback copy mode - 用 nvim 打开终端内容供选择复制
-# super+i: 当前屏幕内容
-# new_split 确保在任何应用中都能用，fish 启动钩子自动运行脚本
+# ── scrollback copy mode ──────────────────────────────────────────────
+# 用 nvim 打开终端屏幕内容，供用户自由选择复制文本
+#
+# cmux 环境 (主要使用):
+#   Cmd+I 由 Karabiner 拦截 (条件: frontmost app = com.cmuxterm.app)
+#   执行 ~/.local/bin/scrollback-copy 脚本:
+#     cmux capture-pane → 临时文件 → 同 pane 新建 tab → nvim 打开
+#   此处的 ghostty keybind 不会触发（Karabiner 优先级更高）
+#
+# ghostty 原生环境:
+#   Cmd+I 由以下 ghostty keybind 处理:
+#     write_screen_file:copy — 屏幕内容写入临时文件，路径存入剪贴板
+#     chain=new_split:right  — 右侧新建 split
+#   新 split 启动 fish 时钩子 (ghostty-scrollback.fish) 检测剪贴板中的临时文件路径
+#   自动调用 ghostty-scrollback-copy 用 nvim 打开，并用 osascript 模拟 Cmd+Enter 最大化 split
+# ─────────────────────────────────────────────────────────────────────
 keybind = super+i=write_screen_file:copy
 keybind = chain=new_split:right
 macos-option-as-alt = true
