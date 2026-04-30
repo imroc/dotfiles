@@ -50,7 +50,7 @@ automatically-unhide-macos-hidden-apps = true
 # even when they are invisible.
 # This config version is only available since 'config-version = 2'
 # Fallback value (if you omit the key): persistent-workspaces = []
-persistent-workspaces = ["A", "B", "C", "D", "E", "M", "O", "T", "V", "W" ]
+persistent-workspaces = ["A", "C", "D", "E", "M", "O", "T", "V", "W" ]
 
 # Possible values: (qwerty|dvorak|colemak)
 # See https://nikitabobko.github.io/AeroSpace/guide#key-mapping
