@@ -131,7 +131,6 @@ persistent-workspaces = ["A", "C", "D", "E", "M", "O", "T", "V", "W" ]
       'mode workspace',
       'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=true',
     ]
-    cmd-ctrl-semicolon = 'exec-and-forget toggle-ghostty'
 
 [mode.workspace.binding]
     esc = [

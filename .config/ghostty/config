@@ -4,6 +4,7 @@
 font-family = JetBrainsMono Nerd Font
 font-family = Sarasa Mono SC
 font-size = 14
+background-opacity = 0.8
 # 强制 ambiguous width 的几何符号用主字体渲染（单宽），
 # 避免 fallback 到更纱黑体导致双宽，影响 nvim render-markdown 等插件的对齐
 font-codepoint-map = U+25CB,U+25CF,U+25C6,U+25C7=JetBrainsMono Nerd Font
@@ -33,6 +34,14 @@ clipboard-paste-protection = false
 macos-icon = official
 macos-titlebar-style = transparent
 unfocused-split-opacity = 0.85
+
+# quick terminal
+keybind = global:cmd+/=toggle_quick_terminal
+quick-terminal-position = center
+quick-terminal-size = 80%,80%
+quick-terminal-screen = main
+quick-terminal-animation-duration = 0
+quick-terminal-autohide = false
 
 # tab
 keybind = super+n=new_tab
