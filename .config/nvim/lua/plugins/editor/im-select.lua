@@ -3,7 +3,9 @@
 -- 核心目标：在 Neovim 中编辑时，normal 模式始终使用英文输入法，insert 模式恢复
 -- 用户之前使用的输入法，消除中英文切换的心智负担。
 --
--- 依赖：macism（命令行输入法切换工具，brew install macism）
+-- 依赖：macism 或 im-select（命令行输入法切换工具）
+--   - 默认使用 macism（brew install macism）
+--   - ghostty quick terminal 中使用 im-select（macism 会导致浮动窗口失焦）
 -- 状态存储：vim.g.im_select_saved_state（记录离开 insert 模式时的输入法 ID）
 --
 -- ┌─────────────────────────────────────────────────────────────────────┐
@@ -47,6 +49,9 @@ if vim.fn.has("mac") ~= 1 then
   return {}
 end
 
+-- quick terminal 中用 im-select 替代 macism，避免 macism 切换输入法时导致浮动窗口失焦
+local im_cmd = vim.env.GHOSTTY_QUICK_TERMINAL == "1" and "im-select" or "macism"
+
 local function handle_focus_change()
   local group = vim.api.nvim_create_augroup("im-select-focus", { clear = true })
   -- 失焦时：如果在插入模式，记录当前输入法（供聚焦时恢复）
@@ -55,7 +60,7 @@ local function handle_focus_change()
     callback = function()
       local mode = vim.api.nvim_get_mode().mode
       if mode == "i" or mode == "ic" or mode == "ix" then
-        saved_im_before_focus_lost = vim.fn.system({ "macism" }):gsub("%s+", "")
+        saved_im_before_focus_lost = vim.fn.system({ im_cmd }):gsub("%s+", "")
       else
         saved_im_before_focus_lost = nil
       end
@@ -71,10 +76,10 @@ local function handle_focus_change()
       -- 非插入模式：默认切英文输入法
       if mode == "i" or mode == "ic" or mode == "ix" then
         if saved_im_before_focus_lost then
-          vim.fn.system({ "macism", saved_im_before_focus_lost })
+          vim.fn.system({ im_cmd, saved_im_before_focus_lost })
         end
       else
-        vim.fn.system({ "macism", "com.apple.keylayout.ABC" })
+        vim.fn.system({ im_cmd, "com.apple.keylayout.ABC" })
       end
       saved_im_before_focus_lost = nil
     end,
@@ -92,7 +97,7 @@ return {
   enabled = vim.g.simpler_scrollback ~= "deeznuts",
   opts = {
     default_im_select = "com.apple.keylayout.ABC",
-    -- default_command = "macism",
+    default_command = im_cmd,
     -- 在默认事件基础上增加终端进入和离开的事件，确保终端使用场景也能自动切换输入方法
     set_default_events = { "CmdlineLeave", "TermLeave", "TermEnter" },
     set_previous_events = {},
@@ -109,10 +114,10 @@ return {
         if is_floating_win() then
           return
         end
-        local current = vim.fn.system({ "macism" }):gsub("%s+", "")
+        local current = vim.fn.system({ im_cmd }):gsub("%s+", "")
         vim.api.nvim_set_var("im_select_saved_state", current)
         if current ~= "com.apple.keylayout.ABC" then
-          vim.fn.system({ "macism", "com.apple.keylayout.ABC" })
+          vim.fn.system({ im_cmd, "com.apple.keylayout.ABC" })
         end
       end,
     })
@@ -122,13 +127,9 @@ return {
         if is_floating_win() then
           return
         end
-        -- quick terminal 中不自动恢复中文（避免 macism 通过切焦切换输入法导致失焦）
-        if vim.env.GHOSTTY_QUICK_TERMINAL == "1" then
-          return
-        end
         local saved = vim.g["im_select_saved_state"]
         if saved and saved ~= "com.apple.keylayout.ABC" then
-          vim.fn.system({ "macism", saved })
+          vim.fn.system({ im_cmd, saved })
         end
       end,
     })
@@ -143,21 +144,21 @@ return {
         end
         local mode = vim.api.nvim_get_mode().mode
         if mode ~= "i" and mode ~= "ic" and mode ~= "ix" then
-          local current = vim.fn.system({ "macism" }):gsub("%s+", "")
+          local current = vim.fn.system({ im_cmd }):gsub("%s+", "")
           if current ~= "com.apple.keylayout.ABC" then
-            vim.fn.system({ "macism", "com.apple.keylayout.ABC" })
+            vim.fn.system({ im_cmd, "com.apple.keylayout.ABC" })
           end
         end
       end,
     })
 
     -- 启动时记录当前输入法，然后切换到英文
-    local im_before_nvim = vim.fn.system({ "macism" }):gsub("%s+", "")
-    vim.fn.system({ "macism", "com.apple.keylayout.ABC" })
+    local im_before_nvim = vim.fn.system({ im_cmd }):gsub("%s+", "")
+    vim.fn.system({ im_cmd, "com.apple.keylayout.ABC" })
     -- 退出时恢复启动前的输入法
     vim.api.nvim_create_autocmd("VimLeavePre", {
       callback = function()
-        vim.fn.system({ "macism", im_before_nvim })
+        vim.fn.system({ im_cmd, im_before_nvim })
       end,
     })
   end,
