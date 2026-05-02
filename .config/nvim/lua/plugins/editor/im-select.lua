@@ -122,6 +122,10 @@ return {
         if is_floating_win() then
           return
         end
+        -- quick terminal 中不自动恢复中文（用作临时便签，不需要频繁切换输入法）
+        if vim.env.GHOSTTY_QUICK_TERMINAL == "1" then
+          return
+        end
         local saved = vim.g["im_select_saved_state"]
         if saved and saved ~= "com.apple.keylayout.ABC" then
           vim.fn.system({ "macism", saved })
