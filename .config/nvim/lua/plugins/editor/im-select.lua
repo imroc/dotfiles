@@ -122,7 +122,7 @@ return {
         if is_floating_win() then
           return
         end
-        -- quick terminal 中不自动恢复中文（用作临时便签，不需要频繁切换输入法）
+        -- quick terminal 中不自动恢复中文（避免 macism 通过切焦切换输入法导致失焦）
         if vim.env.GHOSTTY_QUICK_TERMINAL == "1" then
           return
         end
