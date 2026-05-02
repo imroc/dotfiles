@@ -1,11 +1,23 @@
 local yadm = require("util.yadm")
 
-vim.keymap.set("n", "<leader>yi", "", { desc = "+[P]yadm private" })
-vim.keymap.set("n", "<leader>yu", "", { desc = "+[P]yadm public" })
+require("which-key").add({
+  { "<leader>yi", group = "[P]yadm private" },
+  { "<leader>yu", group = "[P]yadm public" },
+})
 vim.keymap.set("n", "<leader>yig", yadm.open_lazygit("private"), { desc = "[P]Open Lazygit (yadm private)" })
 vim.keymap.set("n", "<leader>yia", yadm.add_current_file("private"), { desc = "[P]Add file (yadm private)" })
 vim.keymap.set("n", "<leader>yis", yadm.sync("private"), { desc = "[P]Sync (yadm private)" })
 vim.keymap.set("n", "<leader>yug", yadm.open_lazygit("public"), { desc = "[P]Open Lazygit (yadm public)" })
 vim.keymap.set("n", "<leader>yua", yadm.add_current_file("public"), { desc = "[P]Add file (yadm public)" })
 vim.keymap.set("n", "<leader>yus", yadm.sync("public"), { desc = "[P]Sync (yadm public)" })
+vim.keymap.set("n", "<leader>yid", function()
+  yadm.set_git_env("private")
+  vim.cmd("DiffviewOpen")
+  vim.cmd("DiffviewToggleFiles")
+end, { desc = "[P]Yadm diff (private)" })
+vim.keymap.set("n", "<leader>yud", function()
+  yadm.set_git_env("public")
+  vim.cmd("DiffviewOpen")
+  vim.cmd("DiffviewToggleFiles")
+end, { desc = "[P]Yadm diff (public)" })
 vim.keymap.set("n", "<leader>ye", yadm.remove_git_env, { desc = "[P]Remove Git Env (yadm work tree)" })
