@@ -44,8 +44,18 @@ vim.keymap.set("n", "<leader>on", function()
   picker.files({ cwd = vim.fn.expand("$HOME/dev/note") })
 end, { desc = "[P]Open Note" })
 
-vim.keymap.set("n", "<C-]>", "]c", { desc = "[P]Next change", noremap = true, silent = true })
-vim.keymap.set("n", "<C-[>", "[c", { desc = "[P]Previous change", noremap = true, silent = true })
+vim.keymap.set("n", "<C-]>", function()
+  if package.loaded["codediff"] and require("codediff").next_hunk() then
+    return
+  end
+  vim.cmd("normal! ]c")
+end, { desc = "[P]Next change", silent = true })
+vim.keymap.set("n", "<C-[>", function()
+  if package.loaded["codediff"] and require("codediff").prev_hunk() then
+    return
+  end
+  vim.cmd("normal! [c")
+end, { desc = "[P]Previous change", silent = true })
 
 -- yank AI reference
 local clipboard = require("util.clipboard")

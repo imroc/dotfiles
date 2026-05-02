@@ -123,16 +123,10 @@ return {
     },
     keys = {
       {
-        "<leader>gr",
-        "<cmd>DiffviewOpen origin/HEAD...HEAD --imply-local<CR>",
-        desc = "[P]Code Review (diff with origin/HEAD)",
-      },
-      {
         "<leader>gR",
         "<cmd>DiffviewFileHistory --range=origin/HEAD...HEAD --right-only --no-merges<CR>",
         desc = "[P]Code Review (commit history after origin/HEAD)",
       },
-      -- { "gh", "<cmd>DiffviewFileHistory --no-merges<CR>", desc = "Git History" },
       {
         "<leader>gF",
         function()
@@ -147,26 +141,6 @@ return {
           find()
         end,
         desc = "[P]Find Git History",
-      },
-      {
-        "<leader>gD",
-        function()
-          local git_blame = require("gitblame")
-          git_blame.get_sha(function(sha)
-            vim.cmd("DiffviewOpen " .. sha .. "^!")
-          end)
-        end,
-        desc = "[P]Diff Commit on Current Blame Line",
-      },
-      { "<leader>gf", "<cmd>DiffviewFileHistory %<CR>", desc = "[P]Git History For Current File" },
-      { "<leader>gh", "<cmd>DiffviewFileHistory<cr>", desc = "[P]Git History" },
-      {
-        "<leader>gd",
-        function()
-          vim.cmd("DiffviewOpen")
-          vim.cmd("DiffviewToggleFiles")
-        end,
-        desc = "[P]Git Diff",
       },
       {
         "<leader>yid",
@@ -188,7 +162,6 @@ return {
         end,
         desc = "[P]Yadm diff (git changes)",
       },
-      { "<C-S-h>", "<cmd>DiffviewFileHistory<CR>", desc = "[P]Git History" },
     },
   },
 }
