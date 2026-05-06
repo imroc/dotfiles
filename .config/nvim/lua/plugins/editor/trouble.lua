@@ -1,5 +1,18 @@
 return {
   "folke/trouble.nvim",
+  init = function()
+    vim.api.nvim_create_autocmd("BufReadPost", {
+      group = vim.api.nvim_create_augroup("quickfix_to_trouble", { clear = true }),
+      callback = function(ev)
+        if vim.bo[ev.buf].buftype == "quickfix" then
+          vim.schedule(function()
+            vim.cmd("cclose")
+            require("trouble").open("qflist")
+          end)
+        end
+      end,
+    })
+  end,
   keys = {
     {
       "<leader>uj",

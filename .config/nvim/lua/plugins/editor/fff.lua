@@ -12,6 +12,7 @@ return {
     keymaps = {
       move_up = { "<Up>", "<C-p>", "<C-k>" },
       move_down = { "<Down>", "<C-n>", "<C-j>" },
+      send_to_quickfix = "<C-t>",
     },
   },
   keys = {
