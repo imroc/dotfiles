@@ -33,6 +33,12 @@ return {
       history = {
         initial_focus = "history",
       },
+      keymaps = {
+        view = {
+          next_hunk = "<C-]>",
+          prev_hunk = "<C-[>",
+        },
+      },
     })
 
     -- explorer 模式下自动隐藏文件列表面板（history 模式保留 commit 列表）
@@ -46,7 +52,12 @@ return {
         local tabpage = ev.data.tabpage or vim.api.nvim_get_current_tabpage()
         local lifecycle = require("codediff.ui.lifecycle")
         local explorer_obj = lifecycle.get_explorer(tabpage)
-        if explorer_obj and explorer_obj.split and explorer_obj.split.winid and vim.api.nvim_win_is_valid(explorer_obj.split.winid) then
+        if
+          explorer_obj
+          and explorer_obj.split
+          and explorer_obj.split.winid
+          and vim.api.nvim_win_is_valid(explorer_obj.split.winid)
+        then
           require("codediff.ui.explorer").toggle_visibility(explorer_obj)
         end
       end,
