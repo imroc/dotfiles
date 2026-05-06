@@ -169,7 +169,197 @@ return {
       },
       {
         "<localleader>a",
-        "<cmd>Checkmate archive<cr>",
+        function()
+          -- Step 1: 调用原生 archive（归档已完成的根 item）
+          require("checkmate").archive()
+
+          -- Step 2: 延迟处理子项归档（等 checkmate transaction 完成）
+          vim.schedule(function()
+            local bufnr = vim.api.nvim_get_current_buf()
+            local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+
+            -- checkmate 在 buffer 中用 unicode: ✔ (checked), □ (unchecked)
+            local checked_marker = "✔"
+            local unchecked_marker = "□"
+
+            -- 辅助：查找 archive section 行范围
+            local function find_archive_section(buf_lines)
+              local a_start, a_end
+              for i, line in ipairs(buf_lines) do
+                if line:match("^%s*## 已完成%s*$") then
+                  a_start = i -- 1-indexed
+                  a_end = #buf_lines
+                  for j = i + 1, #buf_lines do
+                    if buf_lines[j]:match("^%s*##[^#]") or buf_lines[j]:match("^%s*#[^#]") then
+                      a_end = j - 1
+                      break
+                    end
+                  end
+                  break
+                end
+              end
+              return a_start, a_end
+            end
+
+            local archive_start, archive_end = find_archive_section(lines)
+
+            -- 扫描已勾选子项（排除 archive section 内的）
+            -- 匹配 buffer 中 unicode 格式: "  - ✔ xxx" 或 markdown 格式: "  - [x] xxx"
+            local checked_children = {} -- {row=1-indexed, indent=num, text=string}
+            for i, line in ipairs(lines) do
+              if archive_start and i >= archive_start then
+                break
+              end
+              -- 匹配 unicode 格式: "  - ✔ content"
+              local indent, content = line:match("^(%s+)- " .. checked_marker .. " (.+)$")
+              -- fallback: 匹配 markdown 格式: "  - [x] content"
+              if not indent then
+                indent, content = line:match("^(%s+)- %[x%] (.+)$")
+              end
+              if indent and #indent >= 2 then
+                table.insert(checked_children, { row = i, indent = #indent, text = content })
+              end
+            end
+
+            if #checked_children == 0 then
+              return
+            end
+
+            -- 为每个子项找到父项
+            local groups = {} -- parent_text -> {children_texts}
+            local group_order = {} -- 保持父项顺序
+            local rows_to_delete = {}
+            for _, child in ipairs(checked_children) do
+              local parent_text
+              for j = child.row - 1, 1, -1 do
+                local pline = lines[j]
+                -- 匹配 unicode: "- □ xxx" 或 "- ✔ xxx"（分别匹配，因为 lua pattern 不支持多字节 []）
+                local pindent, pcontent = pline:match("^(%s*)- " .. unchecked_marker .. " (.+)$")
+                if not pindent then
+                  pindent, pcontent = pline:match("^(%s*)- " .. checked_marker .. " (.+)$")
+                end
+                -- fallback: markdown "- [ ] xxx" 或 "- [x] xxx"
+                if not pindent then
+                  pindent, pcontent = pline:match("^(%s*)- %[.%] (.+)$")
+                end
+                -- 最终 fallback: 普通列表 "- xxx"
+                if not pindent then
+                  pindent, pcontent = pline:match("^(%s*)- (.+)$")
+                end
+                if pindent and #pindent < child.indent then
+                  parent_text = pcontent
+                  break
+                end
+              end
+              if parent_text then
+                if not groups[parent_text] then
+                  groups[parent_text] = {}
+                  table.insert(group_order, parent_text)
+                end
+                table.insert(groups[parent_text], child.text)
+                table.insert(rows_to_delete, child.row)
+              end
+            end
+
+            if vim.tbl_isempty(groups) then
+              return
+            end
+
+            -- 从后往前删除子项行（避免行号偏移）
+            table.sort(rows_to_delete, function(a, b)
+              return a > b
+            end)
+            for _, row in ipairs(rows_to_delete) do
+              vim.api.nvim_buf_set_lines(bufnr, row - 1, row, false, {})
+            end
+
+            -- 重新读取 buffer，重新定位 archive section
+            lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+            archive_start, archive_end = find_archive_section(lines)
+
+            -- 如果 archive section 不存在，在文件末尾创建
+            if not archive_start then
+              local total = vim.api.nvim_buf_line_count(bufnr)
+              local last_line = vim.api.nvim_buf_get_lines(bufnr, total - 1, total, false)[1]
+              local new_lines = {}
+              if last_line ~= "" then
+                table.insert(new_lines, "")
+              end
+              table.insert(new_lines, "## 已完成")
+              table.insert(new_lines, "")
+              vim.api.nvim_buf_set_lines(bufnr, total, total, false, new_lines)
+              lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+              archive_start, archive_end = find_archive_section(lines)
+            end
+
+            -- 解析 archive section 中已有的父项条目
+            local existing_parents = {} -- parent_text -> row (1-indexed)
+            for i = archive_start + 1, archive_end do
+              local line = lines[i]
+              -- 匹配无 checkbox 的根列表项: "- xxx"（不匹配子项 "  - xxx"）
+              local ptxt = line:match("^- (.+)$")
+              if ptxt then
+                existing_parents[ptxt] = i
+              end
+            end
+
+            -- 构建归档内容
+            local append_lines = {}
+            local insert_into_existing = {} -- {after_row, lines}
+
+            for _, parent_text in ipairs(group_order) do
+              local children = groups[parent_text]
+              local existing_row = existing_parents[parent_text]
+              if existing_row then
+                -- 找到已有父项下最后一个子项，并收集已有子项文本用于去重
+                local last_child_row = existing_row
+                local existing_children = {}
+                for j = existing_row + 1, archive_end do
+                  if lines[j] and lines[j]:match("^  ") then
+                    last_child_row = j
+                    -- 提取子项文本（去掉缩进和 marker）
+                    local ct = lines[j]:match("^%s+- %[x%] (.+)$")
+                      or lines[j]:match("^%s+- " .. checked_marker .. " (.+)$")
+                    if ct then
+                      existing_children[ct] = true
+                    end
+                  else
+                    break
+                  end
+                end
+                local child_lines = {}
+                for _, ct in ipairs(children) do
+                  if not existing_children[ct] then
+                    table.insert(child_lines, "  - [x] " .. ct)
+                  end
+                end
+                if #child_lines > 0 then
+                  table.insert(insert_into_existing, { after = last_child_row, lines = child_lines })
+                end
+              else
+                table.insert(append_lines, "- " .. parent_text)
+                for _, ct in ipairs(children) do
+                  table.insert(append_lines, "  - [x] " .. ct)
+                end
+              end
+            end
+
+            -- 插入到已有父项下（从后往前）
+            table.sort(insert_into_existing, function(a, b)
+              return a.after > b.after
+            end)
+            for _, ins in ipairs(insert_into_existing) do
+              vim.api.nvim_buf_set_lines(bufnr, ins.after, ins.after, false, ins.lines)
+            end
+
+            -- 追加新父项到 archive section 末尾
+            if #append_lines > 0 then
+              lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+              _, archive_end = find_archive_section(lines)
+              vim.api.nvim_buf_set_lines(bufnr, archive_end, archive_end, false, append_lines)
+            end
+          end)
+        end,
         ft = "markdown",
         desc = "[P]Archive Done Items",
       },
