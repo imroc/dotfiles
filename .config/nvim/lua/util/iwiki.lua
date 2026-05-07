@@ -55,7 +55,22 @@ function M.open_iwiki()
       args = { "url", file_path },
     }):sync()
     if code == 0 and result and next(result) ~= nil then
-      cmux.open_browser(result[1])
+      cmux.open_browser(result[1], { same_pane = true })
+      -- 等页面加载后关闭侧边栏(Cmd+Opt+,)和 TOC(Opt+[)
+      vim.defer_fn(function()
+        vim.fn.jobstart({
+          "osascript",
+          "-e",
+          'tell application "System Events" to tell process "cmux" to keystroke "," using {command down, option down}',
+        })
+        vim.defer_fn(function()
+          vim.fn.jobstart({
+            "osascript",
+            "-e",
+            'tell application "System Events" to tell process "cmux" to keystroke "[" using {option down}',
+          })
+        end, 800)
+      end, 2000)
     else
       vim.notify("无法获取文档 URL", vim.log.levels.ERROR)
     end
