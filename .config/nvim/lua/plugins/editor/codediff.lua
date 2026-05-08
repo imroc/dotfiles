@@ -42,9 +42,11 @@ return {
     })
 
     -- explorer 模式下自动隐藏文件列表面板（history 模式保留 commit 列表）
+    -- CodeDiff 打开时自动最大化 cmux pane（多 pane 且未最大化时）
     vim.api.nvim_create_autocmd("User", {
       pattern = "CodeDiffOpen",
       callback = function(ev)
+        require("util.cmux").zoom_if_split()
         local mode = ev.data and ev.data.mode
         if mode ~= "explorer" then
           return
