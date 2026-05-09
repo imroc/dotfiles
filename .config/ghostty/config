@@ -4,7 +4,7 @@
 font-family = JetBrainsMono Nerd Font
 font-family = Sarasa Mono SC
 font-size = 14
-background-opacity = 0.85
+background-opacity = 0.8
 # 强制 ambiguous width 的几何符号用主字体渲染（单宽），
 # 避免 fallback 到更纱黑体导致双宽，影响 nvim render-markdown 等插件的对齐
 font-codepoint-map = U+25CB,U+25CF,U+25C6,U+25C7=JetBrainsMono Nerd Font
