@@ -47,35 +47,36 @@ end
 
 function M.open_iwiki()
   local file_path = buffer.absolute_path()
+  job.run_script(cmd .. ' open "' .. file_path .. '"')
+end
+
+function M.open_iwiki_cmux()
+  local file_path = buffer.absolute_path()
   local cmux = require("util.cmux")
-  if cmux.is_cmux() then
-    local Job = require("plenary.job")
-    local result, code = Job:new({
-      command = cmd,
-      args = { "url", file_path },
-    }):sync()
-    if code == 0 and result and next(result) ~= nil then
-      cmux.open_browser(result[1], { same_pane = true })
-      -- 等页面加载后关闭侧边栏(Cmd+Opt+,)和 TOC(Opt+[)
+  local Job = require("plenary.job")
+  local result, code = Job:new({
+    command = cmd,
+    args = { "url", file_path },
+  }):sync()
+  if code == 0 and result and next(result) ~= nil then
+    cmux.open_browser(result[1], { same_pane = true })
+    -- 等页面加载后关闭侧边栏(Cmd+Opt+,)和 TOC(Opt+[)
+    vim.defer_fn(function()
+      vim.fn.jobstart({
+        "osascript",
+        "-e",
+        'tell application "System Events" to tell process "cmux" to keystroke "," using {command down, option down}',
+      })
       vim.defer_fn(function()
         vim.fn.jobstart({
           "osascript",
           "-e",
-          'tell application "System Events" to tell process "cmux" to keystroke "," using {command down, option down}',
+          'tell application "System Events" to tell process "cmux" to keystroke "[" using {option down}',
         })
-        vim.defer_fn(function()
-          vim.fn.jobstart({
-            "osascript",
-            "-e",
-            'tell application "System Events" to tell process "cmux" to keystroke "[" using {option down}',
-          })
-        end, 800)
-      end, 2000)
-    else
-      vim.notify("无法获取文档 URL", vim.log.levels.ERROR)
-    end
+      end, 800)
+    end, 2000)
   else
-    job.run_script(cmd .. ' open "' .. file_path .. '"')
+    vim.notify("无法获取文档 URL", vim.log.levels.ERROR)
   end
 end
 

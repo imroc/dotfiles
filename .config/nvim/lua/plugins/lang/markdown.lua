@@ -97,32 +97,32 @@ return {
           "<localleader>o",
           function()
             local buf = vim.api.nvim_get_current_buf()
-            if not vim.env.CMUX_SOCKET_PATH then
-              toggle_toc(buf)
-            end
-            close_cmux_surface(buf)
-            vim.cmd("MarkdownPreviewToggle")
-          end,
-          ft = "markdown",
-          desc = "[P]Toggle Preview",
-        },
-        {
-          "<localleader>O",
-          function()
-            local buf = vim.api.nvim_get_current_buf()
             toggle_toc(buf)
             close_cmux_surface(buf)
             -- Force open with system default browser (bypass cmux)
-            local saved = vim.g.mkdp_browserfunc
             vim.g.mkdp_browserfunc = ""
             vim.cmd("MarkdownPreviewToggle")
-            -- Restore after server has read the value
+            -- Restore cmux handler after server has read the value
             vim.defer_fn(function()
-              vim.g.mkdp_browserfunc = saved
+              if vim.env.CMUX_SOCKET_PATH then
+                vim.g.mkdp_browserfunc = "CmuxOpenBrowser"
+              end
             end, 3000)
           end,
           ft = "markdown",
           desc = "[P]Toggle Preview (Default Browser)",
+        },
+        {
+          "<localleader>c",
+          function()
+            local buf = vim.api.nvim_get_current_buf()
+            close_cmux_surface(buf)
+            -- Ensure cmux handler is active
+            vim.g.mkdp_browserfunc = "CmuxOpenBrowser"
+            vim.cmd("MarkdownPreviewToggle")
+          end,
+          ft = "markdown",
+          desc = "[P]Toggle Preview (cmux)",
         },
       }
     end)(),

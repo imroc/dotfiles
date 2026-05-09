@@ -24,6 +24,7 @@ map("n", "<localleader>w", "", { buffer = 0, desc = "+[P]iwiki" })
 local iwiki = require("util.iwiki")
 map("n", "<localleader>ws", iwiki.save_iwiki_force, { buffer = 0, desc = "[P]Save (force)" })
 map("n", "<localleader>wo", iwiki.open_iwiki, { buffer = 0, desc = "[P]Open in browser" })
+map("n", "<localleader>wc", iwiki.open_iwiki_cmux, { buffer = 0, desc = "[P]Open in cmux browser" })
 map("n", "<localleader>wi", iwiki.insert_image, { buffer = 0, desc = "[P]Insert image" })
 map("n", "<localleader>wu", iwiki.copy_url, { buffer = 0, desc = "[P]Copy iwiki URL" })
 
