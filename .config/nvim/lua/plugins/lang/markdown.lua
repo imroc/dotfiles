@@ -97,7 +97,7 @@ return {
           "<localleader>o",
           function()
             local buf = vim.api.nvim_get_current_buf()
-            if not vim.env.CMUX_SOCKET then
+            if not vim.env.CMUX_SOCKET_PATH then
               toggle_toc(buf)
             end
             close_cmux_surface(buf)
@@ -130,7 +130,7 @@ return {
       vim.g.mkdp_markdown_css = vim.fn.expand("~/.config/nvim/resources/markdown-preview/github-markdown-light.css")
       vim.g.mkdp_highlight_css = vim.fn.expand("~/.config/nvim/resources/markdown-preview/github-dark.css")
       vim.g.mkdp_page_title = "${name}"
-      if vim.env.CMUX_SOCKET then
+      if vim.env.CMUX_SOCKET_PATH then
         vim.g.mkdp_browserfunc = "CmuxOpenBrowser"
         _G._cmux_open_browser = function(url)
           local surface = require("util.cmux").open_browser(url, { focus = false })

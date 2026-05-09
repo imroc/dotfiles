@@ -5,7 +5,7 @@ local M = {}
 --- Check if running inside cmux
 ---@return boolean
 function M.is_cmux()
-  return vim.env.CMUX_SOCKET ~= nil
+  return vim.env.CMUX_SOCKET_PATH ~= nil
 end
 
 --- Open a URL in cmux browser.
