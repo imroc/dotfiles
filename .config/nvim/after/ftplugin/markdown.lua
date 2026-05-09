@@ -1,8 +1,4 @@
-if vim.g.neovim_mode == "skitty" then
-  vim.opt_local.wrap = false
-else
-  vim.opt_local.wrap = true
-end
+vim.opt_local.wrap = false
 
 local map = vim.keymap.set
 local md = require("util.markdown")
