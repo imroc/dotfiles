@@ -10,6 +10,23 @@ vim.keymap.set("n", "<leader>yN", clipboard.copy_filename, { desc = "[P]Copy Fil
 vim.keymap.set("n", "<leader>yr", clipboard.copy_relative_path, { desc = "[P]Copy Relative Path" })
 vim.keymap.set("n", "<leader>yR", clipboard.copy_current_root_directory, { desc = "[P]Copy Current Root Directory" })
 vim.keymap.set("n", "<leader>yd", clipboard.copy_current_directory, { desc = "[P]Copy Current Directory" })
+-- Copy current file to system clipboard as Finder file object (macOS)
+vim.keymap.set("n", "<leader>yy", function()
+  local path = vim.api.nvim_buf_get_name(0)
+  local safe_path = path:gsub([[\]], [[\\]]):gsub([["]], [[\"]])
+  -- Build the osascript command to copy the file to the clipboard
+  local result = vim.fn.system({
+    "osascript",
+    "-e",
+    string.format([[tell application "Finder" to set the clipboard to (POSIX file "%s")]], safe_path),
+  })
+  if vim.v.shell_error ~= 0 then
+    vim.notify("Copy failed: " .. result, vim.log.levels.ERROR)
+  else
+    vim.notify(vim.fn.fnamemodify(path, ":t"), vim.log.levels.INFO)
+    vim.notify("Copied to system clipboard", vim.log.levels.INFO)
+  end
+end, { desc = "[P]Copy current file to clipboard" })
 
 -- file permission
 vim.keymap.set("n", "<leader>fx", "<cmd>!chmod +x %<cr>", { desc = "[P]Add executable permission" })
@@ -63,3 +80,15 @@ vim.keymap.set("n", "<leader>odz", "<cmd>edit ~/.config/zellij/config.kdl<cr>", 
 
 -- rename file with iwiki.json sync
 vim.keymap.set("n", "<leader>rn", file.rename, { desc = "[P]Rename current filename" })
+
+-- Auto-yank visual selection to the system clipboard on mouse release
+-- NOTE: This requires Neovim to receive mouse events (so `mouse` must include visual mode)
+-- NOTE: LazyVim already enables `opt.mouse = "a"` (mouse mode), so we don't set it here
+-- https://stackoverflow.com/questions/79585797/how-to-copy-on-mouse-selection-in-neovim
+vim.keymap.set("v", "<LeftRelease>", [["+ygv]], { silent = true, desc = "[P]Mouse select -> yank to system clipboard" })
+vim.keymap.set(
+  "v",
+  "<2-LeftRelease>",
+  [["+ygv]],
+  { silent = true, desc = "[P]Mouse select (double) -> yank to system clipboard" }
+)
