@@ -1123,6 +1123,10 @@
 }
 
 /* Layout for markdown-preview.nvim */
+#page-ctn {
+  max-width: none;
+}
+
 .markdown-body {
   padding: 45px;
 }

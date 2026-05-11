@@ -1140,6 +1140,10 @@ body {
   color: #c9d1d9 !important;
 }
 
+#page-ctn {
+  max-width: none;
+}
+
 .markdown-body {
   padding: 45px;
 }
