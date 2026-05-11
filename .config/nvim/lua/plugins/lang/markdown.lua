@@ -39,54 +39,62 @@ return {
       --- WKWebView (cmux browser) blocks cross-site cookie, so iwiki images
       --- loaded from localhost page fail. This downloads and serves them locally.
       local function inject_iwiki_images(buf)
-        if vim.b[buf].mkdp_iwiki_originals then
+        if vim.b[buf].mkdp_iwiki_replacements then
           return -- already injected
         end
         local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
-        local originals = {} -- { {line_idx_0based, original_line} }
+        local replacements = {} -- { cache_path = original_url }
+        local modified_lines = {} -- { {line_idx_0based, new_content} }
         for i, line in ipairs(lines) do
           -- Match both full URL and path-only forms
-          local new_line = line:gsub("https?://iwiki%.woa%.com(/tencent/api/attachments/s3/url%?attachmentid=(%d+))", function(_, id)
+          local new_line = line:gsub("https?://iwiki%.woa%.com(/tencent/api/attachments/s3/url%?attachmentid=(%d+))", function(full, id)
             local cache_path = iwiki.get_image_cache_path(id)
             if not iwiki.image_cache_exists(id) then
               vim.system({ "iwiki", "download", id, cache_path }):wait()
             end
+            replacements[cache_path] = "https://iwiki.woa.com" .. full
             return cache_path
           end)
           -- Also match path-only: /tencent/api/attachments/s3/url?attachmentid=<id>
-          new_line = new_line:gsub("(/tencent/api/attachments/s3/url%?attachmentid=(%d+))", function(_, id)
+          new_line = new_line:gsub("(/tencent/api/attachments/s3/url%?attachmentid=(%d+))", function(full, id)
             local cache_path = iwiki.get_image_cache_path(id)
             if not iwiki.image_cache_exists(id) then
               vim.system({ "iwiki", "download", id, cache_path }):wait()
             end
+            replacements[cache_path] = full
             return cache_path
           end)
           if new_line ~= line then
-            table.insert(originals, { i - 1, line })
-            lines[i] = new_line
+            table.insert(modified_lines, { i - 1, new_line })
           end
         end
-        if #originals > 0 then
+        if #modified_lines > 0 then
           local was_modified = vim.bo[buf].modified
-          for _, entry in ipairs(originals) do
-            vim.api.nvim_buf_set_lines(buf, entry[1], entry[1] + 1, false, { lines[entry[1] + 1] })
+          for _, entry in ipairs(modified_lines) do
+            vim.api.nvim_buf_set_lines(buf, entry[1], entry[1] + 1, false, { entry[2] })
           end
           vim.bo[buf].modified = was_modified
-          vim.b[buf].mkdp_iwiki_originals = originals
+          vim.b[buf].mkdp_iwiki_replacements = replacements
         end
       end
 
       local function restore_iwiki_images(buf)
-        local originals = vim.b[buf].mkdp_iwiki_originals
-        if not originals then
+        local replacements = vim.b[buf].mkdp_iwiki_replacements
+        if not replacements then
           return
         end
         local was_modified = vim.bo[buf].modified
-        for _, entry in ipairs(originals) do
-          vim.api.nvim_buf_set_lines(buf, entry[1], entry[1] + 1, false, { entry[2] })
+        local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+        for i, line in ipairs(lines) do
+          for cache_path, original_url in pairs(replacements) do
+            if line:find(cache_path, 1, true) then
+              lines[i] = line:gsub(vim.pesc(cache_path), original_url)
+            end
+          end
         end
+        vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
         vim.bo[buf].modified = was_modified
-        vim.b[buf].mkdp_iwiki_originals = nil
+        vim.b[buf].mkdp_iwiki_replacements = nil
       end
 
       local function toggle_toc(buf)
