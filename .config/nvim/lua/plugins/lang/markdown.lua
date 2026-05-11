@@ -33,6 +33,62 @@ return {
   {
     "iamcco/markdown-preview.nvim",
     keys = (function()
+      local iwiki = require("util.iwiki")
+
+      --- Replace iwiki image URLs with local cached paths for markdown-preview.
+      --- WKWebView (cmux browser) blocks cross-site cookie, so iwiki images
+      --- loaded from localhost page fail. This downloads and serves them locally.
+      local function inject_iwiki_images(buf)
+        if vim.b[buf].mkdp_iwiki_originals then
+          return -- already injected
+        end
+        local lines = vim.api.nvim_buf_get_lines(buf, 0, -1, false)
+        local originals = {} -- { {line_idx_0based, original_line} }
+        for i, line in ipairs(lines) do
+          -- Match both full URL and path-only forms
+          local new_line = line:gsub("https?://iwiki%.woa%.com(/tencent/api/attachments/s3/url%?attachmentid=(%d+))", function(_, id)
+            local cache_path = iwiki.get_image_cache_path(id)
+            if not iwiki.image_cache_exists(id) then
+              vim.system({ "iwiki", "download", id, cache_path }):wait()
+            end
+            return cache_path
+          end)
+          -- Also match path-only: /tencent/api/attachments/s3/url?attachmentid=<id>
+          new_line = new_line:gsub("(/tencent/api/attachments/s3/url%?attachmentid=(%d+))", function(_, id)
+            local cache_path = iwiki.get_image_cache_path(id)
+            if not iwiki.image_cache_exists(id) then
+              vim.system({ "iwiki", "download", id, cache_path }):wait()
+            end
+            return cache_path
+          end)
+          if new_line ~= line then
+            table.insert(originals, { i - 1, line })
+            lines[i] = new_line
+          end
+        end
+        if #originals > 0 then
+          local was_modified = vim.bo[buf].modified
+          for _, entry in ipairs(originals) do
+            vim.api.nvim_buf_set_lines(buf, entry[1], entry[1] + 1, false, { lines[entry[1] + 1] })
+          end
+          vim.bo[buf].modified = was_modified
+          vim.b[buf].mkdp_iwiki_originals = originals
+        end
+      end
+
+      local function restore_iwiki_images(buf)
+        local originals = vim.b[buf].mkdp_iwiki_originals
+        if not originals then
+          return
+        end
+        local was_modified = vim.bo[buf].modified
+        for _, entry in ipairs(originals) do
+          vim.api.nvim_buf_set_lines(buf, entry[1], entry[1] + 1, false, { entry[2] })
+        end
+        vim.bo[buf].modified = was_modified
+        vim.b[buf].mkdp_iwiki_originals = nil
+      end
+
       local function toggle_toc(buf)
         local toc_injected = vim.b[buf].mkdp_toc_injected
         if toc_injected then
@@ -92,13 +148,28 @@ return {
         end
       end
 
+      --- Detect if preview is currently active for this buffer
+      local function is_preview_active()
+        return vim.fn.exists(":MarkdownPreviewStop") == 2
+          and (vim.g.mkdp_clients_active or 0) == 1
+      end
+
       return {
         {
           "<localleader>o",
           function()
             local buf = vim.api.nvim_get_current_buf()
-            toggle_toc(buf)
-            close_cmux_surface(buf)
+            if is_preview_active() then
+              -- Closing preview
+              restore_iwiki_images(buf)
+              toggle_toc(buf)
+              close_cmux_surface(buf)
+            else
+              -- Opening preview
+              toggle_toc(buf)
+              inject_iwiki_images(buf)
+              close_cmux_surface(buf)
+            end
             -- Force open with system default browser (bypass cmux)
             vim.g.mkdp_browserfunc = ""
             vim.cmd("MarkdownPreviewToggle")
@@ -116,7 +187,15 @@ return {
           "<localleader>c",
           function()
             local buf = vim.api.nvim_get_current_buf()
-            close_cmux_surface(buf)
+            if is_preview_active() then
+              -- Closing preview
+              restore_iwiki_images(buf)
+              close_cmux_surface(buf)
+            else
+              -- Opening preview
+              inject_iwiki_images(buf)
+              close_cmux_surface(buf)
+            end
             -- Ensure cmux handler is active
             vim.g.mkdp_browserfunc = "CmuxOpenBrowser"
             vim.cmd("MarkdownPreviewToggle")
