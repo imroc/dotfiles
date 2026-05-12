@@ -53,8 +53,7 @@ return {
       --- The observer persists through content updates (WebSocket innerHTML pushes)
       --- because markdown-preview doesn't reload the page.
       local function inject_iwiki_observer(surface)
-        local js = string.format(
-          [[
+        local js = string.format([[
 (function() {
   if (window._iwikiObserver) return;
   var CACHE = '/_local_image_%%2FUsers%%2Froc%%2F.cache%%2Fnvim%%2Fiwiki%%2Fimages%%2F';
@@ -743,7 +742,7 @@ return {
       },
       link = {
         wiki = { icon = " ", highlight = "RenderMarkdownWikiLink", scope_highlight = "RenderMarkdownWikiLink" },
-        image = vim.g.neovim_mode == "skitty" and "" or "󰥶 ",
+        image = "󰥶 ",
         -- image = " ",
         custom = {
           github = { pattern = "github", icon = " " },
