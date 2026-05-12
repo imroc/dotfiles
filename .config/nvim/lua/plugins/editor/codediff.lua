@@ -93,6 +93,41 @@ return {
             focus_first_change()
           end, { buffer = ev.buf, desc = "[P]Select and focus diff" })
         end
+
+        -- L 查看 commit 完整 message（浮动窗口，与上游 roadmap #267 #5 对齐）
+        vim.keymap.set("n", "L", function()
+          local lifecycle = require("codediff.ui.lifecycle")
+          local tabpage = vim.api.nvim_get_current_tabpage()
+          -- history_obj 存储在 explorer slot 中
+          local history_obj = lifecycle.get_explorer(tabpage)
+          if not history_obj or not history_obj.tree then
+            return
+          end
+          local node = history_obj.tree:get_node()
+          if not node or not node.data then
+            return
+          end
+          -- 支持 commit 节点和 file 节点（取其 commit_hash）
+          local hash = (node.data.type == "commit") and node.data.hash or node.data.commit_hash
+          if not hash then
+            return
+          end
+          local git_root = node.data.git_root or history_obj.git_root
+          local result = vim.fn.systemlist({ "git", "-C", git_root, "log", "-1", "--format=%B", hash })
+          if vim.v.shell_error ~= 0 or #result == 0 then
+            return
+          end
+          -- 去除末尾空行
+          while #result > 0 and result[#result] == "" do
+            table.remove(result)
+          end
+          vim.lsp.util.open_floating_preview(result, "markdown", {
+            border = "rounded",
+            max_width = 80,
+            max_height = 20,
+            focus_id = "codediff_commit_msg",
+          })
+        end, { buffer = ev.buf, desc = "[P]Show full commit message" })
       end,
     })
   end,
