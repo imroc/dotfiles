@@ -30,6 +30,8 @@ return {
     -- 禁用一些快捷键，避免与自定义快捷键冲突
     -- { "<leader>S", false },
     -- { "<leader>gS", false },
+    { "<leader>e", false },
+    { "<leader>E", false },
     { "<leader>gi", false },
     { "<leader>gI", false },
     { "<leader>gp", false },
