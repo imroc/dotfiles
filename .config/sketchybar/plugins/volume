@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+source "$CONFIG_DIR/themes/tokyonight"
+
+# volume_change 事件会传入 $INFO（音量值 0-100）
+# update_freq 轮询时 $INFO 为空，需要主动获取
+if [[ -n "$INFO" ]]; then
+  vol="$INFO"
+else
+  vol=$(osascript -e 'output volume of (get volume settings)')
+fi
+
+muted=$(osascript -e 'output muted of (get volume settings)')
+
+if [[ "$muted" == "true" || "$vol" -eq 0 ]]; then
+  icon="󰝟"
+elif [[ "$vol" -le 30 ]]; then
+  icon="󰕿"
+elif [[ "$vol" -le 60 ]]; then
+  icon="󰖀"
+else
+  icon="󰕾"
+fi
+
+sketchybar --set "$NAME" icon="$icon" label="${vol}%"
