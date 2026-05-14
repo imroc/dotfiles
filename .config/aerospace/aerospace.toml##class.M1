@@ -280,10 +280,10 @@ persistent-workspaces = ["A", "C", "D", "E", "M", "O", "T", "V", "W" ]
       'exec-and-forget sketchybar --trigger aerospace_service_mode_enabled_changed AEROSPACE_SERVICE_MODE_ENABLED=false',
     ]
     # See: https://nikitabobko.github.io/AeroSpace/commands#move
-    h = 'move left'
-    j = 'move down'
-    k = 'move up'
-    l = 'move right'
+    shift-h = 'move left'
+    shift-j = 'move down'
+    shift-k = 'move up'
+    shift-l = 'move right'
 
     # sticky is not yet supported https://github.com/nikitabobko/AeroSpace/issues/2
     #s = ['layout sticky tiling', 'mode main']
