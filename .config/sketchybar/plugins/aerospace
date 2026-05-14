@@ -23,7 +23,8 @@ elif [ "$SENDER" = "aerospace_workspace_change" ] || [ "$SENDER" = "aerospace_wi
   # 获取当前聚焦的 workspace（workspace_change 事件通过 env 传入，windows_change 事件需要查询）
   focused="$FOCUSED_WORKSPACE"
   if [ -z "$focused" ]; then
-    focused=$(aerospace list-workspaces --focused)
+    focused=$(timeout 2 aerospace list-workspaces --focused 2>/dev/null)
+    [ -z "$focused" ] && exit 0
   fi
 
   if [ "$1" = "$focused" ]; then
@@ -34,7 +35,7 @@ elif [ "$SENDER" = "aerospace_workspace_change" ] || [ "$SENDER" = "aerospace_wi
       label.font="$LABEL_HIGHLIGHT_FONT"
   else
     # 检查该 workspace 是否有窗口
-    window_count=$(aerospace list-windows --workspace "$1" 2>/dev/null | wc -l | tr -d ' ')
+    window_count=$(timeout 2 aerospace list-windows --workspace "$1" 2>/dev/null | wc -l | tr -d ' ')
     if [ "$window_count" -gt 0 ]; then
       # 有窗口：正常颜色
       sketchybar --set $NAME \

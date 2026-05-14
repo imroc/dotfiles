@@ -314,7 +314,7 @@ persistent-workspaces = ["A", "C", "D", "E", "M", "O", "T", "V", "W" ]
 # 新窗口出现时通知 sketchybar 刷新窗口状态
 [[on-window-detected]]
     check-further-callbacks = true
-    run = ['exec-and-forget sketchybar --trigger aerospace_windows_change']
+    run = ['exec-and-forget sketchybar --trigger aerospace_windows_change FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)']
 
 # 默认 float 的窗口
 [[on-window-detected]]
