@@ -287,10 +287,10 @@ persistent-workspaces = ["A", "C", "D", "E", "M", "O", "T", "V", "W" ]
 
     # sticky is not yet supported https://github.com/nikitabobko/AeroSpace/issues/2
     #s = ['layout sticky tiling', 'mode main']
-    alt-ctrl-h = ['join-with left', 'mode main']
-    alt-ctrl-j = ['join-with down', 'mode main']
-    alt-ctrl-k = ['join-with up', 'mode main']
-    alt-ctrl-l = ['join-with right', 'mode main']
+    alt-ctrl-h = ['join-with left', 'mode main', 'exec-and-forget sketchybar --trigger aerospace_service_mode_enabled_changed AEROSPACE_SERVICE_MODE_ENABLED=false']
+    alt-ctrl-j = ['join-with down', 'mode main', 'exec-and-forget sketchybar --trigger aerospace_service_mode_enabled_changed AEROSPACE_SERVICE_MODE_ENABLED=false']
+    alt-ctrl-k = ['join-with up', 'mode main', 'exec-and-forget sketchybar --trigger aerospace_service_mode_enabled_changed AEROSPACE_SERVICE_MODE_ENABLED=false']
+    alt-ctrl-l = ['join-with right', 'mode main', 'exec-and-forget sketchybar --trigger aerospace_service_mode_enabled_changed AEROSPACE_SERVICE_MODE_ENABLED=false']
 
     # Bluetooth: toggle HUAWEI FreeArc
     e = [
@@ -301,7 +301,7 @@ persistent-workspaces = ["A", "C", "D", "E", "M", "O", "T", "V", "W" ]
 
     ctrl-j = 'volume down'
     ctrl-k = 'volume up'
-    ctrl-0 = ['volume set 0', 'mode main']
+    ctrl-0 = ['volume set 0', 'mode main', 'exec-and-forget sketchybar --trigger aerospace_service_mode_enabled_changed AEROSPACE_SERVICE_MODE_ENABLED=false']
 
 # ----------------------
 # 应用窗口自动放置规则
