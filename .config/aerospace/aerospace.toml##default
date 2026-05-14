@@ -346,7 +346,12 @@ persistent-workspaces = ["A", "C", "D", "E", "M", "O", "T", "V", "W" ]
 [[on-window-detected]]
     if.app-id = 'net.sonuscape.mouseless'
     run = ['layout floating']
-
+[[on-window-detected]]
+    if.app-id = 'com.apple.QuickTimePlayerX' # QuickTime Player
+    run = ['layout floating']
+[[on-window-detected]]
+    if.app-id = 'com.zhipu.agent' # AutoGLM
+    run = ['layout floating']
 
 # A: AI 工具
 [[on-window-detected]]
@@ -405,9 +410,6 @@ persistent-workspaces = ["A", "C", "D", "E", "M", "O", "T", "V", "W" ]
     run = ['move-node-to-workspace E']
 [[on-window-detected]]
     if.app-id = 'net.telestream.screenflow10' # ScreenFlow
-    run = ['move-node-to-workspace E']
-[[on-window-detected]]
-    if.app-id = 'com.apple.QuickTimePlayerX' # QuickTime Player
     run = ['move-node-to-workspace E']
 [[on-window-detected]]
     if.app-id = 'com.siddharthvaddem.openscreen' # OpenScreen
