@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+source "$CONFIG_DIR/environment"
+source "$THEME_DIR/tokyonight"
+
+# ── Bluetooth devices ────────────────────────────────────────
+#   name            MAC                 icon
+devices=(
+  "bt_headphone    64-b0-e8-fb-56-68   󱡏"
+  "bt_keyboard     f5-aa-e4-10-93-dd   󰌌"
+  "bt_mouse        00-81-2a-94-bd-6c   󰍽"
+)
+
+for entry in "${devices[@]}"; do
+  read -r name addr icon <<< "$entry"
+
+  sketchybar --add event "${name}_status_change"
+
+  sketchybar --add item "$name" right \
+    --subscribe "$name" "${name}_status_change" \
+    --set "$name" \
+    drawing=off \
+    background.drawing=off \
+    icon.drawing=on \
+    icon.font="$ICON_BASE_FONT:Bold:15.0" \
+    icon="$icon" \
+    icon.color="$green" \
+    icon.padding_left=0 \
+    icon.padding_right=6 \
+    label.drawing=off \
+    update_freq=60 \
+    script="BT_DEVICE=$addr $PLUGIN_DIR/bt_device"
+done

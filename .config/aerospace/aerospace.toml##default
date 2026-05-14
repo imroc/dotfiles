@@ -296,6 +296,13 @@ persistent-workspaces = ["A", "C", "D", "E", "M", "O", "T", "V", "W" ]
     alt-ctrl-k = ['join-with up', 'mode main']
     alt-ctrl-l = ['join-with right', 'mode main']
 
+    # Bluetooth: toggle HUAWEI FreeArc
+    e = [
+      'exec-and-forget bt-freearc',
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_service_mode_enabled_changed AEROSPACE_SERVICE_MODE_ENABLED=false',
+    ]
+
     down = 'volume down'
     up = 'volume up'
     shift-down = ['volume set 0', 'mode main']

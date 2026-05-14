@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+# Generic bluetooth device status plugin.
+# Requires env var BT_DEVICE (MAC address) set by the item definition.
+
+source "$CONFIG_DIR/themes/tokyonight"
+
+connected=$(/opt/homebrew/bin/blueutil --is-connected "$BT_DEVICE" 2>/dev/null)
+
+if [[ "$connected" == "1" ]]; then
+  sketchybar --set "$NAME" drawing=on
+else
+  sketchybar --set "$NAME" drawing=off
+fi
