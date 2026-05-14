@@ -299,9 +299,9 @@ persistent-workspaces = ["A", "C", "D", "E", "M", "O", "T", "V", "W" ]
       'exec-and-forget sketchybar --trigger aerospace_service_mode_enabled_changed AEROSPACE_SERVICE_MODE_ENABLED=false',
     ]
 
-    down = 'volume down'
-    up = 'volume up'
-    shift-down = ['volume set 0', 'mode main']
+    ctrl-j = 'volume down'
+    ctrl-k = 'volume up'
+    ctrl-0 = ['volume set 0', 'mode main']
 
 # ----------------------
 # 应用窗口自动放置规则
