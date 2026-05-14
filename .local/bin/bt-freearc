@@ -1,0 +1,34 @@
+#!/bin/bash
+# Toggle connect/disconnect for HUAWEI FreeArc bluetooth earbuds
+# NOTE: Use osascript to invoke blueutil so that the Bluetooth TCC check
+# falls on AeroSpace.app (which must be listed in Privacy > Bluetooth).
+
+osascript -e '
+set deviceAddr to "64-b0-e8-fb-56-68"
+set deviceName to "HUAWEI FreeArc"
+set blu to "/opt/homebrew/bin/blueutil"
+set bar to "/opt/homebrew/bin/sketchybar"
+set barEvent to "bt_headphone_status_change"
+
+try
+    set connected to (do shell script blu & " --is-connected " & deviceAddr)
+on error errMsg
+    display notification errMsg with title deviceName sound name "Basso"
+    return
+end try
+
+if connected = "1" then
+    do shell script blu & " --disconnect " & deviceAddr
+    do shell script bar & " --trigger " & barEvent
+    display notification "已断开连接" with title deviceName sound name "Purr"
+else
+    display notification "正在连接..." with title deviceName sound name "Tink"
+    try
+        do shell script blu & " --connect " & deviceAddr & " --wait-connect " & deviceAddr & " 5"
+        do shell script bar & " --trigger " & barEvent
+        display notification "已连接" with title deviceName sound name "Hero"
+    on error
+        display notification "连接失败，请确认耳机已开启" with title deviceName sound name "Basso"
+    end try
+end if
+'
