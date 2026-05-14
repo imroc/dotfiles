@@ -1,0 +1,16 @@
+#!/bin/bash
+# sketchybar-notifier — 自动编译并运行 sketchybar 事件驱动守护进程
+#
+# yadm 同步源码（.swift），二进制缓存到 ~/.cache/，源码变更时自动重新编译。
+# launchd 调用本脚本而非直接调用二进制。
+
+SRC="$HOME/.local/bin/sketchybar-notifier.swift"
+BIN="$HOME/.cache/sketchybar-notifier"
+
+mkdir -p "$(dirname "$BIN")"
+
+if [[ ! -f "$BIN" ]] || [[ "$SRC" -nt "$BIN" ]]; then
+    swiftc -O -framework IOBluetooth -o "$BIN" "$SRC" || exit 1
+fi
+
+exec "$BIN" "$@"

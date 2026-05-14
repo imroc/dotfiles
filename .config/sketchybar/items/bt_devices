@@ -28,6 +28,6 @@ for entry in "${devices[@]}"; do
     icon.padding_left=0 \
     icon.padding_right=6 \
     label.drawing=off \
-    update_freq=10 \
+    update_freq=60 \
     script="BT_DEVICE=$addr $PLUGIN_DIR/bt_device"
 done

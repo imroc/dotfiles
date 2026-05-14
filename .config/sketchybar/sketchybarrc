@@ -43,6 +43,7 @@ source "$ITEM_DIR/spacer"
 source "$ITEM_DIR/front_app"
 
 # Right
+source "$ITEM_DIR/input_method"
 source "$ITEM_DIR/bt_devices"
 source "$ITEM_DIR/clock"
 

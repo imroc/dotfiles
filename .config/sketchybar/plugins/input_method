@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+source "$CONFIG_DIR/themes/tokyonight"
+
+im=$(/opt/homebrew/bin/macism 2>/dev/null)
+
+case "$im" in
+  com.apple.keylayout.ABC)
+    sketchybar --set "$NAME" icon="A" icon.font="$ICON_BASE_FONT:Bold:14.0" icon.color="$cyan"
+    ;;
+  com.sogou.inputmethod.sogou.pinyin)
+    sketchybar --set "$NAME" icon="拼" icon.font="$ICON_BASE_FONT:Bold:14.0" icon.color="$orange"
+    ;;
+  *)
+    sketchybar --set "$NAME" icon="?" icon.color="$white"
+    ;;
+esac

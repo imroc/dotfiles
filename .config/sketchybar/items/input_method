@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+source "$CONFIG_DIR/environment"
+source "$THEME_DIR/tokyonight"
+
+IM_LABEL_COLOR="$cyan"
+
+sketchybar --add event input_method_change
+
+sketchybar --add item input_method right \
+  --subscribe input_method input_method_change \
+  --set input_method \
+  background.drawing=off \
+  icon.drawing=on \
+  icon.font="$ICON_BASE_FONT:Bold:14.0" \
+  icon.color="$IM_LABEL_COLOR" \
+  icon.padding_left=0 \
+  icon.padding_right=6 \
+  label.drawing=off \
+  update_freq=60 \
+  script="$PLUGIN_DIR/input_method"
