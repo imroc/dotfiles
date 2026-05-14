@@ -12,7 +12,7 @@ devices=(
 )
 
 for entry in "${devices[@]}"; do
-  read -r name addr icon <<< "$entry"
+  read -r name addr icon <<<"$entry"
 
   sketchybar --add event "${name}_status_change"
 
@@ -28,6 +28,6 @@ for entry in "${devices[@]}"; do
     icon.padding_left=0 \
     icon.padding_right=6 \
     label.drawing=off \
-    update_freq=60 \
+    update_freq=10 \
     script="BT_DEVICE=$addr $PLUGIN_DIR/bt_device"
 done
