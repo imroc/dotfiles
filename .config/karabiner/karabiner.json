@@ -113,7 +113,7 @@
                         ]
                     },
                     {
-                        "description": "Ghostty: Cmd+U/S switch to English input method",
+                        "description": "Ghostty/cmux: Cmd+U/S switch to English input method",
                         "manipulators": [
                             {
                                 "from": {
@@ -134,7 +134,10 @@
                                 "conditions": [
                                     {
                                         "type": "frontmost_application_if",
-                                        "bundle_identifiers": ["com.mitchellh.ghostty"]
+                                        "bundle_identifiers": [
+                                            "com.mitchellh.ghostty",
+                                            "com.cmuxterm.app"
+                                        ]
                                     }
                                 ],
                                 "type": "basic"
@@ -158,7 +161,10 @@
                                 "conditions": [
                                     {
                                         "type": "frontmost_application_if",
-                                        "bundle_identifiers": ["com.mitchellh.ghostty"]
+                                        "bundle_identifiers": [
+                                            "com.mitchellh.ghostty",
+                                            "com.cmuxterm.app"
+                                        ]
                                     }
                                 ],
                                 "type": "basic"
