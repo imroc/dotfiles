@@ -17,6 +17,9 @@ return {
       desc = "[P]Diff Commit on Current Blame Line",
     },
     { "<C-S-h>", "<cmd>CodeDiff history<CR>", desc = "[P]Git History" },
+    -- yadm keymaps：触发 codediff lazy load 并打开 yadm diff
+    { "<leader>yud", function() require("util.yadm").open_codediff("public")() end, desc = "[P]Yadm diff (public)" },
+    { "<leader>yid", function() require("util.yadm").open_codediff("private")() end, desc = "[P]Yadm diff (private)" },
   },
   config = function()
     require("codediff").setup({
@@ -53,15 +56,41 @@ return {
         end
         local tabpage = ev.data.tabpage or vim.api.nvim_get_current_tabpage()
         local lifecycle = require("codediff.ui.lifecycle")
-        local explorer_obj = lifecycle.get_explorer(tabpage)
-        if
-          explorer_obj
-          and explorer_obj.split
-          and explorer_obj.split.winid
-          and vim.api.nvim_win_is_valid(explorer_obj.split.winid)
-        then
-          require("codediff.ui.explorer").toggle_visibility(explorer_obj)
+
+        -- 等 diff 渲染完成后再隐藏 explorer 并聚焦 modified 窗口第一个变更。
+        -- 不能立即隐藏 explorer，因为 initial file selection 的 vim.schedule
+        -- 回调依赖 explorer 窗口有效性来完成文件加载流程。
+        local attempts = 0
+        local function wait_and_focus()
+          attempts = attempts + 1
+          local tp = vim.api.nvim_get_current_tabpage()
+          if tp ~= tabpage then
+            return -- tab 已切换，放弃
+          end
+          local session = lifecycle.get_session(tp)
+          if session and session.stored_diff_result then
+            -- diff 渲染完成，隐藏 explorer
+            local explorer_obj = lifecycle.get_explorer(tp)
+            if
+              explorer_obj
+              and not explorer_obj.is_hidden
+              and explorer_obj.split
+              and explorer_obj.split.winid
+              and vim.api.nvim_win_is_valid(explorer_obj.split.winid)
+            then
+              require("codediff.ui.explorer").toggle_visibility(explorer_obj)
+            end
+            -- 聚焦 modified 窗口第一个变更
+            local _, modified_win = lifecycle.get_windows(tp)
+            if modified_win and vim.api.nvim_win_is_valid(modified_win) then
+              vim.api.nvim_set_current_win(modified_win)
+              pcall(require("codediff").next_hunk)
+            end
+          elseif attempts < 50 then
+            vim.defer_fn(wait_and_focus, 100)
+          end
         end
+        vim.defer_fn(wait_and_focus, 200)
       end,
     })
 
