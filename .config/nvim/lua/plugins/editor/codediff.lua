@@ -16,10 +16,21 @@ return {
       end,
       desc = "[P]Diff Commit on Current Blame Line",
     },
-    { "<C-S-h>", "<cmd>CodeDiff history<CR>", desc = "[P]Git History" },
     -- yadm keymaps：触发 codediff lazy load 并打开 yadm diff
-    { "<leader>yud", function() require("util.yadm").open_codediff("public")() end, desc = "[P]Yadm diff (public)" },
-    { "<leader>yid", function() require("util.yadm").open_codediff("private")() end, desc = "[P]Yadm diff (private)" },
+    {
+      "<leader>yud",
+      function()
+        require("util.yadm").open_codediff("public")()
+      end,
+      desc = "[P]Yadm diff (public)",
+    },
+    {
+      "<leader>yid",
+      function()
+        require("util.yadm").open_codediff("private")()
+      end,
+      desc = "[P]Yadm diff (private)",
+    },
   },
   config = function()
     require("codediff").setup({
@@ -49,7 +60,7 @@ return {
     vim.api.nvim_create_autocmd("User", {
       pattern = "CodeDiffOpen",
       callback = function(ev)
-        require("util.cmux").zoom_if_split()
+        -- require("util.cmux").zoom_if_split()
         local mode = ev.data and ev.data.mode
         if mode ~= "explorer" then
           return

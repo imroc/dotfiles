@@ -16,7 +16,7 @@ return {
         },
         hooks = {
           view_opened = function()
-            require("util.cmux").zoom_if_split()
+            -- require("util.cmux").zoom_if_split()
           end,
           diff_buf_win_enter = function()
             -- 每次 diff 都要展开所有折叠(包含重新打开相同 diff）

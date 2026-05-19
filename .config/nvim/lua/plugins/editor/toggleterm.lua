@@ -307,7 +307,7 @@ return {
       desc = "[P]Rename Terminal",
     },
     {
-      "<C-.>",
+      "<C-S-l>",
       mode = { "n", "t" },
       function()
         cycle_terminal(1)
@@ -315,7 +315,7 @@ return {
       desc = "[P]Next Terminal",
     },
     {
-      "<C-,>",
+      "<C-S-h>",
       mode = { "n", "t" },
       function()
         cycle_terminal(-1)
@@ -329,7 +329,7 @@ return {
       desc = "[P]Switch to AI Terminal",
     },
     {
-      "<M-.>",
+      "<C-,>",
       mode = { "n", "t" },
       switch_to_last_terminal,
       desc = "[P]Switch to Last Terminal",
