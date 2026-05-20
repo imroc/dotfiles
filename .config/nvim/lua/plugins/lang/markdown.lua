@@ -127,6 +127,9 @@ return {
         end
       end
 
+      --- Close cmux browser surface explicitly (no race with window.close).
+      --- Only used when switching preview mode (e.g. cmux→default browser),
+      --- where markdown-preview won't trigger window.close() on the cmux surface.
       local function close_cmux_surface(buf)
         local cmux_surface = vim.b[buf].mkdp_cmux_surface
         if cmux_surface then
@@ -159,18 +162,27 @@ return {
           "<localleader>c",
           function()
             local buf = vim.api.nvim_get_current_buf()
-            close_cmux_surface(buf)
             -- Ensure cmux handler is active
             vim.g.mkdp_browserfunc = "CmuxOpenBrowser"
             vim.cmd("MarkdownPreviewToggle")
-            -- After preview opens in cmux, inject observer to rewrite iwiki images
-            ensure_iwiki_images_cached(buf)
-            vim.defer_fn(function()
-              local surface = vim.b[buf].mkdp_cmux_surface
-              if surface then
-                inject_iwiki_observer(surface)
-              end
-            end, 2000)
+            -- When closing: markdown-preview's stop_server sends close_all_pages,
+            -- browser receives close_page and executes window.close() which closes
+            -- the cmux browser surface. We only need to clear the tracking variable.
+            -- DO NOT call close-surface here — racing with window.close() causes
+            -- cmux to accidentally close the nvim surface (double-close bug).
+            if not vim.b[buf].mkdp_cmux_surface then
+              -- Opening: inject iwiki image observer after preview loads
+              ensure_iwiki_images_cached(buf)
+              vim.defer_fn(function()
+                local surface = vim.b[buf].mkdp_cmux_surface
+                if surface then
+                  inject_iwiki_observer(surface)
+                end
+              end, 2000)
+            else
+              -- Closing: clear tracking variable (surface closed by window.close)
+              vim.b[buf].mkdp_cmux_surface = nil
+            end
           end,
           ft = "markdown",
           desc = "[P]Toggle Preview (cmux)",
