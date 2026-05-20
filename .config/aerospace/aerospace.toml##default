@@ -151,7 +151,7 @@ persistent-workspaces = ["A", "C", "D", "E", "M", "O", "T", "V", "W" ]
       'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
       'workspace A'
     ]
-    cmd-a = [
+    shift-a = [
       'mode main',
       'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
       'move-node-to-workspace A --focus-follows-window'
@@ -162,7 +162,7 @@ persistent-workspaces = ["A", "C", "D", "E", "M", "O", "T", "V", "W" ]
       'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
       'workspace C'
     ]
-    cmd-c = [
+    shift-c = [
       'mode main',
       'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
       'move-node-to-workspace C --focus-follows-window'
@@ -173,7 +173,7 @@ persistent-workspaces = ["A", "C", "D", "E", "M", "O", "T", "V", "W" ]
       'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
       'workspace D'
     ]
-    cmd-d = [
+    shift-d = [
       'mode main',
       'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
       'move-node-to-workspace D --focus-follows-window'
@@ -184,7 +184,7 @@ persistent-workspaces = ["A", "C", "D", "E", "M", "O", "T", "V", "W" ]
       'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
       'workspace E'
     ]
-    cmd-e = [
+    shift-e = [
       'mode main',
       'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
       'move-node-to-workspace E --focus-follows-window'
@@ -195,7 +195,7 @@ persistent-workspaces = ["A", "C", "D", "E", "M", "O", "T", "V", "W" ]
       'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
       'workspace J'
     ]
-    cmd-j = [
+    shift-j = [
       'mode main',
       'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
       'move-node-to-workspace J --focus-follows-window'
@@ -206,7 +206,7 @@ persistent-workspaces = ["A", "C", "D", "E", "M", "O", "T", "V", "W" ]
       'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
       'workspace M'
     ]
-    cmd-m = [
+    shift-m = [
       'mode main',
       'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
       'move-node-to-workspace M --focus-follows-window'
@@ -217,7 +217,7 @@ persistent-workspaces = ["A", "C", "D", "E", "M", "O", "T", "V", "W" ]
       'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
       'workspace O'
     ]
-    cmd-o = [
+    shift-o = [
       'mode main',
       'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
       'move-node-to-workspace O --focus-follows-window'
@@ -228,7 +228,7 @@ persistent-workspaces = ["A", "C", "D", "E", "M", "O", "T", "V", "W" ]
       'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
       'workspace T'
     ]
-    cmd-t = [
+    shift-t = [
       'mode main',
       'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
       'move-node-to-workspace T --focus-follows-window'
@@ -239,7 +239,7 @@ persistent-workspaces = ["A", "C", "D", "E", "M", "O", "T", "V", "W" ]
       'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
       'workspace V'
     ]
-    cmd-v = [
+    shift-v = [
       'mode main',
       'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
       'move-node-to-workspace V --focus-follows-window'
@@ -250,7 +250,7 @@ persistent-workspaces = ["A", "C", "D", "E", "M", "O", "T", "V", "W" ]
       'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
       'workspace W'
     ]
-    cmd-w = [
+    shift-w = [
       'mode main',
       'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
       'move-node-to-workspace W --focus-follows-window'
