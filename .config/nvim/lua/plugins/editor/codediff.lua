@@ -32,28 +32,29 @@ return {
       desc = "[P]Yadm diff (private)",
     },
   },
-  config = function()
-    require("codediff").setup({
-      diff = {
-        layout = "side-by-side",
-        ignore_trim_whitespace = false,
-        jump_to_first_change = true,
-        cycle_next_hunk = false,
+  opts = {
+    diff = {
+      layout = "inline",
+      ignore_trim_whitespace = false,
+      jump_to_first_change = true,
+      cycle_next_hunk = false,
+    },
+    explorer = {
+      initial_focus = "modified",
+      view_mode = "tree",
+    },
+    history = {
+      initial_focus = "history",
+    },
+    keymaps = {
+      view = {
+        next_hunk = "<C-]>",
+        prev_hunk = "<C-[>",
       },
-      explorer = {
-        initial_focus = "modified",
-        view_mode = "tree",
-      },
-      history = {
-        initial_focus = "history",
-      },
-      keymaps = {
-        view = {
-          next_hunk = "<C-]>",
-          prev_hunk = "<C-[>",
-        },
-      },
-    })
+    },
+  },
+  config = function(_, opts)
+    require("codediff").setup(opts)
 
     -- explorer 模式下自动隐藏文件列表面板（history 模式保留 commit 列表）
     -- CodeDiff 打开时自动最大化 cmux pane（多 pane 且未最大化时）
