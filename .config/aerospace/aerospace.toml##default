@@ -298,7 +298,13 @@ persistent-workspaces = ["A", "C", "D", "E", "M", "O", "T", "V", "W" ]
 
     # Bluetooth: toggle HUAWEI FreeArc
     e = [
-      'exec-and-forget bt-freearc',
+      'exec-and-forget bt-connect freearc',
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_service_mode_enabled_changed AEROSPACE_SERVICE_MODE_ENABLED=false',
+    ]
+    # Bluetooth: toggle Sony WH-1000XM4
+    shift-e = [
+      'exec-and-forget bt-connect headphone',
       'mode main',
       'exec-and-forget sketchybar --trigger aerospace_service_mode_enabled_changed AEROSPACE_SERVICE_MODE_ENABLED=false',
     ]

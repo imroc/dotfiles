@@ -6,9 +6,10 @@ source "$THEME_DIR/tokyonight"
 # ── Bluetooth devices ────────────────────────────────────────
 #   name            MAC                 icon
 devices=(
-  "bt_headphone    64-b0-e8-fb-56-68   󱡏"
-  "bt_keyboard     f5-aa-e4-10-93-dd   󰌌"
-  "bt_mouse        00-81-2a-94-bd-6c   󰍽"
+  "bt_freearc      64-b0-e8-fb-56-68   󱡏"   # HUAWEI FreeArc 耳挂耳机
+  "bt_headphone    88-c9-e8-24-e6-7e   󰋋"   # Sony WH-1000XM4 头戴耳机
+  "bt_keyboard     f5-aa-e4-10-93-dd   󰌌"   # HHKB 键盘
+  "bt_mouse        00-81-2a-94-bd-6c   󰍽"   # Magic 鼠标
 )
 
 for entry in "${devices[@]}"; do

@@ -99,9 +99,10 @@ class BluetoothObserver: NSObject {
     /// 关注的蓝牙设备列表
     /// 新增设备时同步在此添加，并在 sketchybar items/bt_devices 中添加对应条目
     static let devices: [BluetoothDevice] = [
-        BluetoothDevice(item: "bt_headphone", mac: "64-b0-e8-fb-56-68", name: "HUAWEI FreeArc"),
-        BluetoothDevice(item: "bt_keyboard",  mac: "f5-aa-e4-10-93-dd", name: "HHKB"),
-        BluetoothDevice(item: "bt_mouse",     mac: "00-81-2a-94-bd-6c", name: "Magic Mouse"),
+        BluetoothDevice(item: "bt_freearc",    mac: "64-b0-e8-fb-56-68", name: "HUAWEI FreeArc"),
+        BluetoothDevice(item: "bt_headphone",  mac: "88-c9-e8-24-e6-7e", name: "WH-1000XM4"),
+        BluetoothDevice(item: "bt_keyboard",   mac: "f5-aa-e4-10-93-dd", name: "HHKB"),
+        BluetoothDevice(item: "bt_mouse",      mac: "00-81-2a-94-bd-6c", name: "Magic Mouse"),
     ]
 
     override init() {

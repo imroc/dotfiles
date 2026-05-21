@@ -1,0 +1,51 @@
+#!/bin/bash
+# Toggle connect/disconnect for bluetooth audio devices
+#
+# Usage: bt-connect <device>
+#   freearc   - HUAWEI FreeArc (64-b0-e8-fb-56-68)
+#   headphone - Sony WH-1000XM4 (88-c9-e8-24-e6-7e)
+#
+# NOTE: Use osascript to invoke blueutil so that the Bluetooth TCC check
+# falls on AeroSpace.app (which must be listed in Privacy > Bluetooth).
+#
+# 连接成功/断开的系统通知由 sketchybar-notifier 守护进程统一处理（IOBluetooth 事件驱动），
+# 本脚本只负责：1) 执行蓝牙操作  2) "正在连接"提示  3) 连接失败提示（超时无 IOBluetooth 事件）
+
+case "$1" in
+  freearc)
+    addr="64-b0-e8-fb-56-68"
+    name="HUAWEI FreeArc"
+    ;;
+  headphone)
+    addr="88-c9-e8-24-e6-7e"
+    name="WH-1000XM4"
+    ;;
+  *)
+    echo "Usage: bt-connect <freearc|headphone>" >&2
+    exit 1
+    ;;
+esac
+
+osascript -e "
+set deviceAddr to \"$addr\"
+set deviceName to \"$name\"
+set blu to \"/opt/homebrew/bin/blueutil\"
+
+try
+    set connected to (do shell script blu & \" --is-connected \" & deviceAddr)
+on error errMsg
+    display notification errMsg with title deviceName sound name \"Basso\"
+    return
+end try
+
+if connected = \"1\" then
+    do shell script blu & \" --disconnect \" & deviceAddr
+else
+    display notification \"正在连接...\" with title deviceName sound name \"Tink\"
+    try
+        do shell script blu & \" --connect \" & deviceAddr & \" --wait-connect \" & deviceAddr & \" 5\"
+    on error
+        display notification \"连接失败，请确认耳机已开启\" with title deviceName sound name \"Basso\"
+    end try
+end if
+"
