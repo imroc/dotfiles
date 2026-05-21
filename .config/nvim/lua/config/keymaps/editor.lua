@@ -74,6 +74,10 @@ end, { desc = "[P]Yank selection ref to clipboard" })
 -- toggle cursor column
 Snacks.toggle.option("cursorcolumn", { name = "Cursor Column" }):map("<leader>ux")
 
+-- gx: fix URL extraction when preceded by CJK punctuation
+local open = require("util.open")
+vim.keymap.set("n", "gx", open.gx, { desc = "[P]Open URL under cursor (CJK-aware)" })
+
 -- scroll
 local scroll_percentage = 0.35 -- Scroll by 35% of the window height and keep the cursor centered
 -- Scroll by a percentage of the window height and keep the cursor centered
