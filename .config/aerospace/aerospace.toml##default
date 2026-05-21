@@ -366,6 +366,9 @@ persistent-workspaces = ["A", "C", "D", "E", "M", "O", "T", "V", "W" ]
 [[on-window-detected]]
     if.app-id = 'com.alibaba.tongyi'
     run = ['move-node-to-workspace A']
+[[on-window-detected]]
+    if.app-id = 'com.bot.pc.doubao' # 豆包
+    run = ['move-node-to-workspace A']
 
 # C: 聊天
 [[on-window-detected]]
