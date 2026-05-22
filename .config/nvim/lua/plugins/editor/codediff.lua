@@ -45,7 +45,6 @@ return {
     },
     history = {
       initial_focus = "history",
-      height = 8,
     },
     keymaps = {
       view = {

@@ -354,7 +354,12 @@ persistent-workspaces = ["A", "C", "D", "E", "M", "O", "T", "V", "W" ]
 [[on-window-detected]]
     if.app-id = 'com.zhipu.agent' # AutoGLM
     run = ['layout floating']
-
+[[on-window-detected]]
+    if.app-id = 'now.typeless.desktop'
+    run = ['layout floating']
+[[on-window-detected]]
+    if.app-id = 'com.sogou.voiceassistant'
+    run = ['layout floating']
 
 # A: AI 工具
 [[on-window-detected]]
