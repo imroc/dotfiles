@@ -14,6 +14,11 @@ return {
       move_down = { "<Down>", "<C-n>", "<C-j>" },
       send_to_quickfix = "<C-t>",
     },
+    layout = {
+      prompt_position = "top",
+      height = 1,
+      width = 1,
+    },
   },
   keys = {
     {
