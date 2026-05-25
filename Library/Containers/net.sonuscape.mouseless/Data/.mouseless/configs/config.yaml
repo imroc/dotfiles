@@ -307,7 +307,7 @@ keymaps:
     hold for forward button: null
     hold for middle button: null
     hold for move: OptionLeft
-    hold for right button: null
+    hold for right button: ControlLeft
     hold for speed decrease: A
     hold for speed increase:
     - S

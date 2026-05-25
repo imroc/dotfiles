@@ -18,6 +18,7 @@ return {
       prompt_position = "top",
       height = 1,
       width = 1,
+      flex = false,
     },
   },
   keys = {
