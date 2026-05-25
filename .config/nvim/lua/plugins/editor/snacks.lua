@@ -212,12 +212,7 @@ return {
       desc = "[P]Find Zellij Dotfiles",
     },
     {
-      "<leader><space>",
-      function()
-        picker.files({ cwd = LazyVim.root() })
-      end,
-      desc = "[P]Find Files (Root Dir)",
-    },
+      "<leader><space>", false },
     {
       "<leader>ff",
       function()
@@ -299,12 +294,7 @@ return {
       desc = "[P]Grep (Plain Text)",
     },
     {
-      "<leader>/",
-      function()
-        picker.grep({ cwd = LazyVim.root() })
-      end,
-      desc = "[P]Grep (Regex)",
-    },
+      "<leader>/", false },
   },
   opts = function(_, opts)
     return vim.tbl_deep_extend("force", opts or {}, {
@@ -356,11 +346,14 @@ return {
       dashboard = {
         enabled = vim.g.simpler_scrollback ~= "deeznuts",
         preset = {
-          -- keys = {
-          --   { icon = " ", key = "s", desc = "Restore Session", section = "session" },
-          --   -- { icon = "󰒲 ", key = "L", desc = "Lazy", action = ":Lazy", enabled = package.loaded.lazy ~= nil },
-          --   { icon = " ", key = "<esc>", desc = "Quit", action = ":qa" },
-          -- },
+          keys = {
+            { icon = " ", key = "n", desc = "New File", action = ":ene | startinsert" },
+            { icon = " ", key = "r", desc = "Recent Files", action = ":lua Snacks.dashboard.pick('oldfiles')" },
+            { icon = " ", key = "c", desc = "Config", action = ":lua Snacks.dashboard.pick('files', {cwd = vim.fn.stdpath('config')})" },
+            { icon = " ", key = "s", desc = "Restore Session", section = "session" },
+            { icon = "󰒲 ", key = "L", desc = "Lazy", action = ":Lazy", enabled = package.loaded.lazy ~= nil },
+            { icon = " ", key = "q", desc = "Quit", action = ":qa" },
+          },
           header = [[
 ██████╗  ██████╗  ██████╗    ██╗██████╗ ███████╗
 ██╔══██╗██╔═══██╗██╔════╝    ██║██╔══██╗██╔════╝

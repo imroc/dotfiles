@@ -10,7 +10,7 @@ function M.setup(opts)
     callback = function(args)
       local buf_id = args.data.buf_id
       local grugfar = require("grug-far")
-      local picker = require("util.picker")
+      local fff = require("fff")
       local zellij = require("util.zellij")
       local term = require("util.term")
       local get_dir = function()
@@ -36,16 +36,13 @@ function M.setup(opts)
 
       if keymaps.search_text then
         map_dir_handler(keymaps.search_text, function(dir)
-          picker.grep({
-            cwd = dir,
-            regex = false,
-          })
+          fff.live_grep({ cwd = dir })
         end, "[P]Search Text", true)
       end
 
       if keymaps.find_files then
         map_dir_handler(keymaps.find_files, function(dir)
-          picker.files({ cwd = dir })
+          fff.find_files_in_dir(dir)
         end, "[P]Find Files", true)
       end
 

@@ -49,5 +49,19 @@ return {
       end,
       desc = "Search current word",
     },
+    {
+      "<leader><space>",
+      function()
+        require("fff").find_files({ cwd = LazyVim.root() })
+      end,
+      desc = "[P]FFF Find Files (Root Dir)",
+    },
+    {
+      "<leader>/",
+      function()
+        require("fff").live_grep({ cwd = LazyVim.root() })
+      end,
+      desc = "[P]FFF Grep (Root Dir)",
+    },
   },
 }
