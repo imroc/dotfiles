@@ -8,6 +8,7 @@ fish_add_path -m \
     $HOME/.codebuddy/bin \
     $HOME/.bun/bin \
     $HOME/.iwiki \
+    /usr/local/iwiki-cli \
     /usr/local/go/bin \
     /opt/go/bin \
     /opt/homebrew/bin \

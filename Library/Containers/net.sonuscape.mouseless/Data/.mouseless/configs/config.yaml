@@ -351,8 +351,8 @@ keymaps:
     toggle app enabled: null
     toggle continuous mode: null
     toggle continuous mode until closed: '1'
-    toggle free mode: Shift+Command+.
-    toggle overlay: Command+.
+    toggle free mode: Alt+Command+.
+    toggle overlay: Command+Shift+.
     toggle overlay lock: null
     undo last key: Backspace
     wheel down: m
