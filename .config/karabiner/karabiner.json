@@ -113,6 +113,91 @@
                         ]
                     },
                     {
+                        "description": "Ghostty/cmux: Double-tap ESC switch to English input method",
+                        "manipulators": [
+                            {
+                                "from": {
+                                    "key_code": "escape"
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "escape"
+                                    },
+                                    {
+                                        "shell_command": "/opt/homebrew/bin/macism com.apple.keylayout.ABC"
+                                    }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "frontmost_application_if",
+                                        "bundle_identifiers": [
+                                            "com.mitchellh.ghostty",
+                                            "com.cmuxterm.app"
+                                        ]
+                                    },
+                                    {
+                                        "type": "variable_if",
+                                        "name": "esc_pressed_once",
+                                        "value": 1
+                                    }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "from": {
+                                    "key_code": "escape"
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "escape"
+                                    },
+                                    {
+                                        "set_variable": {
+                                            "name": "esc_pressed_once",
+                                            "value": 1
+                                        }
+                                    }
+                                ],
+                                "to_delayed_action": {
+                                    "to_if_invoked": [
+                                        {
+                                            "set_variable": {
+                                                "name": "esc_pressed_once",
+                                                "value": 0
+                                            }
+                                        }
+                                    ],
+                                    "to_if_canceled": [
+                                        {
+                                            "set_variable": {
+                                                "name": "esc_pressed_once",
+                                                "value": 0
+                                            }
+                                        }
+                                    ]
+                                },
+                                "parameters": {
+                                    "basic.to_delayed_action_delay_milliseconds": 300
+                                },
+                                "conditions": [
+                                    {
+                                        "type": "frontmost_application_if",
+                                        "bundle_identifiers": [
+                                            "com.mitchellh.ghostty",
+                                            "com.cmuxterm.app"
+                                        ]
+                                    },
+                                    {
+                                        "type": "variable_if",
+                                        "name": "esc_pressed_once",
+                                        "value": 0
+                                    }
+                                ],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
                         "description": "Ghostty/cmux: Cmd+U/S switch to English input method",
                         "manipulators": [
                             {
