@@ -30,8 +30,8 @@ function cilium --wraps=cilium --description "wrap cilium with extra advanced fe
     end
 
     if test -z "$common_args"
-        cilium $original_args
+        command cilium $original_args
     else
-        cilium $common_args $argv
+        command cilium $common_args $argv
     end
 end
