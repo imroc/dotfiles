@@ -1,4 +1,3 @@
-abbr --add chrome "/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome"
 abbr --add m make
 
 abbr --add typora "open -a typora"
