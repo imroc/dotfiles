@@ -1,7 +1,5 @@
 ---@diagnostic disable: undefined-global
 
-local picker = require("util.picker")
-
 local M = {}
 
 local config_path = vim.fn.expand("$HOME/.config/jumplist.yaml")
@@ -65,7 +63,7 @@ end
 --- <leader>fj: 选择 alias → 在对应目录下搜索文件
 function M.find_files()
   M.pick_alias(function(_, dir)
-    picker.files({ cwd = dir })
+    require("fff").find_files({ cwd = dir })
   end)
 end
 
@@ -92,7 +90,7 @@ function M.find_files_subdir()
       confirm = function(p, item)
         p:close()
         if item then
-          picker.files({ cwd = item.file })
+          require("fff").find_files({ cwd = item.file })
         end
       end,
     })
