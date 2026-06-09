@@ -54,9 +54,10 @@ return {
     {
       "<leader>rf",
       function()
+        local path = vim.fn.expand("%"):gsub("##.*$", "")
         require("grug-far").open({
           prefills = {
-            paths = vim.fn.fnameescape(vim.fn.expand("%")),
+            paths = vim.fn.fnameescape(path),
           },
         })
       end,
