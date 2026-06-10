@@ -10,44 +10,80 @@
                                 "from": {
                                     "key_code": "h",
                                     "modifiers": {
-                                        "mandatory": ["left_command", "left_shift"],
-                                        "optional": ["any"]
+                                        "mandatory": [
+                                            "left_command",
+                                            "left_shift"
+                                        ],
+                                        "optional": [
+                                            "any"
+                                        ]
                                     }
                                 },
-                                "to": [{ "key_code": "left_arrow" }],
+                                "to": [
+                                    {
+                                        "key_code": "left_arrow"
+                                    }
+                                ],
                                 "type": "basic"
                             },
                             {
                                 "from": {
                                     "key_code": "j",
                                     "modifiers": {
-                                        "mandatory": ["left_command", "left_shift"],
-                                        "optional": ["any"]
+                                        "mandatory": [
+                                            "left_command",
+                                            "left_shift"
+                                        ],
+                                        "optional": [
+                                            "any"
+                                        ]
                                     }
                                 },
-                                "to": [{ "key_code": "down_arrow" }],
+                                "to": [
+                                    {
+                                        "key_code": "down_arrow"
+                                    }
+                                ],
                                 "type": "basic"
                             },
                             {
                                 "from": {
                                     "key_code": "k",
                                     "modifiers": {
-                                        "mandatory": ["left_command", "left_shift"],
-                                        "optional": ["any"]
+                                        "mandatory": [
+                                            "left_command",
+                                            "left_shift"
+                                        ],
+                                        "optional": [
+                                            "any"
+                                        ]
                                     }
                                 },
-                                "to": [{ "key_code": "up_arrow" }],
+                                "to": [
+                                    {
+                                        "key_code": "up_arrow"
+                                    }
+                                ],
                                 "type": "basic"
                             },
                             {
                                 "from": {
                                     "key_code": "l",
                                     "modifiers": {
-                                        "mandatory": ["left_command", "left_shift"],
-                                        "optional": ["any"]
+                                        "mandatory": [
+                                            "left_command",
+                                            "left_shift"
+                                        ],
+                                        "optional": [
+                                            "any"
+                                        ]
                                     }
                                 },
-                                "to": [{ "key_code": "right_arrow" }],
+                                "to": [
+                                    {
+                                        "key_code": "right_arrow"
+                                    }
+                                ],
                                 "type": "basic"
                             }
                         ]
@@ -59,13 +95,19 @@
                                 "from": {
                                     "key_code": "comma",
                                     "modifiers": {
-                                        "mandatory": ["left_command", "left_control"]
+                                        "mandatory": [
+                                            "left_command",
+                                            "left_control"
+                                        ]
                                     }
                                 },
                                 "to": [
                                     {
                                         "key_code": "up_arrow",
-                                        "modifiers": ["left_command", "left_option"]
+                                        "modifiers": [
+                                            "left_command",
+                                            "left_option"
+                                        ]
                                     }
                                 ],
                                 "type": "basic"
@@ -74,13 +116,19 @@
                                 "from": {
                                     "key_code": "period",
                                     "modifiers": {
-                                        "mandatory": ["left_command", "left_control"]
+                                        "mandatory": [
+                                            "left_command",
+                                            "left_control"
+                                        ]
                                     }
                                 },
                                 "to": [
                                     {
                                         "key_code": "down_arrow",
-                                        "modifiers": ["left_command", "left_option"]
+                                        "modifiers": [
+                                            "left_command",
+                                            "left_option"
+                                        ]
                                     }
                                 ],
                                 "type": "basic"
@@ -94,7 +142,9 @@
                                 "from": {
                                     "key_code": "i",
                                     "modifiers": {
-                                        "mandatory": ["command"]
+                                        "mandatory": [
+                                            "command"
+                                        ]
                                     }
                                 },
                                 "to": [
@@ -105,7 +155,9 @@
                                 "conditions": [
                                     {
                                         "type": "frontmost_application_if",
-                                        "bundle_identifiers": ["com.cmuxterm.app"]
+                                        "bundle_identifiers": [
+                                            "com.cmuxterm.app"
+                                        ]
                                     }
                                 ],
                                 "type": "basic"
@@ -204,13 +256,17 @@
                                 "from": {
                                     "key_code": "u",
                                     "modifiers": {
-                                        "mandatory": ["command"]
+                                        "mandatory": [
+                                            "command"
+                                        ]
                                     }
                                 },
                                 "to": [
                                     {
                                         "key_code": "u",
-                                        "modifiers": ["command"]
+                                        "modifiers": [
+                                            "command"
+                                        ]
                                     },
                                     {
                                         "shell_command": "/opt/homebrew/bin/macism com.apple.keylayout.ABC"
@@ -231,13 +287,17 @@
                                 "from": {
                                     "key_code": "s",
                                     "modifiers": {
-                                        "mandatory": ["command"]
+                                        "mandatory": [
+                                            "command"
+                                        ]
                                     }
                                 },
                                 "to": [
                                     {
                                         "key_code": "s",
-                                        "modifiers": ["command"]
+                                        "modifiers": [
+                                            "command"
+                                        ]
                                     },
                                     {
                                         "shell_command": "/opt/homebrew/bin/macism com.apple.keylayout.ABC"
@@ -258,13 +318,17 @@
                                 "from": {
                                     "key_code": "t",
                                     "modifiers": {
-                                        "mandatory": ["command"]
+                                        "mandatory": [
+                                            "command"
+                                        ]
                                     }
                                 },
                                 "to": [
                                     {
                                         "key_code": "t",
-                                        "modifiers": ["command"]
+                                        "modifiers": [
+                                            "command"
+                                        ]
                                     },
                                     {
                                         "shell_command": "/opt/homebrew/bin/macism com.apple.keylayout.ABC"
@@ -282,6 +346,137 @@
                                 "type": "basic"
                             }
                         ]
+                    },
+                    {
+                        "description": "cmux: Cmd+D/Cmd+Shift+D/Cmd+Ctrl+j/Cmd+Ctrl+k switch to English input method",
+                        "manipulators": [
+                            {
+                                "from": {
+                                    "key_code": "d",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "command"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "d",
+                                        "modifiers": [
+                                            "command"
+                                        ]
+                                    },
+                                    {
+                                        "shell_command": "/opt/homebrew/bin/macism com.apple.keylayout.ABC"
+                                    }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "frontmost_application_if",
+                                        "bundle_identifiers": [
+                                            "com.cmuxterm.app"
+                                        ]
+                                    }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "from": {
+                                    "key_code": "d",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "command",
+                                            "shift"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "d",
+                                        "modifiers": [
+                                            "command",
+                                            "shift"
+                                        ]
+                                    },
+                                    {
+                                        "shell_command": "/opt/homebrew/bin/macism com.apple.keylayout.ABC"
+                                    }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "frontmost_application_if",
+                                        "bundle_identifiers": [
+                                            "com.cmuxterm.app"
+                                        ]
+                                    }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "from": {
+                                    "key_code": "j",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "left_command",
+                                            "left_control"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "j",
+                                        "modifiers": [
+                                            "left_command",
+                                            "left_control"
+                                        ]
+                                    },
+                                    {
+                                        "shell_command": "sleep 0.15 && /opt/homebrew/bin/macism com.apple.keylayout.ABC"
+                                    }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "frontmost_application_if",
+                                        "bundle_identifiers": [
+                                            "com.cmuxterm.app"
+                                        ]
+                                    }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "from": {
+                                    "key_code": "k",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "left_command",
+                                            "left_control"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "k",
+                                        "modifiers": [
+                                            "left_command",
+                                            "left_control"
+                                        ]
+                                    },
+                                    {
+                                        "shell_command": "sleep 0.15 && /opt/homebrew/bin/macism com.apple.keylayout.ABC"
+                                    }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "frontmost_application_if",
+                                        "bundle_identifiers": [
+                                            "com.cmuxterm.app"
+                                        ]
+                                    }
+                                ],
+                                "type": "basic"
+                            }
+                        ]
                     }
                 ]
             },
@@ -289,11 +484,19 @@
             "selected": true,
             "simple_modifications": [
                 {
-                    "from": { "key_code": "caps_lock" },
-                    "to": [{ "key_code": "left_control" }]
+                    "from": {
+                        "key_code": "caps_lock"
+                    },
+                    "to": [
+                        {
+                            "key_code": "left_control"
+                        }
+                    ]
                 }
             ],
-            "virtual_hid_keyboard": { "keyboard_type_v2": "ansi" }
+            "virtual_hid_keyboard": {
+                "keyboard_type_v2": "ansi"
+            }
         }
     ]
 }
