@@ -198,7 +198,7 @@
                         ]
                     },
                     {
-                        "description": "Ghostty/cmux: Cmd+U/S switch to English input method",
+                        "description": "Ghostty/cmux: Cmd+U/S/T switch to English input method",
                         "manipulators": [
                             {
                                 "from": {
@@ -237,6 +237,33 @@
                                 "to": [
                                     {
                                         "key_code": "s",
+                                        "modifiers": ["command"]
+                                    },
+                                    {
+                                        "shell_command": "/opt/homebrew/bin/macism com.apple.keylayout.ABC"
+                                    }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "frontmost_application_if",
+                                        "bundle_identifiers": [
+                                            "com.mitchellh.ghostty",
+                                            "com.cmuxterm.app"
+                                        ]
+                                    }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "from": {
+                                    "key_code": "t",
+                                    "modifiers": {
+                                        "mandatory": ["command"]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "t",
                                         "modifiers": ["command"]
                                     },
                                     {
