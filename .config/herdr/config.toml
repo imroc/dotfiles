@@ -5,15 +5,16 @@ name = "tokyo-night"
 
 [keys]
 prefix = "ctrl+a"
-switch_workspace = "prefix+alt+1..9"
+switch_workspace = "prefix+ctrl+1..9"
 previous_workspace = "prefix+ctrl+k"
 next_workspace = "prefix+ctrl+j"
-# previous_agent = ""     # optional, unset by default
-# next_agent = ""         # optional, unset by default
-# focus_agent = ""        # optional indexed binding, e.g. "prefix+alt+1..9"
+previous_agent = "prefix+alt+k"
+next_agent = "prefix+alt+j"
+focus_agent = "prefix+alt+1..9"
 
 [experimental]
 kitty_graphics = true
 
+switch_ascii_input_source_in_prefix = true
 [ui]
 show_agent_labels_on_pane_borders = true
