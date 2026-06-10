@@ -6,8 +6,8 @@ name = "tokyo-night"
 [keys]
 prefix = "ctrl+a"
 switch_workspace = "prefix+alt+1..9"
-previous_workspace = "alt+shift+k"
-next_workspace = "alt+shift+j"
+previous_workspace = "prefix+ctrl+k"
+next_workspace = "prefix+ctrl+j"
 # previous_agent = ""     # optional, unset by default
 # next_agent = ""         # optional, unset by default
 # focus_agent = ""        # optional indexed binding, e.g. "prefix+alt+1..9"
