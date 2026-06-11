@@ -62,6 +62,7 @@ vim.keymap.set("n", "<leader>odA", "<cmd>edit ~/.config/agents/AGENTS.md<cr>", {
 vim.keymap.set("n", "<leader>odc", "<cmd>edit ~/.claude-internal/settings.json<cr>", { desc = "[P]Claude" })
 vim.keymap.set("n", "<leader>odb", "<cmd>edit ~/.codebuddy/settings.json<cr>", { desc = "[P]CodeBuddy" })
 vim.keymap.set("n", "<leader>odf", "<cmd>edit ~/.config/fish/config.fish<cr>", { desc = "[P]Fish" })
+vim.keymap.set("n", "<leader>odh", "<cmd>edit ~/.config/herdr/config.toml<cr>", { desc = "[P]Herdr" })
 vim.keymap.set("n", "<leader>odg", "<cmd>edit ~/.config/ghostty/config<cr>", { desc = "[P]Ghostty" })
 vim.keymap.set("n", "<leader>odG", "<cmd>edit ~/.config/git/config<cr>", { desc = "[P]Git" })
 vim.keymap.set("n", "<leader>odk", "<cmd>edit ~/.config/kitty/kitty.conf<cr>", { desc = "[P]Kitty" })
