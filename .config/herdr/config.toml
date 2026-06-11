@@ -5,22 +5,30 @@ name = "tokyo-night"
 
 [keys]
 prefix = "ctrl+a"
-switch_workspace = "super+ctrl+1..9"
-previous_workspace = "super+ctrl+p"
-next_workspace = "super+ctrl+n"
-previous_agent = "super+ctrl+i"
-next_agent = "super+ctrl+o"
+zoom = "super+enter"
+reload_config = "prefix+,"
+# workspace
+switch_workspace = "super+1..9"
+previous_workspace = "super+alt+k"
+next_workspace = "super+alt+j"
+# agent
+previous_agent = "super+alt+h"
+next_agent = "super+alt+l"
 focus_agent = "prefix+1..9"
-previous_tab = "super+ctrl+["
-next_tab = "super+ctrl+]"
+# tab
+previous_tab = "super+["
+next_tab = "super+]"
 switch_tab = "ctrl+1..9"
-focus_pane_left = "super+ctrl+h"
-focus_pane_down = "super+ctrl+j"
-focus_pane_up = "super+ctrl+k"
-focus_pane_right = "super+ctrl+l"
-split_vertical = "super+ctrl+\\"
-split_horizontal = "super+ctrl+-"
-zoom = "super+ctrl+enter"
+new_tab = "super+t"
+rename_tab = "prefix+t"
+# pane
+focus_pane_left = "super+h"
+focus_pane_down = "super+j"
+focus_pane_up = "super+k"
+focus_pane_right = "super+l"
+close_pane = "super+w"
+split_vertical = "super+\\"
+split_horizontal = "super+-"
 
 [experimental]
 kitty_graphics = true

@@ -12,15 +12,19 @@ theme = TokyoNight Night
 cursor-style = block
 
 # split (pane)
-keybind = super+enter=toggle_split_zoom
-keybind = super+h=goto_split:left
-keybind = super+j=goto_split:down
-keybind = super+k=goto_split:up
-keybind = super+l=goto_split:right
+keybind = super+enter=unbind
+keybind = super+ctrl+enter=toggle_split_zoom
+keybind = super+ctrl+h=goto_split:left
+keybind = super+ctrl+j=goto_split:down
+keybind = super+ctrl+k=goto_split:up
+keybind = super+ctrl+l=goto_split:right
 split-inherit-working-directory = true
 split-preserve-zoom = navigation
-# split-divider-color = #F0f0f0
 split-divider-color = #999999
+keybind = super+[=unbind
+keybind = super+]=unbind
+keybind = super+w=unbind
+keybind = super+ctrl+w=close_surface
 
 # Shift+Ejnter 发送换行符（解决 Zellij 下 Shift+Enter 无法换行的问题）
 # keybind = shift+enter=text:\x1b[200~\n\x1b[201~
@@ -45,21 +49,54 @@ quick-terminal-animation-duration = 0
 # quick-terminal-autohide = false
 
 # tab
+keybind = super+t=unbind
 keybind = super+n=new_tab
-keybind = super+shift+]=next_tab
-keybind = super+shift+[=previous_tab
-keybind = super+t=activate_key_table:tab
-keybind = super+shift+r=prompt_tab_title
-keybind = chain=deactivate_key_table
+keybind = super+ctrl+t=activate_key_table:tab
 keybind = tab/r=prompt_tab_title
 keybind = chain=deactivate_key_table
 keybind = tab/x=close_tab
 keybind = tab/]=move_tab:1
 keybind = tab/[=move_tab:-1
+keybind = tab/1=goto_tab:1
+keybind = chain=deactivate_key_table
+keybind = tab/2=goto_tab:2
+keybind = chain=deactivate_key_table
+keybind = tab/3=goto_tab:3
+keybind = chain=deactivate_key_table
+keybind = tab/4=goto_tab:4
+keybind = chain=deactivate_key_table
+keybind = tab/5=goto_tab:5
+keybind = chain=deactivate_key_table
+keybind = tab/6=goto_tab:6
+keybind = chain=deactivate_key_table
+keybind = tab/7=goto_tab:7
+keybind = chain=deactivate_key_table
+keybind = tab/8=goto_tab:8
+keybind = chain=deactivate_key_table
+keybind = tab/9=goto_tab:9
+keybind = chain=deactivate_key_table
 keybind = tab/escape=deactivate_key_table
 keybind = tab/enter=deactivate_key_table
 keybind = tab/catch_all=ignore
 tab-inherit-working-directory = true
+keybind = super+1=unbind
+keybind = super+2=unbind
+keybind = super+3=unbind
+keybind = super+4=unbind
+keybind = super+5=unbind
+keybind = super+6=unbind
+keybind = super+7=unbind
+keybind = super+8=unbind
+keybind = super+9=unbind
+keybind = super+digit_1=unbind
+keybind = super+digit_2=unbind
+keybind = super+digit_3=unbind
+keybind = super+digit_4=unbind
+keybind = super+digit_5=unbind
+keybind = super+digit_6=unbind
+keybind = super+digit_7=unbind
+keybind = super+digit_8=unbind
+keybind = super+digit_9=unbind
 
 # resize
 keybind = resize/k=resize_split:up,100
@@ -72,6 +109,12 @@ keybind = resize/e=deactivate_key_table
 keybind = chain=equalize_splits
 keybind = resize/catch_all=ignore
 keybind = super+ctrl+r=activate_key_table:resize
+keybind = super+==unbind
+keybind = super++=unbind
+keybind = super+-=unbind
+keybind = super+ctrl+==increase_font_size:1
+keybind = super+ctrl++=increase_font_size:1
+keybind = super+ctrl+-=decrease_font_size:1
 
 # scroll
 keybind = super+u=scroll_page_up
@@ -87,10 +130,10 @@ keybind = scroll/d=scroll_page_fractional:0.5
 keybind = scroll/g=scroll_to_top
 keybind = scroll/shift+g=scroll_to_bottom
 keybind = scroll/super+enter=toggle_split_zoom
-keybind = scroll/super+h=goto_split:left
-keybind = scroll/super+j=goto_split:down
-keybind = scroll/super+k=goto_split:up
-keybind = scroll/super+l=goto_split:right
+keybind = scroll/super+ctrl+h=goto_split:left
+keybind = scroll/super+ctrl+j=goto_split:down
+keybind = scroll/super+ctrl+k=goto_split:up
+keybind = scroll/super+ctrl+l=goto_split:right
 keybind = scroll/space=deactivate_key_table
 keybind = chain=scroll_to_bottom
 keybind = scroll/i=deactivate_key_table

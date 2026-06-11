@@ -12,6 +12,7 @@ local filetypes = {
     ["settings.json"] = "jsonc",
     ["keybindings.json"] = "jsonc",
     ["keymap.json"] = "jsonc",
+    ["cmux.json"] = "jsonc",
   },
   pattern = {
     [".*Dockerfile.*"] = "dockerfile",
