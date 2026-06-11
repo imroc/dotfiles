@@ -46,16 +46,16 @@ quick-terminal-animation-duration = 0
 
 # tab
 keybind = super+n=new_tab
-keybind = super+]=next_tab
-keybind = super+[=previous_tab
-keybind = super+shift+]=move_tab:1
-keybind = super+shift+[=move_tab:-1
+keybind = super+shift+]=next_tab
+keybind = super+shift+[=previous_tab
 keybind = super+t=activate_key_table:tab
 keybind = super+shift+r=prompt_tab_title
 keybind = chain=deactivate_key_table
 keybind = tab/r=prompt_tab_title
 keybind = chain=deactivate_key_table
 keybind = tab/x=close_tab
+keybind = tab/]=move_tab:1
+keybind = tab/[=move_tab:-1
 keybind = tab/escape=deactivate_key_table
 keybind = tab/enter=deactivate_key_table
 keybind = tab/catch_all=ignore

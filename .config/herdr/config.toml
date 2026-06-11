@@ -20,6 +20,7 @@ focus_pane_up = "super+ctrl+k"
 focus_pane_right = "super+ctrl+l"
 split_vertical = "super+ctrl+\\"
 split_horizontal = "super+ctrl+-"
+zoom = "super+ctrl+enter"
 
 [experimental]
 kitty_graphics = true
