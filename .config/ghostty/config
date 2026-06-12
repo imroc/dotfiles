@@ -50,7 +50,8 @@ quick-terminal-animation-duration = 0
 
 # tab
 keybind = super+t=unbind
-keybind = super+n=new_tab
+keybind = super+ctrl+n=new_tab
+keybind = super+n=unbind
 keybind = super+ctrl+t=activate_key_table:tab
 keybind = tab/r=prompt_tab_title
 keybind = chain=deactivate_key_table
