@@ -5,7 +5,7 @@ name = "tokyo-night"
 
 [keys]
 prefix = "ctrl+a"
-zoom = "super+enter"
+zoom = ["super+enter", "prefix+z"]
 reload_config = "prefix+,"
 detach = "prefix+d"
 # workspace
@@ -29,9 +29,9 @@ focus_pane_left = "super+h"
 focus_pane_down = "super+j"
 focus_pane_up = "super+k"
 focus_pane_right = "super+l"
-close_pane = "super+w"
-split_vertical = "super+\\"
-split_horizontal = "super+-"
+close_pane = ["super+w", "prefix+x"]
+split_vertical = ["super+\\", "prefix+\\"]
+split_horizontal = ["super+-", "prefix+-"]
 
 [experimental]
 kitty_graphics = true
