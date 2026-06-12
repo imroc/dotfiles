@@ -39,5 +39,8 @@ prompt_new_tab_name = false
 
 [ui.toast]
 delivery = "herdr"
-delay_seconds = 0
+delay_seconds = 1
+
+[ui.toast.herdr]
+position = "bottom-left"
 

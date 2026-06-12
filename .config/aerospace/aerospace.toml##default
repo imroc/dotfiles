@@ -50,7 +50,7 @@ automatically-unhide-macos-hidden-apps = true
 # even when they are invisible.
 # This config version is only available since 'config-version = 2'
 # Fallback value (if you omit the key): persistent-workspaces = []
-persistent-workspaces = ["A", "C", "D", "E", "G", "M", "O", "T", "V", "W" ]
+persistent-workspaces = ["A", "C", "E", "G", "M", "O", "T", "V", "W", "X" ]
 
 # Possible values: (qwerty|dvorak|colemak)
 # See https://nikitabobko.github.io/AeroSpace/guide#key-mapping
@@ -167,16 +167,16 @@ persistent-workspaces = ["A", "C", "D", "E", "G", "M", "O", "T", "V", "W" ]
       'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
       'move-node-to-workspace C --focus-follows-window'
     ]
-    # Daily Dev (日常开发)
-    d = [
+    # cmux (终端复用器)
+    x = [
       'mode main',
       'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
-      'workspace D'
+      'workspace X'
     ]
-    shift-d = [
+    shift-x = [
       'mode main',
       'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
-      'move-node-to-workspace D --focus-follows-window'
+      'move-node-to-workspace X --focus-follows-window'
     ]
     # editing (剪辑)
     e = [
@@ -418,15 +418,15 @@ persistent-workspaces = ["A", "C", "D", "E", "G", "M", "O", "T", "V", "W" ]
     if.app-id = 'com.hnc.Discord' # Discord
     run = ['move-node-to-workspace C']
 
-# D: 日常开发
+# X: cmux
 [[on-window-detected]]
     if.app-id = 'com.cmuxterm.app'
-    run = ['move-node-to-workspace D']
+    run = ['move-node-to-workspace X']
 
-# G: ghostty (浮动终端)
+# G: ghostty
 [[on-window-detected]]
     if.app-id = 'com.mitchellh.ghostty'
-    run = ['move-node-to-workspace G']
+    run = ['layout floating', 'move-node-to-workspace G']
     
 
 # E: 剪辑
