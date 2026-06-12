@@ -7,11 +7,13 @@ name = "tokyo-night"
 prefix = "ctrl+a"
 zoom = "super+enter"
 reload_config = "prefix+,"
+detach = "prefix+d"
 # workspace
 switch_workspace = "super+1..9"
 previous_workspace = "super+alt+k"
 next_workspace = "super+alt+j"
 new_workspace = "super+n"
+rename_workspace = "prefix+ctrl+w"
 # agent
 previous_agent = "super+alt+h"
 next_agent = "super+alt+l"
