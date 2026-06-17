@@ -472,7 +472,7 @@
                         ]
                     },
                     {
-                        "description": "Ghostty: Ctrl+A switch to English input method",
+                        "description": "Ghostty: Ctrl+A/O switch to English input method",
                         "manipulators": [
                             {
                                 "from": {
@@ -486,6 +486,36 @@
                                 "to": [
                                     {
                                         "key_code": "a",
+                                        "modifiers": [
+                                            "control"
+                                        ]
+                                    },
+                                    {
+                                        "shell_command": "/opt/homebrew/bin/macism com.apple.keylayout.ABC"
+                                    }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "frontmost_application_if",
+                                        "bundle_identifiers": [
+                                            "com.mitchellh.ghostty"
+                                        ]
+                                    }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "from": {
+                                    "key_code": "o",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "control"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "o",
                                         "modifiers": [
                                             "control"
                                         ]
