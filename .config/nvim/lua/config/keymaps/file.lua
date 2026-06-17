@@ -59,7 +59,8 @@ vim.keymap.set("n", "<leader>ot", file.open_troubleshooting_note, { desc = "[P]O
 -- dotfiles
 vim.keymap.set("n", "<leader>oda", "<cmd>edit ~/.config/aerospace/aerospace.toml<cr>", { desc = "[P]Aerospace" })
 vim.keymap.set("n", "<leader>odA", "<cmd>edit ~/.config/agents/AGENTS.md<cr>", { desc = "[P]AI Config" })
-vim.keymap.set("n", "<leader>odc", "<cmd>edit ~/.claude-internal/settings.json<cr>", { desc = "[P]Claude" })
+vim.keymap.set("n", "<leader>odc", "<cmd>edit ~/.claude/settings.json<cr>", { desc = "[P]Claude" })
+vim.keymap.set("n", "<leader>odC", "<cmd>edit ~/.claude-internal/settings.json<cr>", { desc = "[P]Claude Internal" })
 vim.keymap.set("n", "<leader>odb", "<cmd>edit ~/.codebuddy/settings.json<cr>", { desc = "[P]CodeBuddy" })
 vim.keymap.set("n", "<leader>odf", "<cmd>edit ~/.config/fish/config.fish<cr>", { desc = "[P]Fish" })
 vim.keymap.set("n", "<leader>odh", "<cmd>edit ~/.config/herdr/config.toml<cr>", { desc = "[P]Herdr" })
@@ -74,6 +75,7 @@ vim.keymap.set(
   { desc = "[P]Mouseless" }
 )
 vim.keymap.set("n", "<leader>odn", "<cmd>edit ~/.config/nvim/init.lua<cr>", { desc = "[P]Neovim" })
+vim.keymap.set("n", "<leader>odo", "<cmd>edit ~/.config/opencode/opencode.jsonc<cr>", { desc = "[P]OpenCode" })
 vim.keymap.set("n", "<leader>ods", "<cmd>edit ~/.config/sketchybar/sketchybarrc<cr>", { desc = "[P]Sketchybar" })
 vim.keymap.set("n", "<leader>odt", "<cmd>edit ~/.config/tmux/tmux.conf.local<cr>", { desc = "[P]Tmux" })
 vim.keymap.set("n", "<leader>odw", "<cmd>edit ~/.config/wezterm/wezterm.lua<cr>", { desc = "[P]Wezterm" })
