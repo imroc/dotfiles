@@ -50,7 +50,7 @@ automatically-unhide-macos-hidden-apps = true
 # even when they are invisible.
 # This config version is only available since 'config-version = 2'
 # Fallback value (if you omit the key): persistent-workspaces = []
-persistent-workspaces = ["A", "C", "E", "G", "M", "O", "T", "V", "W", "X" ]
+persistent-workspaces = ["A", "C", "E", "G", "M", "O", "T", "V", "W", "X", "Z"]
 
 # Possible values: (qwerty|dvorak|colemak)
 # See https://nikitabobko.github.io/AeroSpace/guide#key-mapping
@@ -261,6 +261,17 @@ persistent-workspaces = ["A", "C", "E", "G", "M", "O", "T", "V", "W", "X" ]
       'mode main',
       'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
       'move-node-to-workspace W --focus-follows-window'
+    ]
+    # zcode (代码编辑器)
+    z = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
+      'workspace Z'
+    ]
+    shift-z = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
+      'move-node-to-workspace Z --focus-follows-window'
     ]
 
 # 'service' binding mode declaration.
@@ -483,9 +494,11 @@ persistent-workspaces = ["A", "C", "E", "G", "M", "O", "T", "V", "W", "X" ]
 [[on-window-detected]]
     if.app-id = 'com.apple.Terminal'
     run = ['move-node-to-workspace T']
+
+# Z: ZCode 代码编辑器
 [[on-window-detected]]
-    if.app-id = 'dev.zed.Zed'
-    run = ['move-node-to-workspace T']
+    if.app-id = 'dev.zcode.app' # ZCode
+    run = ['move-node-to-workspace Z']
 
 # M: 会议
 [[on-window-detected]]
