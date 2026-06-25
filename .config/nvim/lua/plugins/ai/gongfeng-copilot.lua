@@ -5,7 +5,7 @@ end
 return {
   "gongfeng-copilot",
   url = "git@git.woa.com:felikszhou/gongfeng-operation-platform.git",
-  enabled = vim.g.simpler_scrollback ~= "deeznuts",
+  enabled = false,
   lazy = true,
   event = "InsertEnter",
   cmd = { "CodeBuddy" },

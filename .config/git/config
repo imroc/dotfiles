@@ -15,3 +15,5 @@
 [init]
 	defaultbranch = main
 	templateDir = ~/.config/git/templates
+[difftool]
+  prompt = false
