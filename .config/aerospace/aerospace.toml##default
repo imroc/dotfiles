@@ -50,7 +50,7 @@ automatically-unhide-macos-hidden-apps = true
 # even when they are invisible.
 # This config version is only available since 'config-version = 2'
 # Fallback value (if you omit the key): persistent-workspaces = []
-persistent-workspaces = ["A", "C", "E", "G", "I", "M", "O", "T", "V", "W", "X", "Z"]
+persistent-workspaces = ["A", "C", "D", "E", "G", "I", "M", "O", "T", "V", "W", "X", "Z"]
 
 # Possible values: (qwerty|dvorak|colemak)
 # See https://nikitabobko.github.io/AeroSpace/guide#key-mapping
@@ -199,6 +199,17 @@ persistent-workspaces = ["A", "C", "E", "G", "I", "M", "O", "T", "V", "W", "X", 
       'mode main',
       'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
       'move-node-to-workspace G --focus-follows-window'
+    ]
+    # devcontainer (容器开发，手动将 ghostty 窗口移入并 ssh)
+    d = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
+      'workspace D'
+    ]
+    shift-d = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
+      'move-node-to-workspace D --focus-follows-window'
     ]
     # IntelliJ IDEA (Java IDE)
     i = [
