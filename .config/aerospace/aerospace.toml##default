@@ -189,7 +189,7 @@ persistent-workspaces = ["A", "C", "D", "E", "G", "I", "M", "O", "T", "V", "W", 
       'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
       'move-node-to-workspace E --focus-follows-window'
     ]
-    # ghostty (浮动终端)
+    # ghostty (终端)
     g = [
       'mode main',
       'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
@@ -459,7 +459,7 @@ persistent-workspaces = ["A", "C", "D", "E", "G", "I", "M", "O", "T", "V", "W", 
 # G: ghostty
 [[on-window-detected]]
     if.app-id = 'com.mitchellh.ghostty'
-    run = ['layout floating', 'move-node-to-workspace G']
+    run = ['move-node-to-workspace G']
     
 
 # E: 剪辑
