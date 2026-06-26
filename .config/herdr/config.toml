@@ -1,7 +1,7 @@
 onboarding = false
 
 [theme]
-name = "tokyo-night"
+name = "terminal"
 
 [keys]
 prefix = "ctrl+a"
@@ -41,9 +41,9 @@ show_agent_labels_on_pane_borders = true
 prompt_new_tab_name = false
 
 [ui.toast]
-delivery = "herdr"
+delivery = "terminal"
 delay_seconds = 1
 
 [ui.toast.herdr]
-position = "bottom-left"
+position = "bottom-right"
 
