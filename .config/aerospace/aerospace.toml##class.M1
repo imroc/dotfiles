@@ -477,6 +477,10 @@ persistent-workspaces = ["A", "C", "D", "E", "G", "I", "M", "O", "T", "V", "W", 
     if.app-id = 'com.jetbrains.intellij'
     run = ['move-node-to-workspace I']
 
+[[on-window-detected]]
+    if.app-id = 'java.bin' # IntelliJ IDEA (via `idea .`)
+    run = ['move-node-to-workspace I']
+
 # J: 工作聊天
 [[on-window-detected]]
     if.app-id = 'com.tencent.WeWorkMac'      # 企业微信主界面
