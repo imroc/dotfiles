@@ -6,24 +6,24 @@ name = "terminal"
 [keys]
 prefix = "ctrl+a"
 zoom = ["super+enter", "prefix+z"]
-reload_config = "prefix+,"
+reload_config = "prefix+;"
 detach = "prefix+d"
 # workspace
 switch_workspace = "super+1..9"
 previous_workspace = "super+alt+k"
 next_workspace = "super+alt+j"
 new_workspace = "super+n"
-rename_workspace = "prefix+ctrl+w"
+rename_workspace = "prefix+$"
 # agent
-previous_agent = "super+alt+h"
-next_agent = "super+alt+l"
+previous_agent = ["super+alt+h", "shift+alt+k"]
+next_agent = ["super+alt+l", "shift+alt+j"]
 focus_agent = "prefix+1..9"
 # tab
 previous_tab = "super+["
 next_tab = "super+]"
 switch_tab = "ctrl+1..9"
 new_tab = "super+t"
-rename_tab = "prefix+t"
+rename_tab = ["prefix+t", "prefix+,"]
 # pane
 focus_pane_left = "super+h"
 focus_pane_down = "super+j"
