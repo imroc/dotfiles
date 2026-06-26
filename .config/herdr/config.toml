@@ -13,7 +13,7 @@ switch_workspace = "super+1..9"
 previous_workspace = "super+alt+k"
 next_workspace = "super+alt+j"
 new_workspace = "super+n"
-rename_workspace = "prefix+$"
+rename_workspace = "prefix+shift+r"
 # agent
 previous_agent = ["super+alt+h", "shift+alt+k"]
 next_agent = ["super+alt+l", "shift+alt+j"]
