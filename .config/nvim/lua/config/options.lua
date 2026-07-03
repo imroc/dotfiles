@@ -49,7 +49,7 @@ vim.g.maplocalleader = ","
 -- 如果启用动画会导致 gg/G 可能无法移动到首行/尾行
 vim.g.snacks_animate = false
 
-if vim.env.SSH_TTY then
+if vim.env.SSH_CONNECTION or vim.env.SSH_TTY then
   local function paste()
     return { vim.fn.split(vim.fn.getreg(""), "\n"), vim.fn.getregtype("") }
   end
