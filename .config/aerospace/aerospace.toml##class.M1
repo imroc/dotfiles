@@ -476,6 +476,9 @@ persistent-workspaces = ["A", "C", "D", "E", "G", "I", "M", "O", "T", "V", "W", 
 [[on-window-detected]]
     if.app-id = 'com.jetbrains.intellij'
     run = ['move-node-to-workspace I']
+[[on-window-detected]]
+    if.app-id = 'com.jetbrains.cwm.guest'
+    run = ['move-node-to-workspace I']
 
 [[on-window-detected]]
     if.app-id = 'java.bin' # IntelliJ IDEA (via `idea .`)
