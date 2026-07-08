@@ -1,4 +1,12 @@
-function ailink --description "Ensure all AI prompt files are symlinked to AGENTS.md (and .local.md to AGENTS.local.md)"
+function ailink --description "Ensure all AI prompt files are symlinked to AGENTS.md (and .local.md to AGENTS.local.md), --skills links tools' skills dirs to .agents/skills"
+    # --skills：将各 AI 工具的 skills 目录软链到当前目录的 .agents/skills
+    argparse --name=ailink 's/skills' -- $argv
+    or return
+
+    if set -q _flag_skills
+        __ailink_skills
+    end
+
     # AI 工具对应的提示词文件名（不含 AGENTS.md 本身，它是 link 目标）
     set -l names CLAUDE CODEBUDDY GEMINI
 
@@ -58,5 +66,44 @@ function ailink --description "Ensure all AI prompt files are symlinked to AGENT
             ln -s $target $f
             echo "$f → $target"
         end
+    end
+end
+
+function __ailink_skills
+    # 仅当当前目录存在 .agents/skills 目录时才执行软链
+    if not test -d .agents/skills
+        echo "跳过：当前目录不存在 .agents/skills 目录"
+        return
+    end
+
+    set -l tools .codebuddy .claude
+    set -l target .agents/skills
+
+    for tool in $tools
+        set -l link "$tool/skills"
+        # 计算相对路径（从 link 所在目录指向 target）
+        set -l rel (python3 -c "import os,sys;print(os.path.relpath(sys.argv[1],sys.argv[2]))" $target $tool)
+
+        # 已是正确的软链，跳过
+        if test -L $link
+            set -l link_target (readlink $link)
+            if test "$link_target" = "$rel"
+                continue
+            end
+        end
+
+        # 存在但不是正确软链
+        if test -e $link; or test -L $link
+            # 真实目录且有内容，提示用户手动处理
+            if test -d $link; and not test -L $link; and test (count (command ls -A $link)) -gt 0
+                echo "警告：$link 是有内容的真实目录，跳过（请手动处理后重试）"
+                continue
+            end
+            rm -rf $link
+        end
+
+        mkdir -p $tool
+        ln -s $rel $link
+        echo "$link → $rel"
     end
 end
