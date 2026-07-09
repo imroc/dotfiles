@@ -4,31 +4,27 @@
 --
 -- 原理：远程 nvim 通过 OSC 1337 SetUserVar 序列发送指令到 WezTerm，
 -- WezTerm 拦截后在本机执行 macism 切换输入法。
---
--- 指令通过 OSC 1337;SetUserVar=im_select=<base64(action)> 发送：
---   init      → 保存当前 IM 为原始状态，切英文       (nvim 启动)
---   save_abc  → 保存当前 IM，切英文                   (InsertLeave)
---   restore   → 恢复之前保存的 IM                     (InsertEnter)
---   abc       → 切英文（不保存）                      (WinEnter 等)
---   save      → 保存当前 IM（不切换）                  (FocusLost)
---   exit      → 恢复 nvim 启动前的 IM                  (VimLeave)
 
 local wezterm = require("wezterm")
 
 local M = {}
 
--- 状态
-local saved_im = nil      -- InsertLeave 时保存的 IM，供 InsertEnter 恢复
-local original_im = nil   -- nvim 启动前的 IM，供退出时恢复
+local saved_im = nil
+local original_im = nil
 
--- 是否为 macOS
 local function is_macos()
   return wezterm.target_triple and wezterm.target_triple:find("apple") ~= nil
 end
 
--- 执行 macism，返回输出（阻塞但极快，macism 调用通常 <5ms）
 local function macism(args)
-  local success, stdout = wezterm.run_child_process(args)
+  local success, stdout, stderr = wezterm.run_child_process(args)
+  -- DEBUG: 写日志到文件
+  local f = io.open("/tmp/wezterm-im-switch.log", "a")
+  if f then
+    f:write(string.format("[%s] macism(%s) -> success=%s stdout=%q stderr=%q\n",
+      os.date("%H:%M:%S"), table.concat(args, " "), tostring(success), stdout or "", stderr or ""))
+    f:close()
+  end
   if success and stdout then
     return stdout:gsub("%s+", "")
   end
@@ -44,12 +40,33 @@ local function get_current_im()
 end
 
 M.setup = function()
-  -- 仅 macOS 启用（macism 只在 macOS 可用）
   if not is_macos() then
+    -- DEBUG
+    local f = io.open("/tmp/wezterm-im-switch.log", "a")
+    if f then
+      f:write(string.format("[%s] setup: not macos (triple=%s), skipping\n",
+        os.date("%H:%M:%S"), tostring(wezterm.target_triple)))
+      f:close()
+    end
     return
   end
 
-  wezterm.on("user-var-changed", function(_window, _pane, name, value)
+  -- DEBUG: 记录 setup 被调用
+  local f = io.open("/tmp/wezterm-im-switch.log", "a")
+  if f then
+    f:write(string.format("[%s] setup: im-switch enabled on macos\n", os.date("%H:%M:%S")))
+    f:close()
+  end
+
+  wezterm.on("user-var-changed", function(window, pane, name, value)
+    -- DEBUG: 记录所有 user-var-changed 事件
+    local dbg = io.open("/tmp/wezterm-im-switch.log", "a")
+    if dbg then
+      dbg:write(string.format("[%s] user-var-changed: name=%q value=%q\n",
+        os.date("%H:%M:%S"), tostring(name), tostring(value)))
+      dbg:close()
+    end
+
     if name ~= "im_select" then
       return
     end
