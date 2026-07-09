@@ -4,6 +4,56 @@ return {
     -- downloads a prebuilt binary or falls back to cargo build
     require("fff.download").download_or_build_binary()
   end,
+  init = function()
+    -- fff.nvim leaks LMDB reader slots (~17 per nvim session). When the
+    -- 126-slot default limit is exhausted, MDB_READERS_FULL causes a
+    -- segfault. This pre-load hook clears the lock file if reader slots
+    -- are near full, preventing the crash.
+    -- See: https://github.com/dmtrKovalenko/fff/issues (reader slot leak)
+    local cache = vim.fn.stdpath("cache")
+    local data = vim.fn.stdpath("data")
+    local lock_files = {
+      cache .. "/fff_nvim/lock.mdb",
+      data .. "/fff_queries/lock.mdb",
+    }
+    for _, lock_file in ipairs(lock_files) do
+      local f = io.open(lock_file, "rb")
+      if f then
+        local content = f:read("*a")
+        f:close()
+        -- LMDB lock file: maxreaders at offset 0x10 (4 bytes LE)
+        -- Reader table starts at offset 0x80, each entry is 64 bytes
+        -- Entry: txnid(8) + pid(4) + pad(4) + tid(8) + pad(32)
+        if #content >= 0x84 then
+          local max_readers = content:byte(0x11) + content:byte(0x12) * 256
+          local used = 0
+          local offset = 0x81 -- 1-indexed: offset 0x80 = byte 0x81
+          while offset + 63 <= #content do
+            -- Check if slot is used (pid field at offset+8 is non-zero)
+            local pid_byte = content:byte(offset + 8)
+            if pid_byte ~= 0 then
+              used = used + 1
+            end
+            offset = offset + 64
+          end
+          -- If >90% slots used, delete lock file to reset reader table
+          if used > max_readers * 0.9 then
+            vim.schedule(function()
+              vim.notify(
+                string.format(
+                  "fff.nvim: LMDB reader slots near full (%d/%d), clearing lock file",
+                  used,
+                  max_readers
+                ),
+                vim.log.levels.WARN
+              )
+            end)
+            os.remove(lock_file)
+          end
+        end
+      end
+    end
+  end,
   opts = {
     debug = {
       enabled = true,
