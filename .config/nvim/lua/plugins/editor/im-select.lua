@@ -11,12 +11,12 @@
 -- ┌──────────────────────────────────────────────────────────────────────────────┐
 -- │ 隧道模式架构                                                                │
 -- ├──────────────────┬───────────────────────────────────────────────────────────┤
--- │ 远程 nvim        │ InsertLeave → echo "save_abc" | nc -w1 localhost:12345   │
--- │ (im-select.lua)  │ InsertEnter → echo "restore"  | nc -w1 localhost:12345  │
--- │                  │ VimEnter    → echo "init"     | nc -w1 localhost:12345   │
--- │                  │ VimLeave    → echo "exit"     | nc -w1 localhost:12345   │
+-- │ 远程 nvim        │ InsertLeave → echo "save_abc" | nc -w1 localhost:17395   │
+-- │ (im-select.lua)  │ InsertEnter → echo "restore"  | nc -w1 localhost:17395  │
+-- │                  │ VimEnter    → echo "init"     | nc -w1 localhost:17395   │
+-- │                  │ VimLeave    → echo "exit"     | nc -w1 localhost:17395   │
 -- ├──────────────────┼───────────────────────────────────────────────────────────┤
--- │ SSH 反向隧道     │ SSH -R 12345:localhost:12345  远程 → 本地端口转发         │
+-- │ SSH 反向隧道     │ SSH -R 17395:localhost:17395  远程 → 本地端口转发         │
 -- ├──────────────────┼───────────────────────────────────────────────────────────┤
 -- │ 本地监听服务      │ im-switch-listener (Python) 接收指令 → 执行 macism        │
 -- │ (本地 Mac)       │ 维护 saved_im / original_im 状态                         │
@@ -56,7 +56,7 @@ end
 -- 远程模式：检测可用通道（隧道 or OSC）
 -- ──────────────────────────────────────────────────────────────────────────────
 
-local TUNNEL_PORT = 12345
+local TUNNEL_PORT = 17395
 local use_tunnel = false
 
 if remote_mode then
