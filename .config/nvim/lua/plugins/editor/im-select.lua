@@ -1,141 +1,222 @@
--- macOS 输入法自动切换（基于 im-select.nvim + 自定义扩展）
+-- 输入法自动切换（基于 im-select.nvim + 自定义扩展）
 --
 -- 核心目标：在 Neovim 中编辑时，normal 模式始终使用英文输入法，insert 模式恢复
 -- 用户之前使用的输入法，消除中英文切换的心智负担。
 --
--- 依赖：macism 或 im-select（命令行输入法切换工具）
---   - 默认使用 macism（brew install macism）
---   - ghostty quick terminal 中使用 im-select（macism 会导致浮动窗口失焦）
--- 状态存储：vim.g.im_select_saved_state（记录离开 insert 模式时的输入法 ID）
+-- 两种工作模式：
+--   1. 本地模式（macOS 本机）：直接调用 macism/im-select 切换输入法
+--   2. 远程模式（SSH 会话）：通过 OSC 1337 SetUserVar 序列向本地 WezTerm 发送指令，
+--      由 WezTerm 在本机执行 macism 切换输入法
 --
--- ┌─────────────────────────────────────────────────────────────────────┐
--- │ 架构分层                                                          │
--- ├──────────────────┬──────────────────────────────────────────────────┤
--- │ im-select.nvim   │ 插件原生能力，处理 CmdlineLeave / TermLeave /  │
--- │ (opts 配置)      │ TermEnter 事件的输入法切换                      │
--- ├──────────────────┼──────────────────────────────────────────────────┤
--- │ 自定义           │ InsertLeave → 非浮动窗口：保存当前 IM，切英文   │
--- │ InsertLeave/     │ InsertEnter → 非浮动窗口：恢复之前的 IM         │
--- │ InsertEnter      │ 浮动窗口中跳过，避免 picker 内 insert/normal    │
--- │ (im-select-      │ 切换时频繁调用 macism 造成干扰                  │
--- │  floating 组)    │                                                  │
--- ├──────────────────┼──────────────────────────────────────────────────┤
--- │ 自定义           │ WinEnter → 进入非浮动窗口且非 insert 模式时     │
--- │ WinEnter         │ 切回英文。补偿浮动窗口（如 Snacks picker）      │
--- │ (同上)           │ 关闭后 InsertLeave 被跳过的问题                  │
--- ├──────────────────┼──────────────────────────────────────────────────┤
--- │ 窗口焦点处理     │ FocusLost  → insert 模式记录当前 IM             │
--- │ (im-select-      │ FocusGained → insert 模式恢复 IM，否则切英文    │
--- │  focus 组)       │ 解决 Alt-Tab 切窗口后输入法状态丢失的问题       │
--- ├──────────────────┼──────────────────────────────────────────────────┤
--- │ 生命周期         │ 启动时：记录原始 IM，切英文                      │
--- │                  │ 退出时：恢复启动前的 IM                          │
--- └──────────────────┴──────────────────────────────────────────────────┘
+-- ┌──────────────────────────────────────────────────────────────────────────┐
+-- │ 远程模式架构                                                             │
+-- ├──────────────────┬───────────────────────────────────────────────────────┤
+-- │ 远程 nvim        │ InsertLeave → OSC: save_abc                           │
+-- │ (im-select.lua)  │ InsertEnter → OSC: restore                           │
+-- │                  │ WinEnter     → OSC: abc                               │
+-- │                  │ FocusLost    → OSC: save                              │
+-- │                  │ FocusGained  → OSC: restore / abc                     │
+-- │                  │ VimEnter     → OSC: init                              │
+-- │                  │ VimLeave     → OSC: exit                              │
+-- ├──────────────────┼───────────────────────────────────────────────────────┤
+-- │ SSH 隧道         │ OSC 序列通过 SSH stdout 流透传到本地终端              │
+-- ├──────────────────┼───────────────────────────────────────────────────────┤
+-- │ 本地 WezTerm     │ 拦截 OSC SetUserVar(im_select=...) 事件              │
+-- │ (im-switch.lua)  │ → 在本机执行 macism 切换/查询输入法                   │
+-- │                  │ → 维护 saved_im / original_im 状态                    │
+-- └──────────────────┴───────────────────────────────────────────────────────┘
 --
--- 为什么不用插件原生的 InsertLeave/InsertEnter？
---   插件默认会在所有窗口触发切换，包括浮动窗口。在 Snacks picker、补全弹窗
---   等浮动窗口中，用户可能在 insert 模式下输入中文搜索词，如果此时 InsertLeave
---   也触发切换，会导致频繁的 macism 调用和输入法闪烁。因此 opts 中将
---   set_previous_events 设为空，InsertLeave 也从 set_default_events 中移除，
---   改由自定义 autocmd 实现带浮动窗口过滤的版本。
+-- 依赖：
+--   本地模式：macism 或 im-select（brew install macism）
+--   远程模式：本地 WezTerm + macism（WezTerm 配置中的 events/im-switch.lua）
+--
+-- 状态存储：
+--   本地模式：vim.g.im_select_saved_state（记录离开 insert 模式时的输入法 ID）
+--   远程模式：状态由 WezTerm 侧管理（saved_im / original_im）
 --
 -- 已知的边界场景：
---   - WinEnter 每次进入普通窗口都会检查输入法，如果 macism 调用耗时过长
---     可能影响窗口切换的流畅度（目前实测无感知）
---   - 浮动窗口内的 insert 模式不会保存/恢复 IM 状态
+--   - 远程模式下无法查询当前 IM 状态，因此放弃"已为英文则不切换"的优化
+--   - 远程模式下如果经过 tmux/zellij，需要开启 passthrough
+--   - 浮动窗口内的 insert 模式不触发切换，避免 picker 内频繁调用
 
--- 只在 macOS 启用
-if vim.fn.has("mac") ~= 1 then
+-- ──────────────────────────────────────────────────────────────────────────────
+-- 模式检测
+-- ──────────────────────────────────────────────────────────────────────────────
+
+local is_mac = vim.fn.has("mac") == 1
+local is_ssh = vim.env.SSH_CONNECTION ~= nil or vim.env.SSH_CLIENT ~= nil
+
+-- 非 macOS 且非 SSH 会话：不启用
+if not is_mac and not is_ssh then
   return {}
 end
 
--- quick terminal 中用 im-select 替代 macism，避免 macism 切换输入法时导致浮动窗口失焦
+-- 远程模式：SSH 会话中（无论远程系统是否为 macOS，都走 OSC 通道）
+local remote_mode = is_ssh
+
+-- ──────────────────────────────────────────────────────────────────────────────
+-- 工具函数
+-- ──────────────────────────────────────────────────────────────────────────────
+
+local function is_floating_win()
+  return vim.api.nvim_win_get_config(0).relative ~= ""
+end
+
+-- ──────────────────────────────────────────────────────────────────────────────
+-- 远程模式：通过 OSC 1337 SetUserVar 向本地 WezTerm 发送输入法指令
+-- ──────────────────────────────────────────────────────────────────────────────
+
+local function send_im_osc(action)
+  local encoded = vim.base64.encode(action)
+  local osc = string.format("\27]1337;SetUserVar=im_select=%s\7", encoded)
+  io.stderr:write(osc)
+  io.stderr:flush()
+end
+
+-- ──────────────────────────────────────────────────────────────────────────────
+-- 本地模式：直接调用 macism/im-select
+-- ──────────────────────────────────────────────────────────────────────────────
+
 local im_cmd = vim.env.GHOSTTY_QUICK_TERMINAL == "1" and "im-select" or "macism"
+
+-- ──────────────────────────────────────────────────────────────────────────────
+-- 统一接口：根据模式选择切换方式
+-- ──────────────────────────────────────────────────────────────────────────────
+
+-- 切换到英文输入法（不保存当前状态）
+local function switch_to_abc()
+  if remote_mode then
+    send_im_osc("abc")
+  else
+    vim.fn.system({ im_cmd, "com.apple.keylayout.ABC" })
+  end
+end
+
+-- 保存当前输入法并切换到英文
+local function save_and_switch_to_abc()
+  if remote_mode then
+    send_im_osc("save_abc")
+  else
+    local current = vim.fn.system({ im_cmd }):gsub("%s+", "")
+    vim.api.nvim_set_var("im_select_saved_state", current)
+    if current ~= "com.apple.keylayout.ABC" then
+      vim.fn.system({ im_cmd, "com.apple.keylayout.ABC" })
+    end
+  end
+end
+
+-- 恢复之前保存的输入法
+local function restore_im()
+  if remote_mode then
+    send_im_osc("restore")
+  else
+    local saved = vim.g["im_select_saved_state"]
+    if saved and saved ~= "com.apple.keylayout.ABC" then
+      vim.fn.system({ im_cmd, saved })
+    end
+  end
+end
+
+-- 仅保存当前输入法（不切换）
+local function save_im()
+  if remote_mode then
+    send_im_osc("save")
+  else
+    return vim.fn.system({ im_cmd }):gsub("%s+", "")
+  end
+end
+
+-- ──────────────────────────────────────────────────────────────────────────────
+-- 焦点处理（FocusLost / FocusGained）
+-- ──────────────────────────────────────────────────────────────────────────────
+
+local saved_im_before_focus_lost
 
 local function handle_focus_change()
   local group = vim.api.nvim_create_augroup("im-select-focus", { clear = true })
-  -- 失焦时：如果在插入模式，记录当前输入法（供聚焦时恢复）
+
   vim.api.nvim_create_autocmd("FocusLost", {
     group = group,
     callback = function()
       local mode = vim.api.nvim_get_mode().mode
       if mode == "i" or mode == "ic" or mode == "ix" then
-        saved_im_before_focus_lost = vim.fn.system({ im_cmd }):gsub("%s+", "")
+        saved_im_before_focus_lost = save_im()
       else
         saved_im_before_focus_lost = nil
       end
     end,
   })
 
-  -- 聚焦时：插入模式下恢复之前的输入法，否则切英文
   vim.api.nvim_create_autocmd("FocusGained", {
     group = group,
     callback = function()
       local mode = vim.api.nvim_get_mode().mode
-      -- 插入模式：聚焦时恢复之前失焦时使用的输入法
-      -- 非插入模式：默认切英文输入法
       if mode == "i" or mode == "ic" or mode == "ix" then
-        if saved_im_before_focus_lost then
-          vim.fn.system({ im_cmd, saved_im_before_focus_lost })
-        end
+        restore_im()
       else
-        vim.fn.system({ im_cmd, "com.apple.keylayout.ABC" })
+        switch_to_abc()
       end
       saved_im_before_focus_lost = nil
     end,
   })
 end
 
-local function is_floating_win()
-  return vim.api.nvim_win_get_config(0).relative ~= ""
+-- ──────────────────────────────────────────────────────────────────────────────
+-- 插件配置
+-- ──────────────────────────────────────────────────────────────────────────────
+
+-- 远程模式不使用插件的命令机制（无法查询远程 IM 状态），
+-- 所有事件由自定义 autocmd 处理；本地模式使用插件内置事件 + 自定义扩展
+local plugin_opts
+if remote_mode then
+  plugin_opts = {
+    default_im_select = "com.apple.keylayout.ABC",
+    default_command = "true", -- 占位：远程模式不实际调用此命令
+    set_default_events = {},
+    set_previous_events = {},
+  }
+else
+  plugin_opts = {
+    default_im_select = "com.apple.keylayout.ABC",
+    default_command = im_cmd,
+    set_default_events = { "CmdlineLeave", "TermLeave", "TermEnter" },
+    set_previous_events = {},
+  }
 end
 
 return {
-  -- https://github.com/keaising/im-select.nvim
   "keaising/im-select.nvim",
   lazy = false,
   enabled = vim.g.simpler_scrollback ~= "deeznuts",
-  opts = {
-    default_im_select = "com.apple.keylayout.ABC",
-    default_command = im_cmd,
-    -- 在默认事件基础上增加终端进入和离开的事件，确保终端使用场景也能自动切换输入方法
-    set_default_events = { "CmdlineLeave", "TermLeave", "TermEnter" },
-    set_previous_events = {},
-  },
+  opts = plugin_opts,
   config = function(_, opts)
     require("im_select").setup(opts)
     handle_focus_change()
 
     -- Custom InsertEnter/InsertLeave: skip IM switching in floating windows
     local im_group = vim.api.nvim_create_augroup("im-select-floating", { clear = true })
+
     vim.api.nvim_create_autocmd("InsertLeave", {
       group = im_group,
       callback = function()
         if is_floating_win() then
           return
         end
-        local current = vim.fn.system({ im_cmd }):gsub("%s+", "")
-        vim.api.nvim_set_var("im_select_saved_state", current)
-        if current ~= "com.apple.keylayout.ABC" then
-          vim.fn.system({ im_cmd, "com.apple.keylayout.ABC" })
-        end
+        save_and_switch_to_abc()
       end,
     })
+
     vim.api.nvim_create_autocmd("InsertEnter", {
       group = im_group,
       callback = function()
         if is_floating_win() then
           return
         end
-        local saved = vim.g["im_select_saved_state"]
-        if saved and saved ~= "com.apple.keylayout.ABC" then
-          vim.fn.system({ im_cmd, saved })
-        end
+        restore_im()
       end,
     })
 
     -- 从浮动窗口回到普通窗口时，如果不在插入模式则确保切回英文
-    -- 解决 Snacks picker 等浮动窗口关闭后输入法未切换的问题
     vim.api.nvim_create_autocmd("WinEnter", {
       group = im_group,
       callback = function()
@@ -144,22 +225,37 @@ return {
         end
         local mode = vim.api.nvim_get_mode().mode
         if mode ~= "i" and mode ~= "ic" and mode ~= "ix" then
-          local current = vim.fn.system({ im_cmd }):gsub("%s+", "")
-          if current ~= "com.apple.keylayout.ABC" then
-            vim.fn.system({ im_cmd, "com.apple.keylayout.ABC" })
-          end
+          switch_to_abc()
         end
       end,
     })
 
-    -- 启动时记录当前输入法，然后切换到英文
-    local im_before_nvim = vim.fn.system({ im_cmd }):gsub("%s+", "")
-    vim.fn.system({ im_cmd, "com.apple.keylayout.ABC" })
-    -- 退出时恢复启动前的输入法
-    vim.api.nvim_create_autocmd("VimLeavePre", {
-      callback = function()
-        vim.fn.system({ im_cmd, im_before_nvim })
-      end,
-    })
+    -- 远程模式下补充 CmdlineLeave 事件（本地模式由插件处理）
+    if remote_mode then
+      vim.api.nvim_create_autocmd("CmdlineLeave", {
+        group = im_group,
+        callback = function()
+          switch_to_abc()
+        end,
+      })
+    end
+
+    -- 启动时：保存原始 IM，切英文；退出时：恢复
+    if remote_mode then
+      send_im_osc("init")
+      vim.api.nvim_create_autocmd("VimLeavePre", {
+        callback = function()
+          send_im_osc("exit")
+        end,
+      })
+    else
+      local im_before_nvim = vim.fn.system({ im_cmd }):gsub("%s+", "")
+      vim.fn.system({ im_cmd, "com.apple.keylayout.ABC" })
+      vim.api.nvim_create_autocmd("VimLeavePre", {
+        callback = function()
+          vim.fn.system({ im_cmd, im_before_nvim })
+        end,
+      })
+    end
   end,
 }
