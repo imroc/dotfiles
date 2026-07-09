@@ -1,5 +1,21 @@
 ---@diagnostic disable: undefined-field
 
+-- 远程 SSH 输入法自动切换（OSC 模式）
+--
+-- 原理：远程 nvim 通过 OSC 1337 SetUserVar 序列发送指令到 WezTerm，
+-- WezTerm 拦截后在本机执行 macism 切换输入法。
+--
+-- 注意：此模式仅在远程 nvim 直连 WezTerm（不经过 herdr/tmux 等复用器）时生效。
+-- 经过终端复用器时，OSC 序列会被拦截，应使用隧道模式（im-switch-listener）。
+--
+-- 指令通过 OSC 1337;SetUserVar=im_select=<base64(action)> 发送：
+--   init      → 保存当前 IM 为原始状态，切英文       (nvim 启动)
+--   save_abc  → 保存当前 IM，切英文                   (InsertLeave)
+--   restore   → 恢复之前保存的 IM                     (InsertEnter)
+--   abc       → 切英文（不保存）                      (WinEnter 等)
+--   save      → 保存当前 IM（不切换）                  (FocusLost)
+--   exit      → 恢复 nvim 启动前的 IM                  (VimLeave)
+
 local wezterm = require("wezterm")
 
 local M = {}
@@ -7,24 +23,15 @@ local M = {}
 local saved_im = nil
 local original_im = nil
 
+-- macism 完整路径（WezTerm 的 run_child_process 用最小化 PATH，必须写死）
 local MACISM = "/opt/homebrew/bin/macism"
 
 local function is_macos()
   return wezterm.target_triple and wezterm.target_triple:find("apple") ~= nil
 end
 
-local function log(msg)
-  local f = io.open("/tmp/wezterm-im-switch.log", "a")
-  if f then
-    f:write(string.format("[%s] %s\n", os.date("%H:%M:%S"), msg))
-    f:close()
-  end
-end
-
 local function macism(args)
-  local success, stdout, stderr = wezterm.run_child_process(args)
-  log(string.format("macism(%s) -> success=%s stdout=%q stderr=%q",
-    table.concat(args, " "), tostring(success), stdout or "", stderr or ""))
+  local success, stdout = wezterm.run_child_process(args)
   if success and stdout then
     return stdout:gsub("%s+", "")
   end
@@ -43,10 +50,8 @@ M.setup = function()
   if not is_macos() then
     return
   end
-  log("setup: im-switch enabled")
 
   wezterm.on("user-var-changed", function(_window, _pane, name, value)
-    log(string.format("user-var-changed: name=%q value=%q", tostring(name), tostring(value)))
     if name ~= "im_select" then
       return
     end
