@@ -254,7 +254,7 @@
                         "manipulators": [
                             {
                                 "from": {
-                                    "key_code": "\\",
+                                    "key_code": "backslash",
                                     "modifiers": {
                                         "mandatory": [
                                             "command"
@@ -263,7 +263,7 @@
                                 },
                                 "to": [
                                     {
-                                        "key_code": "\\",
+                                        "key_code": "backslash",
                                         "modifiers": [
                                             "command"
                                         ]
@@ -285,7 +285,7 @@
                             },
                             {
                                 "from": {
-                                    "key_code": "-",
+                                    "key_code": "hyphen",
                                     "modifiers": {
                                         "mandatory": [
                                             "command"
@@ -294,7 +294,7 @@
                                 },
                                 "to": [
                                     {
-                                        "key_code": "-",
+                                        "key_code": "hyphen",
                                         "modifiers": [
                                             "command"
                                         ]
