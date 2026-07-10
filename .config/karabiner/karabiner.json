@@ -250,8 +250,101 @@
                         ]
                     },
                     {
-                        "description": "Ghostty/cmux: Cmd+U/S/T/H/J/K/L switch to English input method",
+                        "description": "Ghostty/cmux: Cmd+U/S/T/H/J/K/L/N/-/\\ switch to English input method",
                         "manipulators": [
+                            {
+                                "from": {
+                                    "key_code": "\\",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "command"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "\\",
+                                        "modifiers": [
+                                            "command"
+                                        ]
+                                    },
+                                    {
+                                        "shell_command": "/opt/homebrew/bin/macism com.apple.keylayout.ABC"
+                                    }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "frontmost_application_if",
+                                        "bundle_identifiers": [
+                                            "com.mitchellh.ghostty",
+                                            "com.cmuxterm.app"
+                                        ]
+                                    }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "from": {
+                                    "key_code": "-",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "command"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "-",
+                                        "modifiers": [
+                                            "command"
+                                        ]
+                                    },
+                                    {
+                                        "shell_command": "/opt/homebrew/bin/macism com.apple.keylayout.ABC"
+                                    }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "frontmost_application_if",
+                                        "bundle_identifiers": [
+                                            "com.mitchellh.ghostty",
+                                            "com.cmuxterm.app"
+                                        ]
+                                    }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "from": {
+                                    "key_code": "n",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "command"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "n",
+                                        "modifiers": [
+                                            "command"
+                                        ]
+                                    },
+                                    {
+                                        "shell_command": "/opt/homebrew/bin/macism com.apple.keylayout.ABC"
+                                    }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "frontmost_application_if",
+                                        "bundle_identifiers": [
+                                            "com.mitchellh.ghostty",
+                                            "com.cmuxterm.app"
+                                        ]
+                                    }
+                                ],
+                                "type": "basic"
+                            },
                             {
                                 "from": {
                                     "key_code": "l",
