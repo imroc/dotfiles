@@ -152,7 +152,7 @@ persistent-workspaces = ["A", "C", "D", "E", "F", "G", "I", "K", "L", "M", "O", 
       'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
       'move-node-to-workspace A --focus-follows-window'
     ]
-    # chat (聊天)
+    # Chrome (浏览器)
     c = [
       'mode main',
       'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
@@ -328,7 +328,7 @@ persistent-workspaces = ["A", "C", "D", "E", "F", "G", "I", "K", "L", "M", "O", 
       'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
       'move-node-to-workspace V --focus-follows-window'
     ]
-    # web browser (网络浏览器)
+    # 微信 (WeChat)
     w = [
       'mode main',
       'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
@@ -471,20 +471,20 @@ persistent-workspaces = ["A", "C", "D", "E", "F", "G", "I", "K", "L", "M", "O", 
     if.app-id = 'com.bot.pc.doubao' # 豆包
     run = ['move-node-to-workspace A']
 
-# C: 聊天
+# W: 微信
 [[on-window-detected]]
     if.app-id = 'com.tencent.xinWeChat'    # 微信主界面
     if.window-title-regex-substring = '^微信$'
-    run = ['move-node-to-workspace C']
+    run = ['move-node-to-workspace W']
 [[on-window-detected]]
     if.app-id = 'com.tencent.xinWeChat'    # 微信其它主界面
     run = ['layout floating']
 [[on-window-detected]]
     if.app-id = 'com.tinyspeck.slackmacgap' # Slack
-    run = ['move-node-to-workspace C']
+    run = ['move-node-to-workspace W']
 [[on-window-detected]]
     if.app-id = 'com.hnc.Discord' # Discord
-    run = ['move-node-to-workspace C']
+    run = ['move-node-to-workspace W']
 
 # X: cmux
 [[on-window-detected]]
@@ -627,16 +627,16 @@ persistent-workspaces = ["A", "C", "D", "E", "F", "G", "I", "K", "L", "M", "O", 
     if.app-id = 'com.tencent.tenvideo' # 腾讯视频
     run = ['move-node-to-workspace V']
 
-# W: 网络浏览器
+# C: 浏览器
 [[on-window-detected]]
     if.app-id = 'com.google.Chrome'
-    run = ['move-node-to-workspace W']
+    run = ['move-node-to-workspace C']
 [[on-window-detected]]
     if.app-id = 'org.mozilla.firefo4'
-    run = ['move-node-to-workspace W']
+    run = ['move-node-to-workspace C']
 [[on-window-detected]]
     if.app-id = 'com.apple.Safari'
-    run = ['move-node-to-workspace W']
+    run = ['move-node-to-workspace C']
 [[on-window-detected]]
     if.app-id = 'com.microsoft.edgemac'
-    run = ['move-node-to-workspace W']
+    run = ['move-node-to-workspace C']
