@@ -50,7 +50,7 @@ automatically-unhide-macos-hidden-apps = true
 # even when they are invisible.
 # This config version is only available since 'config-version = 2'
 # Fallback value (if you omit the key): persistent-workspaces = []
-persistent-workspaces = ["A", "C", "D", "E", "F", "G", "I", "K", "L", "M", "O", "Q", "T", "V", "W", "X", "Z"]
+persistent-workspaces = ["A", "C", "D", "E", "F", "G", "I", "K", "L", "M", "O", "P", "Q", "T", "V", "W", "X", "Z"]
 
 # Possible values: (qwerty|dvorak|colemak)
 # See https://nikitabobko.github.io/AeroSpace/guide#key-mapping
@@ -284,6 +284,17 @@ persistent-workspaces = ["A", "C", "D", "E", "F", "G", "I", "K", "L", "M", "O", 
       'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
       'move-node-to-workspace O --focus-follows-window'
     ]
+    # pan (网盘)
+    p = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
+      'workspace P'
+    ]
+    shift-p = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
+      'move-node-to-workspace P --focus-follows-window'
+    ]
     # QQ
     q = [
       'mode main',
@@ -503,6 +514,17 @@ persistent-workspaces = ["A", "C", "D", "E", "F", "G", "I", "K", "L", "M", "O", 
 [[on-window-detected]]
     if.app-id = 'com.tencent.qq' # QQ 其它界面默认 float
     run = ['layout floating']
+
+# P: 网盘
+[[on-window-detected]]
+    if.app-id = 'com.quark.clouddrive.desktop'    # 夸克网盘
+    run = ['move-node-to-workspace P']
+[[on-window-detected]]
+    if.app-id = 'com.quark.clouddrive.desktop.helper.player'  # 夸克网盘播放器
+    run = ['move-node-to-workspace P']
+[[on-window-detected]]
+    if.app-id = 'com.baidu.BaiduNetdisk-mac'      # 百度网盘
+    run = ['move-node-to-workspace P']
 
 # G: ghostty
 [[on-window-detected]]
