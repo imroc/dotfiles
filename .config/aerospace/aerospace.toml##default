@@ -50,7 +50,7 @@ automatically-unhide-macos-hidden-apps = true
 # even when they are invisible.
 # This config version is only available since 'config-version = 2'
 # Fallback value (if you omit the key): persistent-workspaces = []
-persistent-workspaces = ["A", "C", "D", "E", "F", "G", "I", "K", "L", "M", "O", "P", "Q", "S", "T", "V", "W", "X", "Z"]
+persistent-workspaces = ["A", "C", "D", "E", "F", "G", "I", "K", "L", "M", "O", "P", "Q", "R", "S", "T", "V", "W", "X", "Z"]
 
 # Possible values: (qwerty|dvorak|colemak)
 # See https://nikitabobko.github.io/AeroSpace/guide#key-mapping
@@ -310,6 +310,17 @@ persistent-workspaces = ["A", "C", "D", "E", "F", "G", "I", "K", "L", "M", "O", 
       'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
       'move-node-to-workspace Q --focus-follows-window'
     ]
+    # discord
+    r = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
+      'workspace R'
+    ]
+    shift-r = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
+      'move-node-to-workspace R --focus-follows-window'
+    ]
     # slack
     s = [
       'mode main',
@@ -499,7 +510,7 @@ persistent-workspaces = ["A", "C", "D", "E", "F", "G", "I", "K", "L", "M", "O", 
     run = ['move-node-to-workspace S']
 [[on-window-detected]]
     if.app-id = 'com.hnc.Discord' # Discord
-    run = ['move-node-to-workspace W']
+    run = ['move-node-to-workspace R']
 
 # X: cmux
 [[on-window-detected]]
