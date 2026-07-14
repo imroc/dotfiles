@@ -50,7 +50,7 @@ automatically-unhide-macos-hidden-apps = true
 # even when they are invisible.
 # This config version is only available since 'config-version = 2'
 # Fallback value (if you omit the key): persistent-workspaces = []
-persistent-workspaces = ["A", "C", "D", "E", "G", "I", "M", "O", "T", "V", "W", "X", "Z"]
+persistent-workspaces = ["A", "C", "D", "E", "F", "G", "I", "K", "L", "M", "O", "Q", "T", "V", "W", "X", "Z"]
 
 # Possible values: (qwerty|dvorak|colemak)
 # See https://nikitabobko.github.io/AeroSpace/guide#key-mapping
@@ -218,6 +218,39 @@ persistent-workspaces = ["A", "C", "D", "E", "G", "I", "M", "O", "T", "V", "W", 
       'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
       'move-node-to-workspace I --focus-follows-window'
     ]
+    # feishu (飞书)
+    f = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
+      'workspace F'
+    ]
+    shift-f = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
+      'move-node-to-workspace F --focus-follows-window'
+    ]
+    # 钉钉 (dingtalk)
+    k = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
+      'workspace K'
+    ]
+    shift-k = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
+      'move-node-to-workspace K --focus-follows-window'
+    ]
+    # lark (Telegram)
+    l = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
+      'workspace L'
+    ]
+    shift-l = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
+      'move-node-to-workspace L --focus-follows-window'
+    ]
     # job chat (工作聊天，企业微信)
     j = [
       'mode main',
@@ -250,6 +283,17 @@ persistent-workspaces = ["A", "C", "D", "E", "G", "I", "M", "O", "T", "V", "W", 
       'mode main',
       'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
       'move-node-to-workspace O --focus-follows-window'
+    ]
+    # QQ
+    q = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
+      'workspace Q'
+    ]
+    shift-q = [
+      'mode main',
+      'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
+      'move-node-to-workspace Q --focus-follows-window'
     ]
     # tool (工具)
     t = [
@@ -425,22 +469,6 @@ persistent-workspaces = ["A", "C", "D", "E", "G", "I", "M", "O", "T", "V", "W", 
     if.app-id = 'com.tencent.xinWeChat'    # 微信其它主界面
     run = ['layout floating']
 [[on-window-detected]]
-    if.app-id = 'com.tencent.qq'           # QQ 主界面
-    if.window-title-regex-substring = 'QQ'
-    run = ['move-node-to-workspace C']
-[[on-window-detected]]
-    if.app-id = 'com.tencent.qq' # QQ 其它界面默认 float
-    run = ['layout floating']
-[[on-window-detected]]
-    if.app-id = 'com.electron.lark'    # 飞书
-    run = ['move-node-to-workspace C']
-[[on-window-detected]]
-    if.app-id = 'com.alibaba.DingTalkMac' # 钉钉
-    run = ['move-node-to-workspace C']
-[[on-window-detected]]
-    if.app-id = 'com.tdesktop.Telegram' # Telegram
-    run = ['move-node-to-workspace C']
-[[on-window-detected]]
     if.app-id = 'com.tinyspeck.slackmacgap' # Slack
     run = ['move-node-to-workspace C']
 [[on-window-detected]]
@@ -451,6 +479,30 @@ persistent-workspaces = ["A", "C", "D", "E", "G", "I", "M", "O", "T", "V", "W", 
 [[on-window-detected]]
     if.app-id = 'com.cmuxterm.app'
     run = ['move-node-to-workspace X']
+
+# K: 钉钉
+[[on-window-detected]]
+    if.app-id = 'com.alibaba.DingTalkMac' # 钉钉
+    run = ['move-node-to-workspace K']
+
+# F: 飞书
+[[on-window-detected]]
+    if.app-id = 'com.electron.lark'    # 飞书
+    run = ['move-node-to-workspace F']
+
+# L: Telegram
+[[on-window-detected]]
+    if.app-id = 'com.tdesktop.Telegram' # Telegram
+    run = ['move-node-to-workspace L']
+
+# Q: QQ
+[[on-window-detected]]
+    if.app-id = 'com.tencent.qq'           # QQ 主界面
+    if.window-title-regex-substring = 'QQ'
+    run = ['move-node-to-workspace Q']
+[[on-window-detected]]
+    if.app-id = 'com.tencent.qq' # QQ 其它界面默认 float
+    run = ['layout floating']
 
 # G: ghostty
 [[on-window-detected]]
