@@ -54,8 +54,7 @@ persistent-workspaces = ["A", "C", "D", "E", "F", "G", "I", "K", "L", "M", "O", 
 
 # Possible values: (qwerty|dvorak|colemak)
 # See https://nikitabobko.github.io/AeroSpace/guide#key-mapping
-[key-mapping]
-    preset = 'qwerty'
+key-mapping.preset = 'qwerty'
 
 # Gaps between windows (inner-*) and between monitor edges (outer-*).
 # Possible values:
@@ -65,13 +64,12 @@ persistent-workspaces = ["A", "C", "D", "E", "F", "G", "I", "K", "L", "M", "O", 
 #                 Monitor pattern is the same as for 'workspace-to-monitor-force-assignment'.
 #                 See:
 #                 https://nikitabobko.github.io/AeroSpace/guide#assign-workspaces-to-monitors
-[gaps]
-    inner.horizontal = 5
-    inner.vertical = 5
-    outer.left = 0
-    outer.right = 0
-    outer.bottom = 0
-    outer.top = 29
+gaps.inner.horizontal = 5
+gaps.inner.vertical = 5
+gaps.outer.left = 0
+gaps.outer.right = 0
+gaps.outer.bottom = 0
+gaps.outer.top = 29
 
 [exec.env-vars]
     PATH = '${HOME}/.local/bin:/opt/homebrew/bin:${PATH}'
