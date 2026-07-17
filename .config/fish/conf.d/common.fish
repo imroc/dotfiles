@@ -31,5 +31,7 @@ alias kssh="kitten ssh"
 set -gx HOMEBREW_NO_ENV_HINTS 1
 # Homebrew: 保持"非官方 tap 默认信任"行为，未来 Homebrew 升级也不强制要求显式 trust（已安装的非官方 tap 都是有意为之）
 set -gx HOMEBREW_NO_REQUIRE_TAP_TRUST 1
+# Homebrew: 升级时默认不弹确认，直接执行
+set -gx HOMEBREW_NO_ASK 1
 
 abbr --add cg "cd ~/dev"
