@@ -71,4 +71,17 @@ function M.copy_ai_ref_text(is_visual)
   copy_and_notify(text)
 end
 
+
+--- Copy the URL under cursor to system clipboard
+function M.copy_url()
+  local open = require("util.open")
+  local urls = open.get_urls()
+  if #urls == 0 then
+    vim.notify("No URL found under cursor", vim.log.levels.WARN)
+    return
+  end
+  local url = urls[1]
+  copy_and_notify(url)
+end
+
 return M

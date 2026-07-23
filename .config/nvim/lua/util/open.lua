@@ -22,23 +22,9 @@ local function url_at(line, col)
   end
 end
 
----@param uri string
----@return string|nil error message
-local function do_open(uri)
-  local cmd, err = vim.ui.open(uri)
-  local rv = cmd and cmd:wait(1000) or nil
-  if cmd and rv and rv.code ~= 0 then
-    err = ("vim.ui.open: command %s (%d): %s"):format(
-      (rv.code == 124 and "timeout" or "failed"),
-      rv.code,
-      vim.inspect(cmd.cmd)
-    )
-  end
-  return err
-end
-
---- gx handler: resolve URLs via built-in sources, falling back to regex extraction.
-function M.gx()
+--- Resolve URLs under cursor via built-in sources, falling back to regex extraction.
+---@return string[] urls list of URLs found
+function M.get_urls()
   local urls = require("vim.ui")._get_urls()
 
   -- keep only valid URLs from built-in sources
@@ -61,6 +47,27 @@ function M.gx()
     end
   end
 
+  return final
+end
+
+---@param uri string
+---@return string|nil error message
+local function do_open(uri)
+  local cmd, err = vim.ui.open(uri)
+  local rv = cmd and cmd:wait(1000) or nil
+  if cmd and rv and rv.code ~= 0 then
+    err = ("vim.ui.open: command %s (%d): %s"):format(
+      (rv.code == 124 and "timeout" or "failed"),
+      rv.code,
+      vim.inspect(cmd.cmd)
+    )
+  end
+  return err
+end
+
+--- gx handler: resolve URLs via built-in sources, falling back to regex extraction.
+function M.gx()
+  local final = M.get_urls()
   for _, u in ipairs(final) do
     local err = do_open(u)
     if err then

@@ -89,3 +89,8 @@ vim.keymap.set("n", "<C-u>", function()
   local lines = math.floor(vim.api.nvim_win_get_height(0) * scroll_percentage)
   vim.cmd("normal! " .. lines .. "kzz")
 end, { noremap = true, silent = true })
+
+-- yank URL under cursor
+vim.keymap.set("n", "yu", function()
+  require("util.clipboard").copy_url()
+end, { desc = "[P]Yank URL under cursor" })
