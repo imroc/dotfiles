@@ -7,26 +7,32 @@ return {
     -- the `ignore` crate with git_global(true), which correctly honors
     -- global, local, and .git/info/exclude gitignore rules.
     local plugin_dir = vim.fn.stdpath("data") .. "/lazy/fff.nvim"
-    local marker = plugin_dir .. '/target/release/.built-from-source'
+    local marker = plugin_dir .. "/target/release/.built-from-source"
     local done = false
     local err_msg = nil
-    vim.system({ 'cargo', 'build', '--release' }, { cwd = plugin_dir }, function(result)
+    vim.system({ "cargo", "build", "--release" }, { cwd = plugin_dir }, function(result)
       if result.code ~= 0 then
-        err_msg = 'Failed to build fff.nvim from source: ' .. (result.stderr or 'unknown error')
+        err_msg = "Failed to build fff.nvim from source: " .. (result.stderr or "unknown error")
       else
         -- Create marker so init() knows the binary was built from source
-        local f = io.open(marker, 'w')
-        if f then f:close() end
+        local f = io.open(marker, "w")
+        if f then
+          f:close()
+        end
         vim.schedule(function()
-          vim.notify('fff.nvim: built from source (ripgrep backend)', vim.log.levels.INFO)
+          vim.notify("fff.nvim: built from source (ripgrep backend)", vim.log.levels.INFO)
         end)
       end
       done = true
     end)
     -- Block until build completes (lazy.nvim build hook is synchronous)
     local timeout_ms = 1000 * 60 * 5 -- 5 minutes
-    vim.wait(timeout_ms, function() return done end, 100)
-    if err_msg then error(err_msg) end
+    vim.wait(timeout_ms, function()
+      return done
+    end, 100)
+    if err_msg then
+      error(err_msg)
+    end
   end,
   init = function()
     -- fff.nvim leaks LMDB reader slots (~17 per nvim session). When the
@@ -62,12 +68,12 @@ return {
           end
           -- If >90% slots used, delete lock file to reset reader table
           if used > max_readers * 0.9 then
-            vim.schedule(function()
-              vim.notify(
-                string.format("fff.nvim: LMDB reader slots near full (%d/%d), clearing lock file", used, max_readers),
-                vim.log.levels.WARN
-              )
-            end)
+            -- vim.schedule(function()
+            --   vim.notify(
+            --     string.format("fff.nvim: LMDB reader slots near full (%d/%d), clearing lock file", used, max_readers),
+            --     vim.log.levels.DEBUG
+            --   )
+            -- end)
             os.remove(lock_file)
           end
         end
@@ -82,60 +88,69 @@ return {
     -- run :Lazy build after syncing dotfiles to a new machine.
     vim.schedule(function()
       local plugin_dir = data .. "/lazy/fff.nvim"
-      local binary_ext = vim.uv.os_uname().sysname == 'Darwin' and 'dylib' or 'so'
-      local binary = plugin_dir .. '/target/release/libfff_nvim.' .. binary_ext
-      local marker = plugin_dir .. '/target/release/.built-from-source'
+      local binary_ext = vim.uv.os_uname().sysname == "Darwin" and "dylib" or "so"
+      local binary = plugin_dir .. "/target/release/libfff_nvim." .. binary_ext
+      local marker = plugin_dir .. "/target/release/.built-from-source"
 
       -- Binary doesn't exist yet — lazy.nvim will run build() on first install
-      if not vim.uv.fs_stat(binary) then return end
+      if not vim.uv.fs_stat(binary) then
+        return
+      end
 
       -- Marker exists — already built from source, nothing to do
-      if vim.uv.fs_stat(marker) then return end
+      if vim.uv.fs_stat(marker) then
+        return
+      end
 
       -- Binary exists but no marker → prebuilt zlob version, need to rebuild
-      if vim.fn.executable('cargo') == 0 then
+      if vim.fn.executable("cargo") == 0 then
         vim.notify(
-          'fff.nvim: 当前使用预编译二进制 (zlob)，全局 gitignore 不生效。\n'
-            .. '请安装 Rust 工具链后运行 :Lazy build fff.nvim 重新编译。',
+          "fff.nvim: 当前使用预编译二进制 (zlob)，全局 gitignore 不生效。\n"
+            .. "请安装 Rust 工具链后运行 :Lazy build fff.nvim 重新编译。",
           vim.log.levels.WARN
         )
         return
       end
 
       -- Check if a build is already in progress (lock file)
-      local lock = plugin_dir .. '/target/release/.building'
-      if vim.uv.fs_stat(lock) then return end
+      local lock = plugin_dir .. "/target/release/.building"
+      if vim.uv.fs_stat(lock) then
+        return
+      end
 
       -- Start background rebuild
-      local f = io.open(lock, 'w')
-      if f then f:close() end
+      local f = io.open(lock, "w")
+      if f then
+        f:close()
+      end
 
       vim.notify(
-        'fff.nvim: 检测到预编译二进制 (zlob)，正在后台从源码编译 (ripgrep 后端)...\n'
-          .. '完成后需重启 nvim 生效。',
+        "fff.nvim: 检测到预编译二进制 (zlob)，正在后台从源码编译 (ripgrep 后端)...\n"
+          .. "完成后需重启 nvim 生效。",
         vim.log.levels.INFO
       )
 
-      vim.system({ 'cargo', 'build', '--release' }, { cwd = plugin_dir }, function(result)
+      vim.system({ "cargo", "build", "--release" }, { cwd = plugin_dir }, function(result)
         os.remove(lock)
         if result.code ~= 0 then
           vim.schedule(function()
             vim.notify(
-              'fff.nvim: 后台编译失败: ' .. (result.stderr or 'unknown error') .. '\n'
-                .. '请手动运行 :Lazy build fff.nvim',
+              "fff.nvim: 后台编译失败: "
+                .. (result.stderr or "unknown error")
+                .. "\n"
+                .. "请手动运行 :Lazy build fff.nvim",
               vim.log.levels.ERROR
             )
           end)
           return
         end
         -- Create marker
-        local mf = io.open(marker, 'w')
-        if mf then mf:close() end
+        local mf = io.open(marker, "w")
+        if mf then
+          mf:close()
+        end
         vim.schedule(function()
-          vim.notify(
-            'fff.nvim: 后台编译完成 (ripgrep 后端)，请重启 nvim 生效。',
-            vim.log.levels.INFO
-          )
+          vim.notify("fff.nvim: 后台编译完成 (ripgrep 后端)，请重启 nvim 生效。", vim.log.levels.INFO)
         end)
       end)
     end)
