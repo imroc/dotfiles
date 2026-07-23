@@ -7,12 +7,16 @@ return {
     -- the `ignore` crate with git_global(true), which correctly honors
     -- global, local, and .git/info/exclude gitignore rules.
     local plugin_dir = vim.fn.fnamemodify(debug.getinfo(1, 'S').source:sub(2), ':h:h:h')
+    local marker = plugin_dir .. '/target/release/.built-from-source'
     local done = false
     local err_msg = nil
     vim.system({ 'cargo', 'build', '--release' }, { cwd = plugin_dir }, function(result)
       if result.code ~= 0 then
         err_msg = 'Failed to build fff.nvim from source: ' .. (result.stderr or 'unknown error')
       else
+        -- Create marker so init() knows the binary was built from source
+        local f = io.open(marker, 'w')
+        if f then f:close() end
         vim.schedule(function()
           vim.notify('fff.nvim: built from source (ripgrep backend)', vim.log.levels.INFO)
         end)
@@ -69,6 +73,72 @@ return {
         end
       end
     end
+
+    -- Auto-rebuild from source if the binary is the prebuilt zlob version.
+    -- The marker file is created by the build() function after successful
+    -- cargo build --release. If it's missing, the binary was either
+    -- downloaded (zlob, doesn't respect global gitignore) or doesn't exist.
+    -- We trigger a background rebuild so the user doesn't need to manually
+    -- run :Lazy build after syncing dotfiles to a new machine.
+    vim.schedule(function()
+      local plugin_dir = vim.fn.fnamemodify(debug.getinfo(1, 'S').source:sub(2), ':h:h:h')
+      local marker = plugin_dir .. '/target/release/.built-from-source'
+      local binary_ext = vim.uv.os_uname().sysname == 'Darwin' and 'dylib' or 'so'
+      local binary = plugin_dir .. '/target/release/libfff_nvim.' .. binary_ext
+
+      -- Binary doesn't exist yet — lazy.nvim will run build() on first install
+      if not vim.uv.fs_stat(binary) then return end
+
+      -- Marker exists — already built from source, nothing to do
+      if vim.uv.fs_stat(marker) then return end
+
+      -- Binary exists but no marker → prebuilt zlob version, need to rebuild
+      if vim.fn.executable('cargo') == 0 then
+        vim.notify(
+          'fff.nvim: 当前使用预编译二进制 (zlob)，全局 gitignore 不生效。\n'
+            .. '请安装 Rust 工具链后运行 :Lazy build fff.nvim 重新编译。',
+          vim.log.levels.WARN
+        )
+        return
+      end
+
+      -- Check if a build is already in progress (lock file)
+      local lock = plugin_dir .. '/target/release/.building'
+      if vim.uv.fs_stat(lock) then return end
+
+      -- Start background rebuild
+      local f = io.open(lock, 'w')
+      if f then f:close() end
+
+      vim.notify(
+        'fff.nvim: 检测到预编译二进制 (zlob)，正在后台从源码编译 (ripgrep 后端)...\n'
+          .. '完成后需重启 nvim 生效。',
+        vim.log.levels.INFO
+      )
+
+      vim.system({ 'cargo', 'build', '--release' }, { cwd = plugin_dir }, function(result)
+        os.remove(lock)
+        if result.code ~= 0 then
+          vim.schedule(function()
+            vim.notify(
+              'fff.nvim: 后台编译失败: ' .. (result.stderr or 'unknown error') .. '\n'
+                .. '请手动运行 :Lazy build fff.nvim',
+              vim.log.levels.ERROR
+            )
+          end)
+          return
+        end
+        -- Create marker
+        local mf = io.open(marker, 'w')
+        if mf then mf:close() end
+        vim.schedule(function()
+          vim.notify(
+            'fff.nvim: 后台编译完成 (ripgrep 后端)，请重启 nvim 生效。',
+            vim.log.levels.INFO
+          )
+        end)
+      end)
+    end)
   end,
   opts = {
     debug = {
