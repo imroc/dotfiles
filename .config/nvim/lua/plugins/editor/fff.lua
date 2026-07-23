@@ -6,7 +6,7 @@ return {
     -- gitignore file (~/.config/git/ignore). The ripgrep backend uses
     -- the `ignore` crate with git_global(true), which correctly honors
     -- global, local, and .git/info/exclude gitignore rules.
-    local plugin_dir = vim.fn.fnamemodify(debug.getinfo(1, 'S').source:sub(2), ':h:h:h')
+    local plugin_dir = vim.fn.stdpath("data") .. "/lazy/fff.nvim"
     local marker = plugin_dir .. '/target/release/.built-from-source'
     local done = false
     local err_msg = nil
@@ -81,10 +81,10 @@ return {
     -- We trigger a background rebuild so the user doesn't need to manually
     -- run :Lazy build after syncing dotfiles to a new machine.
     vim.schedule(function()
-      local plugin_dir = vim.fn.fnamemodify(debug.getinfo(1, 'S').source:sub(2), ':h:h:h')
-      local marker = plugin_dir .. '/target/release/.built-from-source'
+      local plugin_dir = data .. "/lazy/fff.nvim"
       local binary_ext = vim.uv.os_uname().sysname == 'Darwin' and 'dylib' or 'so'
       local binary = plugin_dir .. '/target/release/libfff_nvim.' .. binary_ext
+      local marker = plugin_dir .. '/target/release/.built-from-source'
 
       -- Binary doesn't exist yet — lazy.nvim will run build() on first install
       if not vim.uv.fs_stat(binary) then return end
