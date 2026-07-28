@@ -54,7 +54,13 @@ function M.pick_alias(on_select)
     confirm = function(p, item)
       p:close()
       if item then
-        on_select(item.alias, item.dir)
+        -- Defer to next event loop tick so Snacks.picker's async cleanup
+        -- (vim.schedule in picker:close()) runs first. Otherwise the
+        -- scheduled layout:close() resets mode to normal AFTER fff.nvim's
+        -- startinsert!, causing the picker to open in normal mode.
+        vim.schedule(function()
+          on_select(item.alias, item.dir)
+        end)
       end
     end,
   })
@@ -90,7 +96,9 @@ function M.find_files_subdir()
       confirm = function(p, item)
         p:close()
         if item then
-          require("fff").find_files({ cwd = item.file })
+          vim.schedule(function()
+            require("fff").find_files({ cwd = item.file })
+          end)
         end
       end,
     })
