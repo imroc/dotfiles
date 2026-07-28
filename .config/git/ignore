@@ -19,3 +19,4 @@ CLAUDE.local.md
 AGENTS.local.md
 GEMINI.local.md
 CODEBUDDY.local.md
+__pycache__/
