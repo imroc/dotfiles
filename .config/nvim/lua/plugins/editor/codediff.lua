@@ -34,7 +34,7 @@ return {
   },
   opts = {
     diff = {
-      layout = "inline",
+      -- layout = "inline",
       ignore_trim_whitespace = false,
       jump_to_first_change = true,
       cycle_next_hunk = false,
