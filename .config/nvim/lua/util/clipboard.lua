@@ -37,7 +37,8 @@ function M.copy_current_root_directory()
   copy_and_notify(buffer.pretty_path(LazyVim.root()))
 end
 
---- Generate @ reference text for the current file or visual selection
+--- Generate reference text for the current file or visual selection
+--- Format: "path" or "path:line" or "path:start-end" (quoted, no @ prefix)
 ---@param is_visual? boolean whether called from a visual mode mapping
 ---@return string|nil reference text, or nil if no file
 function M.get_ai_ref_text(is_visual)
@@ -53,11 +54,11 @@ function M.get_ai_ref_text(is_visual)
       start_line, end_line = end_line, start_line
     end
     if start_line == end_line then
-      return string.format('@"%s:%d" ', file_path, start_line)
+      return string.format('"%s:%d" ', file_path, start_line)
     end
-    return string.format('@"%s:%d-%d" ', file_path, start_line, end_line)
+    return string.format('"%s:%d-%d" ', file_path, start_line, end_line)
   else
-    return '@"' .. file_path .. '" '
+    return '"' .. file_path .. '" '
   end
 end
 
