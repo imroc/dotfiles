@@ -134,12 +134,8 @@ function M.insert_image()
     end
     vim.notify("正在上传图片到 iwiki...")
     local result = mac_bridge.send_sync("iwiki_image", { doc_id = doc_id })
-    if result and result.ok and result.image_md then
-      vim.notify("图片上传成功")
-      vim.fn.setreg(register, result.image_md)
-      -- 在当前行下方插入
-      local pos = vim.api.nvim_win_get_cursor(0)
-      vim.api.nvim_buf_set_lines(0, pos[1], pos[1], false, { result.image_md })
+    if result and result.ok then
+      vim.notify("图片已上传并复制到 Mac 剪贴板")
     else
       local err = (result and result.error) or "未知错误"
       vim.notify("上传失败: " .. err, vim.log.levels.ERROR)
