@@ -563,20 +563,6 @@ return {
         desc = "[P]Insert Picture (Picgo)",
       },
       {
-        "<leader>wi",
-        function()
-          local iwiki = require("util.iwiki")
-          if iwiki.is_iwiki() then
-            iwiki.insert_image()
-          else
-            vim.notify("当前文件不在 iwiki 目录", vim.log.levels.WARN)
-          end
-        end,
-        mode = { "n", "v" },
-        ft = "markdown",
-        desc = "[P]Insert iWiki Image",
-      },
-      {
         "<M-i>",
         function()
           local buffer = require("util.buffer")
