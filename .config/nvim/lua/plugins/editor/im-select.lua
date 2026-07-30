@@ -5,30 +5,30 @@
 --
 -- 三种工作模式（自动检测）：
 --   1. 本地模式（macOS 非 SSH）：直接调用 macism
---   2. 隧道模式（SSH + 反向隧道可用）：通过 nc 发送指令到本地监听服务
+--   2. 隧道模式（SSH + 反向隧道可用）：通过 mac-bridge 服务发送 JSON 指令
 --   3. OSC 模式（SSH + 无隧道 + WezTerm）：通过 OSC 1337 向本地 WezTerm 发送指令
 --
 -- ┌──────────────────────────────────────────────────────────────────────────────┐
 -- │ 隧道模式架构                                                                │
 -- ├──────────────────┬───────────────────────────────────────────────────────────┤
--- │ 远程 nvim        │ InsertLeave → echo "save_abc" | nc -w1 localhost:17395   │
--- │ (im-select.lua)  │ InsertEnter → echo "restore"  | nc -w1 localhost:17395  │
--- │                  │ VimEnter    → echo "init"     | nc -w1 localhost:17395   │
--- │                  │ VimLeave    → echo "exit"     | nc -w1 localhost:17395   │
--- ├──────────────────┼───────────────────────────────────────────────────────────┤
+-- │ 远程 nvim        │ InsertLeave → mac_bridge.send("im_switch", {action="save_abc"}) │
+-- │ (im-select.lua)  │ InsertEnter → mac_bridge.send("im_switch", {action="restore"}) │
+-- │                  │ VimEnter    → mac_bridge.send("im_switch", {action="init"})    │
+-- │                  │ VimLeave    → mac_bridge.send("im_switch", {action="exit"})    │
+-- ├──────────────────┼─────────────────────────────────────────────────────���─────┤
 -- │ SSH 反向隧道     │ SSH -R 17395:localhost:17395  远程 → 本地端口转发         │
 -- ├──────────────────┼───────────────────────────────────────────────────────────┤
--- │ 本地监听服务      │ im-switch-listener (Python) 接收指令 → 执行 macism        │
--- │ (本地 Mac)       │ 维护 saved_im / original_im 状态                         │
+-- │ mac-bridge 服务  │ Python TCP 服务，自动发现 handler 模块                     │
+-- │ (本地 Mac)       │ handlers/im_switch.py → 执行 macism，维护 IM 状态         │
 -- └──────────────────┴───────────────────────────────────────────────────────────┘
 --
 -- 状态存储：
 --   本地模式：vim.g.im_select_saved_state
---   隧道/OSC 模式：状态由本地服务/WezTerm 管理
+--   隧道/OSC 模式：状态由本地 mac-bridge 服务 / WezTerm 管理
 --
 -- 依赖：
 --   本地模式：macism 或 im-select（brew install macism）
---   隧道模式：本地 im-switch-listener + SSH RemoteForward + 远程 nc
+--   隧道模式：本地 mac-bridge + SSH RemoteForward + 远程 nc
 --   OSC 模式：本地 WezTerm + macism（WezTerm 配置 events/im-switch.lua）
 
 -- ──────────────────────────────────────────────────────────────────────────────
@@ -77,7 +77,7 @@ local function send_im_osc(action)
 end
 
 local function send_im_tunnel(action)
-  vim.fn.system({ "nc", "-w1", "127.0.0.1", tostring(TUNNEL_PORT) }, action)
+  require('util.mac_bridge').send("im_switch", { action = action })
 end
 
 local function send_im_remote(action)

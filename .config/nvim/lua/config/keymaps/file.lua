@@ -56,6 +56,20 @@ vim.keymap.set("n", "<leader>ob", function()
   job.run("buddycn", { args = { "-r", LazyVim.root() } })
 end, { desc = "[P]Open CodeBuddy (Root Dir)" })
 
+-- JetBrains Gateway (mac-bridge)
+vim.keymap.set("n", "<leader>oj", function()
+  local root = LazyVim.root()
+  local mac_bridge = require("util.mac_bridge")
+  if mac_bridge.available() then
+    mac_bridge.send("jb", { path = root })
+    vim.notify("已触发 JetBrains Gateway: " .. root, vim.log.levels.INFO)
+  elseif vim.fn.executable("jb") == 1 then
+    job.run("jb", { args = { root } })
+  else
+    vim.notify("mac-bridge 隧道不可用且本地无 jb 命令", vim.log.levels.WARN)
+  end
+end, { desc = "[P]Open JetBrains Gateway" })
+
 -- weekly note / troubleshooting note
 vim.keymap.set("n", "<leader>ow", file.open_weekly_note, { desc = "[P]Open Weekly Note" })
 vim.keymap.set("n", "<leader>ot", file.open_troubleshooting_note, { desc = "[P]Open Troubleshooting Note" })

@@ -1,4 +1,6 @@
 -- CJK 感知的 gx 打开：修复裸 URL 前有中文标点时 <cfile> 误将前缀纳入的问题
+-- SSH 环境下通过 mac-bridge 回调 Mac 浏览器打开 URL
+
 local M = {}
 
 local url_pattern = "https?://[%w_.~!*:@&+$/?%%#-]*[%w/]"
@@ -53,6 +55,14 @@ end
 ---@param uri string
 ---@return string|nil error message
 local function do_open(uri)
+  -- SSH 环境：通过 mac-bridge 回调 Mac 浏览器打开
+  local mac_bridge = require("util.mac_bridge")
+  if mac_bridge.available() then
+    mac_bridge.send("url", { url = uri })
+    return nil
+  end
+
+  -- 本地环境：直接用 vim.ui.open
   local cmd, err = vim.ui.open(uri)
   local rv = cmd and cmd:wait(1000) or nil
   if cmd and rv and rv.code ~= 0 then
