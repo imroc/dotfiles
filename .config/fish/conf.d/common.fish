@@ -7,6 +7,7 @@ abbr --add td "terraform apply -destroy -auto-approve"
 
 abbr --add bigfile "sudo find / -type f -size +100M -exec ls -lh {} \;"
 abbr --add cosroc "coscli -c ~/.cos.image.yaml"
+abbr --add di "docker manifest inspect"
 
 # 覆盖 lazygit 在 MacOS 下的默认配置路径（~/Library/Application\ Support/jesseduffield/lazygit/config.yml）
 set -gx XDG_CONFIG_HOME "$HOME/.config"
