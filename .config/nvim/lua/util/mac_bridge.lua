@@ -6,6 +6,7 @@
 -- 用法：
 --   require('util.mac_bridge').send("jb", { path = "/root/dev/tke/enp" })
 --   require('util.mac_bridge').send("url", { url = "https://google.com" })
+--   require('util.mac_bridge').send_sync("iwiki_image", { doc_id = "12345" })
 --   require('util.mac_bridge').available()  -- 检查隧道是否可用
 
 local M = {}
@@ -26,7 +27,7 @@ function M.available()
   return tunnel_available
 end
 
---- 发送请求到 mac-bridge 服务
+--- 异步发送请求到 mac-bridge 服务（fire-and-forget）
 --- @param handler string handler 名称（如 "jb"、"url"、"im_switch"）
 --- @param payload table? 请求参数
 --- @return boolean 是否成功发送
@@ -38,6 +39,27 @@ function M.send(handler, payload)
   local json = vim.fn.json_encode(payload)
   vim.fn.system({ "nc", "-w1", "127.0.0.1", tostring(TUNNEL_PORT) }, json)
   return true
+end
+
+--- 同步发送请求并等待响应（用于需要回传结果的 handler）
+--- @param handler string handler 名称（如 "iwiki_image"）
+--- @param payload table? 请求参数
+--- @return table|nil 响应 JSON（解析后的 dict），nil 表示失败
+function M.send_sync(handler, payload)
+  if not tunnel_available then
+    return nil
+  end
+  payload = vim.tbl_extend("force", { handler = handler }, payload or {})
+  local json = vim.fn.json_encode(payload)
+  local resp = vim.fn.system({ "nc", "-w30", "127.0.0.1", tostring(TUNNEL_PORT) }, json)
+  if vim.v.shell_error ~= 0 or resp == "" then
+    return nil
+  end
+  local ok, result = pcall(vim.json.decode, resp)
+  if ok then
+    return result
+  end
+  return nil
 end
 
 return M

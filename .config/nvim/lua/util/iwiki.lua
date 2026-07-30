@@ -16,6 +16,30 @@ function M.is_iwiki()
   return vim.fn.filereadable(dir .. "/iwiki.json") == 1
 end
 
+
+--- 从当前文件的 iwiki.json 获取文档 ID
+--- @return string|nil doc_id
+function M.get_doc_id()
+  local file_path = buffer.absolute_path()
+  local name = vim.fn.fnamemodify(file_path, ":t:r")
+  local json_file = vim.fn.expand("%:p:h") .. "/iwiki.json"
+  if vim.fn.filereadable(json_file) ~= 1 then
+    return nil
+  end
+  local content = table.concat(vim.fn.readfile(json_file), "")
+  local ok, data = pcall(vim.fn.json_decode, content)
+  if not ok or type(data) ~= "table" then
+    return nil
+  end
+  local doc_id = data[name]
+  if not doc_id then
+    -- 全角 ／ 转回 / 再查一次
+    local converted = name:gsub("／", "/")
+    doc_id = data[converted]
+  end
+  return doc_id and tostring(doc_id) or nil
+end
+
 local function save_iwiki_impl(force)
   local file_path = buffer.absolute_path()
   local extra = force and " --force" or ""
@@ -83,6 +107,31 @@ end
 function M.insert_image()
   local file_path = buffer.absolute_path()
   local register = vim.v.register
+
+  -- SSH 环境：通过 mac-bridge 回调 Mac 上传剪贴板图片
+  local mac_bridge = require("util.mac_bridge")
+  if mac_bridge.available() then
+    local doc_id = M.get_doc_id()
+    if not doc_id then
+      vim.notify("无法获取 iwiki 文档 ID（当前文件不在 iwiki 目录？）", vim.log.levels.ERROR)
+      return
+    end
+    vim.notify("正在上传图片到 iwiki...")
+    local result = mac_bridge.send_sync("iwiki_image", { doc_id = doc_id })
+    if result and result.ok and result.image_md then
+      vim.notify("图片上传成功")
+      vim.fn.setreg(register, result.image_md)
+      -- 在当前行下方插入
+      local pos = vim.api.nvim_win_get_cursor(0)
+      vim.api.nvim_buf_set_lines(0, pos[1], pos[1], false, { result.image_md })
+    else
+      local err = (result and result.error) or "未知错误"
+      vim.notify("上传失败: " .. err, vim.log.levels.ERROR)
+    end
+    return
+  end
+
+  -- 本地环境：直接调用 iwiki upload（原逻辑）
   vim.notify("uploading image to iwiki...")
   local Job = require("plenary.job")
   Job:new({

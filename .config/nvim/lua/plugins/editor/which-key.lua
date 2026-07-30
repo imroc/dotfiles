@@ -10,6 +10,7 @@ return {
         { "<leader>k", group = "kube" },
         { "<leader>r", group = "replace/rename" },
         { "<leader>o", group = "open" },
+        { "<leader>w", group = "wiki" },
         { "<leader>od", group = "[P]Dotfiles" },
         { "<leader>fd", group = "[P]Find Dotfiles" },
         { "<leader>og", group = "git repo" },
