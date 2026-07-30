@@ -71,6 +71,22 @@ end
 
 function M.open_iwiki()
   local file_path = buffer.absolute_path()
+
+  -- SSH 环境：远程获取文档 URL，通过 mac-bridge 让 Mac 打开浏览器
+  local mac_bridge = require("util.mac_bridge")
+  if mac_bridge.available() then
+    local result = vim.fn.system({ cmd, "url", file_path })
+    if vim.v.shell_error == 0 and result ~= "" then
+      local url = result:gsub("%s+$", "")
+      mac_bridge.send("url", { url = url })
+      vim.notify("已在 Mac 打开: " .. url)
+    else
+      vim.notify("无法获取文档 URL", vim.log.levels.ERROR)
+    end
+    return
+  end
+
+  -- 本地环境：iwiki open 直接用 macOS open 打开
   job.run_script(cmd .. ' open "' .. file_path .. '"')
 end
 
