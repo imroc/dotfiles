@@ -5,7 +5,7 @@ name = "terminal"
 
 [keys]
 prefix = "ctrl+a"
-zoom = ["super+enter", "prefix+z"]
+zoom = ["super+enter", "prefix+z", "prefix+space"]
 reload_config = "prefix+;"
 detach = "prefix+d"
 # workspace
@@ -25,10 +25,10 @@ switch_tab = "ctrl+1..9"
 new_tab = "super+t"
 rename_tab = ["prefix+t", "prefix+,"]
 # pane
-focus_pane_left = "super+h"
-focus_pane_down = "super+j"
-focus_pane_up = "super+k"
-focus_pane_right = "super+l"
+focus_pane_left = ["super+h", "prefix+h"]
+focus_pane_down = ["super+j", "prefix+j"]
+focus_pane_up = ["super+k", "prefix+k"]
+focus_pane_right = ["super+l", "prefix+l"]
 close_pane = ["super+w", "prefix+x"]
 split_vertical = ["super+\\", "prefix+\\"]
 split_horizontal = ["super+-", "prefix+-"]
