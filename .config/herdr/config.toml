@@ -40,6 +40,7 @@ kitty_graphics = true
 [ui]
 show_agent_labels_on_pane_borders = true
 prompt_new_tab_name = false
+mobile_width_threshold = 100
 
 [ui.toast]
 delivery = "terminal"
