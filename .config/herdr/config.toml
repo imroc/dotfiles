@@ -8,27 +8,28 @@ prefix = "ctrl+a"
 zoom = ["super+enter", "prefix+z", "prefix+space"]
 reload_config = "prefix+;"
 detach = "prefix+d"
+toggle_sidebar = ["prefix+b", "prefix+ctrl+b"]
 # workspace
 switch_workspace = "super+1..9"
-previous_workspace = "super+alt+k"
-next_workspace = "super+alt+j"
-new_workspace = "super+n"
+previous_workspace = ["super+alt+k", "prefix+ctrl+k"]
+next_workspace = ["super+alt+j", "prefix+ctrl+j"]
+new_workspace = ["super+n", "prefix+n"]
 rename_workspace = "prefix+."
 # agent
-previous_agent = ["super+alt+h", "shift+alt+k"]
-next_agent = ["super+alt+l", "shift+alt+j"]
+previous_agent = ["shift+alt+k", "prefix+shift+k"]
+next_agent = ["shift+alt+j", "prefix+shift+j"]
 focus_agent = "prefix+1..9"
 # tab
 previous_tab = "super+["
 next_tab = "super+]"
 switch_tab = "ctrl+1..9"
-new_tab = "super+t"
-rename_tab = ["prefix+t", "prefix+,"]
+new_tab = ["super+t", "prefix+t"]
+rename_tab = ["prefix+,"]
 # pane
-focus_pane_left = ["super+h", "prefix+h"]
-focus_pane_down = ["super+j", "prefix+j"]
-focus_pane_up = ["super+k", "prefix+k"]
-focus_pane_right = ["super+l", "prefix+l"]
+focus_pane_left = ["super+h", "prefix+h", "prefix+left"]
+focus_pane_down = ["super+j", "prefix+j", "prefix+down"]
+focus_pane_up = ["super+k", "prefix+k", "prefix+up"]
+focus_pane_right = ["super+l", "prefix+l", "prefix+right"]
 close_pane = ["super+w", "prefix+x"]
 split_vertical = ["super+\\", "prefix+\\"]
 split_horizontal = ["super+-", "prefix+-"]
