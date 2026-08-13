@@ -1,8 +1,9 @@
 onboarding = false
 
 [theme]
-name = "terminal"
+name = "catppuccin"
 
+auto_switch = false
 [keys]
 prefix = "ctrl+a"
 zoom = ["super+enter", "prefix+z", "prefix+space"]
@@ -48,4 +49,3 @@ delay_seconds = 1
 
 [ui.toast.herdr]
 position = "bottom-right"
-
