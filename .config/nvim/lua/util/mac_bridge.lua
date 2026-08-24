@@ -1,7 +1,9 @@
 -- mac-bridge: 远程 SSH 会话到本地 Mac 的通用回调桥接
 --
 -- 通过 SSH 反向隧道（RemoteForward 17395），远程 nvim 可发送 JSON 请求
--- 到本地 Mac 的 mac-bridge 服务，触发本地命令执行。
+-- 到本地 Mac 的 mac-bridge 服务，触发本地命令执行。SSH 会话通过
+-- SSH_CONNECTION/SSH_CLIENT 识别；Orca 终端由 daemon 派生、不继承 SSH
+-- 环境变量，因此通过 TERM_PROGRAM=Orca 识别。
 --
 -- 用法：
 --   require('util.mac_bridge').send("jb", { path = "/root/dev/tke/enp" })
@@ -14,10 +16,12 @@ local M = {}
 local TUNNEL_PORT = 17395
 
 local is_ssh = vim.env.SSH_CONNECTION ~= nil or vim.env.SSH_CLIENT ~= nil
+local is_orca = vim.fn.has("mac") == 0 and vim.env.TERM_PROGRAM == "Orca"
+local can_use_tunnel = is_ssh or is_orca
 
 -- 启动时检测隧道可用性（与 im-select.lua 的检测逻辑一致）
 local tunnel_available = false
-if is_ssh then
+if can_use_tunnel then
   vim.fn.system({ "nc", "-z", "-w1", "127.0.0.1", tostring(TUNNEL_PORT) })
   tunnel_available = vim.v.shell_error == 0
 end

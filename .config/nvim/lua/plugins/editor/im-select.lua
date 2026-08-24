@@ -5,7 +5,7 @@
 --
 -- 三种工作模式（自动检测）：
 --   1. 本地模式（macOS 非 SSH）：直接调用 macism
---   2. 隧道模式（SSH + 反向隧道可用）：通过 mac-bridge 服务发送 JSON 指令
+--   2. 隧道模式（SSH/Orca + 反向隧道可用）：通过 mac-bridge 服务发送 JSON 指令
 --   3. OSC 模式（SSH + 无隧道 + WezTerm）：通过 OSC 1337 向本地 WezTerm 发送指令
 --
 -- ┌──────────────────────────────────────────────────────────────────────────────┐
@@ -37,12 +37,15 @@
 
 local is_mac = vim.fn.has("mac") == 1
 local is_ssh = vim.env.SSH_CONNECTION ~= nil or vim.env.SSH_CLIENT ~= nil
+-- Orca daemon 不是从 SSH 会话派生的，终端里没有 SSH_CONNECTION/SSH_CLIENT；
+-- 但其终端会继承 TERM_PROGRAM=Orca，且可通过已建立的 SSH RemoteForward 访问 Mac。
+local is_orca = vim.fn.has("mac") == 0 and vim.env.TERM_PROGRAM == "Orca"
 
-if not is_mac and not is_ssh then
+if not is_mac and not is_ssh and not is_orca then
   return {}
 end
 
-local remote_mode = is_ssh
+local remote_mode = is_ssh or is_orca
 
 -- ──────────────────────────────────────────────────────────────────────────────
 -- 工具函数
