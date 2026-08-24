@@ -502,9 +502,13 @@ gaps.outer.top = 29
 [[on-window-detected]]
     if.app-id = 'com.tencent.xinWeChat'    # 微信其它主界面
     run = ['layout floating']
+
+# S: Slack
 [[on-window-detected]]
     if.app-id = 'com.tinyspeck.slackmacgap' # Slack
     run = ['move-node-to-workspace S', 'layout floating']
+
+# R: Discord
 [[on-window-detected]]
     if.app-id = 'com.hnc.Discord' # Discord
     run = ['move-node-to-workspace R', 'layout floating']
