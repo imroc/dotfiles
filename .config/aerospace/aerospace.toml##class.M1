@@ -483,12 +483,15 @@ gaps.outer.top = 29
 # A: AI 工具
 [[on-window-detected]]
     if.app-id = 'com.tencent.yuanbao'
-    run = ['move-node-to-workspace A']
+    run = ['move-node-to-workspace A'] # 元宝
 [[on-window-detected]]
     if.app-id = 'com.alibaba.tongyi'
-    run = ['move-node-to-workspace A']
+    run = ['move-node-to-workspace A'] # 通义千问
 [[on-window-detected]]
     if.app-id = 'com.bot.pc.doubao' # 豆包
+    run = ['move-node-to-workspace A']
+[[on-window-detected]]
+    if.app-id = 'com.stablyai.orca' # Orca
     run = ['move-node-to-workspace A']
 
 # W: 微信
