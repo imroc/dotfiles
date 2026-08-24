@@ -49,7 +49,10 @@ vim.g.maplocalleader = ","
 -- 如果启用动画会导致 gg/G 可能无法移动到首行/尾行
 vim.g.snacks_animate = false
 
-if vim.env.SSH_CONNECTION or vim.env.SSH_TTY then
+-- Orca 终端无 SSH_* 变量，但会注入 TERM_PROGRAM=Orca；此时若不强制 OSC 52，
+-- nvim 会因 DISPLAY=:99（Orca 自带 Xvfb）+ xclip 存在而选择 X11 provider，
+-- 剪贴板写入 headless Xvfb，无法同步到 Mac 系统剪贴板
+if vim.env.SSH_CONNECTION or vim.env.SSH_TTY or vim.env.TERM_PROGRAM == "Orca" then
   local function paste()
     return { vim.fn.split(vim.fn.getreg(""), "\n"), vim.fn.getregtype("") }
   end
