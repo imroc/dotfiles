@@ -761,7 +761,7 @@
                         ]
                     },
                     {
-                        "description": "Orca: Cmd+T/Cmd+Option+T/brackets/double ESC switch to English input method",
+                        "description": "Orca: Cmd+T/Cmd+Option+T/Cmd+H/Cmd+L/brackets/double ESC switch to English input method",
                         "manipulators": [
                             {
                                 "from": {
@@ -775,6 +775,66 @@
                                 "to": [
                                     {
                                         "key_code": "t",
+                                        "modifiers": [
+                                            "command"
+                                        ]
+                                    },
+                                    {
+                                        "shell_command": "/opt/homebrew/bin/macism com.apple.keylayout.ABC"
+                                    }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "frontmost_application_if",
+                                        "bundle_identifiers": [
+                                            "com.stablyai.orca"
+                                        ]
+                                    }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "from": {
+                                    "key_code": "h",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "command"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "h",
+                                        "modifiers": [
+                                            "command"
+                                        ]
+                                    },
+                                    {
+                                        "shell_command": "/opt/homebrew/bin/macism com.apple.keylayout.ABC"
+                                    }
+                                ],
+                                "conditions": [
+                                    {
+                                        "type": "frontmost_application_if",
+                                        "bundle_identifiers": [
+                                            "com.stablyai.orca"
+                                        ]
+                                    }
+                                ],
+                                "type": "basic"
+                            },
+                            {
+                                "from": {
+                                    "key_code": "l",
+                                    "modifiers": {
+                                        "mandatory": [
+                                            "command"
+                                        ]
+                                    }
+                                },
+                                "to": [
+                                    {
+                                        "key_code": "l",
                                         "modifiers": [
                                             "command"
                                         ]
