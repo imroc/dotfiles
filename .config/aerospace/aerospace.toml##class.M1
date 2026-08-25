@@ -194,7 +194,7 @@ gaps.outer.top = 29
       'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
       'move-node-to-workspace G --focus-follows-window'
     ]
-    # devcontainer (容器开发，手动将 ghostty 窗口移入并 ssh)
+    # Orca (AI Agent 编排)
     d = [
       'mode main',
       'exec-and-forget sketchybar --trigger aerospace_workspace_mode_enabled_changed AEROSPACE_WORKSPACE_MODE_ENABLED=false',
@@ -490,9 +490,11 @@ gaps.outer.top = 29
 [[on-window-detected]]
     if.app-id = 'com.bot.pc.doubao' # 豆包
     run = ['move-node-to-workspace A']
+
+# D: Orca
 [[on-window-detected]]
     if.app-id = 'com.stablyai.orca' # Orca
-    run = ['move-node-to-workspace A']
+    run = ['move-node-to-workspace D']
 
 # W: 微信
 [[on-window-detected]]
@@ -556,7 +558,7 @@ gaps.outer.top = 29
 # G: ghostty
 [[on-window-detected]]
     if.app-id = 'com.mitchellh.ghostty'
-    run = ['move-node-to-workspace G']
+    run = ['move-node-to-workspace G', 'layout floating']
     
 
 # E: 剪辑
