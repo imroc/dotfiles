@@ -77,13 +77,102 @@ end
 
 --- gx handler: resolve URLs via built-in sources, falling back to regex extraction.
 function M.gx()
-  local final = M.get_urls()
+  -- 光标处是否有 http(s) URL：
+  -- 1. 内置 source（LSP/extmark/treesitter，光标位置相关）
+  local urls = require("vim.ui")._get_urls()
+  local final = {}
+  for _, u in ipairs(urls) do
+    if u:match("^https?://") then
+      final[#final + 1] = u
+    end
+  end
+  -- 2. CJK-aware regex 提取（裸 URL 前有中文标点时修正 <cfile> 误判）
+  if #final == 0 then
+    local cursor = vim.api.nvim_win_get_cursor(0)
+    local line = vim.api.nvim_get_current_line()
+    local extracted = url_at(line, cursor[2])
+    if extracted then
+      final = { extracted }
+    end
+  end
+
   for _, u in ipairs(final) do
     local err = do_open(u)
     if err then
       vim.notify(err, vim.log.levels.ERROR)
     end
   end
+
+  -- 光标不在 URL 上：用 flash.nvim 标注屏幕内所有 URL 供选择
+  if #final == 0 then
+    M.gx_select()
+  end
+end
+
+--- gx fallback: flash.nvim 标注可视区域内所有 URL，按 label 选择后打开（不移动光标）。
+function M.gx_select()
+  local ok, Flash = pcall(require, "flash")
+  if not ok then
+    vim.notify("flash.nvim not available for URL selection", vim.log.levels.WARN)
+    return
+  end
+
+  local notified_empty = false
+
+  Flash.jump({
+    search = { multi_window = false },
+    prompt = { enabled = false },
+    labeler = function() end, -- label 在 matcher 中直接分配
+    matcher = function(win, state, opts)
+      -- opts.from/to 是 flash 传入的可视区域（(1,0)-indexed，to 为 botline+1）
+      local from_lnum = opts.from and opts.from[1] or vim.fn.line("w0")
+      local to_lnum = opts.to and (opts.to[1] - 1) or vim.fn.line("w$")
+      local buf = vim.api.nvim_win_get_buf(win)
+      local matches = {}
+      for lnum = from_lnum, to_lnum do
+        local line = (vim.api.nvim_buf_get_lines(buf, lnum - 1, lnum, false))[1]
+        if line then
+          local pos = 1
+          while true do
+            local s, e = line:find(url_pattern, pos)
+            if not s then
+              break
+            end
+            matches[#matches + 1] = {
+              pos = { lnum, s - 1 },
+              end_pos = { lnum, e - 1 },
+              url = line:sub(s, e), -- 自定义字段，action 中原样拿到
+            }
+            pos = e + 1
+          end
+        end
+      end
+
+      if #matches == 0 then
+        if not notified_empty then
+          notified_empty = true
+          vim.schedule(function()
+            vim.notify("No URLs on screen", vim.log.levels.INFO)
+          end)
+        end
+        return {}
+      end
+
+      -- 分配 label（同 flash 内置 treesitter 模式的做法）
+      local labels = state:labels()
+      for i, m in ipairs(matches) do
+        m.label = labels[i]
+      end
+      return matches
+    end,
+    action = function(match, state)
+      state:restore() -- 恢复视图，光标不动
+      local err = do_open(match.url)
+      if err then
+        vim.notify(err, vim.log.levels.ERROR)
+      end
+    end,
+  })
 end
 
 return M
