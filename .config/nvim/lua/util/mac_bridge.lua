@@ -17,6 +17,23 @@ local TUNNEL_PORT = 17395
 
 local is_ssh = vim.env.SSH_CONNECTION ~= nil or vim.env.SSH_CLIENT ~= nil
 local is_orca = vim.fn.has("mac") == 0 and vim.env.TERM_PROGRAM == "Orca"
+
+-- tmux 会覆盖 TERM_PROGRAM=tmux；从 tmux server 全局环境（继承 server 启动时的
+-- 外层环境）读取真实值，保证 tmux 内的 nvim 仍能识别 Orca/SSH 会话。
+if vim.env.TMUX and not (is_ssh or is_orca) then
+  local out = vim.fn.system({ "tmux", "show-environment", "-g" }):gsub("\r", "")
+  if vim.v.shell_error == 0 then
+    for _, kv in ipairs(vim.split(out, "\n")) do
+      local k, v = kv:match("^(%S-)=(.*)$")
+      if k == "TERM_PROGRAM" and v == "Orca" then
+        is_orca = vim.fn.has("mac") == 0
+      elseif k == "SSH_CONNECTION" or k == "SSH_CLIENT" then
+        is_ssh = true
+      end
+    end
+  end
+end
+
 local can_use_tunnel = is_ssh or is_orca
 
 -- 启动时检测隧道可用性（与 im-select.lua 的检测逻辑一致）
