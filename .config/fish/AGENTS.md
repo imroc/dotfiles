@@ -50,6 +50,16 @@ Fisher 插件安装在 `plugins/` 子目录，通过 `004-fisher.fish` 将 `plug
 - `kubectl get -d` — 用 neat 清理 yaml 输出
 - `kubectl node-shell/pod-shell` — fzf 选择后登录节点/Pod
 
+### update git 仓库同步 (`functions/update.fish`)
+
+`update git` 的仓库清单来自 `~/.config/fish/update-repos.conf`，每行一条『<仓库 URL> <本地路径>』（`~` 代表 $HOME）：
+
+- 本地路径不存在（或为空目录）→ 自动 `git clone`
+- 已存在 → `git pull`；因本地有未 push 提交导致 pull 失败 → 自动 `pull --rebase`
+- 非空且非 git 仓库的目录 → 跳过；yadm dotfiles（yi/yu）不在此配置，由 `update git` 单独处理
+
+新增同步仓库只需改该配置文件，无需改函数。
+
 ## 函数命名约定
 
 - 工具包装函数：直接用工具名（`kubectl`、`helm`、`cilium`、`k9s`）
