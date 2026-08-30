@@ -52,7 +52,7 @@ Fisher 插件安装在 `plugins/` 子目录，通过 `004-fisher.fish` 将 `plug
 
 ### update git 仓库同步 (`functions/update.fish`)
 
-`update git` 的仓库清单来自 `~/.config/fish/update-repos.conf`，每行一条『<仓库 URL> <本地路径>』（`~` 代表 $HOME）：
+`update git` 的仓库清单来自 `~/.config/repos.conf`，每行一条『<仓库 URL> <本地路径>』（`~` 代表 $HOME）：
 
 - 本地路径不存在（或为空目录）→ 自动 `git clone`
 - 已存在 → `git pull`；因本地有未 push 提交导致 pull 失败 → 自动 `pull --rebase`
