@@ -44,20 +44,24 @@ vim.keymap.set("n", "<leader>on", function()
   picker.files({ cwd = vim.fn.expand("$HOME/dev/note") })
 end, { desc = "[P]Open Note" })
 
-vim.keymap.set("n", "<C-]>", "]c", { desc = "[P]Next change", noremap = true, silent = true })
-vim.keymap.set("n", "<C-[>", "[c", { desc = "[P]Previous change", noremap = true, silent = true })
--- vim.keymap.set("n", "<C-]>", function()
---   if package.loaded["codediff"] and require("codediff").next_hunk() then
---     return
---   end
---   vim.cmd("normal! ]c")
--- end, { desc = "[P]Next change", silent = true })
--- vim.keymap.set("n", "<C-[>", function()
---   if package.loaded["codediff"] and require("codediff").prev_hunk() then
---     return
---   end
---   vim.cmd("normal! [c")
--- end, { desc = "[P]Previous change", silent = true })
+-- hunk 跳转：codediff 会话优先，否则回退原生 vim diff 的 [c/]c
+-- 注意：nvim 0.10+ 在 kitty keyboard protocol 下，<C-[> 是独立于 <Esc> 的键
+-- （终端发 CSI 91;5u 解码为 <C-[>，而 ESC/legacy 0x1b 解码为 <Esc>）。
+-- codediff 的 keymap claim 机制会把 <C-[> 注册到 <Esc> 键上（keytrans 冻结路径折叠），
+-- 导致 kitty 终端（ghostty/cmux/herdr）下真实 C-[ 按键匹配不到 buffer 局部的 prev_hunk，
+-- 而是命中这里的全局映射。因此全局映射必须能转发到 codediff 导航，否则 C-[ 在 diff 视图失效。
+vim.keymap.set("n", "<C-]>", function()
+  if package.loaded["codediff"] and require("codediff").next_hunk() then
+    return
+  end
+  vim.cmd("normal! ]c")
+end, { desc = "[P]Next change", silent = true })
+vim.keymap.set("n", "<C-[>", function()
+  if package.loaded["codediff"] and require("codediff").prev_hunk() then
+    return
+  end
+  vim.cmd("normal! [c")
+end, { desc = "[P]Previous change", silent = true })
 
 -- yank AI reference
 local clipboard = require("util.clipboard")
