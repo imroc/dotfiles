@@ -1,5 +1,9 @@
 vim.opt_local.wrap = false
 
+-- markdown 保存时自动格式化（全局 vim.g.autoformat=false 默认禁用，此处按 buffer 启用；
+-- formatter 为 prettier + markdownlint-cli2，见 lua/plugins/lang/markdown.lua）
+vim.b.autoformat = true
+
 local map = vim.keymap.set
 local md = require("util.markdown")
 

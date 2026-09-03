@@ -17,6 +17,32 @@ return {
     },
   },
   {
+    -- prettier 补装：markdown extra 的 formatters_by_ft 依赖它（Mason ensure_installed 数组
+    -- 经 tbl_deep_extend 按索引合并会顶掉旧条目，必须用函数式追加）
+    "mason-org/mason.nvim",
+    optional = true,
+    opts = function(_, opts)
+      opts.ensure_installed = opts.ensure_installed or {}
+      vim.list_extend(opts.ensure_installed, { "prettier" })
+    end,
+  },
+  {
+    "stevearc/conform.nvim",
+    optional = true,
+    opts = function(_, opts)
+      -- formatters_by_ft 沿用 markdown extra 默认 { "prettier", "markdownlint-cli2", "markdown-toc" }，
+      -- 仅覆盖 markdownlint-cli2：其默认 condition 要求 buffer 有 markdownlint diagnostics，
+      -- 但上面已禁用 markdown lint → 永远无 diagnostics → formatter 被连带跳过（Formatters unavailable）
+      opts.formatters = opts.formatters or {}
+      opts.formatters["markdownlint-cli2"] = {
+        condition = function()
+          return true
+        end,
+        prepend_args = { "--config", os.getenv("HOME") .. "/.config/markdownlint/.markdownlint.yaml" },
+      }
+    end,
+  },
+  {
     "mpas/marp-nvim",
     ft = "markdown",
     keys = {
