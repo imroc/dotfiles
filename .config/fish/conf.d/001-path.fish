@@ -7,6 +7,7 @@ fish_add_path -m \
     $HOME/.fzf/bin \
     $HOME/.codebuddy/bin \
     $HOME/.bun/bin \
+    $HOME/.rainbow-cli/bin \
     $HOME/.iwiki \
     /usr/local/iwiki-cli \
     /usr/local/go/bin \

@@ -11,3 +11,6 @@ source_config() {
 }
 
 source_config "$HOME/.bashrc.d"
+
+# rainbow-cli (rb-cli)
+export PATH="$PATH:/root/.rainbow-cli/bin"
