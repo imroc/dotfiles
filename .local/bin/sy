@@ -1,0 +1,22 @@
+#!/bin/sh
+# sy: 系统级 dotfiles（/etc/yadm）的 yadm 包装脚本，可在任意 shell 中直接调用。
+#
+# 用法: sy <yadm 子命令> [参数...]
+# 注：仅当机器上存在 /etc/yadm 系统仓库时才有意义；无该目录时 yadm 会报错。
+
+set -e
+
+YADM_DIR_PATH="/etc/yadm"
+YADM_DATA_PATH="/etc/yadm/data"
+
+if command -v yadm >/dev/null 2>&1; then
+    exec yadm --yadm-dir "$YADM_DIR_PATH" --yadm-data "$YADM_DATA_PATH" "$@"
+fi
+# 兜底：yadm 不在 PATH 时的常见安装位置（Linuxbrew / Homebrew）
+for yadm_bin in /home/linuxbrew/.linuxbrew/bin/yadm /opt/homebrew/bin/yadm /usr/local/bin/yadm /usr/bin/yadm; do
+    if [ -x "$yadm_bin" ]; then
+        exec "$yadm_bin" --yadm-dir "$YADM_DIR_PATH" --yadm-data "$YADM_DATA_PATH" "$@"
+    fi
+done
+echo "sy: 未找到 yadm 命令，请先安装 yadm 并确保其在 PATH 中" >&2
+exit 127

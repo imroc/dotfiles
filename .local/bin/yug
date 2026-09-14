@@ -1,0 +1,18 @@
+#!/bin/sh
+# yug: 用 lazygit 打开公共 dotfiles 的 yadm 仓库（worktree 为 $HOME）
+#
+# 相关：yu = 公共 dotfiles 的 yadm 包装；yig = 私有 dotfiles 的 lazygit。
+
+set -e
+
+if command -v lazygit >/dev/null 2>&1; then
+    exec lazygit -ucd "$HOME/.local/share/yadm/lazygit" -w "$HOME" -g "$HOME/.local/share/yadm-public/repo.git"
+fi
+# 兜底：lazygit 不在 PATH 时的常见安装位置（Linuxbrew / Homebrew）
+for lazygit_bin in /home/linuxbrew/.linuxbrew/bin/lazygit /opt/homebrew/bin/lazygit /usr/local/bin/lazygit; do
+    if [ -x "$lazygit_bin" ]; then
+        exec "$lazygit_bin" -ucd "$HOME/.local/share/yadm/lazygit" -w "$HOME" -g "$HOME/.local/share/yadm-public/repo.git"
+    fi
+done
+echo "yug: 未找到 lazygit 命令，请先安装 lazygit 并确保其在 PATH 中" >&2
+exit 127

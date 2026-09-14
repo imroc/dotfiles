@@ -1,0 +1,28 @@
+#!/bin/sh
+# yi: 私有 dotfiles（yadm 仓库）包装脚本，可在任意 shell 中直接调用。
+#
+# 仓库: gitee.com:imroc/dotfiles.git
+# 用法: yi <yadm 子命令> [参数...]
+#   例: yi status --short
+#       yi diff ~/.dsh/settings.yaml
+#       yi add ~/.local/bin/xxx && yi commit -m "说明"
+#
+# 与 yu（公共 dotfiles）成对使用；两者 worktree 均为 $HOME，仅 yadm-dir/yadm-data 不同。
+# 注：必须用 --yadm-dir/--yadm-data 参数指定（yadm 会忽略同名环境变量）。
+
+set -e
+
+YADM_DIR_PATH="$HOME/.config/yadm-private"
+YADM_DATA_PATH="$HOME/.local/share/yadm-private"
+
+if command -v yadm >/dev/null 2>&1; then
+    exec yadm --yadm-dir "$YADM_DIR_PATH" --yadm-data "$YADM_DATA_PATH" "$@"
+fi
+# 兜底：yadm 不在 PATH 时的常见安装位置（Linuxbrew / Homebrew）
+for yadm_bin in /home/linuxbrew/.linuxbrew/bin/yadm /opt/homebrew/bin/yadm /usr/local/bin/yadm /usr/bin/yadm; do
+    if [ -x "$yadm_bin" ]; then
+        exec "$yadm_bin" --yadm-dir "$YADM_DIR_PATH" --yadm-data "$YADM_DATA_PATH" "$@"
+    fi
+done
+echo "yi: 未找到 yadm 命令，请先安装 yadm 并确保其在 PATH 中" >&2
+exit 127

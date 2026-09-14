@@ -9,6 +9,7 @@ fish_add_path -m \
     $HOME/.bun/bin \
     $HOME/.rainbow-cli/bin \
     $HOME/.iwiki \
+    $HOME/background_agent_cli/bin \
     /usr/local/iwiki-cli \
     /usr/local/go/bin \
     /opt/go/bin \
