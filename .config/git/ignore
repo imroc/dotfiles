@@ -14,6 +14,7 @@ gradlew.bat
 **/.codebuddy/settings.local.json
 
 .worktrees/
+.dsh-worktrees/
 node_modules
 CLAUDE.local.md
 AGENTS.local.md

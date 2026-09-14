@@ -17,3 +17,5 @@
 	templateDir = ~/.config/git/templates
 [difftool]
   prompt = false
+[safe]
+	directory = /tmp
