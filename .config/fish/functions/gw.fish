@@ -1,16 +1,7 @@
 function gw --description "Git worktree manager"
     # Help
     if test (count $argv) -ge 1; and contains -- $argv[1] -h --help
-        echo "Usage: gw [command]"
-        echo ""
-        echo "Commands:"
-        echo "  (none)      fzf select a worktree and cd into it"
-        echo "  a, add      create a new worktree from remote branch/tag"
-        echo "  b, branch   create a new worktree with a new branch from current HEAD"
-        echo "  d, delete   fzf multi-select worktrees and remove them"
-        echo "              (Tab: multi-select, Ctrl+A: select all, trunk never deleted)"
-        echo "              options: -f/--force (discard changes), -y/--yes (skip confirm)"
-        echo "  -h, --help  show this help"
+        _gw_help
         return 0
     end
 
@@ -27,6 +18,8 @@ function gw --description "Git worktree manager"
         switch $argv[1]
             case a add
                 _gw_add
+            case n new
+                _gw_new $argv[2..]
             case b branch
                 _gw_branch $argv[2..]
             case d delete
@@ -37,6 +30,21 @@ function gw --description "Git worktree manager"
                 return 1
         end
     end
+end
+
+function _gw_help
+    echo "Usage: gw [command]"
+    echo ""
+    echo "Commands:"
+    echo "  (none)      fzf select a worktree and cd into it"
+    echo "  a, add      create a new worktree from remote branch/tag"
+    echo "  n, new      create a new worktree with a new branch off the remote's"
+    echo "              default branch (fetches first): gw new <new-branch> [base-ref]"
+    echo "  b, branch   create a new worktree with a new branch from current HEAD"
+    echo "  d, delete   fzf multi-select worktrees and remove them"
+    echo "              (Tab: multi-select, Ctrl+A: select all, trunk never deleted)"
+    echo "              options: -f/--force (discard changes), -y/--yes (skip confirm)"
+    echo "  -h, --help  show this help"
 end
 
 # Emit one line per worktree: "<label>\t<path>\t<main|linked>".
@@ -101,6 +109,90 @@ function _gw_main_root
     else
         git rev-parse --show-toplevel
     end
+end
+
+# Print the remote to use: the only one, or an fzf pick when several exist.
+function _gw_pick_remote
+    if test (count $argv) -le 1
+        echo $argv[1]
+        return 0
+    end
+    printf '%s\n' $argv | fzf --prompt="remote> "
+end
+
+# Print the commit-ish a new branch should start from when the user gave none:
+# the remote's default branch (origin/HEAD), else a common trunk name, else HEAD.
+function _gw_default_base
+    set -l remote $argv[1]
+
+    set -l ref (git symbolic-ref --quiet --short refs/remotes/$remote/HEAD 2>/dev/null)
+    if test -z "$ref"
+        for candidate in main master develop trunk
+            if git show-ref --verify --quiet refs/remotes/$remote/$candidate
+                set ref $remote/$candidate
+                break
+            end
+        end
+    end
+    if test -z "$ref"
+        echo "gw: cannot detect '$remote' default branch, using current HEAD" >&2
+        set ref HEAD
+    end
+
+    echo $ref
+end
+
+# Create a worktree under "<repo>/.worktrees/" for a new branch and cd into it.
+# The directory name is the branch name with "/" replaced by "-".
+# $argv[1] = new branch name, $argv[2] = optional base commit-ish (defaults to HEAD).
+function _gw_create_worktree
+    set -l branch_name $argv[1]
+    set -l base $argv[2]
+
+    if not git check-ref-format --branch $branch_name >/dev/null 2>&1
+        echo "gw: invalid branch name '$branch_name'" >&2
+        return 1
+    end
+
+    set -l git_root (_gw_main_root)
+    set -l dir_name (string replace --all '/' '-' $branch_name)
+    set -l wt_dir "$git_root/.worktrees/$dir_name"
+
+    if test -d "$wt_dir"
+        echo "gw: worktree directory already exists: $wt_dir" >&2
+        cd $wt_dir
+        return 0
+    end
+
+    if git show-ref --verify --quiet refs/heads/$branch_name
+        echo "gw: branch '$branch_name' already exists locally, use 'gw add' to check it out" >&2
+        return 1
+    end
+
+    mkdir -p "$git_root/.worktrees"
+
+    # --no-track keeps the new branch from tracking the base, so a stray
+    # pull/push cannot hit the base branch; the first push sets upstream.
+    set -l add_args --no-track -b $branch_name $wt_dir
+    test -n "$base"; and set -a add_args $base
+
+    if not git worktree add $add_args
+        echo "gw: failed to create worktree" >&2
+        return 1
+    end
+
+    set -l detail "branch: $branch_name"
+    test -n "$base"; and set detail "$detail, base: $base"
+    echo "Worktree created: $wt_dir ($detail)"
+
+    set -l remotes (git remote)
+    if test (count $remotes) -gt 0
+        set -l push_remote origin
+        contains -- origin $remotes; or set push_remote $remotes[1]
+        echo "First push: git push -u $push_remote $branch_name"
+    end
+
+    cd $wt_dir
 end
 
 function _gw_delete
@@ -202,30 +294,29 @@ function _gw_delete
 end
 
 function _gw_add
-    set -l git_root (_gw_main_root)
-
     # Determine remote
     set -l remotes (git remote)
     if test (count $remotes) -eq 0
         echo "gw: no remotes configured" >&2
         return 1
-    else if test (count $remotes) -eq 1
-        set -f remote $remotes[1]
-    else
-        set -f remote (printf '%s\n' $remotes | fzf --prompt="remote> ")
-        if test -z "$remote"
-            return 0
-        end
+    end
+    set -l remote (_gw_pick_remote $remotes)
+    if test -z "$remote"
+        return 0
     end
 
     # Fetch latest
     echo "Fetching $remote..."
     git fetch $remote
 
-    # List remote branches and tags
+    # List remote branches and tags. Full refnames are used because git shortens
+    # refs/remotes/<remote>/HEAD to plain "<remote>", which would leak a bogus entry.
     set -l refs
-    for ref in (git for-each-ref --format='%(refname:short)' refs/remotes/$remote/ | string replace "$remote/" '')
-        test "$ref" != HEAD; and set -a refs "branch:$ref"
+    set -l prefix "refs/remotes/$remote/"
+    for ref in (git for-each-ref --format='%(refname)' $prefix)
+        set -l name (string replace -- $prefix '' $ref)
+        test "$name" = HEAD; and continue
+        set -a refs "branch:$name"
     end
     for ref in (git tag -l)
         set -a refs "tag:$ref"
@@ -244,6 +335,8 @@ function _gw_add
     # Parse type and name
     set -l ref_type (string split ':' $chosen)[1]
     set -l ref_name (string split ':' $chosen)[2]
+
+    set -l git_root (_gw_main_root)
 
     # Sanitize directory name (replace / with -)
     set -l dir_name (string replace --all '/' '-' $ref_name)
@@ -279,6 +372,74 @@ function _gw_add
     end
 end
 
+# New branch off the remote's default branch: gw new <new-branch> [base-ref]
+function _gw_new
+    set -l args
+    for arg in $argv
+        switch $arg
+            case -h --help
+                echo "Usage: gw new <new-branch> [base-ref]"
+                echo ""
+                echo "  Fetch the remote, then create a worktree holding a new branch based on"
+                echo "  <base-ref> (default: the remote's default branch, e.g. origin/main)."
+                echo "  Without a configured remote the base defaults to the current HEAD."
+                echo "  The branch is created with --no-track; push it with 'git push -u origin <name>'."
+                return 0
+            case '-*'
+                echo "gw new: unknown option '$arg'" >&2
+                echo "Usage: gw new <new-branch> [base-ref]" >&2
+                return 1
+            case '*'
+                set -a args $arg
+        end
+    end
+
+    if test (count $args) -eq 0
+        echo "gw new: missing new branch name" >&2
+        echo "Usage: gw new <new-branch> [base-ref]" >&2
+        return 1
+    end
+
+    set -l branch_name $args[1]
+    set -l base
+    test (count $args) -ge 2; and set base $args[2]
+
+    if not git check-ref-format --branch $branch_name >/dev/null 2>&1
+        echo "gw new: invalid branch name '$branch_name'" >&2
+        return 1
+    end
+
+    set -l remotes (git remote)
+    if test (count $remotes) -gt 0
+        set -l remote (_gw_pick_remote $remotes)
+        if test -z "$remote"
+            return 0
+        end
+
+        echo "Fetching $remote..."
+        if not git fetch $remote
+            echo "gw new: failed to fetch '$remote'" >&2
+            return 1
+        end
+
+        # A same-named remote branch means an existing branch to check out, not a new one.
+        if git show-ref --verify --quiet refs/remotes/$remote/$branch_name
+            echo "gw new: branch '$branch_name' already exists on '$remote', use 'gw add' to check it out" >&2
+            return 1
+        end
+
+        test -z "$base"; and set base (_gw_default_base $remote)
+    end
+
+    if test -n "$base"; and not git rev-parse --verify --quiet "$base^{commit}" >/dev/null
+        echo "gw new: base '$base' not found" >&2
+        return 1
+    end
+
+    _gw_create_worktree $branch_name $base
+end
+
+# New branch off the current HEAD: gw branch <name>
 function _gw_branch
     if test (count $argv) -eq 0
         echo "gw branch: missing branch name" >&2
@@ -286,25 +447,17 @@ function _gw_branch
         return 1
     end
 
-    set -l branch_name $argv[1]
-    set -l git_root (_gw_main_root)
-    set -l dir_name (string replace --all '/' '-' $branch_name)
-    set -l wt_dir "$git_root/.worktrees/$dir_name"
-
-    if test -d "$wt_dir"
-        echo "gw: worktree directory already exists: $wt_dir" >&2
-        cd $wt_dir
-        return 0
+    switch $argv[1]
+        case -h --help
+            echo "Usage: gw branch <name>"
+            echo ""
+            echo "  Create a worktree holding a new branch based on the current HEAD (no fetch)."
+            echo "  See 'gw new' for a new branch based on the remote's default branch."
+            return 0
+        case '-*'
+            echo "gw branch: unknown option '$argv[1]'" >&2
+            return 1
     end
 
-    mkdir -p "$git_root/.worktrees"
-    git worktree add -b $branch_name "$wt_dir"
-
-    if test $status -eq 0
-        echo "Worktree created: $wt_dir (branch: $branch_name)"
-        cd $wt_dir
-    else
-        echo "gw: failed to create worktree" >&2
-        return 1
-    end
+    _gw_create_worktree $argv[1]
 end
