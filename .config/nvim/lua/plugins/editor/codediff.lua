@@ -82,7 +82,7 @@ return {
           local session = lifecycle.get_session(tp)
           if session and session.stored_diff_result then
             -- diff 渲染完成，隐藏 explorer
-            local explorer_obj = lifecycle.get_explorer(tp)
+            local explorer_obj = lifecycle.get_panel_view(tp)
             if
               explorer_obj
               and not explorer_obj.is_hidden
@@ -140,7 +140,7 @@ return {
           local lifecycle = require("codediff.ui.lifecycle")
           local tabpage = vim.api.nvim_get_current_tabpage()
           -- history_obj 存储在 explorer slot 中
-          local history_obj = lifecycle.get_explorer(tabpage)
+          local history_obj = lifecycle.get_panel_view(tabpage)
           if not history_obj or not history_obj.tree then
             return
           end
